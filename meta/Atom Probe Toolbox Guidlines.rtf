@@ -1,0 +1,620 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica-BoldOblique;\f1\fswiss\fcharset0 Helvetica;\f2\fswiss\fcharset0 Helvetica-Oblique;
+\f3\fmodern\fcharset0 Courier;\f4\froman\fcharset0 Times-Roman;\f5\fswiss\fcharset0 Helvetica-Bold;
+}
+{\colortbl;\red255\green255\blue255;\red160\green32\blue240;\red0\green0\blue0;\red0\green0\blue233;
+}
+{\*\expandedcolortbl;;\csgenericrgb\c62745\c12549\c94118;\cssrgb\c0\c0\c0;\cssrgb\c0\c0\c93333;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww15920\viewh16580\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\i\b\fs24 \cf0 Overall toolbox guidelines \
+\
+TOOLBOX PRINCIPLES
+\f1\i0\b0 \
+The structure if the toolbox and its functions should be:\
+
+\f0\i\b flexible
+\f1\i0\b0 \
+at any point in the analysis process, the user should have access to the data in a readable way, so they can implement their own analysis or analysis workflow\
+\
+
+\f0\i\b modular\
+
+\f1\i0\b0 each task that could be re-used somewhere else should be its own function. Search the Matlab documentation (maybe via Google) if a function already exists that does the job. Avoid using external code if possible. If user interfaces are required, use widgets rather than large UIs.\
+\
+
+\f0\i\b scriptable
+\f1\i0\b0 \
+for all functions, if possible, we provide a user interaction free, command line only version. This enables the user to capture an analysis workflow into a script to be re-used on other, similar datasets. Ideally, by the end of the analysis of an APT dataset, the entire analysis can be put into a script, and re-run with different parameters. This can e.g. be version with user interaction, that is overloaded with a function version where things learned from the user interaction can be parsed.\
+\
+
+\f0\i\b lean / maintainable\
+
+\f1\i0\b0 we will try to use Matlab\'92s built in functionality to maximal avail. This minimises the amount of code to be maintained and makes sure we take maximum advantage of the development of Matlab in the future.\
+We will also avoid the use of UIs if the same thing can conveniently be achieved through the command line. \
+\
+
+\f0\i\b explorable\
+
+\f1\i0\b0 through exploration of the data structures, the user should be able to lear the usage in an intuitive way. All code should therefore also be as readable as possible.\
+\
+
+\f0\i\b customisable\
+
+\f1\i0\b0 the user should be able to customise the toolbox to their analysis needs (isotopes, colouring\'85.) via changing the database, not the code. I.e. all data that could potentially be customised should only appear in variables, saved as .mat files, with one variable per file.\
+\
+
+\f0\i\b efficient / reproducible
+\f1\i0\b0 \
+next to code efficiency, the toolbox should allow for and efficient workflow of large dataset and complex geometry. This demands that all relevant information can easily be saved and retrieved, ideally in a visually accessible way. This can be achieved by saving relevant data into the UserData section of Matlab graphics objects and/or saving workspace variables. Any Matlab graphics object should contain all information in the UserData section that is required to re-create the object (e.g. isosurface: what scalar field \'91Mn conc\'92, what bin size \'913 nm\'92 what iso-value \'913.5 %\'92.\
+\
+
+\f0\i\b learnable
+\f1\i0\b0 \
+a thorough documentation will be provided for the overall data structure, each function and analysis workflows. Example workflows will be provided for typical analysis scenarios. This is especially important if built-in Matlab functions are used to perform tasks, as they are not necessarily part of the documentation.\
+\
+\
+
+\f0\i\b ATOM PROBE TOOLBOX VARIABLE TYPES (MANDATORY)\
+\
+Before reconstruction\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f2\b0 \cf0 For raw data from Oxcart - type: Table\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\i0 \cf0 For mass spectral reconstruction and spatial reconstruction: table with the following entries and their units (minimum). Conversion from raw detector data\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs20 \cf0     pos.Properties.VariableNames = \{\cf2 'ionIdx'\cf0 ,\cf2 'tof'\cf0 ,\cf2 'VDC'\cf0 ,\cf2 'VP'\cf0 ,\cf2 'detx'\cf0 ,\cf2 'dety'\cf0 ,\cf2 'deltaP'\cf0 ,\cf2 'multi'\cf0 \};
+\fs24 \
+
+\fs20     pos.Properties.VariableUnits = \{\cf2 '1'\cf0 ,\cf2 'nm'\cf0 ,\cf2 'nm'\cf0 ,\cf2 'nm'\cf0 ,\cf2 'Da'\cf0 ,\cf2 'ns'\cf0 ,\cf2 'V'\cf0 ,\cf2 'V'\cf0 ,\cf2 'mm'\cf0 ,\cf2 'mm'\cf0 ,\cf2 '1'\cf0 ,\cf2 '1'\cf0 \};\
+ionIdx: int vector of arrival index of the ion    \
+tof: double vector of raw uncorrected flight times in ns\
+VDC: double vector of DC high voltage\
+VP: double vector of pulse voltage\
+detx: double vector of detector x hit coordinate\
+dety: double vector of detector y hit coordinate\
+deltaP: int vector of number of pulses since last hit\
+multi: int vector of hit multiplicities of hits\
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\i\b\fs24 \cf0 After Reconstruction, no ranges allocated\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f2\b0 \cf0 Atom probe data (historically *.pos files) - type: Table
+\f1\i0 \
+For data analysis: table with the following entries and their units (minimum)\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs20 \cf0     pos.Properties.VariableNames = \{\cf2 'ionIdx'\cf0 ,\cf2 'x'\cf0 ,\cf2 'y'\cf0 ,\cf2 'z'\cf0 ,\cf2 'mc'\cf0 \};
+\fs24 \
+
+\fs20     pos.Properties.VariableUnits = \{\cf2 '1'\cf0 ,\cf2 'nm'\cf0 ,\cf2 'nm'\cf0 ,\cf2 'nm'\cf0 ,\cf2 'Da'\cf0 \};\
+x: double vector of x coordinate of the atom in the 3D atom map\
+y: double vector of y coordinate of the atom in the 3D atom map\
+z: double vector of z coordinate of the atom in the 3D atom map\
+mc: double vector of mass to charge values of atom
+\fs24 \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f2\i \cf0 For extended analysis (historically *.epos) - type: Table
+\f1\i0 \
+For general data storage, including raw detector data. This is directly loadable from epos files or produced via mass spectrum and spatial reconstruction from Oxcart\
+\pard\pardeftab720\partightenfactor0
+
+\f3\fs20 \cf0     pos.Properties.VariableNames = \{\cf2 'ionIdx'\cf0 ,\cf2 'x'\cf0 ,\cf2 'y'\cf0 ,\cf2 'z'\cf0 ,\cf2 'mc'\cf0 ,\cf2 'tof'\cf0 ,\cf2 'VDC'\cf0 ,\cf2 'VP'\cf0 ,\cf2 'detx'\cf0 ,\cf2 'dety'\cf0 ,\cf2 'deltaP'\cf0 ,\cf2 'multi'\cf0 \};
+\fs24 \
+
+\fs20     pos.Properties.VariableUnits = \{\cf2 '1'\cf0 ,\cf2 'nm'\cf0 ,\cf2 'nm'\cf0 ,\cf2 'nm'\cf0 ,\cf2 'Da'\cf0 ,\cf2 'ns'\cf0 ,\cf2 'V'\cf0 ,\cf2 'V'\cf0 ,\cf2 'mm'\cf0 ,\cf2 'mm'\cf0 ,\cf2 '1'\cf0 ,\cf2 '1'\cf0 \};   \
+as above \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\i\b\fs24 \cf0 After Reconstruction, ranges allocated in addition to data after reconstruction\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f2\b0 \cf0 simple range allocation - type: table \
+       
+\f3\i0\fs20 pos.Properties.VariableNames = \{\cf2 ...\cf3 ,\cf2 'ion\'92\cf3 ,\cf2 \'92chargeState'\cf0 \};
+\fs24 \
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0     pos.Properties.VariableUnits = \{\cf2 ...,\'92Z count\'92\cf0 ,\cf2 \'921\'92\cf0 \};\
+ion: categorical vector of ion types without isotopic information\
+chargeState: int vector of charge states
+\fs24 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f2\i \cf0 decomposition of ranges (complex ion are broken up into individual atoms). Additional to simple range allocation. - type: table
+\f3\i0 \
+
+\f2\i        
+\f3\i0\fs20 pos.Properties.VariableNames = \{\cf2 ...\cf3 ,\cf2 'atom\'92\cf3 ,\cf2 \'92isotope\'92,\'92ionComplexity\'92\cf0 \};
+\fs24 \
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0     pos.Properties.VariableUnits = \{\cf2 ...,\'92Z\'92\cf0 ,\cf2 \'92iso\'92,\'921\'92\cf0 \};\
+atom: categorical vector of chemical element\
+isotope: int vector of isotope number\
+ionComplexity: int vector of number of atoms in the corresponding ion
+\fs24 \
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\i\b \cf0 Ranges (as extracted from a mass spectrum plot)
+\f3\i0\b0 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\i\b \cf0 Ions (as extracted from a mass spectrum plot)
+\f3\i0\b0 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\i\b \cf0 Graphical objects:\
+
+\f1\i0\b0 General Structure:\
+for each type of data, the most appropriate type of graphical object is selected for display. The data of the object is stored in the native fields of the graphical object where possible (e.g. mass spectrum: spec.XData, spec.YData). Additional data of each object o is stored in o.UserData. The use of these fields is defined below.\
+\
+Besides the objects below, annotation objects exist (text, etc.)\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f2\i \cf0 \ul \ulc0 Mass Spectrum\ulnone \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\i0 \cf0 type = area plot\
+DisplayName = \'91mass spectrum\'92\
+UserData.plotType = "massSpectrum"\
+Area Plot that displays the mass spectrum (histogram of m/c frequencies) either in raw counts or normalised to bin width and total ion count. 
+\f2\i \
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \ul Range\ulnone \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\i0 \cf0 type = area plot\
+DisplayName = name of the ion without isotopic information\
+UserData.plotType = "range"\
+UserData.ion = table of ion with ion.element (categorical) and ion.isotope (int)\
+UserData.chargeState = int of charge state\
+Area Plot that denotes the part of a mass spectrum to which a certain ion is allocated. The x and y data are taken from the parent mass spectrum
+\f2\i \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \ul Ion
+\f1\i0 \ulnone \
+type = stem plot\
+DisplayName = name of the ion without isotopic information\
+UserData.plotType = "ion"\
+UserData.ion = cell vector of individual isotopic combinations with ion\{i\}.element and ion\{i\}.isotope\
+UserData.chargeState = int vector of charge state (same length as ion)\
+Stem plot that represents the peak locations and relative heights of an ion and its individual isotopic combinations based on the used isotopeTable\
+\
+
+\f2\i \ul Interface
+\f1\i0 \ulnone \
+type = patch plot\
+\
+Patch plot that defines interfaces such as phase interfaces or grain boundaries. Created vis iso-surface, hand-modelling, DCOM and/or a wide range of other means. The data exits as a \'91triangle soup\'92 with vertices and corner indices of the individual triangles. Do not use quadrilaterals.\
+\
+
+\f2\i \ul region of interest\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\i0 \cf0 \ulnone type = patch plot\
+\
+UserData.\
+\
+Patch plot that delineates a region of interest. The data exits as a \'91triangle soup\'92 with vertices and corner indices of the individual triangles. Do not use quadrilaterals.\
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\i\b \cf0 Databases:
+\fs26 \
+
+\f2\b0 \ul colorScheme \ulnone \
+type = table\
+columns:\ul  \ulnone \
+ion (categorical vector), format: \'91Fe2 O3\'92\
+color (N x 3 double array, 0-1) \
+
+\f1\i0 Contains the coloring for each ion type. Trying to define an ion or a range where no color is defined will throw an error. Pls report any new ion to the database administrator. Multiple color schemes for different projects may be defined depending on occurring ions / atoms;
+\f2\i \
+\
+\
+\ul isotopeTable \ulnone \
+type = table \
+columns: \
+atomicNumber (int vector)\
+element (categorical vector) \
+isotope (int vector) \
+weight (double vector), unit: amu\
+abundance (double vector), unit: %\
+Contains the weight and relative abundance in % for all observationally stable isotopes in the periodic table. Relative abundances can be edited if required for isotopic experiments. Most common: FEI FIBs use mono-isotopic Ga source. \
+\
+\
+\ul ionList\
+\ulnone type = table\
+columns:
+\f1\i0\fs24 \
+ionName (categorical vector), format: \'9256Fe 57Fe 16O3 ++\'92\
+mc (double vector), unit: Da\
+abundance (double vector), unit: %\
+comment (string vector), comment on the ion e.g. \'91observed only in XXXX\'92\
+Contains the names, mass-to-charge and abundance of previously observed ions for ion searches in mass spectra. If a previously unknown ion is observed, pls contact the database administrator, so that the ion list can be updated. Comments on the specifics of an ion are possible in a string.\
+\
+\
+\
+\
+\
+
+\f0\i\b SPECIFIC FUNCTION STYLE GUIDE
+\f1\i0\b0 \
+\
+In addition to the Matlab Style Book 2!\
+some aspects have not consistently been implemented/followed by me over the years and need change of the functions\
+\
+For Matlab toolbox packaging read:\
+\pard\pardeftab720\sl280\partightenfactor0
+{\field{\*\fldinst{HYPERLINK "https://www.mathworks.com/help/matlab/matlab_prog/create-and-share-custom-matlab-toolboxes.html"}}{\fldrslt 
+\f4 \cf4 \expnd0\expndtw0\kerning0
+\ul \ulc4 https://www.mathworks.com/help/matlab/matlab_prog/create-and-share-custom-matlab-toolboxes.html}}\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f5\b \cf0 Function naming:
+\f1\b0 \
+unlike Matlab style guide, we capitalise individual names.\
+start with object it operates on, then what it does:\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f2\i \cf0 ionAdd(\'85.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\i0 \cf0 \
+not \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f2\i \cf0 addIon(\'85.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\i0 \cf0 \
+Be comprehensive:\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f2\i \cf0 ionAddToMassSpec(\'85.
+\f1\i0 \
+\
+not \
+
+\f2\i addIon(\'85.
+\f1\i0 \
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f5\b \cf0 Variable naming:
+\f1\b0 \
+use variable type, if type conversion not possible or wanted\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f2\i \cf0 ionTable\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\i0 \cf0 not\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f2\i \cf0 ions
+\f1\i0 \
+\
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f5\b \cf0 Function structure\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\b0 \cf0 for comments formats, refer to: {\field{\*\fldinst{HYPERLINK "https://www.mathworks.com/help/matlab/matlab_prog/comments.html"}}{\fldrslt 
+\f4 \cf4 \expnd0\expndtw0\kerning0
+\ul \ulc4 https://www.mathworks.com/help/matlab/matlab_prog/comments.html}}
+\f4 \cf4 \expnd0\expndtw0\kerning0
+\ul \ulc4 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1 \cf0 \kerning1\expnd0\expndtw0 \ulnone \
+The first contagious block of comments in a code will appear in the Matlab help. This is very important!\
+\pard\pardeftab720\sl280\partightenfactor0
+{\field{\*\fldinst{HYPERLINK "https://www.mathworks.com/help/matlab/matlab_prog/add-help-for-your-program.html"}}{\fldrslt 
+\f4 \cf4 \expnd0\expndtw0\kerning0
+\ul https://www.mathworks.com/help/matlab/matlab_prog/add-help-for-your-program.html}}\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \
+function [output1, output2\'85.] = foo(input1, input2, \'85.)\
+% general explanation of what the function does (if necessary)\'85.\
+% general explanation of what the function does (if necessary)\'85.\
+%\
+% output1 = foo(input1)\
+% input 2 defaults to XXXXX\
+%\
+% output1 = foo(input1, input2)\
+% [output1, output2] = foo(input1, input2)\
+%\
+% INPUTS\
+% input1: explanation of variable input1, format of variable input 2\
+% input2: explanation of variable input2, format of variable input 2\
+%\
+% OUTPUTS\
+% output1: explanation of variable output1, format of variable output1\
+% output 2: explanation of variable output2, format of variable output2 \
+\
+\
+code\'85.\
+\
+\
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f5\b \cf0 Coding progression for a function:\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\b0 \cf0 1. write general description and function definition (see above)\
+2. write individual functionality and requirements list list, e.g. for a list item:\
+	
+\f2\i % check for range overlap X
+\f1\i0 \
+an X at the end means the functionality is not implemented or complete. These go above the function definition, together with the known bugs.\
+3. write code section comments e.g. \
+	
+\f2\i %% input validation
+\f1\i0 \
+4. fill up with code\
+5. test with test cases and debug\
+6. repeat until functionality is implemented\
+7. add to repository and assign person for unit testing\
+8. unit testing with test cases by other person and more bug fixes\
+9. tick-off\
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f5\b \cf0 Bug reporting and fixing\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\b0 \cf0 Identified bugs are listed in the function as comments above the function definition. Delete after bug is fixed.\
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f5\b \cf0 \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+List of functions in the toolbox\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\b0 \cf0 (old name in parentheses if new name required)
+\f5\b \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\b0 \cf0 X \'85 Does not exist yet\
+I\'85	Needs functionality implemented\
+M \'85 Needs to be migrated 
+\f5\b \
+
+\f1\b0 U \'85 Migrated but needs unit testing\
+R \'85 Only needs renaming and/or proper documentation\
+F \'85 Finished\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\i\b \cf0 Instrument calibration
+\f5\i0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\b0 \cf0 M	tofVoltageCurve.m\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f5\b \cf0 \
+\
+\
+
+\f0\i Mass spectrum reconstruction
+\f5\i0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\b0 \cf0 R	posAllocateRange.m						(allocateRange.m)\
+M	mcFromTofSimple.m						(tof2mcSimple.m)\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 M	tofSimpleBowlCorrection.m				(simpleBowlCorrection.m)\
+M	mcFindPeakOffset.m						(findPeakOffset.m)\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 I	tofExtractBowlPoints.m					(extractBowlPoints.m)\
+X	mcVoltageFineCorrection.m\
+X	mcBowlFineCorrection.m
+\f5\b \
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\i \cf0 3D reconstruction\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\i0\b0 \cf0 M	hitsFilterVoronoi.m						(VoronoiFilter2D.m)\
+M	posReconstructionExplorer.mlapp			(reconExplorer.mlapp)\
+M	hitsDetectorStackOutline.m				(datasetOutline.m)\
+M	posReconstruction.m						(atomProbeRecon.m)\
+I	hitsCropDetectorRegion.m					(cropDetectorRegion.m)
+\f5\b \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\i \cf0 Data I/O\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\i0\b0 \cf0 M	saveToPos.m							(savepos.m)\
+R	posToTable.m							(pos2table.m)
+\f0\i\b \
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 Mass spectrum Visualisation/Analysis\
+
+\f1\i0\b0 M	massSpecSaxeyPlot.m					(saxeyPlot.m)\
+R	massSpecShowLegend.m					(showMassSpecLegend.m)\
+R	massSpecReorderPlot.m					(reorderMassSpectrumPlot.m)\
+M	reading.m								(reading.m)\
+M	posInRange.m							(posInRange.m)\
+R	plotMassSpec.m						(plotMassSpec.m)\
+R	ionWeight.m							(ionWeight.m)\
+X	ionFindInMassSpec.m\
+R	rangesExtractFromMassSpec.m			(extractRanges.m)\
+R	ionsExtractFromMassSpec.m				(extractIons.m)\
+R	rangeEdit.m							(editRange.m)\
+X	ionCreateTable.m						(createIonTable.m)\
+U	ionConvertNameTable.m					(convertIonName.m)\
+R	rangeAdd.m							(addRange.m)\
+R	ionAdd.m								(addIon.m)
+\f0\i\b \
+
+\f1\i0\b0 M	countsPeakBackgroundCorrected			(bgCorrectedPeakCount.m)\
+X	ionsCreateTableOfIsotopicCombinations.m	(createIonList.m)\
+X	posCalculateConcentrations.m\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\i\b \cf0 \
+
+\f5\i0 \
+\
+
+\f0\i Spatial visualisation
+\f5\i0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\b0 \cf0 R	movieCreateTurntableAnimation.m 			(turntableAnimation.m)\
+M	scatterPlotAptData.m						(plotAPTdata.m)\
+M	imageCreateFieldDesorptionMap.m			(fieldDesorptionMap.m)\
+M	movieCreateFieldDesorptionMap.m			(FDMmovie.m, should call imageCreateFieldDesorptionMap.m)\
+R	axisSpatialAptify.m						(APTifyAxis.m)\
+X	axisControlVisibility.mlapp\
+R	axisCropping.mlapp						(cropping.mlapp)\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f5\b \cf0 \
+\
+\
+
+\f0\i Spatial analysis
+\f5\i0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f2\i\b0 \cf0 Analysis object creation / manipulation / spatial clipping
+\f5\i0\b \
+	
+\f1\b0 R	patchStretchToBoundary.m			(stretchToBoundary.m)\
+	M	patchCreateSampledAlphaHull.m		(sampledAlphaHull.m)\
+	M	patchReadObj.m					(read_wobj_v2.m)\
+	R	patchCreateProjectionTessellation.m		(projectionTessellation.m)\
+	R	lineOrderEdges.m					(orderEdges.m)\
+	R	lineCalculateVectors.m				(lineVectors.m)\
+	M	posInLineDistance.m					(lineDistanceClipping.m)\
+	M	posInConvexHull.m					(inhull.m)\
+	R	patchFilterSize.m					(filterPatchSize.m)\
+	R	posClipPatchDistance.m				(distanceClipping2D.m)\
+	R	patchDcomRelaxationStep.m			(DCOMstep.m)\
+	R	patchDcomRelaxation.m				(DCOM.m)\
+	R	patchFindBoundary.m				(computeBoundary.m)\
+	R	patchCombine.m					(combinePatches.m)\
+	R	posClipSpatial.m					(clipAPTdata.m)\
+	R	patchCentroidalVoronoiTessellation.m	(centroidalVoronoiTessellation.m)\
+	R	patchVertexArea.m					(vertexArea.m)\
+	R	roiCreateSphere.m					(ROIcreateSphere.m)\
+	R	roiCreateCylinder.m					(ROIcreateCylinder.m)\
+	R	roiCreateBox.m						(ROIcreateBox.m)\
+	X	roiCreatePlane.m\
+	X	roiCreateLine.m\
+	X	roiCreateWorkCoordinateSystem.m\
+	R	roiManipulate.mlapp					(manipulateROI.mlapp)\
+	R	posTransformCoordinatesToWCS.m		(coordSystemTransform.m)\
+\
+\
+
+\f2\i Volumetrics\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\i0 \cf0 	R	volumeToRaw
+\f2\i .
+\f1\i0 m					(volume2RAW.m)\
+	M	voxelCreateFromPos					(point2voxel)\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f2\i \cf0 Analysis \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\i0 \cf0 	M	patchCreateManifoldConcentrationMap.m	(pseudo2DconcMap.m)\
+	M	patchCreateLocalProxigram.m			(localProxigram.m, merge with kwikProxigram)\
+	M	patchCreateProxigram.m				(kwikProxigram.m)\
+	M	pointCreateProxigram.m				(kwikPointProxigram.m)\
+	M	lineCreateProxigram.m				(kwikLineProxigram.m)\
+	M	lineCreateExcessValue.m				(kwikLineEval.m)\
+	M	patchCreateExcessValue.m			(kwikEval.m)\
+	M	patchCreateExcessMap.m				(kwikEmap.m)\
+	M	patchCreateDensityMap.m			(kwikDmap.m)\
+	M	patchCreateConcentrationMap.m		(kwikCmap.m)\
+	R	patchDelocalizeProperty.m			(delocalizeProperty.m)\
+	R	lineExcessGui.m					(lineExcessGUI.m)\
+	R	patchExcessGui.m					(excessGUI.m)\
+	M	posVoronoiClusterSearch.m			(clusterDetermination.m)\
+	M	posCalculate1Dprofile.m				(calculate1Dprofile.m)\
+	M	posCalculate2Dprofile.m				(calculate2Dprofile.m)
+\f2\i \
+\
+Analysis I/O\
+
+\f1\i0 	R	patchToPly.m						(patch2ply.m)\
+	R	patchToObj.m						(patch2obj.m)\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 	R	lineToObj.m						(lines2obj.m)\
+\
+\
+
+\f0\i\b Utility functions
+\f2\b0 	\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\i0 \cf0 M	elementSymbol.m						(sym4number.m, table based?)\
+M	elementAtomicNumber.m					(number4sym.m, table based?)\
+	
+\f5\b \
+\
+\
+\
+}
