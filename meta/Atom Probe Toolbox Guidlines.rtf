@@ -423,9 +423,8 @@ List of functions in the toolbox\
 
 \f1\b0 \cf0 (old name in parentheses if new name required)
 \f5\b \
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f1\b0 \cf0 X \'85 Does not exist yet\
+\f1\b0 X \'85 Does not exist yet\
 I\'85	Needs functionality implemented\
 M \'85 Needs to be migrated 
 \f5\b \
@@ -446,18 +445,17 @@ F \'85 Finished\
 \f5\b \cf0 \
 \
 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f0\i Mass spectrum reconstruction
+\f0\i \cf0 Mass spectrum reconstruction
 \f5\i0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f1\b0 \cf0 R	posAllocateRange.m						(allocateRange.m)\
 M	mcFromTofSimple.m						(tof2mcSimple.m)\
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-\cf0 M	tofSimpleBowlCorrection.m				(simpleBowlCorrection.m)\
+M	tofSimpleBowlCorrection.m				(simpleBowlCorrection.m)\
 M	mcFindPeakOffset.m						(findPeakOffset.m)\
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-\cf0 I	tofExtractBowlPoints.m					(extractBowlPoints.m)\
+I	tofExtractBowlPoints.m					(extractBowlPoints.m)\
 X	mcVoltageFineCorrection.m\
 X	mcBowlFineCorrection.m
 \f5\b \
@@ -484,8 +482,7 @@ I	hitsCropDetectorRegion.m					(cropDetectorRegion.m)
 R	posToTable.m							(pos2table.m)
 \f0\i\b \
 \
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-\cf0 Mass spectrum Visualisation/Analysis\
+Mass spectrum Visualisation/Analysis\
 
 \f1\i0\b0 M	massSpecSaxeyPlot.m					(saxeyPlot.m)\
 R	massSpecShowLegend.m					(showMassSpecLegend.m)\
@@ -510,11 +507,13 @@ X	posCalculateConcentrations.m\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f0\i\b \cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f5\i0 \
+\f5\i0 \cf0 \
 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f0\i Spatial visualisation
+\f0\i \cf0 Spatial visualisation
 \f5\i0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
@@ -530,8 +529,9 @@ R	axisCropping.mlapp						(cropping.mlapp)\
 \f5\b \cf0 \
 \
 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f0\i Spatial analysis
+\f0\i \cf0 Spatial analysis
 \f5\i0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
@@ -601,12 +601,12 @@ Analysis I/O\
 
 \f1\i0 	R	patchToPly.m						(patch2ply.m)\
 	R	patchToObj.m						(patch2obj.m)\
+	R	lineToObj.m						(lines2obj.m)\
+\
+\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-\cf0 	R	lineToObj.m						(lines2obj.m)\
-\
-\
 
-\f0\i\b Utility functions
+\f0\i\b \cf0 Utility functions
 \f2\b0 	\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
@@ -615,6 +615,22 @@ M	elementAtomicNumber.m					(number4sym.m, table based?)\
 	
 \f5\b \
 \
+During Analysis\
+Naming of analysis files\
+
+\f1\b0 Mass spectrum ranging figure 					SPECIMENNAME_rng.fig \
+3D atom map								SPECIMENNAME_3D.fig
+\f5\b \
 \
-\
+Naming of analysis objects\
+
+\f1\b0 Region of interest\
+isosurface\
+interface (modeled)\
+line object\
+point object\
+WCS\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f5\b \cf0 \
 }
