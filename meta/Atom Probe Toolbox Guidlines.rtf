@@ -1,6 +1,6 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
 {\fonttbl\f0\fswiss\fcharset0 Helvetica-BoldOblique;\f1\fswiss\fcharset0 Helvetica;\f2\fswiss\fcharset0 Helvetica-Oblique;
-\f3\fmodern\fcharset0 Courier;\f4\froman\fcharset0 Times-Roman;\f5\fswiss\fcharset0 Helvetica-Bold;
+\f3\fmodern\fcharset0 Courier;\f4\fswiss\fcharset0 Helvetica-Bold;\f5\froman\fcharset0 Times-Roman;
 }
 {\colortbl;\red255\green255\blue255;\red160\green32\blue240;\red0\green0\blue0;\red0\green0\blue233;
 }
@@ -229,10 +229,16 @@ Patch plot that delineates a region of interest. The data exits as a \'91triangl
 \f0\i\b \cf0 Analysis output variables \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f2\b0 \cf0 \ul Concentrations of a pos variable\
-\
-\
-1D profile\
+\f2\b0 \cf0 \ul Concentrations of a pos variable & 1D Profile\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f4\i0\b \cf0 \ulnone !!!tentative, evaluating readability
+\f2\i\b0 \ul \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f1\i0 \cf0 \ulnone Table with variable names according to atom/ion, row names according to what it is:\
+count, concentration (as fraction)
+\f2\i \ul \
 \
 \
 2D profile (flat, image like)\
@@ -299,13 +305,13 @@ some aspects have not consistently been implemented/followed by me over the year
 For Matlab toolbox packaging read:\
 \pard\pardeftab720\sl280\partightenfactor0
 {\field{\*\fldinst{HYPERLINK "https://www.mathworks.com/help/matlab/matlab_prog/create-and-share-custom-matlab-toolboxes.html"}}{\fldrslt 
-\f4 \cf4 \expnd0\expndtw0\kerning0
+\f5 \cf4 \expnd0\expndtw0\kerning0
 \ul \ulc4 https://www.mathworks.com/help/matlab/matlab_prog/create-and-share-custom-matlab-toolboxes.html}}\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 \cf0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f5\b \cf0 Function naming:
+\f4\b \cf0 Function naming:
 \f1\b0 \
 unlike Matlab style guide, we capitalise individual names.\
 start with object it operates on, then what it does:\
@@ -336,7 +342,7 @@ not \
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f5\b \cf0 Variable naming:
+\f4\b \cf0 Variable naming:
 \f1\b0 \
 use variable type, if type conversion not possible or wanted\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
@@ -355,13 +361,13 @@ use variable type, if type conversion not possible or wanted\
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f5\b \cf0 Function structure\
+\f4\b \cf0 Function structure\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f1\b0 \cf0 for comments formats, refer to: {\field{\*\fldinst{HYPERLINK "https://www.mathworks.com/help/matlab/matlab_prog/comments.html"}}{\fldrslt 
-\f4 \cf4 \expnd0\expndtw0\kerning0
+\f5 \cf4 \expnd0\expndtw0\kerning0
 \ul \ulc4 https://www.mathworks.com/help/matlab/matlab_prog/comments.html}}
-\f4 \cf4 \expnd0\expndtw0\kerning0
+\f5 \cf4 \expnd0\expndtw0\kerning0
 \ul \ulc4 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
@@ -369,7 +375,7 @@ use variable type, if type conversion not possible or wanted\
 The first contagious block of comments in a code will appear in the Matlab help. This is very important!\
 \pard\pardeftab720\sl280\partightenfactor0
 {\field{\*\fldinst{HYPERLINK "https://www.mathworks.com/help/matlab/matlab_prog/add-help-for-your-program.html"}}{\fldrslt 
-\f4 \cf4 \expnd0\expndtw0\kerning0
+\f5 \cf4 \expnd0\expndtw0\kerning0
 \ul https://www.mathworks.com/help/matlab/matlab_prog/add-help-for-your-program.html}}\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 \cf0 \
@@ -399,7 +405,7 @@ code\'85.\
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f5\b \cf0 Coding progression for a function:\
+\f4\b \cf0 Coding progression for a function:\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f1\b0 \cf0 1. write general description and function definition (see above)\
@@ -422,7 +428,7 @@ an X at the end means the functionality is not implemented or complete. These go
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f5\b \cf0 Bug reporting and fixing\
+\f4\b \cf0 Bug reporting and fixing\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f1\b0 \cf0 Identified bugs are listed in the function as comments above the function definition. Delete after bug is fixed.\
@@ -430,7 +436,7 @@ an X at the end means the functionality is not implemented or complete. These go
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f5\b \cf0 \
+\f4\b \cf0 \
 \
 \
 \
@@ -447,12 +453,12 @@ List of functions in the toolbox\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f1\b0 \cf0 (old name in parentheses if new name required)
-\f5\b \
+\f4\b \
 
 \f1\b0 X \'85 Does not exist yet\
 I\'85	Needs functionality implemented\
 M \'85 Needs to be migrated 
-\f5\b \
+\f4\b \
 
 \f1\b0 U \'85 Migrated but needs unit testing\
 R \'85 Only needs renaming and/or proper documentation\
@@ -461,19 +467,19 @@ F \'85 Finished\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f0\i\b \cf0 Instrument calibration
-\f5\i0 \
+\f4\i0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f1\b0 \cf0 M	tofVoltageCurve.m\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f5\b \cf0 \
+\f4\b \cf0 \
 \
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f0\i \cf0 Mass spectrum reconstruction
-\f5\i0 \
+\f4\i0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f1\b0 \cf0 R	posAllocateRange.m						(allocateRange.m)\
@@ -483,7 +489,7 @@ M	mcFindPeakOffset.m						(findPeakOffset.m)\
 I	tofExtractBowlPoints.m					(extractBowlPoints.m)\
 X	mcVoltageFineCorrection.m\
 X	mcBowlFineCorrection.m
-\f5\b \
+\f4\b \
 \
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
@@ -496,7 +502,7 @@ M	posReconstructionExplorer.mlapp			(reconExplorer.mlapp)\
 M	hitsDetectorStackOutline.m				(datasetOutline.m)\
 M	posReconstruction.m						(atomProbeRecon.m)\
 I	hitsCropDetectorRegion.m					(cropDetectorRegion.m)
-\f5\b \
+\f4\b \
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
@@ -534,12 +540,12 @@ X	posCalculateConcentrations.m\
 \f0\i\b \cf0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f5\i0 \cf0 \
+\f4\i0 \cf0 \
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f0\i \cf0 Spatial visualisation
-\f5\i0 \
+\f4\i0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f1\b0 \cf0 R	movieCreateTurntableAnimation.m 			(turntableAnimation.m)\
@@ -551,17 +557,17 @@ X	axisControlVisibility.mlapp\
 R	axisCropping.mlapp						(cropping.mlapp)\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f5\b \cf0 \
+\f4\b \cf0 \
 \
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f0\i \cf0 Spatial analysis
-\f5\i0 \
+\f4\i0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f2\i\b0 \cf0 Analysis object creation / manipulation / spatial clipping
-\f5\i0\b \
+\f4\i0\b \
 	
 \f1\b0 R	patchStretchToBoundary.m			(stretchToBoundary.m)\
 	M	patchCreateSampledAlphaHull.m		(sampledAlphaHull.m)\
@@ -638,14 +644,14 @@ Analysis I/O\
 \f1\i0 \cf0 M	elementSymbol.m						(sym4number.m, table based?)\
 M	elementAtomicNumber.m					(number4sym.m, table based?)\
 	
-\f5\b \
+\f4\b \
 \
 During Analysis\
 Naming of analysis files\
 
 \f1\b0 Mass spectrum ranging figure 					SPECIMENNAME_rng.fig \
 3D atom map								SPECIMENNAME_3D.fig
-\f5\b \
+\f4\b \
 \
 Naming of analysis objects\
 
@@ -657,5 +663,5 @@ point object\
 WCS\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f5\b \cf0 \
+\f4\b \cf0 \
 }
