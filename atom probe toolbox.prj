@@ -1,0 +1,168 @@
+<deployment-project plugin="plugin.toolbox" plugin-version="1.0">
+  <configuration file="/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/Atom Probe Toolbox/Atom-Probe-Toolbox/atom probe toolbox.prj" location="/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/Atom Probe Toolbox/Atom-Probe-Toolbox" name="atom probe toolbox" target="target.toolbox" target-name="Package Toolbox">
+    <param.appname>atom probe toolbox</param.appname>
+    <param.authnamewatermark>Felfer research group</param.authnamewatermark>
+    <param.email>peter.felfer@fau.de</param.email>
+    <param.company>Friedrich-Alexander Universität</param.company>
+    <param.summary>Toolbox for the analysis and visualisation of atom probe data</param.summary>
+    <param.description />
+    <param.screenshot />
+    <param.version>0.9</param.version>
+    <param.output>${PROJECT_ROOT}/atom probe toolbox.mltbx</param.output>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.guid>84d6e253-912b-4b19-9bdd-8bd5f300e1c6</param.guid>
+    <param.exclude.filters />
+    <param.exclude.pcodedmfiles>true</param.exclude.pcodedmfiles>
+    <param.examples />
+    <param.demosxml />
+    <param.apps />
+    <param.registered.apps>
+      <file>${PROJECT_ROOT}/ionFind.mlapp</file>
+    </param.registered.apps>
+    <param.docs>${PROJECT_ROOT}/info.xml</param.docs>
+    <param.getting.started.guide>${PROJECT_ROOT}/doc/GettingStarted.mlx</param.getting.started.guide>
+    <param.matlabpath.excludes />
+    <param.javaclasspath.excludes />
+    <param.exported.on.package>true</param.exported.on.package>
+    <param.required.addons />
+    <param.matlab.project.id />
+    <param.matlab.project.name />
+    <param.release.start>R2019b</param.release.start>
+    <param.release.end>R2019b</param.release.end>
+    <param.release.current.only>true</param.release.current.only>
+    <param.compatiblity.windows>true</param.compatiblity.windows>
+    <param.compatiblity.macos>true</param.compatiblity.macos>
+    <param.compatiblity.linux>true</param.compatiblity.linux>
+    <param.compatiblity.matlabonline>true</param.compatiblity.matlabonline>
+    <param.installation.map />
+    <param.additional.sw.names />
+    <param.additional.sw.licenses />
+    <param.additional.sw.win.url />
+    <param.additional.sw.mac.url />
+    <param.additional.sw.linux.url />
+    <unset>
+      <param.description />
+      <param.screenshot />
+      <param.output />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+      <param.exclude.filters />
+      <param.exclude.pcodedmfiles />
+      <param.examples />
+      <param.demosxml />
+      <param.apps />
+      <param.matlabpath.excludes />
+      <param.javaclasspath.excludes />
+      <param.required.addons />
+      <param.matlab.project.id />
+      <param.matlab.project.name />
+      <param.compatiblity.windows />
+      <param.compatiblity.macos />
+      <param.compatiblity.linux />
+      <param.compatiblity.matlabonline />
+      <param.installation.map />
+      <param.additional.sw.names />
+      <param.additional.sw.licenses />
+      <param.additional.sw.win.url />
+      <param.additional.sw.mac.url />
+      <param.additional.sw.linux.url />
+    </unset>
+    <fileset.rootdir>
+      <file>${PROJECT_ROOT}</file>
+    </fileset.rootdir>
+    <fileset.rootfiles>
+      <file>${PROJECT_ROOT}/.DS_Store</file>
+      <file>${PROJECT_ROOT}/.git</file>
+      <file>${PROJECT_ROOT}/.gitattributes</file>
+      <file>${PROJECT_ROOT}/DesktopToolset.xml</file>
+      <file>${PROJECT_ROOT}/LICENSE</file>
+      <file>${PROJECT_ROOT}/README.md</file>
+      <file>${PROJECT_ROOT}/colorScheme.mat</file>
+      <file>${PROJECT_ROOT}/createIonTable.m</file>
+      <file>${PROJECT_ROOT}/doc</file>
+      <file>${PROJECT_ROOT}/info.xml</file>
+      <file>${PROJECT_ROOT}/ionAdd.m</file>
+      <file>${PROJECT_ROOT}/ionConvertName.m</file>
+      <file>${PROJECT_ROOT}/ionFind.mlapp</file>
+      <file>${PROJECT_ROOT}/isotopeTable_naturalAbundances.mat</file>
+      <file>${PROJECT_ROOT}/massSpecPlot.m</file>
+      <file>${PROJECT_ROOT}/massSpecReorderPlot.m</file>
+      <file>${PROJECT_ROOT}/massSpecShowLegend.m</file>
+      <file>${PROJECT_ROOT}/meta</file>
+      <file>${PROJECT_ROOT}/posToTable.m</file>
+      <file>${PROJECT_ROOT}/rangeAdd.m</file>
+      <file>${PROJECT_ROOT}/symbolConvertAtomicNumber.m</file>
+      <file>${PROJECT_ROOT}/test data</file>
+      <file>${PROJECT_ROOT}/utilities</file>
+    </fileset.rootfiles>
+    <fileset.depfun.included>
+      <file>/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/atom probe code/atom-probe-code/massSpecTools/resources1/createComplexIons.m</file>
+      <file>/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/atom probe code/atom-probe-code/massSpecTools/resources1/ionStemPlot.m</file>
+      <file>/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/atom probe code/atom-probe-code/massSpecTools/resources1/ionsCreateIsotopeList.m</file>
+      <file>/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/atom probe code/atom-probe-code/massSpecTools/resources1/ionsMergePeaks.m</file>
+      <file>/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/atom probe code/atom-probe-code/massSpecTools/resources1/nreplacek.m</file>
+      <file>/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/atom probe code/atom-probe-code/massSpecTools/resources1/permn.m</file>
+    </fileset.depfun.included>
+    <fileset.depfun.excluded />
+    <fileset.package />
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}" name="atom probe toolbox.mltbx" optional="false">/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/Atom Probe Toolbox/Atom-Probe-Toolbox/atom probe toolbox.mltbx</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>/Applications/MATLAB_R2019b.app</root>
+      <toolboxes>
+        <toolbox name="matlabcoder" />
+        <toolbox name="embeddedcoder" />
+        <toolbox name="fixedpoint" />
+        <toolbox name="matlabhdlcoder" />
+        <toolbox name="neuralnetwork" />
+      </toolboxes>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
+      <toolbox>
+        <fixedpoint>
+          <enabled>true</enabled>
+        </fixedpoint>
+      </toolbox>
+      <toolbox>
+        <matlabhdlcoder>
+          <enabled>true</enabled>
+        </matlabhdlcoder>
+      </toolbox>
+      <toolbox>
+        <neuralnetwork>
+          <enabled>true</enabled>
+        </neuralnetwork>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>true</unix>
+      <mac>true</mac>
+      <windows>false</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>10.14.6</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>maci64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

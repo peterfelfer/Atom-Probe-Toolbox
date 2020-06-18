@@ -1,16 +1,25 @@
-function list = createIonTable(elements,chargeStates,isotopeTable,maxComplexity,complexFormers,abundanceThreshold)
+function list = ionTableCreate(elements,chargeStates,isotopeTable,maxComplexity,complexFormers,abundanceThreshold)
 % creates a table of all possible ions up to a max complexity
 % maxComplexity of elements (can be a list of atomic numbers, symbols or
 % 'all' for a list of chargeStates e.g. [1,2,3]. Complex formers can be
 % specified.
-
-% Output is a struct with .massToCharge (sorted), ionType{},
-% relativeAbundance()
-
-% if complexformers = 'std' complexformers = H, H2, H3, He, B, C, C2, C3,
-% N, O, O2, Ne. If complexFormers = 'and C P ....' it takes the elements
-% in elements and adds the additional specified elements
-
+% 
+% list = ionTableCreate(elements,chargeStates,isotopeTable,maxComplexity,complexFormers,abundanceThreshold)
+%
+% INPUTS
+% elements:             can be a list of atomic numbers, symbols or 'all'    
+% chargeStates:         list of chargeStates e.g. [1,2,3]    
+% isotopeTable:         isotopeTable as given in the toolbox
+% maxComplexity:        maximal complexity of the created ions
+% complexFormers:       if complexformers = 'std' complexformers = H, H2, H3, He, B, C, C2, C3,
+%                       N, O, O2, Ne. If complexFormers = 'and C P ....' it takes the elements
+%                       in elements and adds the additional specified elements
+% abundanceThreshold:   sets an threshold for used isotopes to biuld the
+%                       list
+% 
+% OUTPUTS
+%                       struct with .massToCharge (sorted), ionType{},
+%                       relativeAbundance()
 
 %% input interpretation (character inputs ==> list of atomic numbers)
 % elements are parsed as a character array or string (whitespace delimited, 'Fe Ni Mo ...')
