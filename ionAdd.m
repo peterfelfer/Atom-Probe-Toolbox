@@ -1,4 +1,3 @@
-
 function h = ionAdd(spec,ion,chargeState,isotopeTable,colorScheme,sumMargin,minAbundance,maxHeight,maxSeparation)
 % ionAdd creates a stem plot in the mass spectrum (spec) for the parsed ion
 % and its corresponding charge state. The stem line will be according to
