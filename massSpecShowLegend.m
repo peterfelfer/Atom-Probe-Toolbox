@@ -1,5 +1,5 @@
 function massSpecShowLegend(spec,items)
-% shows the legend of a mass spectrum plot, with selected item(s) in focus as 
+% massSpecShowLegende shows the legend of a mass spectrum plot, with selected item(s) in focus as 
 % shown below, order of items is editable
 % unknown ions will not be shown in the legend
 %
@@ -10,6 +10,7 @@ function massSpecShowLegend(spec,items)
 % INPUTS
 % spec:     spec is the name of the areaplot that contains the
 %           mass spectrum, area
+%
 % items:    defines which information is written down in the legend
 %           "ion": list of ions by type (isotopes not listed)
 %           "range": list of ions and ranged isotopes
@@ -20,7 +21,7 @@ function massSpecShowLegend(spec,items)
 % OUTPUTS
 %           shows the legend of the ranged ions in the mass spectrum
 %           
-
+%%
 if ~exist('items','var')
     items = ["ion", "unknown"]; % "ion" "text" "massSpectrum" "range"
 end

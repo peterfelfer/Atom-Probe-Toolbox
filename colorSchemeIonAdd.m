@@ -6,18 +6,19 @@ function colorScheme = colorSchemeIonAdd(colorScheme, newIon, selection)
 % colorScheme = colorSchemeIonAdd(colorScheme, newIon)
 %
 % INPUT
-% colorScheme = The existing colorScheme
-% newIon = Name of the newIon, if the ion already exists, the function will
-%           end and the command window shows "ion already exists in
-%           colorScheme"
-% selection = 'select' if you want to choose the color
+% colorScheme:  The existing colorScheme
+% newIon:       Name of the newIon, if the ion already exists, the function will
+%               end and the command window shows "ion already exists in
+%               colorScheme"
+% selection:    'select' if you want to choose the color
 %               if nothing is parsed, the color is randomly generated
+% 
 % OUTPUT
-% colorScheme = the new colorScheme with the new ion added at the end of
+% colorScheme:  the new colorScheme with the new ion added at the end of
 %               the table
 
-
-NCOLS = 10000; % number of random colors to be generated for farthest point sampling
+%% number of random colors to be generated for farthest point sampling
+NCOLS = 10000; 
 
 %% Check for ion name
 ionTable = ionConvertName(newIon); % Convert the name in the table format

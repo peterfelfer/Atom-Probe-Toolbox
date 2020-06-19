@@ -2,12 +2,18 @@ function ionTable = ionsExtractFromMassSpec(spec)
 % pulls all ions and corresponding information from a mass spectrum plot
 % gets all plots connected to the mass spectrum
 %
-% INPUT: spec, area plot that displays the mass spectrum (histogram of m/c frequencies) 
-%        either in raw counts or normalised to bin width and total ion count
+% ionTable = ionsExtractFromMassSpec(spec)
 %
-% OUTPUT: ionTable, table with allocated ions and additional information
-%         (charge state, corresponding color code)
+% INPUT
+% spec: area plot that displays the mass spectrum (histogram of 
+%       m/c frequencies)either in raw counts or normalised to bin width 
+%       and total ion count
+%
+% OUTPUT 
+% ionTable: table with allocated ions and additional information
+%           charge state, corresponding color code)
 
+%%
 plots = spec.Parent.Children;
 
 idx = 1;

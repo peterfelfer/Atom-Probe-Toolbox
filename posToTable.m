@@ -15,7 +15,7 @@ function pos = posToTable(fileName)
 %
 % hint: in case of an epos file as input, be aware to select (*.epos) as
 %       displayed data type in the dialog box
-
+%%
 if ~exist('fileName','var')
     [file, path, idx] = uigetfile({'*.pos';'*.epos'},'Select a pos file');
     fileName = [path file];
