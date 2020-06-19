@@ -14,7 +14,7 @@ function pos = posAllocateRange(pos,rng,options)
 % pos:      first case, no 'options' input: table of reconstructed atom  
 %           positions with ionIdx, x, y, z, m/c, and additional ion and   
 %           chargeState fields
-%           second case, with 'decompose' as options input used: table of  
+%           second case, with 'decomposed' as options input used: table of  
 %           reconstructed atom positions with ionIdx, x, y, z, m/c, and 
 %           additional ion, chargeState, atom, isotope, and ionComplexity fields
 
@@ -49,7 +49,7 @@ if ~exist('options','var')
     
     
     % allocation with decomposition
-elseif strcmp(options,'decompose')
+elseif strcmp(options,'decomposed')
     numIon = height(pos);
     for r = 1:height(rng)
         rngComplexity(r,:) = height(rng.ion{r});

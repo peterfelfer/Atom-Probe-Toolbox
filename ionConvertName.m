@@ -28,17 +28,24 @@ function varargout = ionConvertName(varargin)
 %   (element count) x N                            'Fe2 O3'
 %   individual nucleides will be sorted by atomic number descending 
 %   e.g. 'O H2'
+%
 % ionTable:         Table that contains the element and the isotope
+%
 % ionCategorical:   ion table that is stored as an categorical array
+%
 % ionArray:         Matrix of element and isotope number 
 %                   e.g. Fe2O3 = [26,56;26,56;8,16;8,16;8,16;];
+%
 % chargeState:      is the charge State of the ion 
+%
 % NaN:              if no chargeState is parsed
+%
 % format:           can be 'plain' or 'LaTeX'
+%
 % isotopeTable:     Table with all isotopes
 
 %% conversion from array to table. The new table is saved as an input 
-%% argument and is converted to ionName as a normal table
+% argument and is converted to ionName as a normal table
 
 % check for input as an array 
 if ismatrix(varargin{1}) & ~istable(varargin{1}) & ~iscategorical(varargin{1}) & ~ischar(varargin{1})

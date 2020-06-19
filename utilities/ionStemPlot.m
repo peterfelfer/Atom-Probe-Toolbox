@@ -1,6 +1,24 @@
 function h = ionStemPlot(ax, weight, abundance, ionList, chargeStates, colorScheme)
-% plots the relative abundances of an ion in a stem plot
+% ionStemPlot plots the relative abundances of an ion in a stem plot
 % the information about the ion is given in h.UserData 
+% 
+% h = ionStemPlot(ax, weight, abundance, ionList, chargeStates, colorScheme)
+%
+% INPUTS
+% ax:           axis of the current massspectrum
+%
+% weight:       weight of the ion
+%
+% adundance:    adundance for the choosen ion
+%
+% ionList:      list of all possible ions
+% 
+% chargeStates: chargestates for the given ions
+%
+% colorScheme:  colorScheme as provided or self made
+%
+% OUTPUT
+% h:            handle to the stem plot
 
 
 % generate ion name
