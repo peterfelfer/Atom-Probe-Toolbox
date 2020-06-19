@@ -1,7 +1,6 @@
 function ionTable = ionsExtractFromMassSpec(spec)
-% ionsExtractFromMassSpec pulls all ions and corresponding information 
-% from a mass spectrum plot and gets all plots connected to the mass 
-% spectrum
+% pulls all ions and corresponding information from a mass spectrum plot
+% gets all plots connected to the mass spectrum
 %
 % ionTable = ionsExtractFromMassSpec(spec)
 %

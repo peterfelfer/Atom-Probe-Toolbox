@@ -1,15 +1,5 @@
 function weight = isotopicWeightAll(Z)
-% isotopicWeight gives back the weight of an certain isotope
-%
-% weight = isotopicWeight(Z,isotope)
-%
-% INPUT
-% Z: atomic number of the element
-%
-% isotope: number of the isotope
-%
-% OUTPUT
-% weight: weight of the given isotope
+
 
 
 weight = []; % [isotope weight abundance]

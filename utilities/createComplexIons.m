@@ -4,17 +4,42 @@ function ionList = createComplexIons(baseNucleides, complexNucleides, complexity
 % ionList = createComplexIons(baseNucleides, complexNucleides, complexity)
 % 
 % INPUT        
-% baseNucleides:    nucleides that only forming noncomplex ions
-% 
-% complexNucleides: nucleides that are forming complex ions
-% 
-% complexity:       complexity of the ions that are formed
+% spec:         mass spectrum to whom the stem plot is added to
+% ion:          chemical symbol of the ion that will be added,
+%               string scalar or string array
+% chargeState:  charge state of the ion; if ion is a string array,
+%               chargeState can be a scalar, a vector of charge states for
+%               all ions (e.g.[1 2 3]) or a vector with the same number 
+%               of entries as the ion list
+% isotopeTable: the parsed isotope table is the basis of the relative
+%               abundances
+% colorScheme:  each ion has a different color
+% sumMargin:    specifies a margin within which two peaks will be summed up
+% minAbundance: is the minimal abundance, value between 0 and 1
+% maxHeight:    is the height of the most abundant isotope (counts or
+%               relative frequency)
+%               default: to the YScale of the plotaxis
+%               numeric value: you can type in the height of the highest
+%               peak
+%               'selection': uses a graphical input to select a peak, to
+%               which the nearest isotopic combination will be scaled
+%               'most abundant': adjusts the height of the most abundant 
+%               peak to the closest peak in the mass spectrum
+%               'least squares': adjusts the heights of the peaks to least 
+%               squares match the peaks in the mass spectrum. Peaks that 
+%               are close to other assigned peaks are not used.
+% maxSeparation:is used when peak detection is used. The maximum of the
+%               mass spectrum within this range will be used for scaling
 % 
 % OUTPUT
-% ionList:          list of all formable Ions
+% h:            optional, is a 1x1 stem plot
 % 
+% THE FOLLOWING WILL BE STORED IN THE USER DATA SECTION OF THE PLOT:
+% plotType = 'ion'
+% isotopicCombinations: list of peaks vs. nucleides in the ion and
+% charge state
 %% if the complexity is 1, a list of both the base and complex nucleides is
-%%  returned with the ion species in a cell array
+%% returned with the ion species in a cell array
 
 if complexity == 1
     

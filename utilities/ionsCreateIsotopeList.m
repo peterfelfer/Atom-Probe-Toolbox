@@ -1,16 +1,8 @@
 function [ions, abundance, weight] = ionsCreateIsotopeList(ion, isotopeTable)
-% ionCreateIsotopeList takes an ion type, e.g.'Cr2 O3' and gives all 
-% isotopic combinations, based on the supplied isotopeTable
-% 
-% [ions, abundance, weight] = ionsCreateIsotopeList(ion, isotopeTable)
-%
-% INPUTS
-% ion:                       ion to whom the combinations are made
-%   
-% isotopeTable:              Table of all isotopes of all elements                  
-% 
-% OUTPUTS
-% [ions, abundance, weight]: cell arry with all possible combinations 
+% takes an ion type, e.g.'Cr2 O3' and gives all isotopic combinations,
+% based on the supplied isotopeTable
+
+
 %% interpret ion name into a table [element count]
 ionTable = ionConvertName(ion);
 

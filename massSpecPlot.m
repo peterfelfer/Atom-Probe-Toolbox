@@ -21,7 +21,7 @@ function handle = massSpecPlot(mc, bin, mode)
 %           (counts/Dalton)/totalCounts over Dalton. Used in further
 %           analysis to find new ions
 
-%%
+
 % count is default mode
 if ~exist('mode','var')
     mode = 'count';

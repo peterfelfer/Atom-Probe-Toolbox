@@ -1,22 +1,7 @@
 function [ionType, abundance, weight] = ionsMergePeaks(ionType, abundance, weight, mergeMargin)
-% ionsMergePeaks takes a list of isotopic combinations and merges peaks 
-% that are closer than mergeMargin
-% 
-% [ionType, abundance, weight] = ionsMergePeaks(ionType, abundance, weight, mergeMargin)
-% 
-% INPUT
-% ionType:                      type of the ion for that peaks should 
-%                               be merged
-% 
-% abundance:                    relativ abundance of the peak in 
-%                               the massspectrum
-%
-% weight:                       weight of the ion
-%
-% mergeMargin:                  peaks within this range will be merged
-% 
-% OUTPUT
-% [ionType, abundance, weight]: cell array of merged Peaks
+% takes a list of isotopic combinations and merges peaks that are closer
+% than mergeMargin
+
 % sort by molecular weight
 [weight, sortIdx] = sort(weight);
 abundance = abundance(sortIdx);

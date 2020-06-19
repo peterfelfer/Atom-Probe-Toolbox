@@ -1,8 +1,4 @@
 function isoList = nucleideList
-% nucleideList provides an list of all isitopes of all elements with all
-% weights an abundances
-%
-% isoList = nucleideList
 
 isoList = [];
 

@@ -1,9 +1,7 @@
 function axisSpatialAptify
-% axisSpatialAptify takes the current axes and puts them into an APT style 
-% display. It sets the axes and background color, the direction of the 
-% z-axis and the plot is ready to rotate the reconstructed APT tip.
-% 
-% axisSpatialAptify
+% script that takes current axes and puts them into an APT style display
+% mode (ready to rotate the reconstructed APT tip; 
+% sets axes and background color, direction of z-axis)
 
 axis equal;
 rotate3d on;

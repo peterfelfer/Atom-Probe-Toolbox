@@ -1,38 +1,50 @@
 function [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size,plotAxis)
+% scatterPlotPosData plots APT data in the usual style. Sample allows the specificaiton of a
+% subset to plot. If sample <1, it is a fraction of the overall number of
+% atoms, if >1, it is a fixed number. 'color' is provided as RGB vector
+% 'crop' crops data before plotting rather than just setting axes limits.
+% Makes for more responsive plots and smaller fiels when saving a figure. If
+% an axis is parsed, it will be plotted in that axis.
+
+% alternatively to a colorScheme, also raw color values can be given.
+
+% for single atom ions with no chargeState definition:
+% uses ions when no atom range allocated (not 'decomposed'), atoms when allocated
+
+% ax axis output is only important if a tiled plot is created
+
+%sample needs to be scalar or vector with same length as species. Same for
+%size
+
+%if multiple species are given and no plotAxis, array of axes is plotted with synced axis
+%movement. Otehrwise they all go into the same axis. plothandle (p) and
+%axis (ax) output can therefore be scalar or aray
 % scatterPlotPosData plots APT data in the usual style.
 % 
 % [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size,plotAxis)
 % [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size)
-% [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme)
 % 
 % INPUT
 % pos:            decomposed pos file      
-% 
-% species:        Which ion/atom should be plotted
-%                 one single ion {'C'}
-%                 more ions {'H','C', 'N'}
-%                 if multiple species are given and no plotAxis, array of 
-%                 axes is plotted with synced axis movement. 
-%                 Otherwise they all go into the same axis.
-% 
-% sample:         allows the specification of a subset to plot. 
-%                 If sample <1, it is a fraction of the overall number of
-%                 atoms, if >1, it is a fixed number. Can be a scalar or a 
-%                 vector with same length as species.
-% 
-% colorScheme:    a colorScheme can be parsed or a RGB color vector
-%
-% size:           size of the single atoms in the plot
-%                 can be a scalar or a vector with same length as species.
-%
+% species:        
+% sample:         sample <1, it is a fraction of the overall number of
+% atoms, if >1, it is a fixed number. can be a scalar or a vector with same legtn as species.
+% colorScheme:    a colorScheme can be parsed or a RGB color vector 
+% size:           can be a scalar or a vector with same legtn as species.       
 % plotAxis:       an axis for the plot can be parsed. If no plotAxis is 
 %                 parsed, a new axis is created. If you want to plot
 %                 mulitple Ions in one plot write axes(figure()) for
 %                 plotAxis.
 % 
 % OUTPUT
-% p:              plothandle
-% ax:             axis from the plot, important for tiled plot
+% p:              handle of the plot
+% ax:             axis from the plot
+
+
+
+
+
+
 
 
 %%
