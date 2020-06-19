@@ -27,8 +27,9 @@ function [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size,plotAx
 % INPUT
 % pos:            decomposed pos file      
 % species:        
-% sample:         can be a scalar or a vector with same legtn as species.
-% colorScheme:    a colorScheme can be parsed or a color vector 
+% sample:         sample <1, it is a fraction of the overall number of
+% atoms, if >1, it is a fixed number. can be a scalar or a vector with same legtn as species.
+% colorScheme:    a colorScheme can be parsed or a RGB color vector 
 % size:           can be a scalar or a vector with same legtn as species.       
 % plotAxis:       an axis for the plot can be parsed. If no plotAxis is 
 %                 parsed, a new axis is created. If you want to plot
