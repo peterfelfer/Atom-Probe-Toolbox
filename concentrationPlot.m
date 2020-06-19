@@ -18,7 +18,7 @@ function [p, ax, f] = concentrationPlot(conc,excludeList, plotType, colorScheme)
 %               concentration, unranged atoms appear as 'unranged', if not 
 %               parsed, no atoms will be excluded
 %
-% plotType:     can be a 'pie' or 'bar'
+% plotType:     can be a 'pie' or 'bar', default is 'bar'
 %
 % colorScheme:  coloring will be according to colorScheme
 %               If multiple volumes are parsed and you want to color by 
