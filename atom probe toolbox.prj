@@ -83,12 +83,14 @@
       <file>${PROJECT_ROOT}/LICENSE</file>
       <file>${PROJECT_ROOT}/README.md</file>
       <file>${PROJECT_ROOT}/colorScheme.mat</file>
+      <file>${PROJECT_ROOT}/colorSchemeIonAdd.m</file>
       <file>${PROJECT_ROOT}/createIonTable.m</file>
       <file>${PROJECT_ROOT}/doc</file>
       <file>${PROJECT_ROOT}/info.xml</file>
       <file>${PROJECT_ROOT}/ionAdd.m</file>
       <file>${PROJECT_ROOT}/ionConvertName.m</file>
       <file>${PROJECT_ROOT}/ionFind.mlapp</file>
+      <file>${PROJECT_ROOT}/ionWeight.m</file>
       <file>${PROJECT_ROOT}/isotopeTable_naturalAbundances.mat</file>
       <file>${PROJECT_ROOT}/massSpecPlot.m</file>
       <file>${PROJECT_ROOT}/massSpecReorderPlot.m</file>
@@ -96,7 +98,6 @@
       <file>${PROJECT_ROOT}/meta</file>
       <file>${PROJECT_ROOT}/posToTable.m</file>
       <file>${PROJECT_ROOT}/rangeAdd.m</file>
-      <file>${PROJECT_ROOT}/symbolConvertAtomicNumber.m</file>
       <file>${PROJECT_ROOT}/test data</file>
       <file>${PROJECT_ROOT}/utilities</file>
     </fileset.rootfiles>
