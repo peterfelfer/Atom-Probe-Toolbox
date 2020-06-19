@@ -1,0 +1,9 @@
+function rangeAddAll(spec,colorScheme)
+% rangeAddAll is a convenience function that guides the user through the
+% ranging process for all defined ioninc peaks that currently have no range
+% associated with them. The focus in the figure is automatically given to
+% the current peak and the region around it. 
+%
+%
+
+% find individual peaks and determine if a range is defined
