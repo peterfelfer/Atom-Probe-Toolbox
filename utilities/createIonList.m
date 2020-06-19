@@ -1,12 +1,32 @@
 function list = createIonList(elements,chargeStates,maxComplexity,complexFormers,abundanceThreshold)
-
-%% creates a list of all possible ions up to a max complexity
-%% maxComplexity of elements (can be a list of atomic numbers, symbols or
-%% 'all' for a list of chargeStates e.g. [1,2,3]. Complex formers can be
-%% specified.
-
-%% Output is a struct with .massToCharge (sorted), ionType{},
-%% relativeAbundance()
+% createIonList creates a list of all possible ions up to a max complexity
+% maxComplexity of elements (can be a list of atomic numbers, symbols or
+% 'all' for a list of chargeStates e.g. [1,2,3]. Complex formers can be
+% specified.
+% 
+% list = ionTableCreate(elements,chargeStates,isotopeTable,maxComplexity,complexFormers,abundanceThreshold)
+%
+% INPUTS
+% elements:             can be a list of atomic numbers, symbols or 'all'    
+% 
+% chargeStates:         list of chargeStates e.g. [1,2,3]    
+% 
+% isotopeTable:         isotopeTable as given in the toolbox
+% 
+% maxComplexity:        maximal complexity of the created ions
+% 
+% complexFormers:       if complexformers = 'std' complexformers = H, H2, 
+%                       H3, He, B, C, C2, C3, N, O, O2, Ne. 
+%                       If complexFormers = 'and C P ....' it takes the 
+%                       elements in elements and adds the additional 
+%                       specified elements
+% 
+% abundanceThreshold:   sets an threshold for used isotopes to biuld the
+%                       list
+% 
+% OUTPUTS
+% list:                 struct with .massToCharge (sorted), ionSpecies{},
+%                       relativeAbundance(), chargeState(), ionID()
 
 %% if complexformers = 'std' complexformers = H, H2, H3, He, B, C, C2, C3,
 %% N, O, O2, Ne. If complexFormers = 'and C P ....' it takes the elements
