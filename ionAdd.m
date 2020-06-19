@@ -8,6 +8,7 @@ function h = ionAdd(spec,ion,chargeState,isotopeTable,colorScheme,sumMargin,minA
 %
 % INPUT        
 % spec:         mass spectrum to whom the stem plot is added to
+%
 % ion:          chemical symbol of the ion that will be added,
 %               string scalar or string array
 %
