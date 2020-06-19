@@ -52,6 +52,7 @@ function h = ionAdd(spec,ion,chargeState,isotopeTable,colorScheme,sumMargin,minA
 %               charge state
 % 
 % ToDo:
+%   - implement specifying certain isotope (isotope combo) for peak height
 %   - implement isnumeric('minHeight')
 %   - implement 'least squares'
 %   - implement checking for duplicate ions

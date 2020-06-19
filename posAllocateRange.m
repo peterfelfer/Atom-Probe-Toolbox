@@ -20,7 +20,7 @@ function pos = posAllocateRange(pos,rng,options)
 %           reconstructed atom positions with ionIdx, x, y, z, m/c, and 
 %           additional ion, chargeState, atom, isotope, and ionComplexity fields
 
-%% find the range the ion is in
+% find the range the ion is in
 in = (pos.mc > rng.mcbegin') & (pos.mc < rng.mcend');
 unranged = ~sum(in,2);
 
@@ -58,7 +58,7 @@ elseif strcmp(options,'decompose')
         rngElements(r,1:rngComplexity(r)) = rng.ion{r}.element';
         rngIsotopes(r,1:rngComplexity(r)) = rng.ion{r}.isotope';
     end
-    rngComplexity(end+1) = 1; % for unranged ions
+    rngComplexity(end+1,:) = 1; % for unranged ions
     rngElements(end+1,1) = categorical(string(missing));
     rngIsotopes(end+1,1) = categorical(string(missing));
     
