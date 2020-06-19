@@ -26,16 +26,19 @@ function [h, txt] = rangeAdd(spec,colorScheme,manualName)
 % [h, txt] = rangeAdd(spec,colorScheme)
 % 
 %
-% INPUTS: spec, area plot that displays the mass spectrum (histogram of m/c frequencies) 
-%         either in raw counts or normalised to bin width and total ion count
+% INPUTS: 
+% spec:         area plot that displays the mass spectrum (histogram of  
+%               m/c frequencies)either in raw counts or normalised to bin 
+%               width and total ion count
 %
-%         colorScheme, table with elements assigned to color code
+% colorScheme:  table with elements assigned to color code
 %
-%         manualName, name of range if no ion is defined, following keywords
-%         are possible: 'background'. This defines a background range
+% manualName:   name of range if no ion is defined, following keywords
+%               are possible: 'background'. This defines a background range
 %
-% OUTPUTS: h, handle to the area plot of the range
-%          txt, corresponding text
+% OUTPUTS: 
+% h:            handle to the area plot of the range
+% txt:          corresponding text
 
 %% set current axes
 ax = spec.Parent;

@@ -1,10 +1,10 @@
 function [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size,plotAxis)
-%plots APT data in the usual style. Sample allows the specificaiton of a
-%subset to plot. If sample <1, it is a fraction of the overall number of
-%atoms, if >1, it is a fixed number. 'color' is provided as RGB vector
-%'crop' crops data before plotting rather than just setting axes limits.
-%Makes for more responsive plots and smaller fiels when saving a figure. If
-%an axis is parsed, it will be plotted in that axis.
+% scatterPlotPosData plots APT data in the usual style. Sample allows the specificaiton of a
+% subset to plot. If sample <1, it is a fraction of the overall number of
+% atoms, if >1, it is a fixed number. 'color' is provided as RGB vector
+% 'crop' crops data before plotting rather than just setting axes limits.
+% Makes for more responsive plots and smaller fiels when saving a figure. If
+% an axis is parsed, it will be plotted in that axis.
 
 % alternatively to a colorScheme, also raw color values can be given.
 
@@ -19,8 +19,34 @@ function [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size,plotAx
 %if multiple species are given and no plotAxis, array of axes is plotted with synced axis
 %movement. Otehrwise they all go into the same axis. plothandle (p) and
 %axis (ax) output can therefore be scalar or aray
+% scatterPlotPosData plots APT data in the usual style.
+% 
+% [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size,plotAxis)
+% [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size)
+% 
+% INPUT
+% pos:            decomposed pos file      
+% species:        
+% sample:         can be a scalar or a vector with same legtn as species.
+% colorScheme:    a colorScheme can be parsed or a color vector 
+% size:           can be a scalar or a vector with same legtn as species.       
+% plotAxis:       an axis for the plot can be parsed. If no plotAxis is 
+%                 parsed, a new axis is created. If you want to plot
+%                 mulitple Ions in one plot write axes(figure()) for
+%                 plotAxis.
+% 
+% OUTPUT
+% p:              handle of the plot
+% ax:             axis from the plot
 
 
+
+
+
+
+
+
+%%
 % find how many plots need to be done
 if iscell(species)
     numPlots = length(species);

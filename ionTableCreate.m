@@ -1,24 +1,30 @@
 function list = ionTableCreate(elements,chargeStates,isotopeTable,maxComplexity,complexFormers,abundanceThreshold)
-% creates a table of all possible ions up to a max complexity
-% maxComplexity of elements (can be a list of atomic numbers, symbols or
-% 'all' for a list of chargeStates e.g. [1,2,3]. Complex formers can be
-% specified.
+% ionTableCreate creates a table of all possible ions up to a max 
+% complexity maxComplexity of elements (can be a list of atomic numbers, 
+% symbols or 'all' for a list of chargeStates e.g. [1,2,3]. Complex formers 
+% can be specified.
 % 
 % list = ionTableCreate(elements,chargeStates,isotopeTable,maxComplexity,complexFormers,abundanceThreshold)
 %
 % INPUTS
-% elements:             can be a list of atomic numbers, symbols or 'all'    
+% elements:             can be a list of atomic numbers (cell array), 
+%                       symbols (string array) or 'all'
+
 % chargeStates:         list of chargeStates e.g. [1,2,3]    
+
 % isotopeTable:         isotopeTable as given in the toolbox
+
 % maxComplexity:        maximal complexity of the created ions
+
 % complexFormers:       if complexformers = 'std' complexformers = H, H2, H3, He, B, C, C2, C3,
 %                       N, O, O2, Ne. If complexFormers = 'and C P ....' it takes the elements
 %                       in elements and adds the additional specified elements
-% abundanceThreshold:   sets an threshold for used isotopes to biuld the
+
+% abundanceThreshold:   sets an threshold for used isotopes to build the
 %                       list
 % 
 % OUTPUTS
-%                       struct with .massToCharge (sorted), ionType{},
+% list:                 struct with .massToCharge (sorted), ionType{},
 %                       relativeAbundance()
 
 %% input interpretation (character inputs ==> list of atomic numbers)
@@ -33,7 +39,7 @@ if strcmp(elements,'all')
 else
     elements = strread(elements,'%s');
     for i=1:length(elements)
-        elements{i} = number4sym(elements{i});
+        elements{i} = symbolConvertAtomicNumber(elements{i});
     end
     elements = cell2mat(elements);
 end
@@ -99,10 +105,10 @@ if exist('complexFormers','var')
         
 end    
     %% based on the list 'complexNucleides', the complex ions are
-    %% calculated this list includes the element list and the list of
-    %% complex forming ions. This mean ions are formed by nucleides from
-    %% the list 'nucleidesUsed' + permutations of the nucleides from the
-    %% list 'complexNucleides' up to maxComplexity -1.
+    % calculated this list includes the element list and the list of
+    % complex forming ions. This mean ions are formed by nucleides from
+    % the list 'nucleidesUsed' + permutations of the nucleides from the
+    % list 'complexNucleides' up to maxComplexity -1.
     
     tempIon = {};
     tempMass =[];
@@ -136,8 +142,8 @@ end
 
 
 %% produce output struct with chargestates list.ionSpecies,
-%% list.massToCharge, list.relativeAbundance, list.chargeState. list.ionID
-%% has a unique number for ions of the same type across the chargestates.
+% list.massToCharge, list.relativeAbundance, list.chargeState. list.ionID
+% has a unique number for ions of the same type across the chargestates.
 list.ionSpecies = {};
 list.massToCharge = [];
 list.relativeAbundance = [];

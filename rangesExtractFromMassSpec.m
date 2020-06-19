@@ -1,13 +1,18 @@
 function rangeTable = rangesExtractFromMassSpec(spec)
-% pulls all ranges and additional information from a mass spectrum plot
-% gets all plots connected to the mass spectrum
+% rangesExtractFromMassSpec pulls all ranges and additional information 
+% from a mass spectrum plot gets all plots connected to the mass spectrum
 % 
-% INPUT: spec, area plot that displays the mass spectrum (histogram of m/c frequencies) 
-%        either in raw counts or normalised to bin width and total ion count
+% rangeTable = rangesExtractFromMassSpec(spec)
 %
-% OUTPUT: rangeTable, table with allocated ranges of the ions and additional information
-%         (charge state, corresponding color code)
+% INPUT: 
+% spec:     area plot that displays the mass spectrum (histogram of  
+%           m/c frequencies) either in raw counts or normalised to bin 
+%           width and total ion count
 %
+% OUTPUT: 
+% rangeTable:   table with allocated ranges of the ions and additional 
+%               information (charge state, corresponding color code)
+%%
 plots = spec.Parent.Children;
 
 

@@ -1,5 +1,5 @@
 function handle = massSpecPlot(mc, bin, mode)
-% plotMassSpec plots the data from pos to get a Massspectrum
+% massSpecPlot plots the data from pos to get a Massspectrum as a figure
 %
 % handle = plotMassSpec(mc, bin, mode)
 % handle = plotMassSpec(mc, bin)
@@ -7,7 +7,9 @@ function handle = massSpecPlot(mc, bin, mode)
 % INPUTS
 % mc:       is the mass-to-charge(mc)-ratio [Da] of the events in the
 %           APT-Measurement stored in pos, table
+%
 % bin:      is the width of the steps in which the plot is performed,
+%
 % mode:     Specifies the way the counts are applied
 %           'count' records the number of counts
 %           'normalised' records the number of counts if the bin was one Da
@@ -15,7 +17,7 @@ function handle = massSpecPlot(mc, bin, mode)
 %           default mode is 'count'
 %
 % OUTPUTS
-%           handle to the plot that contains counts or
+% handle:   handle to the plot that contains counts or
 %           (counts/Dalton)/totalCounts over Dalton. Used in further
 %           analysis to find new ions
 
