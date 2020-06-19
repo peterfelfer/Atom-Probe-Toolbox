@@ -3,12 +3,20 @@ function [ionType, abundance, weight] = ionsMergePeaks(ionType, abundance, weigh
 % that are closer than mergeMargin
 % 
 % [ionType, abundance, weight] = ionsMergePeaks(ionType, abundance, weight, mergeMargin)
+% 
 % INPUT
-% ionType: type of the ion 
+% ionType:                      type of the ion for that peaks should 
+%                               be merged
 % 
-% abundance: relativ abundance of the 
+% abundance:                    relativ abundance of the peak in 
+%                               the massspectrum
+%
+% weight:                       weight of the ion
+%
+% mergeMargin:                  peaks within this range will be merged
 % 
-% abundance: abundance 
+% OUTPUT
+% [ionType, abundance, weight]: cell array of merged Peaks
 % sort by molecular weight
 [weight, sortIdx] = sort(weight);
 abundance = abundance(sortIdx);
