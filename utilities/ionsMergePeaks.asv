@@ -6,7 +6,7 @@ function [ionType, abundance, weight] = ionsMergePeaks(ionType, abundance, weigh
 % INPUT
 % ionType: type of the ion 
 % 
-% abundance: relativ abundance of the 
+% abundance: der jeweiligen kombination
 % 
 % abundance: abundance 
 % sort by molecular weight
