@@ -1,18 +1,26 @@
 %error when range table only contains one range
 
-function pos = allocateRange(pos,rng,options)
-% takes a pos variable (table form) and a range variable (table form) and
+function pos = posAllocateRange(pos,rng,options)
+% posAllocateRange takes a pos and a range variable and
 % allocates ion hits to it.
+%
+% INPUTS:
+% pos:      table of reconstructed atom positions with ionIdx, x, y, z, and m/c
+%
+% rng:      table with extracted ranges from the mass spec
+%           input possible as rangesExtractFromMassSpec(spec)
+%
+% options:  'decompose': the complex ions will be split up
+%
+% OUTPUT:
+% pos:      first case, no 'options' input: table of reconstructed atom  
+%           positions with ionIdx, x, y, z, m/c, and additional ion and   
+%           chargeState fields
+%           second case, with 'decompose' as options input used: table of  
+%           reconstructed atom positions with ionIdx, x, y, z, m/c, and 
+%           additional ion, chargeState, atom, isotope, and ionComplexity fields
 
-% default:
-% ion chargeState
-% ion is the ion name excluding isotopic information
-
-% option 'decompose':
-% if option is 'decompose', the complex ions will be split up
-
-
-% find the range the ion is in
+%% find the range the ion is in
 in = (pos.mc > rng.mcbegin') & (pos.mc < rng.mcend');
 unranged = ~sum(in,2);
 
@@ -32,7 +40,7 @@ ionNames = [ionNames; categorical(string(missing))];
 chargeStates = rng.chargeState;
 chargeStates = [chargeStates; NaN];
 
-    % alloction by range
+    % allocation by range
 if ~exist('options','var')
     % allocate ion name to pos
     pos.ion = ionNames(rngIdx);
@@ -42,7 +50,7 @@ if ~exist('options','var')
     
     
     
-    %allocation with decomposition
+    % allocation with decomposition
 elseif strcmp(options,'decompose')
     numIon = height(pos);
     for r = 1:height(rng)
@@ -54,17 +62,17 @@ elseif strcmp(options,'decompose')
     rngElements(end+1,1) = categorical(string(missing));
     rngIsotopes(end+1,1) = categorical(string(missing));
     
-    % create vecor with indices mapping into new table
+    % create vector with indices mapping into new table
     ionComplexity = rngComplexity(rngIdx); % complexity of each hit
     mapVec = (repelem(1:height(pos),ionComplexity))'; % map vector to decomposed pos variable
     numAtomDecomp = length(mapVec);
     
-    % create vectors with ion name, chargestate, element, isotope, ion
-    % complexity
+    % create vectors with ion name, chargeState, element, isotope, 
+    % ion complexity
     
     % find index of atom in ion table
-    firstIdx = cumsum(ionComplexity); % index of first occurance of ion
-    atomIdx = (1:numAtomDecomp)' + ionComplexity(mapVec) - firstIdx(mapVec); %index of atom in ion table
+    firstIdx = cumsum(ionComplexity); % index of first occurrence of ion
+    atomIdx = (1:numAtomDecomp)' + ionComplexity(mapVec) - firstIdx(mapVec); % index of atom in ion table
     
     % index into rngElements and rngIsotopes linearly
     linIdx = sub2ind(size(rngElements),rngIdx(mapVec),atomIdx);
