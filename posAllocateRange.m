@@ -11,11 +11,11 @@ function pos = posAllocateRange(pos,rng,options)
 % options:  'decompose': the complex ions will be split up
 %
 % OUTPUT:
-% pos:      first case, no 'options' input: table of reconstructed atom  
-%           positions with ionIdx, x, y, z, m/c, and additional ion and   
+% pos:      first case, no 'options' input: table of reconstructed atom
+%           positions with ionIdx, x, y, z, m/c, and additional ion and
 %           chargeState fields
-%           second case, with 'decomposed' as options input used: table of  
-%           reconstructed atom positions with ionIdx, x, y, z, m/c, and 
+%           second case, with 'decompose' as options input used: table of
+%           reconstructed atom positions with ionIdx, x, y, z, m/c, and
 %           additional ion, chargeState, atom, isotope, and ionComplexity fields
 
 % find the range the ion is in
@@ -38,7 +38,7 @@ ionNames = [ionNames; categorical(string(missing))];
 chargeStates = rng.chargeState;
 chargeStates = [chargeStates; NaN];
 
-    % allocation by range
+% allocation by range
 if ~exist('options','var')
     % allocate ion name to pos
     pos.ion = ionNames(rngIdx);
@@ -49,7 +49,7 @@ if ~exist('options','var')
     
     
     % allocation with decomposition
-elseif strcmp(options,'decomposed')
+elseif strcmp(options,'decompose')
     numIon = height(pos);
     for r = 1:height(rng)
         rngComplexity(r,:) = height(rng.ion{r});
@@ -65,7 +65,7 @@ elseif strcmp(options,'decomposed')
     mapVec = (repelem(1:height(pos),ionComplexity))'; % map vector to decomposed pos variable
     numAtomDecomp = length(mapVec);
     
-    % create vectors with ion name, chargeState, element, isotope, 
+    % create vectors with ion name, chargeState, element, isotope,
     % ion complexity
     
     % find index of atom in ion table
@@ -85,6 +85,12 @@ elseif strcmp(options,'decomposed')
     % give all unranged and unknown ions an ion complexity of NaN
     pos.ionComplexity = ionComplexity(mapVec);
     pos.ionComplexity(isundefined(pos.ion) | isnan(pos.chargeState)) = NaN;
+    
+    % return notification if options input is not 'decomposed'
+elseif ~strcmp(options,'decompose')
+    
+    error('Invalid options input. Only allowed option is: ''decompose''.');
+    
 end
 
 
