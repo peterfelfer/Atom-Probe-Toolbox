@@ -1,5 +1,3 @@
-%error when range table only contains one range
-
 function pos = posAllocateRange(pos,rng,options)
 % posAllocateRange takes a pos and a range variable and
 % allocates ion hits to it.
