@@ -1,6 +1,6 @@
 function symnum = symbolConvertAtomicNumber(input)
-% symbolConvertAtomicNumber transform the atomic number of an element to his symbol and vice versa the
-% symbol to the atomic number Z
+% symbolConvertAtomicNumber transform the atomic number of an element to 
+% his symbol and vice versa the symbol to the atomic number Z
 % 
 % symnum = symbolConvertAtomicNumber(input)
 % 
