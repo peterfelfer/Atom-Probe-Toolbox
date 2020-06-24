@@ -16,8 +16,8 @@ function list = ionTableCreate(elements,chargeStates,isotopeTable,maxComplexity,
 
 % maxComplexity:        maximal complexity of the created ions
 
-% complexFormers:       if complexformers = 'std' complexformers = H, H2, H3, He, B, C, C2, C3,
-%                       N, O, O2, Ne. If complexFormers = 'and C P ....' it takes the elements
+% complexFormers:       if complexformers = 'std' complexformers = H, H2, H3, C, C2, C3,
+%                       N, O, O2. If complexFormers = 'and C P ....' it takes the elements
 %                       in elements and adds the additional specified elements
 
 % abundanceThreshold:   sets an threshold for used isotopes to build the
