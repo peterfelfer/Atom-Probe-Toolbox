@@ -2,7 +2,7 @@ function rangeAddAll(spec,colorScheme,rangeMargin)
 % rangeAddAll is a convenience function that guides the user through the
 % ranging process for all defined ioninc peaks that currently have no range
 % associated with them. The focus in the figure is automatically given to
-% the current peak and the region around it. 
+% the current peak and the region around it.
 %
 % rangeMargin is the number of Da before and after the peak that are
 % displayed
@@ -29,9 +29,16 @@ ionLocations = ionLocations';
 % compare with ranges
 rangeTable = rangesExtractFromMassSpec(spec);
 
-notInRange = not(any((ionLocations > rangeTable.mcbegin') & (ionLocations < rangeTable.mcend'),2));
-unrangedIonLocations = ionLocations(notInRange);
-unrangedPeakHeights = peakHeights(notInRange);
+if ~isempty(rangeTable)
+    %check which ions currently have no range associated with them for any
+    %populated range table
+    notInRange = not(any((ionLocations > rangeTable.mcbegin') & (ionLocations < rangeTable.mcend'),2));
+    unrangedIonLocations = ionLocations(notInRange);
+    unrangedPeakHeights = peakHeights(notInRange);
+else
+    %if no ranges exist in the mass spectrum
+    notInRange = true(size(ionLocations));
+end
 
 
 
@@ -42,7 +49,7 @@ for ion = 1:length(unrangedIonLocations)
     spec.Parent.YLim = [yPlotLimits(1), unrangedPeakHeights(ion)*1.5];
     
     % put a marker there
-       
+    
     % range the peak
     rangeAdd(spec,colorScheme);
 end
