@@ -78,7 +78,7 @@ if ischar(elements)
         
         elements = strread(elements,'%s');
         for i=1:length(elements)
-            elements{i} = number4sym(elements{i});
+            elements{i} = symbolConvertAtomicNumber(elements{i});
         end
         
         elements = cell2mat(elements);
