@@ -1,18 +1,18 @@
 function [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size,plotAxis)
-% scatterPlotPosData plots APT data in the usual style.
+% scatterPlotPosData plots APT data in the typical APT style.
 % 
 % [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size,plotAxis)
 % [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size)
 % [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme)
 % 
 % INPUT
-% pos:            decomposed pos file      
+% pos:            decomposed or allocated pos file with pos.ion column      
 % 
-% species:        Which ion/atom should be plotted
+% species:        Which ion/atom species should be plotted
 %                 one single ion {'C'}
-%                 more ions {'H','C', 'N'}
+%                 more ions {'H','C','N'}
 %                 if multiple species are given and no plotAxis, array of 
-%                 axes is plotted with synced axis movement. 
+%                 axes is plotted with synched axis movement. 
 %                 Otherwise they all go into the same axis.
 % 
 % sample:         allows the specification of a subset to plot. 
@@ -31,7 +31,7 @@ function [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size,plotAx
 %                 plotAxis.
 % 
 % OUTPUT
-% p:              plothandle
+% p:              plot handle
 % ax:             axis from the plot, important for tiled plot
 
 
@@ -98,7 +98,7 @@ for pl = 1:numPlots
     
     % finds chemical elements
     if any(isnan(ionTable.isotope)) & isDecomposed & isnan(ionChargeState) & height(ionTable) == 1
-        %use atoms
+        % use atoms
         speciesIdx = find(pos.atom == species{pl});
         color = colorScheme.color(colorScheme.ion == species{pl},:);
         
