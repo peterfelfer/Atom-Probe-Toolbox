@@ -29,6 +29,7 @@ for pl = 1:length(plotHandles)
     end
 end
 ionLocations = ionLocations';
+peakHeights = peakHeights';
 
 % compare with ranges
 rangeTable = rangesExtractFromMassSpec(spec);
@@ -50,7 +51,7 @@ if exist('useMin','var')
     limPoints = sortrows(limPoints);
     % extrapolate to limits of mass spectrum as constant
     limPoints = [spec.XData(1) limPoints(1,2) ; limPoints; spec.XData(end) limPoints(end,2)];
-    limPlotHandle = line(limPoints(:,1),limPoints(:,2),'-r','LineWidth',2); % line plot of the background selection
+    limPlotHandle = line(spec.Parent,limPoints(:,1),limPoints(:,2),'Color',[1 0 0],'LineWidth',2); % line plot of the background selection
     % get limit y values for ion peak locations
     limVals = interp1(limPoints(:,1),limPoints(:,2),ionLocations,'linear');
     % compare to peak heights
@@ -61,7 +62,7 @@ unrangedIonLocations = ionLocations(notInRange & isAboveLimit);
 unrangedPeakHeights = peakHeights(notInRange & isAboveLimit);
 
 %% cycle through ions that have no range associated
-for ion = 1:length(unrangedIonLocations)
+wfor ion = 1:length(unrangedIonLocations)
     % put focus on peak
     spec.Parent.XLim = [unrangedIonLocations(ion) - rangeMargin, unrangedIonLocations(ion) + rangeMargin];
     spec.Parent.YLim = [yPlotLimits(1), unrangedPeakHeights(ion)*1.5];
