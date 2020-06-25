@@ -52,9 +52,8 @@ if exist('useMin','var')
     limPoints = [spec.XData(1) limPoints(1,2) ; limPoints; spec.XData(end) limPoints(end,2)];
     limPlotHandle = line(limPoints(:,1),limPoints(:,2),'-r','LineWidth',2); % line plot of the background selection
     % get limit y values for ion peak locations
-    limVals = interp1(limPoints(:,1),limPoints(:,2),ionLocations,'linear');
+    limVals = interp1(ionLocations
     % compare to peak heights
-    isAboveLimit = peakHeights > limVals;
 end
 
 unrangedIonLocations = ionLocations(notInRange & isAboveLimit);
