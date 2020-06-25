@@ -16,7 +16,8 @@ function rangeAddAll(spec,colorScheme,rangeMargin,useMin)
 %
 % rangeMargin:  is the number of Da before and after the peak that are
 %               displayed
-% useMin:
+% 
+% useMin:              
 
 xPlotLimits = spec.Parent.XLim; % current plot limits
 yPlotLimits = spec.Parent.YLim; % current plot limits
