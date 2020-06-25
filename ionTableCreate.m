@@ -60,7 +60,7 @@ if exist('complexFormers','var')
     % create list of elements used as complex formers
     complexFormers = strread(complexFormers,'%s');
     for i=1:length(complexFormers)
-        complexFormers{i} = number4sym(complexFormers{i});
+        complexFormers{i} = symbolConvertAtomicNumber(complexFormers{i});
     end
     complexFormers = cell2mat(complexFormers);
     complexFormers = sort(complexFormers); % final sorted list of atomic numbers of elements given
