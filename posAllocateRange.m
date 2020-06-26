@@ -39,7 +39,7 @@ chargeStates = rng.chargeState;
 chargeStates = [chargeStates; NaN];
 
 % allocation by range
-if ~exist('options','var')
+if ~exist('options','var') | exist('options','var') && strcmp(options,'default')
     % allocate ion name to pos
     pos.ion = ionNames(rngIdx);
     

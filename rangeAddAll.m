@@ -1,16 +1,22 @@
 function rangeAddAll(spec,colorScheme,rangeMargin,useMin)
 % rangeAddAll is a convenience function that guides the user through the
-% ranging process for all defined ioninc peaks that currently have no range
+% ranging process for all defined ionic peaks that currently have no range
 % associated with them. The focus in the figure is automatically given to
+% the current peak and the region around it. 
+% When the peak is in focus, press enter for ranging, any other key to skip
 % the current peak and the region around it.
 %
-% rangeMargin is the number of Da before and after the peak that are
-% displayed
+% rangeAddAll(spec,colorScheme,rangeMargin)
 %
-% useMin lets the user choose the min heights of the peaks to be ranged
+% INPUT
+% spec:         figure, that holds the mass spectra with the peaks which 
+%               will be ranged
 %
-% When the peak is in focus, press enter for ranging, any other key to skip
+% colorScheme:  color Scheme with colors for the ranges
 %
+% rangeMargin:  is the number of Da before and after the peak that are
+%               displayed
+% useMin:
 
 xPlotLimits = spec.Parent.XLim; % current plot limits
 yPlotLimits = spec.Parent.YLim; % current plot limits
@@ -47,7 +53,7 @@ end
 %check which peaks are higher than the defined background
 isAboveLimit = true(size(ionLocations));
 if exist('useMin','var')
-    limPoints = ginput(); % prompts the user to input poins below which peaks are not considered
+    limPoints = ginput(); % prompts the user to input points below which peaks are not considered
     limPoints = sortrows(limPoints);
     % extrapolate to limits of mass spectrum as constant
     limPoints = [spec.XData(1) limPoints(1,2) ; limPoints; spec.XData(end) limPoints(end,2)];
@@ -62,7 +68,7 @@ unrangedIonLocations = ionLocations(notInRange & isAboveLimit);
 unrangedPeakHeights = peakHeights(notInRange & isAboveLimit);
 
 %% cycle through ions that have no range associated
-wfor ion = 1:length(unrangedIonLocations)
+for ion = 1:length(unrangedIonLocations)
     % put focus on peak
     spec.Parent.XLim = [unrangedIonLocations(ion) - rangeMargin, unrangedIonLocations(ion) + rangeMargin];
     spec.Parent.YLim = [yPlotLimits(1), unrangedPeakHeights(ion)*1.5];

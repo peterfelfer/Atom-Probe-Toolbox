@@ -75,7 +75,7 @@ else % plots in new axis/figure
     fig.Color = 'w';
     isExistingAxis = false;
     if numPlots > 1
-        isTilePlot = true;% if multiple plots are made in a new figure, we use tiles
+        isTilePlot = true; % if multiple plots are made in a new figure, we use tiles
         tileLayoutHandle = tiledlayout(fig,'flow','TileSpacing','normal');
         fig.Name = 'atom maps';
         
@@ -156,8 +156,9 @@ for pl = 1:numPlots
             ax(pl) = axes(fig);
         end
     end
+    axisSpatialAptify;
     
-    %displayName = species{pl};
+    % displayName = species{pl};
     
 
     
