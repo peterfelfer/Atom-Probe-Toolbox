@@ -61,6 +61,7 @@ function in = posInConvexHull(pos,xyz,tess,tol)
 % Release date: 10/26/06
 % edited by benedict.ott@fau.de @ 06/10/2020
 
+
 %% Limits pos to the right dimensions
 if exist ('pos','var')
     if size(xyz,2)==2
