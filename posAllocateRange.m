@@ -9,6 +9,7 @@ function pos = posAllocateRange(pos,rng,options)
 %           input possible as rangesExtractFromMassSpec(spec)
 %
 % options:  'decompose': the complex ions will be split up
+%           'raw': complex ions will not be split up
 %
 % OUTPUT:
 % pos:      first case, no 'options' input: table of reconstructed atom
@@ -39,7 +40,7 @@ chargeStates = rng.chargeState;
 chargeStates = [chargeStates; NaN];
 
 % allocation by range
-if ~exist('options','var')
+if strcmp(options,'raw')
     % allocate ion name to pos
     pos.ion = ionNames(rngIdx);
     
