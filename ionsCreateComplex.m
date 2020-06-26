@@ -1,31 +1,30 @@
 function ionList = ionsCreateComplex(elements,complexity,isotopeTable,chargeStates)
 % ionsCreateComplex creates a list of all complex ions that can be formed
-% by the given elements, based on the isotopeTable. chargeStates are
-% optional, default is +1 - +3
+% by the given elements, based on the isotopeTable. 
 %
-% create ionList
 % ionList = ionsCreateComplex(elements,complexity,isotopeTable,chargeStates);
 % 
-% OUTPUT
-% ionList:      table containng the possible individual peaks. Table with
-%               fields:
-%               ion, ionIsotopic: Categorical with ion names
-%               mc: mass to chargestate value of the individual isotopic
-%               combination in amu
-%
 % INPUT
-% elements:     list of elements that form the complexes, either as cell
+% elements:     list of elements that form the complexes, either as cell,
 %               string {'Fe','Cr','O',...} or as vector of atomic numbers
 %               HINT: the cell string can be extracted from the decomposed
 %               posfile as elements = categories(pos.atom)
-%               HINT: to use many elements, standard matlab linar vector
-%               generation can be used, e.g. elements = 1:100
+%               HINT: to use many elements, standard matlab linear vector
+%               generation can be used, e.g. elements = 1:100% 
 %
 % complexity:   vector of ion complexities to be included, e.g. [1 2 3]
 %
 % isotopeTable: isotopeTable used for the analysis
 %
-% chargeStates: vector of charge states to be included, e.g. [1 2 3]
+% chargeStates: vector of charge states to be included, e.g. [1 2 3], 
+%               chargeStates are optional, default is +1 - +3
+%
+% OUTPUT
+% ionList:      table that contians the possible individual peaks. 
+%               Table with fields:
+%               ion, ionIsotopic: Categorical with ion names
+%               mc: mass to chargestate value of the individual isotopic
+%               combination in amu
 %
 % WARNING: the number of permutations of ions grows with the Gamma
 % function. Beware when creating very large complexities. For the entire
