@@ -141,6 +141,9 @@ if exist('input','var')
 
         case 'Mo' 
             symnum = 42;
+            
+        case 'Tc'
+            symnum = 43;
 
         case 'Ru'
             symnum = 44;

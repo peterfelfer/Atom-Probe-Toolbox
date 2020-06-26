@@ -1,5 +1,5 @@
 function varargout = ionConvertName(varargin)
-% ionConvertNameTable converts an ion name to a table variable and reverse.
+% ionConvertName converts an ion name to a table variable and reverse.
 % As input parameters, also categorical or an array of elements is
 % possible.
 %

@@ -3,14 +3,35 @@ function ionList = ionsCreateComplex(elements,complexity,isotopeTable,chargeStat
 % by the given elements, based on the isotopeTable. chargeStates are
 % optional, default is +1 - +3
 %
+% create ionList
+% ionList = ionsCreateComplex(elements,complexity,isotopeTable,chargeStates);
+% 
+% OUTPUT
+% ionList:      table containng the possible individual peaks. Table with
+%               fields:
+%               ion, ionIsotopic: Categorical with ion names
+%               mc: mass to chargestate value of the individual isotopic
+%               combination in amu
+%
+% INPUT
+% elements:     list of elements that form the complexes, either as cell
+%               string {'Fe','Cr','O',...} or as vector of atomic numbers
+%               HINT: the cell string can be extracted from the decomposed
+%               posfile as elements = categories(pos.atom)
+%               HINT: to use many elements, standard matlab linar vector
+%               generation can be used, e.g. elements = 1:100
+%
+% complexity:   vector of ion complexities to be included, e.g. [1 2 3]
+%
+% isotopeTable: isotopeTable used for the analysis
+%
+% chargeStates: vector of charge states to be included, e.g. [1 2 3]
+%
 % WARNING: the number of permutations of ions grows with the Gamma
-% function. Beware when creating very large complexities
-%
-% elements is a cellStr in the form {'Fe','Cr','O',...} and can be directly
-% extracted e.g. from the decomposed pos file, as a keyword, 'all' can be
-% used. This uses all elements up to
-%
-% complexity is the complexites in vector form, e.g. [1 2 3]
+% function. Beware when creating very large complexities. For the entire
+% periodic system, anything above a complexity of 2 will lead to a very
+% long list.
+
 
 
 if ~exist('chargeStates','var')
@@ -30,7 +51,10 @@ end
 % for each complexity
 ionPerm = {};
 for comp = 1:length(complexity)
+    % create permutations of given elements with repetitions
     elementalPermutations = permn(elements,complexity(comp));
+    elementalPermutations = unique(sort(elementalPermutations,2),'rows');
+    
     numPerms = size(elementalPermutations,1);
     for elPerm = 1:numPerms
         ionPerm{end+1,1} = ionConvertName(transp(elementalPermutations(elPerm,:)),NaN,'plain',isotopeTable);
@@ -48,6 +72,7 @@ wb = waitbar(0,'building isotopic combinations');
 
 for i = 1:length(ionPerm)
     ionIsotopicTmp = {};
+    %create isotope combination list with weights for each elemental permutation
     [isoCombos, ~, weightTmp] = ionsCreateIsotopeList(ionPerm{i}, isotopeTable);
     for it = 1:length(isoCombos)
         ionIsotopicTmp{it,1} = ionConvertName(isoCombos{it});
@@ -76,5 +101,7 @@ ion = categorical(ion);
 ionIsotopic = categorical(ionIsotopic);
 
 ionList = table(ion,ionIsotopic,mc);
+%ionList = unique(ionList); 
 
 ionList = sortrows(ionList,3);
+
