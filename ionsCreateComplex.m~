@@ -40,7 +40,7 @@ end
 
 %% create isotopic combinations from isotope table
 ion = {};
-ionIsotopicNoCS = {};
+ionIsotopic = {};
 weight = [];
 
 % include waitbar since this could take a while
@@ -53,7 +53,7 @@ for i = 1:length(ionPerm)
         ionIsotopicTmp{it,1} = ionConvertName(isoCombos{it});
     end
     ion = [ion; repmat(ionPerm(i),[length(isoCombos) 1])];
-    ionIsotopicNoCS = [ionIsotopicNoCS; ionIsotopicTmp];
+    ionIsotopic = [ionIsotopic; ionIsotopicTmp];
     weight = [weight; weightTmp'];
     
     % update waitbar
@@ -64,17 +64,11 @@ delete(wb);
 
 
 %% add charge states in the mix
-ion = repmat(ion,[length(chargeStates) 1]);
+ion = repmat(ion,[ 1]);
 mc = [];
-ionIsotopic = {};
 for cs = 1:length(chargeStates)
-    mc = [mc; weight/chargeStates(cs)];
-    ionIsotopic = [ionIsotopic; cellfun(@(x) [x ' ' repmat('+', [1, chargeStates(cs)])], ionIsotopicNoCS,'UniformOutput',false)];
+    mc = [mc weight/chargeStates(cs)];
 end
 
-ion = categorical(ion);
-ionIsotopic = categorical(ionIsotopic);
 
-ionList = table(ion,ionIsotopic,mc);
-
-ionList = sortrows(ionList,3);
+disp('fin');
