@@ -23,20 +23,22 @@ function varargout = ionConvertName(varargin)
 % INPUT/OUTPUT:
 %
 % ionName: Name of the ion
-%   (isotope element count) x N chargestate        '56Fe2 16O3 ++' 
+%   (isotope element count) x N chargestate        '56Fe2 16O3 ++'
 %   (element count) x N chargestate                'Fe2 O3 ++'
 %   (element count) x N                            'Fe2 O3'
-%   individual nucleides will be sorted by atomic number descending 
+%   individual nucleides will be sorted by atomic number descending
 %   e.g. 'O H2'
 %
 % ionTable:         Table that contains the element and the isotope
 %
 % ionCategorical:   ion table that is stored as an categorical array
 %
-% ionArray:         Matrix of element and isotope number 
-%                   e.g. Fe2O3 = [26,56;26,56;8,16;8,16;8,16;];
+% ionArray:         Matrix of element and isotope number
+%                   e.g. Fe2O3  [26,56;26,56;8,16;8,16;8,16;]
+%                   Vector of elements
+%                   e.g. Fe2O3  [26;26;8;8;8]
 %
-% chargeState:      is the charge State of the ion 
+% chargeState:      is the charge State of the ion
 %
 % NaN:              if no chargeState is parsed
 %
@@ -44,29 +46,38 @@ function varargout = ionConvertName(varargin)
 %
 % isotopeTable:     Table with all isotopes
 
-%% conversion from array to table. The new table is saved as an input 
-% argument and is converted to ionName as a normal table
+%% conversion from array to table/categorical. The new table/categorical is saved as an input
+% argument and is converted to table if isotopes are given, categorical if
+% only elements are given as a vector
 
-% check for input as an array 
+% check for input as an array
 if ismatrix(varargin{1}) & ~istable(varargin{1}) & ~iscategorical(varargin{1}) & ~ischar(varargin{1})
-   %check for isotopeTable as an input variable
-   if nargin == 4 & istable(varargin{4})
-    ionArray = varargin{1};
-    isotopeTable = varargin{4};
-    % create element List
-    for j = 1:length(ionArray)
-        isotopeName = isotopeTable.element(isotopeTable.atomicNumber==ionArray(j,1));
-        element(j,1) = isotopeName(1,1);
+    %check for isotopeTable as an input variable
+    if nargin == 4 & istable(varargin{4})
+        ionArray = varargin{1};
+        isotopeTable = varargin{4};
+        % create element List
+        for j = 1:length(ionArray)
+            isotopeName = isotopeTable.element(isotopeTable.atomicNumber==ionArray(j,1));
+            element(j,1) = isotopeName(1,1);
+        end
+        
+        if isvector(ionArray)
+            varargin{1} = categorical(element);         
+        else
+            % create isotope List
+            isotope = ionArray(:,2);
+            % create ionTable with element and isotope
+            ionTable = table(element, isotope);
+            varargin{1} = ionTable;
+        end
+    else
+        error('no isotopeTable is parsed');
     end
-    % create isotope List
-    isotope = ionArray(:,2);
-    % create ionTable with element and isotope
-    ionTable = table(element, isotope);
-    varargin{1} = ionTable;
-   else
-       error('no isotopeTable is parsed');
-   end
 end
+
+
+
 
 %% conversion from table to name
 if istable(varargin{1})
