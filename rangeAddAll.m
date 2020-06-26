@@ -52,7 +52,7 @@ end
 
 %check which peaks are higher than the defined background
 isAboveLimit = true(size(ionLocations));
-if strcmp(useMin,'true')
+if useMin == true
     limPoints = ginput(); % prompts the user to input points below which peaks are not considered
     limPoints = sortrows(limPoints);
     % extrapolate to limits of mass spectrum as constant
