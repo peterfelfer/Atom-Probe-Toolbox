@@ -3,7 +3,6 @@ function ionList = ionsCreateComplex(elements,complexity,isotopeTable,chargeStat
 % by the given elements, based on the isotopeTable. chargeStates are
 % optional, default is +1 - +3
 %
-% create ionList
 % ionList = ionsCreateComplex(elements,complexity,isotopeTable,chargeStates);
 % 
 % OUTPUT
