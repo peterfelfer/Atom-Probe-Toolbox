@@ -1,10 +1,10 @@
-function bh = roiCreateBox(dimensions,location,ax)
+function bh = ROIcreateBox(dimensions,location,ax)
 % creates box in current or parsed axis with specified width and
 % height at the location. 
 % Output is handle to the object for later manipulation.
 %
-% bh = roiCreateBox()
-% bh = roiCreateBox(dimensions)
+% bh = ROIcreateBox()
+% bh = ROIcreateBox(dimensions)
 % bh = roiCreateBox(dimensions,location)
 % bh = roiCreateBox(dimensions,location,ax)
 %
@@ -23,7 +23,7 @@ if not(exist('dimensions','var'))
     dimensions = [10 10 10];
 end
 %% default location is [0 0 0]
-if ~exist('location','var')
+if not(exist('location','var'))
     location = [0 0 0];
 end
 %% gets axis
