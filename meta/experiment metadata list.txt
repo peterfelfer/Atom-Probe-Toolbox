@@ -1,0 +1,48 @@
+% EXPERIMENT METADATA FILE TEMPLATE
+% description of experiment data metadata
+%
+% general form: variableName [format] = value [unit]
+%
+
+
+% metadata metadata
+metaDataTemplateVersion [string] = 1.0 []
+
+% required general experiment metadata
+experimentDataType [string] = atomProbeTomography []
+sampleDescription [string] = NULL []
+sampleIdentifier [string] = HydMet-ABCD []
+projectIdentifier [string] = HydMet []
+experimentInstrumentOperator [string] = Peter Felfer []
+experimentBeginDateTime [dateTime] = 2020-07-01 10:14:36.000 [yyyy-MM-dd HH:mm:ss.SSS]
+experimentEndDateTime [dateTime] = 2020-07-01 10:14:36.000 [yyyy-MM-dd HH:mm:ss.SSS]
+experimentUniqueIdentifier [string] = R56_00001 []
+instrumentFamily [string] = LEAP 4000X HR []
+instrumentType [string] = Microelectrode Atom Probe []
+instrumentAcquisitionDevice [string] = CAMECA GPX-TDC delayline []
+instrumentManufacturer [string] = CAMECA []
+
+
+% optional general metadata
+% not set if data is continuously recorded during experiment
+% if data is continuously recorded, pls use corresponding variable names below
+experimentInstitution [string] =  Friedrich-Alexander Universität Erlangen-Nürnberg, Department of Materials Science, Institute for General Materials Properties []
+experimentLongitude [float32] = 49.573321 [degree]
+experimentLatitude [float32] = 11.027098 [degree]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% required atom probe experiment specific metadata
+instrumentFlightpathLength [float32] = 110 [mm]
+experimentType [string] = voltage []
+
+
+% optional atom probe experiment specific metadata
+% not set if data is continuously recorded during experiment
+% if data is continuously recorded, pls use corresponding variable names below
+
+experimentTemperature [float32] = NULL [K]
+experimentPulseFraction [float32] = NULL [1]
+experimentLaserPulseEnergy [float32] = NULL [J]
+pulseCount [uint64] = NULL [1]
+detectorXcoordinate [float32] = NULL [mm]
+detectorYcoordinate [float32] = NULL [ns]
