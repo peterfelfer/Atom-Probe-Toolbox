@@ -2,7 +2,7 @@ function pos = posAllocateRange(pos,rng,options)
 % posAllocateRange takes a pos and a range variable and
 % allocates ion hits to it.
 %
-% INPUTS:
+% INPUT
 % pos:      table of reconstructed atom positions with ionIdx, x, y, z, and m/c
 %
 % rng:      table with extracted ranges from the mass spec
@@ -11,7 +11,7 @@ function pos = posAllocateRange(pos,rng,options)
 % options:  'decompose': the complex ions will be split up
 %           'raw': complex ions will not be split up
 %
-% OUTPUT:
+% OUTPU
 % pos:      first case, with 'raw' as options input used: table of reconstructed atom
 %           positions with ionIdx, x, y, z, m/c, and additional ion and
 %           chargeState fields

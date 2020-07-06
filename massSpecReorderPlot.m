@@ -6,7 +6,7 @@ function massSpecReorderPlot(spec,order)
 % massSpecReorderPlot(spec,order)
 % massSpecReorderPlot(spec,["order1","order2",etc])
 %
-% INPUTS
+% INPUT
 % spec:     spec is the name of the areaplot that contains the
 %           massspectrum, area.
 %
@@ -21,7 +21,7 @@ function massSpecReorderPlot(spec,order)
 %           default order is
 %           ["text","ion","range","massSpectrum","unknown"]
 %           
-% OUTPUTS
+% OUTPUT
 %          Massspectrum with focus on wanted informations 
 
 

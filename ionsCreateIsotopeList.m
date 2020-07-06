@@ -4,12 +4,12 @@ function [ions, abundance, weight] = ionsCreateIsotopeList(ion, isotopeTable)
 % 
 % [ions, abundance, weight] = ionsCreateIsotopeList(ion, isotopeTable)
 %
-% INPUTS
+% INPUT
 % ion:                       ion to whom the combinations are made
 %   
 % isotopeTable:              Table of all isotopes of all elements                  
 % 
-% OUTPUTS
+% OUTPUT
 % [ions, abundance, weight]: cell arry with all possible combinations 
 %% interpret ion name into a table [element count]
 ionTable = ionConvertName(ion);
