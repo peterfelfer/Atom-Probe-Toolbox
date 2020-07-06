@@ -60,3 +60,11 @@ for m = 1:size(metaData,1)
     
     h5writeatt(fileName,'/',metaData{m,1},data);
 end
+
+
+%% writing ions 
+
+
+
+
+%% writing ranges
