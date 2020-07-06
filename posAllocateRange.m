@@ -12,7 +12,7 @@ function pos = posAllocateRange(pos,rng,options)
 %           'raw': complex ions will not be split up
 %
 % OUTPUT:
-% pos:      first case, no 'options' input: table of reconstructed atom
+% pos:      first case, with 'raw' as options input used: table of reconstructed atom
 %           positions with ionIdx, x, y, z, m/c, and additional ion and
 %           chargeState fields
 %           second case, with 'decompose' as options input used: table of
