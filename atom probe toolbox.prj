@@ -21,6 +21,7 @@
     <param.apps />
     <param.registered.apps>
       <file>${PROJECT_ROOT}\ionFind.mlapp</file>
+      <file>${PROJECT_ROOT}\roiManipulate.mlapp</file>
     </param.registered.apps>
     <param.docs>${PROJECT_ROOT}\info.xml</param.docs>
     <param.getting.started.guide>${PROJECT_ROOT}\doc\GettingStarted.mlx</param.getting.started.guide>
