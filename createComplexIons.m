@@ -1,5 +1,5 @@
 function ionList = createComplexIons(baseNucleides, complexNucleides, complexity)
-% createcreates a list of complex ions with a certain complexity
+% createComplexIons creates a list of complex ions with a certain complexity
 %
 % ionList = createComplexIons(baseNucleides, complexNucleides, complexity)
 % 

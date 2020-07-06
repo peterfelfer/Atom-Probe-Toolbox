@@ -5,7 +5,7 @@ function in = posInConvexHull(pos,xyz,tess,tol)
 % usage: posInConvexHull = inhull(pos,xyz,tess)
 % usage: posInConvexHull = inhull(pos,xyz,tess,tol)
 %
-% INPUTS:
+% INPUT:
 %  pos: n*p array to test, n data points, in p dimensions
 %       If you have many points to test, it is most efficient to
 %       call this function once with the entire set.

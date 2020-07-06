@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.toolbox" plugin-version="1.0">
-  <configuration file="/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/Atom Probe Toolbox/Atom-Probe-Toolbox/atom probe toolbox.prj" location="/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/Atom Probe Toolbox/Atom-Probe-Toolbox" name="atom probe toolbox" target="target.toolbox" target-name="Package Toolbox">
+  <configuration file="\\home.rrze.uni-erlangen.de\oj53yqod\Documents\GitHub\Atom-Probe-Toolbox\atom probe toolbox.prj" location="\\home.rrze.uni-erlangen.de\oj53yqod\Documents\GitHub\Atom-Probe-Toolbox" name="atom probe toolbox" target="target.toolbox" target-name="Package Toolbox">
     <param.appname>atom probe toolbox</param.appname>
     <param.authnamewatermark>Felfer research group</param.authnamewatermark>
     <param.email>peter.felfer@fau.de</param.email>
@@ -8,7 +8,7 @@
     <param.description />
     <param.screenshot />
     <param.version>0.9</param.version>
-    <param.output>${PROJECT_ROOT}/atom probe toolbox.mltbx</param.output>
+    <param.output>${PROJECT_ROOT}\atom probe toolbox.mltbx</param.output>
     <param.products.name />
     <param.products.id />
     <param.products.version />
@@ -20,10 +20,11 @@
     <param.demosxml />
     <param.apps />
     <param.registered.apps>
-      <file>${PROJECT_ROOT}/ionFind.mlapp</file>
+      <file>${PROJECT_ROOT}\ionFind.mlapp</file>
+      <file>${PROJECT_ROOT}\roiManipulate.mlapp</file>
     </param.registered.apps>
-    <param.docs>${PROJECT_ROOT}/info.xml</param.docs>
-    <param.getting.started.guide>${PROJECT_ROOT}/doc/GettingStarted.mlx</param.getting.started.guide>
+    <param.docs>${PROJECT_ROOT}\info.xml</param.docs>
+    <param.getting.started.guide>${PROJECT_ROOT}\doc\GettingStarted.mlx</param.getting.started.guide>
     <param.matlabpath.excludes />
     <param.javaclasspath.excludes />
     <param.exported.on.package>true</param.exported.on.package>
@@ -76,47 +77,84 @@
       <file>${PROJECT_ROOT}</file>
     </fileset.rootdir>
     <fileset.rootfiles>
-      <file>${PROJECT_ROOT}/.DS_Store</file>
-      <file>${PROJECT_ROOT}/.git</file>
-      <file>${PROJECT_ROOT}/.gitattributes</file>
-      <file>${PROJECT_ROOT}/DesktopToolset.xml</file>
-      <file>${PROJECT_ROOT}/LICENSE</file>
-      <file>${PROJECT_ROOT}/README.md</file>
-      <file>${PROJECT_ROOT}/colorScheme.mat</file>
-      <file>${PROJECT_ROOT}/colorSchemeIonAdd.m</file>
-      <file>${PROJECT_ROOT}/createIonTable.m</file>
-      <file>${PROJECT_ROOT}/doc</file>
-      <file>${PROJECT_ROOT}/info.xml</file>
-      <file>${PROJECT_ROOT}/ionAdd.m</file>
-      <file>${PROJECT_ROOT}/ionConvertName.m</file>
-      <file>${PROJECT_ROOT}/ionFind.mlapp</file>
-      <file>${PROJECT_ROOT}/ionWeight.m</file>
-      <file>${PROJECT_ROOT}/isotopeTable_naturalAbundances.mat</file>
-      <file>${PROJECT_ROOT}/massSpecPlot.m</file>
-      <file>${PROJECT_ROOT}/massSpecReorderPlot.m</file>
-      <file>${PROJECT_ROOT}/massSpecShowLegend.m</file>
-      <file>${PROJECT_ROOT}/meta</file>
-      <file>${PROJECT_ROOT}/posToTable.m</file>
-      <file>${PROJECT_ROOT}/rangeAdd.m</file>
-      <file>${PROJECT_ROOT}/test data</file>
-      <file>${PROJECT_ROOT}/utilities</file>
+      <file>${PROJECT_ROOT}\.git</file>
+      <file>${PROJECT_ROOT}\.gitattributes</file>
+      <file>${PROJECT_ROOT}\alphavol.m</file>
+      <file>${PROJECT_ROOT}\axisSpatialAptify.m</file>
+      <file>${PROJECT_ROOT}\binApplyConcentrationFunction.m</file>
+      <file>${PROJECT_ROOT}\binVectorsFromDistance.m</file>
+      <file>${PROJECT_ROOT}\colorScheme.mat</file>
+      <file>${PROJECT_ROOT}\colorSchemeCreate.m</file>
+      <file>${PROJECT_ROOT}\colorSchemeIonAdd.m</file>
+      <file>${PROJECT_ROOT}\concentrationPlot.m</file>
+      <file>${PROJECT_ROOT}\createComplexIons.m</file>
+      <file>${PROJECT_ROOT}\createIonList.m</file>
+      <file>${PROJECT_ROOT}\DesktopToolset.xml</file>
+      <file>${PROJECT_ROOT}\doc</file>
+      <file>${PROJECT_ROOT}\drawROIaxes.m</file>
+      <file>${PROJECT_ROOT}\dualMesh</file>
+      <file>${PROJECT_ROOT}\info.xml</file>
+      <file>${PROJECT_ROOT}\ionAdd.m</file>
+      <file>${PROJECT_ROOT}\ionConvertName.m</file>
+      <file>${PROJECT_ROOT}\ionFind.mlapp</file>
+      <file>${PROJECT_ROOT}\ionsCreateComplex.m</file>
+      <file>${PROJECT_ROOT}\ionsCreateIsotopeList.m</file>
+      <file>${PROJECT_ROOT}\ionsCreateList.m</file>
+      <file>${PROJECT_ROOT}\ionsExtractFromMassSpec.m</file>
+      <file>${PROJECT_ROOT}\ionsMergePeaks.m</file>
+      <file>${PROJECT_ROOT}\ionStemPlot.m</file>
+      <file>${PROJECT_ROOT}\ionTableCreate.m</file>
+      <file>${PROJECT_ROOT}\ionWeight.m</file>
+      <file>${PROJECT_ROOT}\isotopeTable_naturalAbundances.mat</file>
+      <file>${PROJECT_ROOT}\isotopicWeight.m</file>
+      <file>${PROJECT_ROOT}\isotopicWeightAll.m</file>
+      <file>${PROJECT_ROOT}\LICENSE</file>
+      <file>${PROJECT_ROOT}\massSpecPlot.m</file>
+      <file>${PROJECT_ROOT}\massSpecReorderPlot.m</file>
+      <file>${PROJECT_ROOT}\massSpecShowLegend.m</file>
+      <file>${PROJECT_ROOT}\meta</file>
+      <file>${PROJECT_ROOT}\metaDataReadTextFile.m</file>
+      <file>${PROJECT_ROOT}\movieCreateTurntableAnimation.m</file>
+      <file>${PROJECT_ROOT}\nreplacek.m</file>
+      <file>${PROJECT_ROOT}\nucleideList.m</file>
+      <file>${PROJECT_ROOT}\patch_normals</file>
+      <file>${PROJECT_ROOT}\patchCreateExcessValue.m</file>
+      <file>${PROJECT_ROOT}\permn.m</file>
+      <file>${PROJECT_ROOT}\posAllocateRange.m</file>
+      <file>${PROJECT_ROOT}\posCalculateConcentrationSimple.m</file>
+      <file>${PROJECT_ROOT}\posInConvexHull.m</file>
+      <file>${PROJECT_ROOT}\posNdBin.m</file>
+      <file>${PROJECT_ROOT}\posToHDF5.m</file>
+      <file>${PROJECT_ROOT}\posToHDF5.m~</file>
+      <file>${PROJECT_ROOT}\posToTable.m</file>
+      <file>${PROJECT_ROOT}\posToVoxel.m</file>
+      <file>${PROJECT_ROOT}\rangeAdd.m</file>
+      <file>${PROJECT_ROOT}\rangeAddAll.m</file>
+      <file>${PROJECT_ROOT}\rangesExtractFromMassSpec.m</file>
+      <file>${PROJECT_ROOT}\README.md</file>
+      <file>${PROJECT_ROOT}\resources1</file>
+      <file>${PROJECT_ROOT}\ROIcreateBox.m</file>
+      <file>${PROJECT_ROOT}\ROIcreateCylinder.m</file>
+      <file>${PROJECT_ROOT}\ROIcreateSphere.m</file>
+      <file>${PROJECT_ROOT}\roiManipulate.mlapp</file>
+      <file>${PROJECT_ROOT}\scatterPlotPosData.m</file>
+      <file>${PROJECT_ROOT}\symbolConvertAtomicNumber.m</file>
+      <file>${PROJECT_ROOT}\test data</file>
+      <file>${PROJECT_ROOT}\Workflow_1DConcentrationProfile.mlx</file>
+      <file>${PROJECT_ROOT}\Workflow_3D_Visualisation_of_APT_data.mlx</file>
+      <file>${PROJECT_ROOT}\Workflow_Concentration.mlx</file>
+      <file>${PROJECT_ROOT}\Workflow_Defining_ROI_and_cropping_data.mlx</file>
+      <file>${PROJECT_ROOT}\Workflow_FirstSteps.mlx</file>
     </fileset.rootfiles>
-    <fileset.depfun.included>
-      <file>/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/atom probe code/atom-probe-code/massSpecTools/resources1/createComplexIons.m</file>
-      <file>/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/atom probe code/atom-probe-code/massSpecTools/resources1/ionStemPlot.m</file>
-      <file>/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/atom probe code/atom-probe-code/massSpecTools/resources1/ionsCreateIsotopeList.m</file>
-      <file>/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/atom probe code/atom-probe-code/massSpecTools/resources1/ionsMergePeaks.m</file>
-      <file>/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/atom probe code/atom-probe-code/massSpecTools/resources1/nreplacek.m</file>
-      <file>/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/atom probe code/atom-probe-code/massSpecTools/resources1/permn.m</file>
-    </fileset.depfun.included>
+    <fileset.depfun.included />
     <fileset.depfun.excluded />
     <fileset.package />
     <build-deliverables>
-      <file location="${PROJECT_ROOT}" name="atom probe toolbox.mltbx" optional="false">/Users/peter 1/Dropbox/research/01 research Erlangen/GIT repositories/Atom Probe Toolbox/Atom-Probe-Toolbox/atom probe toolbox.mltbx</file>
+      <file location="${PROJECT_ROOT}" name="atom probe toolbox.mltbx" optional="false">\\home.rrze.uni-erlangen.de\oj53yqod\Documents\GitHub\Atom-Probe-Toolbox\atom probe toolbox.mltbx</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/Applications/MATLAB_R2019b.app</root>
+      <root>C:\Program Files\MATLAB\R2019b</root>
       <toolboxes>
         <toolbox name="matlabcoder" />
         <toolbox name="embeddedcoder" />
@@ -151,18 +189,18 @@
       </toolbox>
     </matlab>
     <platform>
-      <unix>true</unix>
-      <mac>true</mac>
-      <windows>false</windows>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
       <win2k>false</win2k>
       <winxp>false</winxp>
       <vista>false</vista>
       <linux>false</linux>
       <solaris>false</solaris>
-      <osver>10.14.6</osver>
+      <osver>10.0</osver>
       <os32>false</os32>
       <os64>true</os64>
-      <arch>maci64</arch>
+      <arch>win64</arch>
       <matlab>true</matlab>
     </platform>
   </configuration>

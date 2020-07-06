@@ -8,7 +8,7 @@ function patchCreateExcessValue(pos,parentPos,interface,vertices)
 % patchCreateExcessValue(pos,parentPos,interface)
 % patchCreateExcessValue(pos,parentPos,interface,vertices)
 %
-% INPUTS:
+% INPUT
 % pos: table, pos file of the atom species, of which an interfacial excess 
 %      should be calculated
 %

@@ -4,7 +4,7 @@ function w = ionWeight(ion, isotopeTable, chargeState)
 % w = ionWeight(ion, isotopeTable);
 % w = ionWeight(ion, isotopeTable, chargeState);
 %
-% INPUTS
+% INPUT
 % ion:          the definition of the ion as a table with ion.element 
 %               categorical vector of chemical element)and 
 %               ion.isotope (int vector of isotope number)
@@ -13,8 +13,8 @@ function w = ionWeight(ion, isotopeTable, chargeState)
 %
 % chargeState:  int of charge state of the ion, optional
 %
-% OUTPUTS
-% w: weight of ion in amu (w/o chargeState) or Da
+% OUTPUT
+% w:            weight of ion in amu (w/o chargeState) or Da
 
 %% extract the individual ions and get weight
 

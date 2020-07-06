@@ -8,14 +8,16 @@ function bh = ROIcreateBox(dimensions,location,ax)
 % bh = roiCreateBox(dimensions,location)
 % bh = roiCreateBox(dimensions,location,ax)
 %
-% INPUTS
+% INPUT
 % dimensions:   the length, width and height (x,y,z) of the ROI given as 
 %               [x y z], default is [10 10 10]
+%
 % location:     the start coordinates of the ROI given as [x y z],
 %               default is [0 0 0]
+%
 % ax:           axis in which the ROI is orientated
 %
-% OUTPUTS
+% OUTPUT
 % bh:           handle to the ROIbox
 
 %% sets default dimensions to [10 10 10]

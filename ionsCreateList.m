@@ -6,7 +6,7 @@ function ionList = ionsCreateList(elements,chargeStates,maxComplexity,complexFor
 % 
 % list = ionTableCreate(elements,chargeStates,maxComplexity,complexFormers,abundanceThreshold,isotopeTable)
 %
-% INPUTS
+% INPUT
 % elements:             can be a list of atomic numbers, symbols or 'all'    
 % 
 % chargeStates:         list of chargeStates e.g. [1,2,3]  
@@ -24,7 +24,7 @@ function ionList = ionsCreateList(elements,chargeStates,maxComplexity,complexFor
 % 
 % isotopeTable:         isotopeTable as given in the toolbox
 % 
-% OUTPUTS
+% OUTPUT
 %                       struct with .massToCharge (sorted), ionType{},
 %                       relativeAbundance()
 %

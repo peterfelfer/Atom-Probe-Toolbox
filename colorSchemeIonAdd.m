@@ -45,7 +45,7 @@ end
 n = false;
 while match == true
     % add a color to the new ion
-    if exist('selection', 'var') & ionAlreadyExist == false; ;
+    if exist('selection', 'var') & ionAlreadyExist == false ;
         if n == false
             color = uisetcolor();
             n = true;

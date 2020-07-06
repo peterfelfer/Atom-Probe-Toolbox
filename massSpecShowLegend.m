@@ -7,7 +7,7 @@ function massSpecShowLegend(spec,items)
 % massSpecShowLegend(spec,"item1")
 % massSpecShowLegend(spec,["item1","item2"])
 %
-% INPUTS
+% INPUT
 % spec:     spec is the name of the areaplot that contains the
 %           mass spectrum, area
 %
@@ -18,7 +18,7 @@ function massSpecShowLegend(spec,items)
 %           legend
 %           default item is "ion"
 %
-% OUTPUTS
+% OUTPUT
 %           shows the legend of the ranged ions in the mass spectrum
 %           
 %%

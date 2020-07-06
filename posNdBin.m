@@ -1,6 +1,25 @@
 function vox = posNdBin(pos, distance, binEdges)
-% creates a voxelisation of the data in 'pos' based on the bin centers in
-% 'gridVectorstors' (can be created e.g. using 'gridVectorstorFromPos.m') 
+% posNdBin creates a voxelisation of the data in 'pos' based on the bin 
+% edges
+%
+% vox = posNdBin(pos, distance, binEdges)
+%
+% INPUT
+% pos:      decomposed pos file with atoms/ions
+%
+% distance: variable to be binned, determining the dimensions (e.g.
+%           distance = pos.z for 1 D)
+%
+% binEdges: binEdges of the grid vector, can be created e.g. using 
+%           'binVectorsFromDistance.m'
+%
+% OUTPUT
+% vox:      voxel of the dataset
+
+
+
+
+
 
 % nD voxelisation for 1, 2 and 3 dimensions
 % depending on how many distance entries are given

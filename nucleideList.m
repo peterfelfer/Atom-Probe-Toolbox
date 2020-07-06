@@ -1,8 +1,12 @@
 function isoList = nucleideList
-% nucleideList provides an list of all isitopes of all elements with all
-% weights an abundances
+% nucleideList provides a list of all isotopes of all elements with all
+% weights and abundances
 %
 % isoList = nucleideList
+%
+% OUTPUT
+% isoList:  List with all isotopes of all elements with all weights and
+%           abundances
 
 isoList = [];
 
