@@ -32,6 +32,7 @@ function [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size,plotAx
 % 
 % OUTPUT
 % p:              plot handle
+%
 % ax:             axis from the plot, important for tiled plot
 
 

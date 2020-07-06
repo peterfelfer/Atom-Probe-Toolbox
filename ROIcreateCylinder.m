@@ -10,13 +10,16 @@ function ch = ROIcreateCylinder(radius,height,location,numSegments,ax)
 % ch = ROIcreateCylinder(radius,height,location,numSegments)
 % ch = ROIcreateCylinder(radius,height,location,numSegments,ax)
 %
-% INPUTS
-% radius:       radius of the cylinder, default is 5   
+% INPUT
+% radius:       radius of the cylinder, default is 5 
+%
 % height:       height of the cylinder, default is 10
+%
 % location:     start coordinates of the cylinder, default is [0 0 0]
+%
 % numSegments:  number of segments of the cylinder, default is 32
 %
-% OUTPUTS
+% OUTPUT
 % ch:           handle to the ROIcylinder
 
 %% sets default radius to 5

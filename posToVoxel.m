@@ -8,15 +8,18 @@ function vox = posToVoxel(pos,gridVec,species)
 % INPUT
 % pos:     posfile with allocated range. A decomposed pos file is also
 %          possible.
+%
 % gridVec: are the gridVectors for the grid. If the grid vectors need to be
 %          created, use binCenters (Output from binVectorsFromDistance
 %          function)
+%
 % species: Species can be a species list as in {'Fe', 'Mn'}. Ions or Atoms 
 %          in pos can be parsed. Alternatively it can be a logical vector 
 %          with the same legth as the pos file.
 %          If no species variable is given, all atoms/ions are taken.
 %          To get all ranged atoms, use species = categories(pos.atoms)
 %          To get all ranged ions, use species = categories(pos.ions)
+%
 % OUTPUT
 % vox:     voxelisation of the point cloud stored in pos
 

@@ -17,7 +17,8 @@ function [ionType, abundance, weight] = ionsMergePeaks(ionType, abundance, weigh
 % 
 % OUTPUT
 % [ionType, abundance, weight]: cell array of merged Peaks
-% sort by molecular weight
+%                               sort by molecular weight
+
 [weight, sortIdx] = sort(weight);
 abundance = abundance(sortIdx);
 ionType = ionType(sortIdx);

@@ -1,6 +1,17 @@
 function weight = isotopicWeight(Z,isotope)
-
-
+% isotopicWeight gives you the weight of the element in the specific
+% isotope state (If you want to have all possible isotope states and their
+% weight use 'isotopicWeightAll.m')
+%
+% weight = isotopicWeight(Z,isotope)
+% 
+% INPUT 
+% Z:        atomic number
+%
+% isotope:  the isotope of the element
+%
+% OUTPUT
+% weight:   the weight of the element with atomic number Z and isotope
 
 weight = []; % [isotope weight abundance]
 

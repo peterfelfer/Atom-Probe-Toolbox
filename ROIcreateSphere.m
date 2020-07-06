@@ -8,14 +8,17 @@ function sh = ROIcreateSphere(radius,subDivisions,location,ax)
 % sh = ROIcreateSphere(radius,subDivisions,location)
 % sh = ROIcreateSphere(radius,subDivisions,location,ax)
 %
-% INPUTS
+% INPUT
 % radius:       the radius of the ROI, default is 10
+%
 % subDivisions: fineness of the grid, default is 2 
+%
 % location:     the start coordinates of the ROI given as [x y z] 
 %               default is [0 0 0]
+%
 % ax:           axis in which the ROI is orientated
 %
-% OUTPUTS
+% OUTPUT
 % sh:           handle to the ROIsphere
 
 if not(exist('radius','var'))

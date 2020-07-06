@@ -3,14 +3,20 @@ function meta = metaDataReadTextFile(fileStr)
 % a matlab struct. Information in the metadata file is the general form of:
 %   variableName [format] = value [unit]
 % comments are denoted by a % at the beginning of the line.
-%
-% Input: string content of the *.metadata file containg the information
-%
-% Output: cell array with name - value combinations in the form of:
-%               {name, value, unit}
-%
 % the string expression 'NULL' denotes an undefined value, resulting in an
 % empty cell in the output cell arrray. Case insensitive!
+%
+% meta = metaDataReadTextFile(fileStr)
+%
+% INPUT 
+% fileStr:      string content of the *.metadata file containg the 
+%               information
+%
+% OUTPUT
+% meta:         cell array with name - value combinations in the form of:
+%               {name, value, unit}
+
+
 
 %break it into lines
 fileByLine = regexp(fileStr, '\n', 'split');

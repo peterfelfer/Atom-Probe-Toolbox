@@ -4,7 +4,7 @@ function handle = massSpecPlot(mc, bin, mode)
 % handle = plotMassSpec(mc, bin, mode)
 % handle = plotMassSpec(mc, bin)
 %
-% INPUTS
+% INPUT
 % mc:       is the mass-to-charge(mc)-ratio [Da] of the events in the
 %           APT-Measurement stored in pos, table
 %
@@ -16,7 +16,7 @@ function handle = massSpecPlot(mc, bin, mode)
 %           wide over the overall number of counts
 %           default mode is 'count'
 %
-% OUTPUTS
+% OUTPUT
 % handle:   handle to the plot that contains counts or
 %           (counts/Dalton)/totalCounts over Dalton. Used in further
 %           analysis to find new ions
