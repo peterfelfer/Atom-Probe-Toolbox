@@ -1,6 +1,7 @@
 function conc = binApplyConcentrationFunction(vox,binCenters, concentrationFunction, distanceUnits)
-% takes a voxelisation and applies a concentration function to it
-% the binCenters are put into the concentration values for plotting
+% binApplyConcentrationFunction takes a voxelisation and applies a 
+% concentration function to it the binCenters are put into the
+% concentration values for plotting
 %
 % conc = binApplyConcentrationFunction(vox,binCenters, concentrationFunction, distanceUnits)
 %
