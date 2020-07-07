@@ -30,7 +30,7 @@ atomIdx = (1:height(pos))'; %atomic indices for allocation into bins
 
 
 
-%% calcualting 3d bin association
+%% calculating 3d bin association
 for d = 1:numDim
     [~, loc(:,d)] = histc(distance(:,d),binEdges{d},1);
     sz(d) = length(binEdges{d})-1;
