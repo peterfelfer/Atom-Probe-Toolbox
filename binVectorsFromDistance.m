@@ -21,11 +21,11 @@ function [binCenters, binEdges] = binVectorsFromDistance(dist,bin,mode)
 %           atoms, use it for proxygrams 
 %
 % OUTPUT
-% binCenters:   are the bin Centers of each bin 
+% binCenters:   are the bin centers of each bin 
 %               mode 'distance' the center is the mean value of the distance
 %               mode 'count' the center is the median of the distance (bin
 %               middle by index)               
-% binEdges: Edges of of each bin
+% binEdges:     edges of of each bin
 %% 
 isConstantCount = strcmp(mode, 'count');
 isConstantDistance = strcmp(mode, 'distance');
