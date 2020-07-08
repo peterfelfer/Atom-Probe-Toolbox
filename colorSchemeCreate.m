@@ -3,19 +3,13 @@ function colorScheme = colorSchemeCreate(ionTable)
 % the colors are generated in a way, that no two colors are perceived as similar
 %
 % INPUT: 
-% ionTable:     table with variable ion (ionTable.ionName)
+% ionTable:     table with variable ion (ionTable.ion)
 %               example: ionTable = table(categorical({'Fe'; 'C'; 'H'; 'N'}));
-%                        ionTable.Properties.VariableNames{1} = 'ionName';
+%                        ionTable.Properties.VariableNames{1} = 'ion';
 %
 % OUTPUT:
 % colorScheme:  table with ion field and corresponding color field
  
-%% Check for ions that are twice in the ionTable because of their charge state
-
-Tnew = unique(ionTable.ionName);
-ionTable = table(Tnew);
-ionTable.Properties.VariableNames{1} = 'ionName';
-
 %% determine value for Value (V) of the HSV color code
 V = 1.0;                % Value, value between 0 and 1 [1 means 100 %]
  
@@ -34,7 +28,7 @@ colorScheme.Properties.VariableNames{2} = 'color';
  
 %% fill colorScheme table with HSV values
 for i = 1:height(ionTable);
-    colorScheme.ion(i) = ionTable.ionName(i);
+    colorScheme.ion(i) = ionTable.ion(i);
     colorScheme.color(i,1) = lsH.Hue(1,i);
     colorScheme.color(i,2) = lsS.Saturation(1,i);
     colorScheme.color(i,3) = V;
