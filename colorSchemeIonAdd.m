@@ -35,6 +35,7 @@ for j = 1:length(1,1)
             ionAlreadyExist = true;
         else 
             match = true; 
+            ionAlreadyExist = false;
         end
 end
         
@@ -45,29 +46,36 @@ end
 n = false;
 while match == true
     % add a color to the new ion
-    if exist('selection', 'var') & ionAlreadyExist == false ;
-        if n == false
-            color = uisetcolor();
-            n = true;
-        else 
-            title = 'color already exists';
-            color = uisetcolor(title);
+
+   if ~exist('selection','var')
+       selection = 'create';
+   end
+       
+       if strcmp(selection,'select') && ionAlreadyExist == false 
+                if n == false
+                    color = uisetcolor();
+                    n = true;
+                else 
+                    title = 'color already exists';
+                    color = uisetcolor(title);
+                end
+
+       elseif strcmp(selection,'create')
+                % generate new color from NCOLS number of randomly generated colors,
+                % by picking the one that is the farhtest from all existing colors
+                cols = rand(NCOLS,3);
+                dist = pdist2(colorScheme.color,cols,"euclidean");
+                md = min(dist,[],1);
+                [~, idx] = max(md);
+                color = cols(idx,:);
+           
         end
-    else
-        % generate new color from NCOLS number of randomly generated colors,
-        % by picking the one that is the farhtest from all existing colors
-        cols = rand(NCOLS,3);
-        dist = pdist2(colorScheme.color,cols,"euclidean");
-        md = min(dist,[],1);
-        [~, idx] = max(md);
-        color = cols(idx,:);
-    end
     
     % check if color already exist and change the match variable 
     for i = 1:length(1,1)
-            if colorScheme.color(i,1) == color(1,1) && colorScheme.color(i,2) == color(1,2) && colorScheme.color(i,3) == color(1,3);
+            if colorScheme.color(i,1) == color(1,1) && colorScheme.color(i,2) == color(1,2) && colorScheme.color(i,3) == color(1,3)
                 match = true; % color already exist in colorScheme
-                n = 1; %countnumber for the second 
+                n = true; % countnumber for the second round of choosing a color 
                 i = length(1,1);
             else
                 match = false; % color does not exist in colorScheme
