@@ -82,6 +82,7 @@ t.String = {['bin width: ' num2str(bin) ' Da'], ['num atoms: ' num2str(length(mc
 t.BackgroundColor = 'w';
 t.FaceAlpha = 0.8;
 t.Position = [.15 .8 .27 .1];
+t.FitBoxToText = 'on';
 pan xon
 zoom xon
 
