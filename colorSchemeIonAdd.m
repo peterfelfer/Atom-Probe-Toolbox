@@ -12,6 +12,8 @@ function colorScheme = colorSchemeIonAdd(colorScheme, newIon, selection)
 %               colorScheme"
 % selection:    'select' if you want to choose the color
 %               if nothing is parsed, the color is randomly generated
+%               'create' a new color by picking the one that is the farthest 
+%               from all existing colors
 % 
 % OUTPUT
 % colorScheme:  the new colorScheme with the new ion added at the end of
@@ -26,7 +28,7 @@ ionName = ionConvertName(ionTable); % make the correct name
 
 length = size(colorScheme.ion);
 ionAlreadyExist = false;
-%% Check if ion already exist in colorScheme
+%% Check if ion already exists in colorScheme
 
 for j = 1:length(1,1)
         if colorScheme.ion(j,1) == ionName(1,:)
@@ -41,7 +43,7 @@ end
         
 
 
-%% check if color already exist for another ion, if the color already exist,
+%% check if color already exists for another ion, if the color already exists,
 %   you need to choose a new color 
 n = false;
 while match == true
@@ -62,7 +64,7 @@ while match == true
 
        elseif strcmp(selection,'create')
                 % generate new color from NCOLS number of randomly generated colors,
-                % by picking the one that is the farhtest from all existing colors
+                % by picking the one that is the farthest from all existing colors
                 cols = rand(NCOLS,3);
                 dist = pdist2(colorScheme.color,cols,"euclidean");
                 md = min(dist,[],1);
@@ -71,7 +73,7 @@ while match == true
            
         end
     
-    % check if color already exist and change the match variable 
+    % check if color already exists and change the match variable 
     for i = 1:length(1,1)
             if colorScheme.color(i,1) == color(1,1) && colorScheme.color(i,2) == color(1,2) && colorScheme.color(i,3) == color(1,3)
                 match = true; % color already exist in colorScheme
@@ -87,7 +89,7 @@ end
 
 
 
-%% write ionName and color in the color Scheme
+%% write ionName and color in the colorScheme
 if ionAlreadyExist == false
     newIonRow = {ionName, color};
     colorScheme(end+1,:) = newIonRow;
