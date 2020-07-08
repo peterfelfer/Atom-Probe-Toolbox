@@ -1,22 +1,22 @@
 function rangeAddAll(spec,colorScheme,rangeMargin,useMin)
-% rangeAddAll is a convenience function that guides the user through the
+% rangeAddAll is a convenient function that guides the user through the
 % ranging process for all defined ionic peaks that currently have no range
 % associated with them. The focus in the figure is automatically given to
 % the current peak and the region around it. 
-% When the peak is in focus, press enter for ranging, any other key to skip
-% the current peak and the region around it.
+% When the peak is in focus, the user needs to range it manually. If the 
+% peak should be skipped, enter must be pressed.
 %
 % rangeAddAll(spec,colorScheme,rangeMargin)
 %
 % INPUT
-% spec:         figure, that holds the mass spectra with the peaks which 
+% spec:         figure, that holds the mass spectrum with the peaks which 
 %               will be ranged
 %
-% colorScheme:  color Scheme with colors for the ranges
+% colorScheme:  color scheme with colors for the ranges
 %
 % rangeMargin:  is the number of Da before and after the peak that are
 %               displayed
-% useMin:
+% useMin:       
 
 xPlotLimits = spec.Parent.XLim; % current plot limits
 yPlotLimits = spec.Parent.YLim; % current plot limits
