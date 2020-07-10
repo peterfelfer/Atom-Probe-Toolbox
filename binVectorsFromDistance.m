@@ -37,7 +37,7 @@ if ~(numDim == length(dist(1,:))) % throw error when dimensions incompatible
     error('dimensions of distance variable and bin variable not the same');
 end
 if isConstantCount & numDim ~= 1
-    error('constant count mode only avialable for 1D binning');
+    error('constant count mode only available for 1D binning');
 end
 
 
