@@ -10,7 +10,7 @@ function posIn = posToTable(fileName)
 %           A dialog box will pop up if no file name is given.
 % 
 % OUTPUT
-% pos: is the variable that contains the entire data from the atom probe for further analysis,
+% posIn: is the variable that contains the entire data from the atom probe for further analysis,
 %       table
 %
 % hint: in case of an epos file as input, be aware to select (*.epos) as
@@ -43,22 +43,22 @@ switch ext
 end
 
 if ~idx
-    pos = 0;
+    posIn = 0;
     return
 end
 
 fid = fopen(fileName, 'r');
 
 if idx == 1
-    pos = fread(fid, inf, '4*float32', 'b');
-    numAtoms = length(pos)/4;
-    pos=reshape(pos, [4 numAtoms]);
-    pos=double(pos');
+    posIn = fread(fid, inf, '4*float32', 'b');
+    numAtoms = length(posIn)/4;
+    posIn=reshape(posIn, [4 numAtoms]);
+    posIn=double(posIn');
     ionIdx = (1:numAtoms)';
     
-    pos = table(ionIdx,pos(:,1),pos(:,2),pos(:,3),pos(:,4));
-    pos.Properties.VariableNames = {'ionIdx','x','y','z','mc'};
-    pos.Properties.VariableUnits = {'1','nm','nm','nm','Da'};
+    posIn = table(ionIdx,posIn(:,1),posIn(:,2),posIn(:,3),posIn(:,4));
+    posIn.Properties.VariableNames = {'ionIdx','x','y','z','mc'};
+    posIn.Properties.VariableUnits = {'1','nm','nm','nm','Da'};
  
     
     
@@ -67,7 +67,7 @@ elseif idx == 2
     
     %% Reads through the file made of 9 floats, with 8 byte stride (the two
     %% integers at the end)
-    pos = fread(fid, inf, '9*float32', 8 ,'ieee-be');
+    posIn = fread(fid, inf, '9*float32', 8 ,'ieee-be');
     
     
     %% reads the pulse info from epos
@@ -76,19 +76,19 @@ elseif idx == 2
     pul = fread(fid, inf, '2*uint32', 36 ,'ieee-be');
     
     %% Makes an array with the list of floats
-    numAtoms = length(pos)/9;
+    numAtoms = length(posIn)/9;
     
-    pos = reshape(pos, [9 numAtoms]);
-    pos = double(pos');
+    posIn = reshape(posIn, [9 numAtoms]);
+    posIn = double(posIn');
     ionIdx = (1:numAtoms)';
     
     
     pulse = reshape(pul, [2,numAtoms]);
     pulse = pulse';
     
-    pos = table(ionIdx,pos(:,1),pos(:,2),pos(:,3),pos(:,4),pos(:,5),pos(:,6),pos(:,7),pos(:,8),pos(:,9),pulse(:,1),pulse(:,2),(1:numAtoms)');
-    pos.Properties.VariableNames = {'ionIdx','x','y','z','mc','tof','VDC','VP','detx','dety','deltaP','multi','#atom'};
-    pos.Properties.VariableUnits = {'1','nm','nm','nm','Da','ns','V','V','mm','mm','1','1','1'};    
+    posIn = table(ionIdx,posIn(:,1),posIn(:,2),posIn(:,3),posIn(:,4),posIn(:,5),posIn(:,6),posIn(:,7),posIn(:,8),posIn(:,9),pulse(:,1),pulse(:,2),(1:numAtoms)');
+    posIn.Properties.VariableNames = {'ionIdx','x','y','z','mc','tof','VDC','VP','detx','dety','deltaP','multi','#atom'};
+    posIn.Properties.VariableUnits = {'1','nm','nm','nm','Da','ns','V','V','mm','mm','1','1','1'};    
     
 end
 
