@@ -1,9 +1,9 @@
-function pos = posToTable(fileName)
+function posIn = posToTable(fileName)
 % posToTable returns data from a .pos or .epos file and returns a table with the
 % entries and units from an atom probe measurement
 %
-% pos = posToTable(fileName)
-% pos = posToTable()
+% posIn = posToTable(fileName)
+% posIn = posToTable()
 %
 % INPUT
 % fileName: is the name of the .pos or .epos file, it is optional. 
