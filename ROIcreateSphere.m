@@ -41,7 +41,7 @@ end
 [fv.vertices fv.faces] = icosphere(subDivisions);
 fv.vertices = fv.vertices * radius;
 
-sh = patch(fv);
+sh = patch(ax,'Vertices',fv.vertices,'Faces',fv.faces);
 sh.FaceColor = [.5 , .5 , .5];
 sh.FaceAlpha = 0.5;
 sh.Vertices(:,1) = sh.Vertices(:,1) + location(:,1);%shifts x coordinates

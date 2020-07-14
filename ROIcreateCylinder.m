@@ -65,7 +65,7 @@ faces = convhull(x,y,z);
 fv.faces = faces;
 
 %% plotting the patch object
-ch = patch(fv);
+ch = patch(ax,'Vertices',fv.vertices,'Faces',fv.faces);
 ch.FaceColor = [.5 , .5 , .5];
 ch.FaceAlpha = 0.5;
 ch.DisplayName = 'ROI cylinder';
