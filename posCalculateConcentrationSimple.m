@@ -11,7 +11,7 @@ function conc = posCalculateConcentrationSimple(pos, detEff, excludeList,volumeN
 %               the individual atoms
 %
 % detEff:       detector Efficiency of the atom probe, can be parsed as 
-%               or as a fraction(LEAP 4000XHR 0.37)
+%               or as a fraction(LEAP 4000X HR 0.37)
 %               
 % excludeList:  is a cell array that contains as character the individual
 %               ions that shall not be considered for the concentration 
