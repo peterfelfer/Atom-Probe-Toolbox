@@ -1,9 +1,9 @@
-function conc = binApplyConcentrationFunction(vox,binCenters, concentrationFunction, distanceUnits)
-% binApplyConcentrationFunction takes a voxelisation and applies a 
+function conc = binApplyConcentrationKernel(vox,binCenters,concentrationKernel,distanceUnits)
+% binApplyConcentrationKernel takes a voxelisation and applies a 
 % concentration function to it the binCenters are put into the
 % concentration values for plotting
 %
-% conc = binApplyConcentrationFunction(vox,binCenters, concentrationFunction, distanceUnits)
+% conc = binApplyConcentrationKernel(vox,binCenters, concentrationKernel, distanceUnits)
 %
 % INPUT
 % vox:                  pos file in voxel
@@ -11,8 +11,8 @@ function conc = binApplyConcentrationFunction(vox,binCenters, concentrationFunct
 % binCenters:           binCenters of the voxel, calculated with the
 %                       binVectorsFromDistance function 
 %
-% concentrationFunction: concentration function that will calculate the
-%                        concentration for each voxel
+% concentrationKernel:  concentration function that will calculate the
+%                       concentration for each voxel
 %
 % distanceUnits:   Units to measure the distance e.g. {'nm'}     
 %
@@ -28,7 +28,7 @@ function conc = binApplyConcentrationFunction(vox,binCenters, concentrationFunct
 
 
 %% concentration calculation per voxel
-conc = cellfun(concentrationFunction, vox, 'UniformOutput',false);
+conc = cellfun(concentrationKernel, vox, 'UniformOutput',false);
 
 numDim = length(binCenters);
 
@@ -36,7 +36,7 @@ dist = cell(size(conc));
 
 
 % allocation of distance vector
-%conc = cellfun(@(conc, dist) allocateDistanceVector(conc, dist),conc, dist, 'UniformOutput',false);
+% conc = cellfun(@(conc, dist) allocateDistanceVector(conc, dist),conc, dist, 'UniformOutput',false);
 
 
 % create list for 1D
