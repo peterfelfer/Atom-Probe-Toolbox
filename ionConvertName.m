@@ -51,7 +51,7 @@ function varargout = ionConvertName(varargin)
 % only elements are given as a vector
 
 % check for input as an array
-if ismatrix(varargin{1}) & ~istable(varargin{1}) & ~iscategorical(varargin{1}) & ~ischar(varargin{1})
+if ismatrix(varargin{1}) & ~istable(varargin{1}) & ~iscategorical(varargin{1}) & ~ischar(varargin{1}) & ~isstring(varargin{1})
     %check for isotopeTable as an input variable
     if nargin == 4 & istable(varargin{4})
         ionArray = varargin{1};
@@ -218,6 +218,10 @@ end
 
 
 %% conversion from name to table
+if isstring(varargin{1}) % string to char array if needed
+    varargin{1} = char(varargin{1});
+end
+
 if ischar(varargin{1})
     ionName = varargin{1};
     

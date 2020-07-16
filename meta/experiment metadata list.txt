@@ -3,25 +3,57 @@
 %
 % general form: variableName [format] = value [unit]
 %
-
+// c style line commenting also allowed
 
 % metadata metadata
-metaDataTemplateVersion [string] = 1.0 []
+metaDataTemplateVersion [string] = 0.1 []
+
+% project metadata
+projectIdentifier1 [string] = HydMet []
+projectContactPerson1 [string] = Peter Felfer []
+projectConfidentiality1 [enum] = open [open, embargoed, confidental]
+projectDataSharingLicense1 [string] = CC by []
+projectStartDate1 [dateTime] = 2020-07-01 [yyyy-MM-dd]
+projectEndDate1 [dateTime] = 2020-07-01 [yyyy-MM-dd]
+
+projectIdentifier2 [string] = HydMet []
+projectContactPerson2 [string] = Peter Felfer []
+projectConfidentiality2 [enum] = open [open, embargoed, confidental]
+projectDataSharingLicense2 [string] = CC by []
+projectStartDate2 [dateTime] = 2020-07-01 [yyyy-MM-dd]
+projectEndDate2 [dateTime] = 2020-07-01 [yyyy-MM-dd]
+% multiple projects allowed
+
 
 % required general experiment metadata
-experimentDataType [string] = atomProbeTomography []
+sampleName = NULL []
 sampleDescription [string] = NULL []
-sampleIdentifier [string] = HydMet-ABCD []
-projectIdentifier [string] = HydMet []
+sampleUniqueIdentifier [string] = HydMet-ABCD []
+sampleNotes [string] = NULL []
+sampleMaterialType [string] = aluminium []
+samplePreparationMethod [string] = electropolishing []
+
+experimentType [string] = atomProbeTomographyExperiment []
 experimentInstrumentOperator [string] = Peter Felfer []
 experimentBeginDateTime [dateTime] = 2020-07-01 10:14:36.000 [yyyy-MM-dd HH:mm:ss.SSS]
+experimentBeginTimeZone [timeZone] = CET []
 experimentEndDateTime [dateTime] = 2020-07-01 10:14:36.000 [yyyy-MM-dd HH:mm:ss.SSS]
-experimentUniqueIdentifier [string] = R56_00001 []
-instrumentFamily [string] = LEAP 4000X HR []
-instrumentType [string] = Microelectrode Atom Probe []
-instrumentAcquisitionDevice [string] = CAMECA GPX-TDC delayline []
-instrumentManufacturer [string] = CAMECA []
+experimentEndTimeZone [timeZone] = CET []
+experimentUniqueIdentifier [string] = Ox000001 []
+experimentStatus [enum] = finished [planned, inProgress, finished]
+experimentResult [enum] = goodData [short, ok, questionable, failed]
+experimentNotes [string] = man that was a hard experiment []
+experimentDataEmbargoPeriodEndDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
+experimentDataIsEncrypted [bool] = No [Yes/No]
+experimentDataEncryptionInformation [string] = NULL []
 
+instrumentFamily [string] = Oxcart Titanium Atom Probe []
+instrumentType [string] = Microelectrode Atom Probe []
+instrumentAcquisitionDevice [string] = Surface Concept DLD8080 []
+instrumentManufacturer [string] = Felfer Group []
+instrumentLastCalibrationDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
+
+laboratoryAmbientTemperature [float32] = 23.5 [degC]
 
 % optional general metadata
 % not set if data is continuously recorded during experiment
@@ -32,17 +64,55 @@ experimentLatitude [float32] = 11.027098 [degree]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % required atom probe experiment specific metadata
-instrumentFlightpathLength [float32] = 110 [mm]
-experimentType [string] = voltage []
+aptInstrumentFlightPathLength [float32] = 110 [mm]
+aptInstrumentT0 [float32] = 55.7 [ns]
+aptInstrumentApertureType [string] = conical microelectrode []
+aptInstrumentApertureUniqueIdentifier [string] = Ox00 []
+aptInstrumentDetectorReadout [string] = discriminator []
+aptInstrumentDetectorResolution [float32] = 0.02 [mm]
+aptInstrumentDetectorSize [float32] = 80,80 [mm]
+aptInstrumentLaserIncidenceDirection [float32] = 1,2,3 []
+aptExperimentType [string] = voltage []
 
 
 % optional atom probe experiment specific metadata
 % not set if data is continuously recorded during experiment
 % if data is continuously recorded, pls use corresponding variable names below
 
-experimentTemperature [float32] = NULL [K]
-experimentPulseFraction [float32] = NULL [1]
-experimentLaserPulseEnergy [float32] = NULL [J]
-pulseCount [uint64] = NULL [1]
-detectorXcoordinate [float32] = NULL [mm]
-detectorYcoordinate [float32] = NULL [ns]
+aptExperimentTipTemperature [float32] = NULL [K]
+aptExperimentPulseFraction [float32] = NULL [1]
+aptExperimentLaserPulseEnergy [float32] = NULL [J]
+aptExperimentLaserPosition [float32] = NULL,NULL,NULL [mm]
+aptExperimentPulsePeriod [float32] = NULL [ns]
+aptExperimentSampleStagePosition [float32] = NULL,NULL,NULL [mm]
+
+aptHitLaserPulseCount [uint64] = NULL [1]
+aptHitDetectorXcoordinate [float32] = NULL [mm]
+aptHitDetectorYcoordinate [float32] = NULL [mm]
+aptHitTimeOfFlight [float32] = NULL [nm]
+aptHitStandingVoltage [float32] = NULL [V]
+aptHitPulseAmplitude [float32] = NULL [V]
+
+aptReconstructionIsDecomposed [bool] = true []
+aptReconstructionIonXcoordinate [float32] = NULL [nm]
+aptReconstructionIonYcoordinate [float32] = NULL [nm]
+aptReconstructionIonZcoordinate [float32] = NULL [nm]
+aptReconstructionAtomXcoordinate [float32] = NULL [nm]
+aptReconstructionAtomYcoordinate [float32] = NULL [nm]
+aptReconstructionAtomZcoordinate [float32] = NULL [nm]
+aptReconstructionIonMassToCharge [float32] = NULL [nm]
+aptReconstructionIonIdx [int32] = NULL [nm]
+aptReconstructionIon [string] = NULL []
+aptReconstructionAtomElement [string] = NULL []
+aptReconstructionAtomIsotope [uint8] = NULL []
+aptReconstructionIonChargeState [uint8] = NULL []
+aptReconstructionIonVolume [float32] = NULL []
+
+% experiment analysis variables (multiline heterogeneous data)
+aptReconstructionIdentifiedIon [string] = Fe2 O3 ++ []
+
+aptReconstructionMassToChargeRangeName [string] = Fe2 O3 []
+aptReconstructionMassToChargeRangeIon [string] = 56Fe2 16O3 ++ []
+aptReconstructionMassToChargeRangeBegin [float32] = 32.34 [Da]
+aptReconstructionMassToChargeRangeEnd [float32] = 33.34 [Da]
+aptReconstructionMassToChargeRangeVolume [float32] = NULL [nm3]
