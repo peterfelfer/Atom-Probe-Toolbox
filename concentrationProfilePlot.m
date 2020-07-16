@@ -1,7 +1,6 @@
-function [p, ax, f] = concentrationProfilePlot(conc,excludeList, colorScheme)
-% plots a concentration profile
-% plotType can be inLine or stacked
-% up to 4 volumes with different plot lines
+function [p, ax, f] = concentrationProfilePlot(conc,excludeList,colorScheme)
+% concentrationProfilePlot plots a concentration profile of up to 4 volumes
+% with different plot lines
 %
 % INPUT
 % conc:        table that contains the counts or the concentration of 
@@ -16,24 +15,20 @@ function [p, ax, f] = concentrationProfilePlot(conc,excludeList, colorScheme)
 % colorScheme: table with RGB codes assigned to ions
 %
 % OUTPUT
-% p:            bar/pie chart of the volume, with properties (BarLayout, 
-%               BarWidth, FaceColor, EdgeColor, BaseValue, XData, YData)
+% p:            profile plot
 %
 % ax:           axes of the plot with properties (XLim, YLim, XScale, 
 %               YScale, GridlineStyle, Position, Units)
 %
-% f:            figure that contains the plot (pie or bar chart) with 
-%               properties(Number, Name, Color, Position, Units)
-%
-%
-%
+% f:            figure that contains the plot with properties
+%               (Number, Name, Color, Position, Units)
 %
 % USEFUL Notes:
 % If the conc as OUTPUT of posCalculateConcentrationSimple function is used, either
 % concentration or counts must be specified in the INPUT argument with the
 % following lines as INPUT argument
 %       concentration:  conc([conc.format=='concentration'], :)
-%       count:         conc([conc.format=='count'], :)
+%       count:          conc([conc.format=='count'], :)
 %
 
 if ~exist('excludeList','var')
