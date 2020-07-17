@@ -12,7 +12,7 @@ ROIbasis = [ROIobject.UserData.ROIxaxis(2,:) - ROIobject.UserData.ROIxaxis(1,:);
     ROIobject.UserData.ROIyaxis(2,:) - ROIobject.UserData.ROIyaxis(1,:);...
     ROIobject.UserData.ROIzaxis(2,:) - ROIobject.UserData.ROIzaxis(1,:)];
     
-temp = (global2localcoord(temp(:,1:3)','rr',ROIorigin',ROIbasis'))';
+temp = (global2localcoord([temp.x, temp.y, temp.z]','rr',ROIorigin',ROIbasis'))';
 
-points(:,1:3) = temp;
+points(:,2:4) = array2table(temp);
 
