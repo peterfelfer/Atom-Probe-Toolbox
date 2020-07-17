@@ -1,10 +1,10 @@
-function bh = ROIcreateBox(dimensions,location,ax)
-% creates box in current or parsed axis with specified width and
-% height at the location. 
+function bh = roiCreateBox(dimensions,location,ax)
+% roiCreateBox creates a box in the current or parsed axis with specified 
+% width and height at the location. 
 % Output is handle to the object for later manipulation.
 %
-% bh = ROIcreateBox()
-% bh = ROIcreateBox(dimensions)
+% bh = roiCreateBox()
+% bh = roiCreateBox(dimensions)
 % bh = roiCreateBox(dimensions,location)
 % bh = roiCreateBox(dimensions,location,ax)
 %
