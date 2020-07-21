@@ -1,9 +1,15 @@
 function points = coordSystemTransform(ROIobject, points)
-%transforms points from the global coordinate system to a local object defined oe2jhdkvkueqwzfvciuzevwbufihscjkbEJKQWBNC%The basis vectors are stored in the ROI object 'o' as: o.UserData.ROIxaxis
-%The basis vectors contain two components: Basis starting and end vector
-
-%If points contains more than 3 colums, only the first three will be treated as coordinates
-%(e.g. for pos / epos). Basis vectors need not be of unit length.
+% transforms points from the global coordinate system to a local object defined 
+% 
+% points = coordSystemTransform(ROIobject, points)
+% 
+% INPUT
+% ROIobject:    object which defines the region of interest  
+%
+% points:       points wihin the ROI shape
+% 
+% OUTPUT
+% points:       points transformed to the new coordinate system    
 
 temp = points;
 
