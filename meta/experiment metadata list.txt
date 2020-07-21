@@ -3,116 +3,111 @@
 %
 % general form: variableName [format] = value [unit]
 %
-// c style line commenting also allowed
+% variables can be a scalar or vector depending on context
+%
+% each group can contain more than one entry, e.g. /project/1/, sample/1/
 
 % metadata metadata
-metaDataTemplateVersion [string] = 0.1 []
+/metaData/templateVersion [string] = 0.1 []
 
 % project metadata
-projectIdentifier1 [string] = HydMet []
-projectContactPerson1 [string] = Peter Felfer []
-projectConfidentiality1 [enum] = open [open, embargoed, confidental]
-projectDataSharingLicense1 [string] = CC by []
-projectStartDate1 [dateTime] = 2020-07-01 [yyyy-MM-dd]
-projectEndDate1 [dateTime] = 2020-07-01 [yyyy-MM-dd]
-
-projectIdentifier2 [string] = HydMet []
-projectContactPerson2 [string] = Peter Felfer []
-projectConfidentiality2 [enum] = open [open, embargoed, confidental]
-projectDataSharingLicense2 [string] = CC by []
-projectStartDate2 [dateTime] = 2020-07-01 [yyyy-MM-dd]
-projectEndDate2 [dateTime] = 2020-07-01 [yyyy-MM-dd]
+/project/1/identifier [string] = HydMet []
+/project/1/contactPerson [string] = Peter Felfer []
+/project/1/confidentiality [enum] = open [open, embargoed, confidental]
+/project/1/dataSharingLicense [string] = CC by []
+/project/1/startDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
+/project/1/endDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
 % multiple projects allowed
 
 
 % required general experiment metadata
-sampleName = NULL []
-sampleDescription [string] = NULL []
-sampleUniqueIdentifier [string] = HydMet-ABCD []
-sampleNotes [string] = NULL []
-sampleMaterialType [string] = aluminium []
-samplePreparationMethod [string] = electropolishing []
+/sample/name [string] = NULL []
+/sample/description [string] = NULL []
+/sample/uniqueIdentifier [string] = HydMet-ABCD []
+/sample/notes [string] = NULL []
+/sample/materialType [string] = aluminium []
 
-experimentType [string] = atomProbeTomographyExperiment []
-experimentInstrumentOperator [string] = Peter Felfer []
-experimentBeginDateTime [dateTime] = 2020-07-01 10:14:36.000 [yyyy-MM-dd HH:mm:ss.SSS]
-experimentBeginTimeZone [timeZone] = CET []
-experimentEndDateTime [dateTime] = 2020-07-01 10:14:36.000 [yyyy-MM-dd HH:mm:ss.SSS]
-experimentEndTimeZone [timeZone] = CET []
-experimentUniqueIdentifier [string] = Ox000001 []
-experimentStatus [enum] = finished [planned, inProgress, finished]
-experimentResult [enum] = goodData [short, ok, questionable, failed]
-experimentNotes [string] = man that was a hard experiment []
-experimentDataEmbargoPeriodEndDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
-experimentDataIsEncrypted [bool] = No [Yes/No]
-experimentDataEncryptionInformation [string] = NULL []
+/experiment/type [string] = atomProbeTomographyExperiment []
+/experiment/instrumentOperator [string] = Peter Felfer []
+/experiment/beginDateTime [dateTime] = 2020-07-01 10:14:36.000 [yyyy-MM-dd HH:mm:ss.SSS]
+/experiment/beginTimeZone [timeZone] = CET []
+/experiment/endDateTime [dateTime] = 2020-07-01 10:14:36.000 [yyyy-MM-dd HH:mm:ss.SSS]
+/experiment/endTimeZone [timeZone] = CET []
+/experiment/uniqueIdentifier [string] = Ox000001 []
+/experiment/status [enum] = finished [planned, inProgress, finished]
+/experiment/result [enum] = goodData [short, ok, questionable, failed]
+/experiment/notes [string] = man that was a hard experiment []
+/experiment/dataEmbargoPeriodEndDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
+/experiment/dataIsEncrypted [bool] = false []
+/experiment/dataEncryptionInformation [string] = NULL []
+% structure the institution name hierachically, comma separated
+/experiment/institution [string] =  Friedrich-Alexander Universität Erlangen-Nürnberg, Department of Materials Science, Institute for General Materials Properties []
+/experiment/longitude [float64] = 49.573321 [degree]
+/experiment/latitude [float64] = 11.027098 [degree]
 
-instrumentFamily [string] = Oxcart Titanium Atom Probe []
-instrumentType [string] = Microelectrode Atom Probe []
-instrumentAcquisitionDevice [string] = Surface Concept DLD8080 []
-instrumentManufacturer [string] = Felfer Group []
-instrumentLastCalibrationDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
+/instrument/family [string] = Oxcart Titanium Atom Probe []
+/instrument/type [string] = Microelectrode Atom Probe []
+/instrument/acquisitionDevice [string] = Surface Concept DLD8080 []
+/instrument/manufacturer [string] = Felfer Group []
+/instrument/lastCalibrationDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
 
-laboratoryAmbientTemperature [float32] = 23.5 [degC]
-
-% optional general metadata
-% not set if data is continuously recorded during experiment
-% if data is continuously recorded, pls use corresponding variable names below
-experimentInstitution [string] =  Friedrich-Alexander Universität Erlangen-Nürnberg, Department of Materials Science, Institute for General Materials Properties []
-experimentLongitude [float32] = 49.573321 [degree]
-experimentLatitude [float32] = 11.027098 [degree]
+/laboratory/ambientTemperature [float32] = 23.5 [degC]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % required atom probe experiment specific metadata
-aptInstrumentFlightPathLength [float32] = 110 [mm]
-aptInstrumentT0 [float32] = 55.7 [ns]
-aptInstrumentApertureType [string] = conical microelectrode []
-aptInstrumentApertureUniqueIdentifier [string] = Ox00 []
-aptInstrumentDetectorReadout [string] = discriminator []
-aptInstrumentDetectorResolution [float32] = 0.02 [mm]
-aptInstrumentDetectorSize [float32] = 80,80 [mm]
-aptInstrumentLaserIncidenceDirection [float32] = 1,2,3 []
-aptExperimentType [string] = voltage []
-
+/atomProbeTomography/instrument/flightPathLength [float32] = 110 [mm]
+/atomProbeTomography/instrument/t0 [float32] = 55.7 [ns]
+/atomProbeTomography/instrument/apertureType [string] = conical microelectrode []
+/atomProbeTomography/instrument/apertureUniqueIdentifier [string] = Ox00 []
+/atomProbeTomography/instrument/detectorReadout [string] = discriminator []
+/atomProbeTomography/instrument/detectorResolution [float32] = 0.02 [mm]
+/atomProbeTomography/instrument/detectorSize [float32] = 80,80 [mm]
+/atomProbeTomography/instrument/laserIncidenceDirection [float32] = 1,2,3 []
 
 % optional atom probe experiment specific metadata
 % not set if data is continuously recorded during experiment
 % if data is continuously recorded, pls use corresponding variable names below
 
-aptExperimentTipTemperature [float32] = NULL [K]
-aptExperimentPulseFraction [float32] = NULL [1]
-aptExperimentLaserPulseEnergy [float32] = NULL [J]
-aptExperimentLaserPosition [float32] = NULL,NULL,NULL [mm]
-aptExperimentPulsePeriod [float32] = NULL [ns]
-aptExperimentSampleStagePosition [float32] = NULL,NULL,NULL [mm]
+/atomProbeTomography/experiment/pulseType [enum] = voltagePulsed [voltagePulsed, laserPulsed]
+/atomProbeTomography/experiment/tipTemperature [float32] = NULL [K]
+/atomProbeTomography/experiment/pulseFraction [float32] = NULL [1]
+/atomProbeTomography/experiment/laserPulseEnergy [float32] = NULL [J]
+/atomProbeTomography/experiment/laserPosition [float32] = NULL,NULL,NULL [mm]
+/atomProbeTomography/experiment/pulsePeriod [float32] = NULL [ns]
+/atomProbeTomography/experiment/sampleStagePosition [float32] = NULL,NULL,NULL [mm]
 
-aptHitLaserPulseCount [uint64] = NULL [1]
-aptHitDetectorXcoordinate [float32] = NULL [mm]
-aptHitDetectorYcoordinate [float32] = NULL [mm]
-aptHitTimeOfFlight [float32] = NULL [nm]
-aptHitStandingVoltage [float32] = NULL [V]
-aptHitPulseAmplitude [float32] = NULL [V]
+/atomProbeTomography/sample/preparationMethod [enum] = electropolishing [electropolishing, FIB, BIB]
+/atomProbeTomography/sample/preparationInstrument [string] = NULL []
 
-aptReconstructionIsDecomposed [bool] = true []
-aptReconstructionIonXcoordinate [float32] = NULL [nm]
-aptReconstructionIonYcoordinate [float32] = NULL [nm]
-aptReconstructionIonZcoordinate [float32] = NULL [nm]
-aptReconstructionAtomXcoordinate [float32] = NULL [nm]
-aptReconstructionAtomYcoordinate [float32] = NULL [nm]
-aptReconstructionAtomZcoordinate [float32] = NULL [nm]
-aptReconstructionIonMassToCharge [float32] = NULL [nm]
-aptReconstructionIonIdx [int32] = NULL [nm]
-aptReconstructionIon [string] = NULL []
-aptReconstructionAtomElement [string] = NULL []
-aptReconstructionAtomIsotope [uint8] = NULL []
-aptReconstructionIonChargeState [uint8] = NULL []
-aptReconstructionIonVolume [float32] = NULL []
+/atomProbeTomography/detectorEvent/laserPulseCount [uint64] = NULL [1]
+/atomProbeTomography/detectorEvent/voltagePulseCount [uint64] = NULL [1]
+/atomProbeTomography/detectorEvent/x [float32] = NULL [mm]
+/atomProbeTomography/detectorEvent/y [float32] = NULL [mm]
+/atomProbeTomography/detectorEvent/timeOfFlight [float32] = NULL [nm]
+/atomProbeTomography/detectorEvent/standingVoltage [float32] = NULL [V]
+/atomProbeTomography/detectorEvent/pulseAmplitude [float32] = NULL [V]
+
+/atomProbeTomography/reconstruction/isDecomposed [bool] = true []
+/atomProbeTomography/reconstruction/ion/x [float32] = NULL [nm]
+/atomProbeTomography/reconstruction/ion/y [float32] = NULL [nm]
+/atomProbeTomography/reconstruction/ion/z [float32] = NULL [nm]
+/atomProbeTomography/reconstruction/ion/massToCharge [float32] = NULL [nm]
+/atomProbeTomography/reconstruction/ion/chargeState [uint8] = NULL []
+/atomProbeTomography/reconstruction/ion/reconstructionVolume [float32] = NULL []
+/atomProbeTomography/reconstruction/ion/fieldEvaporationSequenceIndex [int32] = NULL [nm]
+/atomProbeTomography/reconstruction/ion/ion [string] = NULL []
+
+/atomProbeTomography/reconstruction/atom/element [string] = NULL []
+/atomProbeTomography/reconstruction/atom/isotope [uint8] = NULL []
+/atomProbeTomography/reconstruction/atom/x [float32] = NULL [nm]
+/atomProbeTomography/reconstruction/atom/y [float32] = NULL [nm]
+/atomProbeTomography/reconstruction/atom/z [float32] = NULL [nm]
 
 % experiment analysis variables (multiline heterogeneous data)
-aptReconstructionIdentifiedIon [string] = Fe2 O3 ++ []
+/atomProbeTomography/identifiedIon/ion [string] = NULL [] % e.g. Fe2 O3 ++
 
-aptReconstructionMassToChargeRangeName [string] = Fe2 O3 []
-aptReconstructionMassToChargeRangeIon [string] = 56Fe2 16O3 ++ []
-aptReconstructionMassToChargeRangeBegin [float32] = 32.34 [Da]
-aptReconstructionMassToChargeRangeEnd [float32] = 33.34 [Da]
-aptReconstructionMassToChargeRangeVolume [float32] = NULL [nm3]
+/atomProbeTomography/massToChargeRange/name [string] = NULL [] % e.g. Fe2 O3
+/atomProbeTomography/massToChargeRange/ion [string] = NULL [] % e.g. 56Fe2 16O3 ++
+/atomProbeTomography/massToChargeRange/begin [float32] = NULL [Da] % e.g. 32.34
+/atomProbeTomography/massToChargeRange/end [float32] = NULL [Da] % e.g. 33.34
+/atomProbeTomography/massToChargeRange/reconstructionVolume [float32] = NULL [at/nm3] % e.g. 70

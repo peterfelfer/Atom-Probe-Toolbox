@@ -17,7 +17,7 @@ function meta = metaDataReadTextFile(fileStr)
 %               {name, value, unit}
 
 
-
+% pre-formatting of the text file
 %break it into lines
 fileByLine = regexp(fileStr, '\n', 'split');
 fileByLine = fileByLine';
@@ -26,6 +26,7 @@ fileByLine( cellfun(@isempty,fileByLine) ) = [];
 % remove comments
 fileByLine( cellfun(@(x) x(1) == '%',fileByLine )) = [];
 
+%% going through each line of metadata
 meta = {};
 for li = 1:length(fileByLine)
     isBrackets = find(fileByLine{li} == '[' | fileByLine{li} == ']');
@@ -39,6 +40,12 @@ for li = 1:length(fileByLine)
     
     %variable value
      varStr = strtrim(fileByLine{li}(isEqualSign+1:isBrackets(3)-1));
+     
+     
+     %units
+     meta{li,3} = strtrim(fileByLine{li}(isBrackets(3)+1:isBrackets(4)-1));
+
+     
      if strcmp(upper(varStr),'NULL')
         meta{li,2} = {};
         
@@ -47,6 +54,13 @@ for li = 1:length(fileByLine)
          
      elseif strcmp(varFormat,'dateTime')
          meta{li,2} = datetime(varStr,'InputFormat',strtrim(fileByLine{li}(isBrackets(3)+1:isBrackets(4)-1)));
+         
+     elseif strcmp(varFormat,'enum')
+         cat = categorical(strtrim(split(meta{li,3},',')));
+         meta{li,2} = cat(cat == varStr);
+         
+     elseif strcmp(varFormat,'bool')
+         meta{li,2} = str2num(varStr);
          
      else % numeric formats
          meta{li,2} = str2num(varStr);
