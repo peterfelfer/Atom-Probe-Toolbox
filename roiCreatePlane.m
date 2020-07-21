@@ -49,7 +49,7 @@ faces = delaunay(vertices(:,1),vertices(:,2));
 ph = patch(ax,'Vertices',vertices,'Faces',faces);
 ph.FaceColor = [.5 , .5 , .5];
 ph.FaceAlpha = 0.5;
-ph.DisplayName = 'ROI box';
+ph.DisplayName = 'ROI plane';
 
 % defining reference coordinate system
 ph.UserData.ROIzaxis = [location ; location + [0,0,dimensions(1)]];
