@@ -1,9 +1,9 @@
-function ph = ROIcreatePlane(dimensions,spacing,location,ax)
-%creates plane in current or parsed axis with specified width and
-%height at the location loc. 
-%spcing gives the approximate spacing between vertices for later analysis
-%purposes. leave at 0 for simple plane object with no subdivision.
-%Output is handle to the object for later manipulation.
+function ph = roiCreatePlane(dimensions,spacing,location,ax)
+% roiCreatePlane creates a plane in the current or parsed axis with 
+% specified width and height at location. 
+% spacing gives the approximate spacing between vertices for later analysis
+% purposes. leave at 0 for simple plane object with no subdivision.
+% Output is handle to the object for later manipulation.
 
 % get axis if necessary
 if not(exist('ax','var'))
@@ -28,7 +28,7 @@ vertices = vertices + repmat(location,numVerts,1);
 faces = delaunay(vertices(:,1),vertices(:,2));
 
     
-% plotting of pathc object
+% plotting of patch object
 ph = patch(ax,'Vertices',vertices,'Faces',faces);
 ph.FaceColor = [.5 , .5 , .5];
 ph.FaceAlpha = 0.5;
