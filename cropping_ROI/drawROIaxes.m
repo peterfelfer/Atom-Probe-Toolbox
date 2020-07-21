@@ -1,6 +1,6 @@
 function lh = drawROIaxes(roi)
 % draws lines denoting the analysis axes for the ROI object red = x, 
-%green = y, blue = z
+% green = y, blue = z
 %
 % bh = drawROiaxes(roi)
 %
