@@ -44,7 +44,6 @@ vertices = vertices + repmat(location,numVerts,1);
 % delaunay triangulation of vertices
 faces = delaunay(vertices(:,1),vertices(:,2));
 
-    
 % plotting of patch object
 ph = patch(ax,'Vertices',vertices,'Faces',faces);
 ph.FaceColor = [.5 , .5 , .5];
