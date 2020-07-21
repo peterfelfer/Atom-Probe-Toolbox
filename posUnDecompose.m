@@ -1,5 +1,5 @@
 function pos = posUnDecompose(pos)
-% posUnDecompose takes a decomposed pos table variable and turns it into a 
+% posUnDecompose takes a decomposed pos table and turns it into a 
 % state with only ranges allocated
 %
 % INPUT 
