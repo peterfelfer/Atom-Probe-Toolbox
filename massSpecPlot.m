@@ -83,7 +83,7 @@ t.BackgroundColor = 'w';
 t.FaceAlpha = 0.8;
 t.Position = [.15 .8 .27 .1];
 t.FitBoxToText = 'on';
-pan xon
+pan(handle, 'xon')
 zoom xon
 
 handle.DisplayName = 'mass spectrum';

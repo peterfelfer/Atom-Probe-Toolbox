@@ -1,14 +1,14 @@
-function ch = ROIcreateCylinder(radius,height,location,numSegments,ax)
-% creates cylinder in current or parsed axis with specified radius and
-% height. 
+function ch = roiCreateCylinder(radius,height,location,numSegments,ax)
+% roiCreateCylinder creates cylinder in current or parsed axis with 
+% specified radius and height. 
 % Output is handle to the object for later manipulation.
 %
-% ch = ROIcreateCylinder()
-% ch = ROIcreateCylinder(radius)
-% ch = ROIcreateCylinder(radius,height)
-% ch = ROIcreateCylinder(radius,height,location)
-% ch = ROIcreateCylinder(radius,height,location,numSegments)
-% ch = ROIcreateCylinder(radius,height,location,numSegments,ax)
+% ch = roiCreateCylinder()
+% ch = roiCreateCylinder(radius)
+% ch = roiCreateCylinder(radius,height)
+% ch = roiCreateCylinder(radius,height,location)
+% ch = roiCreateCylinder(radius,height,location,numSegments)
+% ch = roiCreateCylinder(radius,height,location,numSegments,ax)
 %
 % INPUT
 % radius:       radius of the cylinder, default is 5 

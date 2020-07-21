@@ -1,17 +1,46 @@
-function [p, ax, f] = concentrationProfilePlot(conc,excludeList, colorScheme)
-% plots a concentration profile
-% plotType can be inLine or stacked
-% up to 4 volumes with different plot lines
+function [p, ax, f] = concentrationProfilePlot(conc,excludeList,colorScheme)
+% concentrationProfilePlot plots a concentration profile of up to 4 volumes
+% with different plot lines
+%
+% INPUT
+% conc:        table that contains the counts or the concentration of 
+%              one or more volumes. If multiple volumes are in the 
+%              variable, the name will be atom/ion + volume name
+%
+% excludeList: cell array that contains as character the individual
+%              ions that shall not be considered for the plot of the 
+%              concentration, unranged atoms appear as 'unranged', if not 
+%              parsed, no atoms will be excluded
+%
+% colorScheme: table with RGB codes assigned to ions
+%
+% OUTPUT
+% p:            profile plot
+%
+% ax:           axes of the plot with properties (XLim, YLim, XScale, 
+%               YScale, GridlineStyle, Position, Units)
+%
+% f:            figure that contains the plot with properties
+%               (Number, Name, Color, Position, Units)
+%
+% USEFUL Notes:
+% If the conc as OUTPUT of posCalculateConcentrationSimple function is used, either
+% concentration or counts must be specified in the INPUT argument with the
+% following lines as INPUT argument
+%       concentration:  conc([conc.format=='concentration'], :)
+%       count:          conc([conc.format=='count'], :)
+%
 
 if ~exist('excludeList','var')
     excludeList = {};
 end
+
 % remove elements on the exclude list
 conc = conc(:,~ismember(conc.Properties.VariableNames,excludeList));
 
 
 %% check for multiple volumes, presence of variance for error bars, options and compatibility
-%check if all variables have the same format
+% check if all variables have the same format
 if ~xor(any(conc.format == 'concentration'),any(conc.format == 'count'))
     error('only either concentration or count format is allowed as input');
 end
@@ -47,7 +76,7 @@ catch
     ax.XLabel.String = 'distance';
 end
 
-%check if we are plotting concentrations, need to adjust data
+% check if we are plotting concentrations, need to adjust data
 if any(conc.format == 'concentration')
     pctFac = 100;
     ax.YLabel.String = [ax.YLabel.String ' [%]'];

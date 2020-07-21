@@ -1,12 +1,12 @@
-function sh = ROIcreateSphere(radius,subDivisions,location,ax)
-% creates sphere in current or parsed axis with specified radius
-% Output is handle to the object for later manipulation.
+function sh = roiCreateSphere(radius,subDivisions,location,ax)
+% roiCreateSphere creates sphere in current or parsed axis with specified 
+% radius. Output is handle to the object for later manipulation.
 % 
-% sh = ROIcreateSphere()
-% sh = ROIcreateSphere(radius)
-% sh = ROIcreateSphere(radius,subDivisions)   
-% sh = ROIcreateSphere(radius,subDivisions,location)
-% sh = ROIcreateSphere(radius,subDivisions,location,ax)
+% sh = roiCreateSphere()
+% sh = roiCreateSphere(radius)
+% sh = roiCreateSphere(radius,subDivisions)   
+% sh = roiCreateSphere(radius,subDivisions,location)
+% sh = roiCreateSphere(radius,subDivisions,location,ax)
 %
 % INPUT
 % radius:       the radius of the ROI, default is 10
@@ -55,7 +55,7 @@ sh.UserData.ROIxaxis = [location ; location + [radius,0,0]];
 
 end
 function [vv,ff] = icosphere(varargin)
-%ICOSPHERE Generate icosphere.
+% ICOSPHERE Generate icosphere.
 % Create a unit geodesic sphere created by subdividing a regular
 % icosahedron with normalised vertices.
 %
@@ -126,7 +126,7 @@ switch(nargout)
 end
 end
 function [i,v] = getMidPoint(t1,t2,v)
-%GETMIDPOINT calculates point between two vertices
+% GETMIDPOINT calculates point between two vertices
 %   Calculate new vertex in subdivision aex
 %
 %   Wil O.C. Ward 19/03/2015
@@ -141,7 +141,7 @@ i = size(v,1) + 1;
 v = [v;pm];
 end
 function [v,f] = icosahedron()
-%ICOSAHEDRON creates unit regular icosahedron
+% ICOSAHEDRON creates unit regular icosahedron
 %   Returns 12 vertex and 20 face values.
 %
 %   Wil O.C. Ward 19/03/2015
@@ -185,7 +185,7 @@ f = [ 1,12, 6; % f1
      10, 9, 2];% f20
 end
 function chowSphere(cax,f,v)
-%chOWSPHERE displays icosphere given faces and vertices.
+% chOWSPHERE displays icosphere given faces and vertices.
 %   Displays a patch surface on the axes, cax, and sets the view.
 %   
 %   Properties:
