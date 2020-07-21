@@ -4,6 +4,23 @@ function ph = roiCreatePlane(dimensions,spacing,location,ax)
 % spacing gives the approximate spacing between vertices for later analysis
 % purposes. leave at 0 for simple plane object with no subdivision.
 % Output is handle to the object for later manipulation.
+%
+% ph = roiCreatePlane(dimensions,spacing)
+% ph = roiCreatePlane(dimensions,spacing,location)
+% ph = roiCreatePlane(dimensions,spacing,location,ax)
+%
+% INPUT
+% dimensions:   1x2 array with x and y dimensions of the plane
+%
+% spacing:      1x2 array with the spacing value in x and y direction
+%
+% location:     coordinates of the ROI's center given as [x y z] 
+%               default is [0 0 0]
+%
+% ax:           axis in which the ROI is orientated
+%
+% OUTPUT
+% ph:           handle to the ROIplane
 
 % get axis if necessary
 if not(exist('ax','var'))
