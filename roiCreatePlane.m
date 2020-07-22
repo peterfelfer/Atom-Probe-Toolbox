@@ -22,23 +22,17 @@ function ph = roiCreatePlane(dimensions,spacing,location,ax)
 % OUTPUT
 % ph:           handle to the ROIplane
 
-%% default dimensions is [10 10]
-if not(exist('dimensions','var'))
-    dimensions = [10 10];
-end
-%% default spacing is [1 1]
-if not(exist('spacing','var'))
-    dimensions = [1 1];
-end
-%% default location is [0, 0, 0]
-if ~exist('location','var')
-    location = [0, 0, 0];
-end
-%% get axis if necessary
+% get axis if necessary
 if not(exist('ax','var'))
     ax = gca;
 end
-%% x and y coordinates of the vertices
+
+% default location is [0, 0, 0]
+if ~exist('location','var')
+    location = [0, 0, 0];
+end
+
+% x and y coordinates of the vertices
 xLocs = (0:spacing(:,1):dimensions(:,1)) - dimensions(:,1)/2;
 yLocs = (0:spacing(:,2):dimensions(:,2)) - dimensions(:,2)/2;
 [tx, ty] = meshgrid(xLocs,yLocs);

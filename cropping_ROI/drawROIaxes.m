@@ -1,8 +1,8 @@
-function lh = roiDrawAxes(roi)
-% roiDrawAxes draws lines denoting the analysis axes for the ROI object red = x, 
+function lh = drawROIaxes(roi)
+% draws lines denoting the analysis axes for the ROI object red = x, 
 % green = y, blue = z
 %
-% bh = roiDrawAxes(roi)
+% bh = drawROiaxes(roi)
 %
 % INPUTS
 % roi: name of roi as given before

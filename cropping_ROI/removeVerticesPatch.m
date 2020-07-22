@@ -1,4 +1,4 @@
-function fvcOut = patchRemoveVertices(fvcIn,removeVerticeList)
+function fvcOut = removeVerticesPatch(fvcIn,removeVerticeList)
 %% Remove Vertices from FV structure containing patch data. 
 % This function will take in a FV structure of patch data and remove any
 % repeated or unused vertices in fvcIn.vertices. It will find vertices in
@@ -11,7 +11,7 @@ function fvcOut = patchRemoveVertices(fvcIn,removeVerticeList)
 % STL files generated from patches with unused vertices. (Note, developed
 % in MATLAB R2013a)
 %
-% function fvcOut = patchRemoveVertices(fvcIn,removeVerticeList)
+% function fvcOut = removeVerticesPatch(fvcIn,removeVerticeList)
 %
 % Input: fvcIn - Structure with fields 'vertices' and 'faces', 
 %                 optionally 'facevertexcdata'
@@ -29,7 +29,7 @@ function fvcOut = patchRemoveVertices(fvcIn,removeVerticeList)
 %     fvc = surf2patch(X,Y,Z,Z);
 %     ptsRemove = [X(R<cutOff),Y(R<cutOff),Z(R<cutOff)];
 %     fvc = surf2patch(X,Y,Z,Z)
-%     fvc1 = patchRemoveVertices(fvc,ptsRemove)
+%     fvc1 = removeVerticesPatch(fvc,ptsRemove)
 % 
 %     figure
 %     subplot(1,2,1)
