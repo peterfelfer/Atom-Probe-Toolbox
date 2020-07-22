@@ -1,4 +1,4 @@
-function fv = patchDeleteExternalPoints(fv,pos,numRims)
+function fv = patchDeleteExternalPoints(gh,pos,numRims)
 % patchDeleteExternalPoints deletes all points of a patch object that are outside the dataset. This
 % is done by deleting all points that have no atomic position that is
 % closer to them than no other vertex.
@@ -6,31 +6,35 @@ function fv = patchDeleteExternalPoints(fv,pos,numRims)
 % fv = patchDeleteExternalPosnts(fv,pos,numRims)
 % 
 % INPUT
-% fv:       faces and vertices of the 
+% gh:       graphic handle that is needed to biult the structure of
+%           vertices and faces
 %
-% pos:      dataset 
+% pos:      dataset on which the patch object will be fitted
 %
-% numRims:  number of the rims
+% numRims:  numRims is the number of edge loops to be deleted on top of the unused verts
 % 
 % OUTPUT
 % points:   points transformed to the new coordinate system   
-%numRims is the number of edge loops to be deleted on top of the unused verts.
 
 
-% calculate which vertices are inside the dataset
-vertCoords = fv.Vertices;
+%% creating the structure
+fv = struct();
+fv.vertices = gh.Vertices;
+fv.faces = gh.Faces;
+%% calculate which vertices are inside the dataset
+vertCoords = fv.vertices;
 atomCoords = [pos.x, pos.y, pos.z];
 closest = dsearchn(vertCoords,atomCoords);
 isIn = ismember(1:length(vertCoords),closest);
 
 
-% remove unused vertices
-fv = removeVerticesPatch([fv.Vertices fv.Faces],fv.Vertices(~isIn,:));
+%% remove unused vertices
+fv = patchRemoveVertices(fv,fv.vertices(~isIn,:));
 
-% remove boundary vertices for n boundary rings
+%% remove boundary vertices for n boundary rings
 if exist('numRims','var')
     for i=1:numRims
         bnd = computeBoundary(fv);
-        fv = removeVerticesPatch([fv.Vertices fv.Faces],fv.Vertices(bnd,:));
+        fv = patchRemoveVertices(fv,fv.vertices(bnd,:));
     end
 end
