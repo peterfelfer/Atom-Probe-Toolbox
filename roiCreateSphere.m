@@ -16,7 +16,7 @@ function sh = roiCreateSphere(radius,subDivisions,location,ax)
 % location:     the start coordinates of the ROI given as [x y z] 
 %               default is [0 0 0]
 %
-% ax:           axis in which the ROI is orientated
+% ax:           axes in which the ROI is orientated
 %
 % OUTPUT
 % sh:           handle to the ROIsphere
