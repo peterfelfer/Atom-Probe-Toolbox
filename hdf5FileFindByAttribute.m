@@ -1,4 +1,4 @@
-function files = hdf5findFileByAttribute(topFolder,varargin)
+function files = hdf5FileFindByAttribute(topFolder,varargin)
 % HDF5deepDrill gets a list of all hdf5 files the folder topFolder and all
 % its subfolders and filters them by attributes. The attributes are parsed
 % by combinations of keyword and value. You can check your hdf5 files for

@@ -1,0 +1,1 @@
+function pos = posTableFromHDF5(fileName)

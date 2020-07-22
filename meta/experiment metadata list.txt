@@ -57,6 +57,7 @@
 % required atom probe experiment specific metadata
 /atomProbeTomography/instrument/flightPathLength [float32] = 110 [mm]
 /atomProbeTomography/instrument/t0 [float32] = 55.7 [ns]
+/atomProbeTomography/instrument/detectionEfficiency [float32] = 0.37 []
 /atomProbeTomography/instrument/apertureType [string] = conical microelectrode []
 /atomProbeTomography/instrument/apertureUniqueIdentifier [string] = Ox00 []
 /atomProbeTomography/instrument/detectorReadout [string] = discriminator []
