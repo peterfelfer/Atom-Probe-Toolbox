@@ -1,10 +1,17 @@
-function fv = filterPatchSize(fv,Nmin)
-% filterPatchSize filters the individually connected parts of a patch and 
+function fv = patchFilterSize(fv,Nmin)
+% patchFilterSize filters the individually connected parts of a patch and 
 % discards patch parts smaller than Nmin. Useful for filtering noise in 
-% isosurfaces
+% isosurfaces 
 % 
+% fv = filterPatchSize(fv,Nmin)
 % 
-% 
+% INPUT
+% fv =      structure with fields of vertices and faces
+% Nmin =    is the boundary, all patches that are smaller than Nmin are
+%           discarded
+%
+% OUTPUT
+% fv =      residua patches that are bigger than Nmin
 
 patches = splitFV(fv);
 numPatches = length(patches);
