@@ -1,8 +1,31 @@
-function wcsh = WcsCreate(size,loc,ax)
-%creates box in current or parsed axis with specified width and
-%height at the location loc. 
-%Output is handle to the object for later manipulation.
-
+function wcsh = wcsCreate(size,location,ax)
+% wcsCreate creates box in current or parsed axis with specified width and
+% height at the location loc. 
+% Output is handle to the object for later manipulation
+%
+% wcsh = wcsCreate(size,loc,ax)
+% 
+% INPUT
+% size:     the length, width and height (x,y,z) of the ROI given as 
+%           [x y z], default is [10 10 10]
+%
+% location: the start coordinates of the ROI given as [x y z],
+%           default is [0 0 0]
+%
+% ax:       axes in which the ROI is orientated
+% 
+% OUTPUT
+% points:       points transformed to the new coordinate system
+%
+%% default size is [10 10]
+if not(exist('size','var'))
+    size = [10 10 10];
+end
+%% default location is [0, 0, 0]
+if ~exist('location','var')
+    location = [0, 0, 0];
+end
+%% sets axis
 if not(exist('ax','var'))
     ax = gca;
 end
@@ -17,7 +40,7 @@ vertices = [...
     1 1 1;... idx 7
     0 1 1]; % idx 8
 vertices = vertices * size; % scale
-vertices = vertices + repmat(loc,8,1);
+vertices = vertices + repmat(location,8,1);
 
 faces = [...
     1 2 3 4;...
