@@ -19,6 +19,8 @@ function ch = roiCreateCylinder(radius,height,location,numSegments,ax)
 %
 % numSegments:  number of segments of the cylinder, default is 32
 %
+% ax:           axes in which the ROI is orientated
+%
 % OUTPUT
 % ch:           handle to the ROIcylinder
 

@@ -17,7 +17,7 @@ function ph = roiCreatePlane(dimensions,spacing,location,ax)
 % location:     coordinates of the ROI's center given as [x y z] 
 %               default is [0 0 0]
 %
-% ax:           axis in which the ROI is orientated
+% ax:           axes in which the ROI is orientated
 %
 % OUTPUT
 % ph:           handle to the ROIplane
