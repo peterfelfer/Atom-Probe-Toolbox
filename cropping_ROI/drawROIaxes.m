@@ -8,7 +8,8 @@ function lh = drawROIaxes(roi)
 % roi: name of roi as given before
 %
 % OUTPUTS
-% bh:   handle to the axes of the roi, colors as described before        
+% bh:   handle to the axes of the roi, colors as described before
+%
 lh(1) = line(roi.UserData.ROIxaxis(:,1),roi.UserData.ROIxaxis(:,2),roi.UserData.ROIxaxis(:,3),'LineWidth',4,'Color','r');
 lh(2) = line(roi.UserData.ROIyaxis(:,1),roi.UserData.ROIyaxis(:,2),roi.UserData.ROIyaxis(:,3),'LineWidth',4,'Color','g');
 lh(3) = line(roi.UserData.ROIzaxis(:,1),roi.UserData.ROIzaxis(:,2),roi.UserData.ROIzaxis(:,3),'LineWidth',4,'Color','b');

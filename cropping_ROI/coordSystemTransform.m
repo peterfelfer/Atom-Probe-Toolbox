@@ -1,5 +1,5 @@
 function points = coordSystemTransform(ROIobject, points)
-% transforms points from the global coordinate system to a local object defined 
+% coordSystemTransform transforms points from the global coordinate system to a local object defined 
 % 
 % points = coordSystemTransform(ROIobject, points)
 % 
