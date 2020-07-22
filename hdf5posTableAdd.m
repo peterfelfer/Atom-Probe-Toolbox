@@ -1,92 +1,20 @@
-function posTableToHDF5(fileName,pos,metaData,ionTable,rangeTable)
-% posToHDF5 exports a pos variable to an HDF 5 file, optionally including
-% metadata about ranges and ions identified in the data.
+function hdf5posTableAdd(fileName,pos)
+% With hdf5posTableAdd pos data can be added to an exisitng HDF5 file with
+% the appropriate groups structure.
 %
-% fileName as text
+%  hdf5posTableAdd(fileName,pos)
 %
-% pos as table with entries ionIdx, x, y, z, mc and more if needed
+%   INPUT: 
+%   fileName        full file name including path as string or char array
 %
-% metadata as cell aray with {variableName, value, unit}
-%
-% TODO: implement export of ion and range tables
-%       implementation of export of categorical arrays
-
-
-%% creating hdf5 file 
-fid = H5F.create(fileName);
-
-
-%% creating dataset groups
-% extracting groups form metadata list
-% group list needs to be created such that a group is created before its
-% subgroup. This demands extracting the individual components of each path
-
-% deleting the individual variable names
-groupsTmp = string(metaData(:,1)); 
-delPos = regexp(groupsTmp,"/");
-delPos = cellfun(@(x) x(end),delPos);
-groupsTmp = extractBefore(groupsTmp,delPos+1);
-groupsTmp = unique(groupsTmp);
-
-% extracting the group hierachy
-delPos = regexp(groupsTmp,"/");
-groups = [];
-for gr = 1:length(groupsTmp)
-    groupDepth = length(delPos{gr});
-    tmp = repmat(groupsTmp(gr),groupDepth,1);
-    tmp = extractBefore(tmp,(delPos{gr})');
-    groups = [groups; tmp];
-end
-
-% format group list
-groups = unique(groups);
-groups = sort(groups);
-groups(groups == "") = [];
-groups = groups + "/";
-
-% cretaing individual groups
-for gr = 1:length(groups)
-    groupID(gr) = H5G.create(fid,groups(gr),...
-        'H5P_DEFAULT','H5P_DEFAULT','H5P_DEFAULT');
-    H5G.close(groupID(gr));
-end
-
-
-
-%% writing metadata
-for m = 1:size(metaData,1)
-    % formatting of metadata for writing
-    if ~isempty(metaData{m,2})
-        
-        % get dataset path in hdf5 file from metadata text
-        idxLastSlash = find(metaData{m,1} == '/');
-        idxLastSlash = max(idxLastSlash);
-        
-        path = metaData{m,1}(1:idxLastSlash);
-        attribute = metaData{m,1}(idxLastSlash+1:end);
-        
-        if isdatetime(metaData{m,2}) % for dates
-            data = datestr(metaData{m,2});
-            
-        elseif iscategorical(metaData{m,2}) % for enums (categoricals in Matlab)
-            data = string(metaData{m,2});
-            
-        elseif islogical(metaData{m,2})
-            if metaData{m,2}
-                data = 'true';
-            else 
-                data = 'false';
-            end
-            
-        else
-            data = metaData{m,2};
-        end
-        
-        h5writeatt(fileName,path,attribute,data,'TextEncoding','UTF-8');
-    end      
-end
-
-H5F.close(fid);
+%   pos             pos table variable. Should contain the following entries:
+%                   ionIdx,x,y,z,mc,tof,VDC,VP,detx,dety,deltaP,multi,ion,atom,isotope,chargeState,ionComplexity
+%                   decomposition state is automatically determined and the
+%                   corresponding data is written either into the group:
+%                   '/atomProbeTomography/reconstruction/ion/'
+%                   (undecomposed)
+%                   '/atomProbeTomography/reconstruction/atom/'
+%                   (decomposed)
 
 
 %% writing pos data ==> APT specific!
@@ -171,13 +99,3 @@ for col = 1:width(pos)
     end
 
 end
-
-
-%% writing ions 
-% create list with ion names
-
-
-
-
-%% writing ranges
-
