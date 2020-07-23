@@ -4,6 +4,7 @@ function files = hdf5FileFindByAttribute(topFolder,varargin)
 % by combinations of keyword and value. You can check your hdf5 files for
 % those combinations by using info = h5info('test.h5');
 
+
 % test if number of input argument is viable
 if mod((nargin-1),2) == 1
     error('use only attribute - value combinations');
