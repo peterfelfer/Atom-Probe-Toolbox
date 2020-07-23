@@ -27,6 +27,12 @@
 /sample/notes [string] = NULL []
 /sample/materialType [string] = aluminium []
 
+/sample/images/1/type [enum] = SEM [SEM,TEM,LOM,photo]
+/sample/images/1/contrastMechanism [string] = BSE []
+/sample/images/1/image [uint32] = NULL []
+/sample/images/1/pixelScale [float32] = NULL [µm]
+
+
 /experiment/type [string] = atomProbeTomographyExperiment []
 /experiment/instrumentOperator [string] = Peter Felfer []
 /experiment/beginDateTime [dateTime] = 2020-07-01 10:14:36.000 [yyyy-MM-dd HH:mm:ss.SSS]
@@ -65,6 +71,13 @@
 /atomProbeTomography/instrument/detectorSize [float32] = 80,80 [mm]
 /atomProbeTomography/instrument/laserIncidenceDirection [float32] = 1,2,3 []
 
+/atomProbeTomography/sample/preparation/method [enum] = electropolishing [electropolishing, FIB, BIB]
+/atomProbeTomography/sample/preparation/instrument [string] = NULL []
+/atomProbeTomography/sample/preparation/finalIonBeamEnergy [float32] = NULL [keV]
+/atomProbeTomography/sample/preparation/electroPolishingAgent [string] = NULL []
+/atomProbeTomography/sample/preparation/electroPolishingVoltage [float32] = NULL [V,s] % may be V-t curve
+/atomProbeTomography/sample/preparation/electropolishingTemperature [float32] = NULL [C]
+
 % optional atom probe experiment specific metadata
 % not set if data is continuously recorded during experiment
 % if data is continuously recorded, pls use corresponding variable names below
@@ -74,11 +87,8 @@
 /atomProbeTomography/experiment/pulseFraction [float32] = NULL [1]
 /atomProbeTomography/experiment/laserPulseEnergy [float32] = NULL [J]
 /atomProbeTomography/experiment/laserPosition [float32] = NULL,NULL,NULL [mm]
-/atomProbeTomography/experiment/pulsePeriod [float32] = NULL [ns]
+/atomProbeTomography/experiment/pulsePeriod [float32] = NULL [ns] % period between two voltage or laser pulses
 /atomProbeTomography/experiment/sampleStagePosition [float32] = NULL,NULL,NULL [mm]
-
-/atomProbeTomography/sample/preparationMethod [enum] = electropolishing [electropolishing, FIB, BIB]
-/atomProbeTomography/sample/preparationInstrument [string] = NULL []
 
 /atomProbeTomography/detectorEvent/laserPulseCount [uint64] = NULL [1]
 /atomProbeTomography/detectorEvent/voltagePulseCount [uint64] = NULL [1]
