@@ -11,12 +11,12 @@
 /metaData/templateVersion [string] = 0.1 []
 
 % project metadata
-/project/1/identifier [string] = HydMet []
-/project/1/contactPerson [string] = Peter Felfer []
-/project/1/confidentiality [enum] = open [open, embargoed, confidental]
-/project/1/dataSharingLicense [string] = CC by []
-/project/1/startDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
-/project/1/endDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
+/project/identifier [string] = HydMet []
+/project/contactPerson [string] = Peter Felfer []
+/project/confidentiality [enum] = open [open, embargoed, confidental]
+/project/dataSharingLicense [string] = CC by []
+/project/startDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
+/project/endDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
 % multiple projects allowed
 
 
@@ -27,10 +27,11 @@
 /sample/notes [string] = NULL []
 /sample/materialType [string] = aluminium []
 
-/sample/images/1/type [enum] = SEM [SEM,TEM,LOM,photo]
-/sample/images/1/contrastMechanism [string] = BSE []
+/sample/images/1/type [string] = NULL []
+/sample/images/1/contrastMechanism [string] = NULL []
 /sample/images/1/image [uint32] = NULL []
-/sample/images/1/pixelScale [float32] = NULL [µm]
+/sample/images/1/horizontalPixelScale [float32] = NULL [µm]
+/sample/images/1/verticalPixelScale [float32] = NULL [µm]
 
 
 /experiment/type [string] = atomProbeTomographyExperiment []
@@ -83,7 +84,7 @@
 % if data is continuously recorded, pls use corresponding variable names below
 
 /atomProbeTomography/experiment/pulseType [enum] = voltagePulsed [voltagePulsed, laserPulsed]
-/atomProbeTomography/experiment/tipTemperature [float32] = NULL [K]
+/atomProbeTomography/experiment/specimenTemperature [float32] = 40 [K]
 /atomProbeTomography/experiment/pulseFraction [float32] = NULL [1]
 /atomProbeTomography/experiment/laserPulseEnergy [float32] = NULL [J]
 /atomProbeTomography/experiment/laserPosition [float32] = NULL,NULL,NULL [mm]
