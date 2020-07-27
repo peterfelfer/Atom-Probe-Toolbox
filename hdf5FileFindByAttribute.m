@@ -32,6 +32,9 @@ function files = hdf5FileFindByAttribute(topFolder,varargin)
 %                   datenum
 %
 
+%MISSING: query for existance of data, ie. if it has an image of the
+%sample, ranges defined or ions defined maybe as 
+
 
 % test if number of input argument is viable
 if mod((nargin-1),2) == 1

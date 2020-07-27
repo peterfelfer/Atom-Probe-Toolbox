@@ -48,7 +48,7 @@ if isvector(vox)
         concOut = [concOut; conc{i}];
     end
     conc = concOut;
-    conc.Properties.VariableUnits{strcmp(conc.Properties.VariableNames,'distance')} = distanceUnits{1};
+    %conc.Properties.VariableUnits{strcmp(conc.Properties.VariableNames,'distance')} = distanceUnits{1};
 end
 
 end

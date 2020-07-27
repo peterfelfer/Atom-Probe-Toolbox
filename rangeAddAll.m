@@ -71,7 +71,12 @@ unrangedPeakHeights = peakHeights(notInRange & isAboveLimit);
 for ion = 1:length(unrangedIonLocations)
     % put focus on peak
     spec.Parent.XLim = [unrangedIonLocations(ion) - rangeMargin, unrangedIonLocations(ion) + rangeMargin];
-    spec.Parent.YLim = [yPlotLimits(1), unrangedPeakHeights(ion)*1.5];
+    
+    if unrangedPeakHeights(ion)*1.5 > yPlotLimits(1) % in case the upper plot y limit is lower than the lower y plot limit
+        spec.Parent.YLim = [yPlotLimits(1), unrangedPeakHeights(ion)*1.5];
+    else
+        spec.Parent.YLim = [unrangedPeakHeights(ion)/10, unrangedPeakHeights(ion)*1.5];
+    end
     
     % put a marker there
     
