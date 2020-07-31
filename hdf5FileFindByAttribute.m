@@ -4,17 +4,16 @@ function files = hdf5FileFindByAttribute(topFolder,varargin)
 % by combinations of keyword and value. You can check your hdf5 files for
 % those combinations by using info = h5info('test.h5');
 %
-%   files = hdf5FileFindByAttribute(topFolder,varargin)
+% files = hdf5FileFindByAttribute(topFolder,varargin)
 %
-%   INPUTS:
-%   topFolder       folder in which the search will be performed. All
-%                   subfolders will be included
+% INPUTS
+% topFolder =   folder in which the search will be performed. All
+%               subfolders will be included
 %
-%   varargin        pairs of attributes and their values. For numeric
-%                   values, comparions can be used. If comparisons are
-%                   used, the value input needs to be char type
-%                   examples:
-%
+% varargin =    pairs of attributes and their values. For numeric
+%               values, comparions can be used. If comparisons are
+%               used, the value input needs to be char type examples:
+%              
 %                   String type
 %                   '/sample/materialType'  'aluminium'
 %
@@ -26,10 +25,10 @@ function files = hdf5FileFindByAttribute(topFolder,varargin)
 %                   '/atomProbeTomography/experiment/specimenTemperature'
 %                   40
 %
-%   OUTPUTS:
-%   files           files that fulfill the attributes as array of structs
-%                   with the fields: name, folder, bytes, date, isdir,
-%                   datenum
+% OUTPUTS
+% files =        files that fulfill the attributes as array of structs
+%                with the fields: name, folder, bytes, date, isdir,
+%                datenum
 %
 
 %MISSING: query for existance of data, ie. if it has an image of the
