@@ -1,5 +1,5 @@
-function [proxi, binvector] = kwikProxigram(pos,parentPos,interface,bin)
-% kwikProxigram calculates a proxigram for the patch 'interface' 
+function [proxi, binvector] = patchCreateProxigram(pos,parentPos,interface,bin)
+% patchCreateProxigram calculates a proxigram for the patch 'interface' 
 % for the atoms in 'pos', which are a subset of the atoms in 'parentPos' 
 % with a bin width of bin.
 % 
