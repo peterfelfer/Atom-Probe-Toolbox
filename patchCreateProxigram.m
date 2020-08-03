@@ -16,7 +16,7 @@ function [proxi, binVector] = patchCreateProxigram(posSpecies,pos,interface,bin)
 % proxi:        concentration values of the desired species; y-values of
 %               the proxigram
 %
-% binvector:    corresponding distance values; x-values of the proxigram
+% binVector:    corresponding distance values; x-values of the proxigram
 
 % distances are calculated along vertex normals.
 normals = patchnormals(interface);
