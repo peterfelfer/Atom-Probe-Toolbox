@@ -4,9 +4,9 @@ function [proxi, binvector] = patchCreateProxigram(posSpecies,pos,interface,bin)
 % with a bin width of bin.
 % 
 % INPUT
-% posSpecies:          pos of the desired species, subset of initial pos
+% posSpecies:   pos of the desired species, subset of initial pos
 %
-% parentPos:    initial pos file with pos.x, pos.y, and pos.z
+% pos:          initial pos file with pos.x, pos.y, and pos.z
 %
 % interface:    structure with faces and vertices of the interface
 %
