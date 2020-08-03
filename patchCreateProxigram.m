@@ -1,4 +1,4 @@
-function [proxi, binvector] = patchCreateProxigram(posSpecies,pos,interface,bin)
+function [proxi, binVector] = patchCreateProxigram(posSpecies,pos,interface,bin)
 % patchCreateProxigram calculates a proxigram for the patch 'interface' 
 % for the atoms in 'pos', which are a subset of the atoms in 'parentPos' 
 % with a bin width of bin.
@@ -32,12 +32,12 @@ dist = sum(normals(closest,:) .* distVec,2);
 
 
 % calculating bin centers
-binvector = linspace(0,10000*bin,10001);
-binvector = [fliplr(uminus(binvector(2:end))) binvector];
-binvector(binvector<min(dist) | binvector>max(dist)) = [];
+binVector = linspace(0,10000*bin,10001);
+binVector = [fliplr(uminus(binVector(2:end))) binVector];
+binVector(binVector<min(dist) | binVector>max(dist)) = [];
 
 % number of atoms per bin
-posHist = hist(dist,binvector);
+posHist = hist(dist,binVector);
 
 
 %% for element pos files
@@ -47,14 +47,14 @@ distVecS = [posSpecies.x, posSpecies.y, posSpecies.z] - interface.vertices(close
 distS = sum(normals(closestS,:) .* distVecS,2);
 
 % number of atoms per bin
-proxi = hist(distS,binvector)./posHist;
+proxi = hist(distS,binVector)./posHist;
 
 
 %% plotting
 f = figure;
 hold all;
 
-plot(binvector,proxi*100);
+plot(binVector,proxi*100);
 set(gcf,'Name','proximity histogram');
 set(gcf,'Color',[1 1 1]);
 set(get(gca,'XLabel'),'String','distance [nm]');
