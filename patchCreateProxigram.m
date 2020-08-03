@@ -1,10 +1,10 @@
-function [proxi, binvector] = patchCreateProxigram(pos,parentPos,interface,bin)
+function [proxi, binvector] = patchCreateProxigram(posSpecies,pos,interface,bin)
 % patchCreateProxigram calculates a proxigram for the patch 'interface' 
 % for the atoms in 'pos', which are a subset of the atoms in 'parentPos' 
 % with a bin width of bin.
 % 
 % INPUT
-% pos:          pos of the desired species, subset of initial pos
+% posSpecies:          pos of the desired species, subset of initial pos
 %
 % parentPos:    initial pos file with pos.x, pos.y, and pos.z
 %
@@ -25,8 +25,8 @@ normals = patchnormals(interface);
 %% tessellation and distance calculation
 % for overall pos file
 % finding closest point for each atomic position
-closest = dsearchn(interface.vertices,delaunayn(interface.vertices),[parentPos.x, parentPos.y, parentPos.z]);
-distVec = [parentPos.x, parentPos.y, parentPos.z] - interface.vertices(closest,:);
+closest = dsearchn(interface.vertices,delaunayn(interface.vertices),[pos.x, pos.y, pos.z]);
+distVec = [pos.x, pos.y, pos.z] - interface.vertices(closest,:);
 % distance through dot product
 dist = sum(normals(closest,:) .* distVec,2);
 
@@ -41,8 +41,8 @@ posHist = hist(dist,binvector);
 
 
 %% for element pos files
-closestS = dsearchn(interface.vertices,delaunayn(interface.vertices),[pos.x, pos.y, pos.z]);
-distVecS = [pos.x, pos.y, pos.z] - interface.vertices(closestS,:);
+closestS = dsearchn(interface.vertices,delaunayn(interface.vertices),[posSpecies.x, posSpecies.y, posSpecies.z]);
+distVecS = [posSpecies.x, posSpecies.y, posSpecies.z] - interface.vertices(closestS,:);
 % distance through dot product
 distS = sum(normals(closestS,:) .* distVecS,2);
 
