@@ -61,20 +61,3 @@ set(get(gca,'XLabel'),'String','distance [nm]');
 set(get(gca,'YLabel'),'String','concentration [%]');
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
