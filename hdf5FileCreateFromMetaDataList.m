@@ -5,14 +5,16 @@ function hdf5FileCreateFromMetaDataList(fileName,metaData)
 % the second and variable unit in the third column. Experimental data and
 % data from the analysis can then be added to this file. 
 %
-%
 % hdf5FileCreateFromMetaDataList(fileName,metaData)
 %
-% INPUTS:
+% INPUTS
 % fileName =      full file name including path as string or char array
 %   
 % metaData =      cell array of metadata in the form {path/varName, value, 
 %                 unit}
+%
+% OUTPUT
+% a hdf5 file with the entire metaData
 
 
 %% creating hdf5 file 

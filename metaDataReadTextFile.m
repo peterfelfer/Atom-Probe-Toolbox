@@ -17,10 +17,17 @@ function meta = metaDataReadTextFile(fileStr)
 %               {name, value, unit}
 
 
-% pre-formatting of the text file
+%% pre-formatting of the text file
 % break it into lines
 fileByLine = regexp(fileStr, '\n', 'split');
 fileByLine = fileByLine';
+% check for residual cells with [] instead of an empty cell; 
+residualZero = cellfun(@find,fileByLine,'UniformOutput',false);
+for i = 1:length(fileByLine)
+    if residualZero{i,1} == 1
+        fileByLine{i,1} = [];
+    end
+end
 % remove empty lines
 fileByLine( cellfun(@isempty,fileByLine) ) = [];
 % remove comments
