@@ -1,5 +1,5 @@
 function [proxi, binVector] = pointCreateProxigram(posSpecies,pos,vertices,bin)
-% pointCreateProxigram calculates a proxigram for the input vertices 
+% pointCreateProxigram calculates a proxigram for the input 'vertices' 
 % for the atoms in 'posSpecies', which are a subset of the atoms in 'pos' 
 % with a bin width of 'bin'.
 %
