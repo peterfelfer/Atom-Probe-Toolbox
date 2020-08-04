@@ -63,6 +63,9 @@
 
 /laboratory/ambientTemperature [float32] = 23.5 [degC]
 
+
+% User defined analysis data
+
 % for ROIs, isosurfaces etc.
 /objects/meshObject/name [string] = NULL []
 /objects/meshObject/information [string] = NULL [] %e.g. 5 pct. Cr isosurface
@@ -72,6 +75,11 @@
 /objects/meshObject/faces [float64] = NULL, NULL, NULL [nm] % change unit for context of data
 /objects/meshObject/origin [float64] = NULL, NULL, NULL [nm] % change unit for context of data
 /objects/meshObject/coordinateSystemVectors [float64] = NULL [1] % 3x3 matrix (exx exy exz; eyx eyy eyz; ezx ezy ezz)
+/objects/meshObject/vertexColor [float64] = NULL, NULL, NULL [] % RGB 0-1 e.g. 0.23 , 0.4, 1.0, either whole or per vertex
+/objects/meshObject/faceColor [float64] = NULL, NULL, NULL [] % RGB 0-1 e.g. 0.23 , 0.4, 1.0, either whole or per vertex
+/objects/meshObject/faceAlpha [float64] = NULL [] % 0-1 either whole or per item
+/objects/meshObject/lineColor [float64] = NULL, NULL, NULL [] % RGB 0-1 e.g. 0.23 , 0.4, 1.0, either whole or per vertex
+/objects/meshObject/lineAlpha [float64] = NULL [] % R0-1 either whole or per item
 
 /objects/workCoordinateSystem/name [string] = NULL []
 /objects/workCoordinateSystem/origin [float64] = NULL, NULL, NULL [nm] % change unit for context of data

@@ -1,0 +1,1 @@
+function [meshObject WCS] = patchExtractFromHdf5(fileName,objectName)
