@@ -1,7 +1,7 @@
 function [proxi, binVector] = patchCreateProxigram(posSpecies,pos,interface,bin)
 % patchCreateProxigram calculates a proxigram for the patch 'interface' 
 % for the atoms in 'pos', which are a subset of the atoms in 'parentPos' 
-% with a bin width of bin.
+% with a bin width of 'bin'.
 % 
 % INPUT
 % posSpecies:   pos of the desired species, subset of initial pos
