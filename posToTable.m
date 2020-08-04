@@ -87,7 +87,7 @@ elseif idx == 2
     pulse = pulse';
     
     posIn = table(ionIdx,posIn(:,1),posIn(:,2),posIn(:,3),posIn(:,4),posIn(:,5),posIn(:,6),posIn(:,7),posIn(:,8),posIn(:,9),pulse(:,1),pulse(:,2),(1:numAtoms)');
-    posIn.Properties.VariableNames = {'ionIdx','x','y','z','mc','tof','VDC','VP','detx','dety','deltaP','multi','#atom'};
+    posIn.Properties.VariableNames = {'ionIdx','x','y','z','mc','tof','VDC','VP','detx','dety','deltaP','multi','atom#'};
     posIn.Properties.VariableUnits = {'1','nm','nm','nm','Da','ns','V','V','mm','mm','1','1','1'};    
     
 end
