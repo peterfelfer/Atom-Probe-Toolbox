@@ -27,6 +27,7 @@
 /specimen/uniqueIdentifier [string] = HydMet-ABCD []
 /specimen/notes [string] = NULL []
 /specimen/materialType [string] = aluminium []
+/specimen/nominalComposition [string] = NULL [] % elemental for metals: Ag72Cu28
 
 /specimen/images/1/type [string] = NULL []
 /specimen/images/1/contrastMechanism [string] = NULL []
