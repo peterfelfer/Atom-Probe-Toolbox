@@ -2,10 +2,10 @@ function eposExtract = eposExtractFromVoltageCurve(epos)
 % dataExtractFromVoltageCurve extracts data on the basis of a voltage curve
 % 
 % INPUT
-% epos: epos file, table with experiment data 
+% epos:        epos file, table with experiment data 
 %
 % OUTPUT
-% eposExtract: table with experiment data, subset of initial epos table,
+% eposExtract: table with experiment data, subset of initial epos file,
 %              clipped on the basis of the user's selection
 %
 
