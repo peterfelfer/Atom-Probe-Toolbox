@@ -1,26 +1,33 @@
-function meta = metaDataReadTextFile(fileStr)
+function meta = metaDataReadTextFile()
 % metaDataReadTextFile reads a text file with standard UTF-8 encoding into
-% a matlab struct. Information in the metadata file is the general form of:
+% a matlab cell. Information in the metadata file is the general form of:
 %               variableName [format] = value [unit]
-% comments are denoted by a % at the beginning of the line.
-% the string expression 'NULL' denotes an undefined value, resulting in an
+% Comments are denoted by a % at the beginning of the line.
+% The string expression 'NULL' denotes an undefined value, resulting in an
 % empty cell in the output cell array. Case insensitive!
 %
-% meta = metaDataReadTextFile(fileStr)
+% meta = metaDataReadTextFile()
 %
 % INPUT 
-% fileStr:      string content of the *.metadata file containing the 
-%               information
+% Upon execution of this function, the user will have to select a *.txt
+% file
 %
 % OUTPUT
 % meta:         cell array with name - value combinations in the form of:
 %               {name, value, unit}
+%
+% HINT:         the user may change the selection of displayed file types
+%               within the selection window
 
+%% select text file
+[file path] = uigetfile();
+fileStr = fileread([path file]);
 
 %% pre-formatting of the text file
 % break it into lines
 fileByLine = regexp(fileStr, '\n', 'split');
 fileByLine = fileByLine';
+
 % check for residual cells with [] instead of an empty cell; 
 residualZero = cellfun(@find,fileByLine,'UniformOutput',false);
 for i = 1:length(fileByLine)
@@ -28,8 +35,10 @@ for i = 1:length(fileByLine)
         fileByLine{i,1} = [];
     end
 end
+
 % remove empty lines
 fileByLine( cellfun(@isempty,fileByLine) ) = [];
+
 % remove comments
 fileByLine( cellfun(@(x) x(1) == '%',fileByLine )) = [];
 
