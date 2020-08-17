@@ -2,7 +2,7 @@ function hdf5FileCreateFromMetaDataList(fileName,metaData)
 % hdf5FileCreateFromMetaDataList creates a hdf5 file with all the metadata
 % that is provided in the metaData variable. This variable is a cell array
 % with variable name, including path in the first column, variable value in
-% the second and variable unit in the third column. Experimental data and
+% the second, and variable unit in the third column. Experimental data and
 % data from the analysis can then be added to this file. 
 %
 % hdf5FileCreateFromMetaDataList(fileName,metaData)
@@ -14,7 +14,8 @@ function hdf5FileCreateFromMetaDataList(fileName,metaData)
 %                 unit}
 %
 % OUTPUT
-% a hdf5 file with the entire metaData
+% a hdf5 file with the entire metadata, automatically saved in the current
+% folder
 
 
 %% creating hdf5 file 
@@ -33,7 +34,7 @@ delPos = cellfun(@(x) x(end),delPos);
 groupsTmp = extractBefore(groupsTmp,delPos+1);
 groupsTmp = unique(groupsTmp);
 
-% extracting the group hierachy
+% extracting the group hierarchy
 delPos = regexp(groupsTmp,"/");
 groups = [];
 for gr = 1:length(groupsTmp)
@@ -49,7 +50,7 @@ groups = sort(groups);
 groups(groups == "") = [];
 groups = groups + "/";
 
-% cretaing individual groups
+% creating individual groups
 for gr = 1:length(groups)
     groupID(gr) = H5G.create(fid,groups(gr),...
         'H5P_DEFAULT','H5P_DEFAULT','H5P_DEFAULT');
