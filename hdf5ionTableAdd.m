@@ -5,19 +5,18 @@ function hdf5ionTableAdd(fileName,ionTable)
 %/atomProbeTomography/identifiedIon/1/ion [string] = NULL [] % e.g. Fe2 O3 ++
 %/atomProbeTomography/identifiedIon/1/color [float32] = NULL [] % RGB 0-1 e.g. 0.23 , 0.4, 1.0
 %
-% USAGE: hdf5ionTableAdd(fileName,ionTable)
+% hdf5ionTableAdd(fileName,ionTable)
 %
-% INPUTS:
-% fileName =    full file name of existing hdf5 file
+% INPUT
+% fileName:    full file name of existing hdf5 file
 %
-% ionTable =    table of ranges usually as created by extraction from a
-%               mass spectrum plot via ionsExtractFromMassSpec(spec)
+% ionTable:    table of ranges usually as created by extraction from a
+%              mass spectrum plot via ionsExtractFromMassSpec(spec)
 %
 % All ion information is written as attributes in consecutive groups
 %/atomProbeTomography/identifiedIon/1/ion
 %/atomProbeTomography/identifiedIon/2/ion
 % etc...
-%
 
 numIon = height(ionTable);
 
