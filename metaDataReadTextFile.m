@@ -10,14 +10,14 @@ function meta = metaDataReadTextFile()
 %
 % INPUT 
 % Upon execution of this function, the user will have to select a *.txt
-% file
+% file in a popped up window 
 %
 % OUTPUT
 % meta:         cell array with name - value combinations in the form of:
 %               {name, value, unit}
 %
-% HINT:         the user may change the selection of displayed file types
-%               within the selection window
+% HINT:         the user may need to change the selection of displayed 
+%               file types within the selection window
 
 %% select text file
 [file path] = uigetfile();
