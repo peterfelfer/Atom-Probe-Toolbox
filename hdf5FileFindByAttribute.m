@@ -7,7 +7,7 @@ function files = hdf5FileFindByAttribute(topFolder,varargin)
 %
 % files = hdf5FileFindByAttribute(topFolder,varargin)
 %
-% INPUTS
+% INPUT
 % topFolder:   folder in which the search will be performed. All
 %              subfolders will be included. If the current folder is used
 %              as input, the input '' is sufficient
@@ -27,7 +27,7 @@ function files = hdf5FileFindByAttribute(topFolder,varargin)
 %                   '/atomProbeTomography/experiment/specimenTemperature'
 %                   40
 %
-% OUTPUTS
+% OUTPUT
 % files:         files that fulfill the attributes as array of structure
 %                with the fields: name, folder, date, bytes, isdir,
 %                datenum
