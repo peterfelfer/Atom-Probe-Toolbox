@@ -3,6 +3,8 @@ function [proxi, binVector] = patchCreateProxigram(posSpecies,pos,interface,bin)
 % for the atoms in 'posSpecies', which are a subset of the atoms in 'pos' 
 % with a bin width of 'bin'.
 % 
+% [proxi, binVector] = patchCreateProxigram(posSpecies,pos,interface,bin)
+%
 % INPUT
 % posSpecies:   pos of the desired species, subset of initial pos
 %
