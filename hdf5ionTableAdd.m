@@ -2,27 +2,28 @@ function hdf5ionTableAdd(fileName,ionTable)
 % hdf5ionTableAdd can be used to write an ion table into an HDF5 file.
 % Written are only the ion types, not the individual isotopic combinations.
 % The ions are written in string format in the identifiedIon group:
-%/atomProbeTomography/identifiedIon/1/ion [string] = NULL [] % e.g. Fe2 O3 ++
-%/atomProbeTomography/identifiedIon/1/color [float32] = NULL [] % RGB 0-1 e.g. 0.23 , 0.4, 1.0
+% /atomProbeTomography/identifiedIon/1/ion [string] = NULL [] % e.g. Fe2 O3 ++
+% /atomProbeTomography/identifiedIon/1/color [float32] = NULL [] % RGB 0-1 e.g. 0.23 , 0.4, 1.0
 %
 % hdf5ionTableAdd(fileName,ionTable)
 %
 % INPUT
 % fileName:    full file name of existing hdf5 file
 %
-% ionTable:    table of ranges usually as created by extraction from a
-%              mass spectrum plot via ionsExtractFromMassSpec(spec)
+% ionTable:    table of ions usually as created by extraction from a
+%              mass spectrum plot via the function 
+%              ionsExtractFromMassSpec(spec)
 %
-% All ion information is written as attributes in consecutive groups
-%/atomProbeTomography/identifiedIon/1/ion
-%/atomProbeTomography/identifiedIon/2/ion
+% all ion information is written as attributes in consecutive groups
+% /atomProbeTomography/identifiedIon/1/ion
+% /atomProbeTomography/identifiedIon/2/ion
 % etc...
 
 numIon = height(ionTable);
 
 basePath = "/atomProbeTomography/identifiedIon/";
 
-%open the hdf5 file
+% open the hdf5 file
 fid = H5F.open(fileName,'H5F_ACC_RDWR','H5P_DEFAULT');
 
 for i=1:numIon
