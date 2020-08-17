@@ -7,8 +7,9 @@ function hdf5FileCreateFromMetaDataList(fileName,metaData)
 %
 % hdf5FileCreateFromMetaDataList(fileName,metaData)
 %
-% INPUTS
+% INPUT
 % fileName =      full file name including path as string or char array
+%                 (e.g. '\Desktop\test.h5')
 %   
 % metaData =      cell array of metadata in the form {path/varName, value, 
 %                 unit}
