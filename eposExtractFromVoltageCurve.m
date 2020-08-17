@@ -1,5 +1,5 @@
 function eposExtract = eposExtractFromVoltageCurve(epos)
-% dataExtractFromVoltageCurve extracts data on the basis of a voltage curve
+% eposExtractFromVoltageCurve extracts data on the basis of a voltage curve
 % 
 % INPUT
 % epos:        epos file, table with experiment data 
