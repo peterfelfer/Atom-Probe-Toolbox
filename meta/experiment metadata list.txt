@@ -9,7 +9,7 @@
 
 % metadata metadata
 /metaData/templateVersion [string] = 0.1 []
-/metaData/templateURL [string] = 123.123.123.123 []
+/metaData/templateURL [string] = NULL []
 
 % project metadata
 /project/identifier [string] = HydMet []
@@ -27,7 +27,7 @@
 /specimen/uniqueIdentifier [string] = HydMet-ABCD []
 /specimen/notes [string] = NULL []
 /specimen/materialType [string] = aluminium []
-/specimen/nominalComposition [string] = NULL [] % elemental for metals: Ag72Cu28
+/specimen/compositionNominal [string] = NULL [%] % elemental for metals: Ag72Cu28
 
 /specimen/images/1/type [string] = NULL []
 /specimen/images/1/contrastMechanism [string] = NULL []
@@ -56,13 +56,13 @@
 /experiment/longitude [float64] = 49.573321 [degree]
 /experiment/latitude [float64] = 11.027098 [degree]
 
-/instrument/family [string] = Oxcart Titanium Atom Probe []
+/instrument/family [string] = LEAP 4000X HR []
 /instrument/type [string] = Microelectrode Atom Probe []
-/instrument/acquisitionDevice [string] = Surface Concept DLD8080 []
-/instrument/manufacturer [string] = Felfer Group []
-/instrument/lastCalibrationDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
+/instrument/acquisitionDevice [string] = CAMECA DLD []
+/instrument/manufacturer [string] = CAMECA []
+/instrument/lastCalibrationDate [dateTime] = NULL [yyyy-MM-dd]
 
-/laboratory/ambientTemperature [float32] = 23.5 [degC]
+/laboratory/ambientTemperature [float32] = NULL [degC]
 
 
 % User defined analysis data
@@ -86,7 +86,8 @@
 /objects/workCoordinateSystem/origin [float64] = NULL, NULL, NULL [nm] % change unit for context of data
 /objects/workCoordinateSystem/coordinateSystemVectors [float64] = NULL [1] % 3x3 matrix (exx exy exz; eyx eyy eyz; ezx ezy ezz)
 
-
+/analysis/information [string] = NULL []
+/analysis/script [string] = NULL []
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % required atom probe experiment specific metadata
@@ -112,7 +113,8 @@
 % if data is continuously recorded, pls use corresponding variable names below
 
 /atomProbeTomography/experiment/pulseType [enum] = voltagePulsed [voltagePulsed, laserPulsed]
-/atomProbeTomography/experiment/specimenTemperature [float32] = 40 [K]
+/atomProbeTomography/experiment/specimenTemperatureActual [float32] = 40 [K]
+/atomProbeTomography/experiment/specimenTemperatureNominal [float32] = 40 [K]
 /atomProbeTomography/experiment/pulseFraction [float32] = NULL [1]
 /atomProbeTomography/experiment/laserPulseEnergy [float32] = NULL [J]
 /atomProbeTomography/experiment/laserPosition [float32] = NULL,NULL,NULL [mm]
@@ -129,6 +131,8 @@
 /atomProbeTomography/detectorEvent/fieldDesorptionMap [uint32] = NULL, NULL [1]
 
 /atomProbeTomography/reconstruction/isDecomposed [bool] = true []
+/atomProbeTomography/reconstruction/protocolPublicationDOI [string] = NULL []
+/atomProbeTomography/reconstruction/protocolParameterSet [string] = NULL []
 /atomProbeTomography/reconstruction/ion/x [float32] = NULL [nm]
 /atomProbeTomography/reconstruction/ion/y [float32] = NULL [nm]
 /atomProbeTomography/reconstruction/ion/z [float32] = NULL [nm]
