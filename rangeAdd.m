@@ -9,10 +9,10 @@ function [h, txt] = rangeAdd(spec,colorScheme,manualName)
 % the user can choose the desired ion out of a list in a pop-up window;
 % default selection is set to the ion with higher natural abundance
 %
-% if the new range covers an existing range, the command gets abborted
+% if the new range covers an existing range, the command gets aborted
 %
 % if the new range is entirely covered by an existing range, the command
-% gets abborted
+% gets aborted
 %
 % if the new range partially overlaps with an existing range, the new range
 % gets clipped to the adjacent range

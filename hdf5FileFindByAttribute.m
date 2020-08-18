@@ -1,18 +1,20 @@
 function files = hdf5FileFindByAttribute(topFolder,varargin)
-% hdf5FileFindByAttribute gets a list of all hdf5 files the folder topFolder and all
-% its subfolders and filters them by attributes. The attributes are parsed
-% by combinations of keyword and value. You can check your hdf5 files for
-% those combinations by using info = h5info('test.h5');
+% hdf5FileFindByAttribute gets a list of all hdf5 files the folder 
+% topFolder and all its subfolders and filters them by attributes. The 
+% attributes are parsed by combinations of keyword and value. You can 
+% check your hdf5 files for those combinations by using 
+% info = h5info('test.h5');
 %
 % files = hdf5FileFindByAttribute(topFolder,varargin)
 %
-% INPUTS
-% topFolder =   folder in which the search will be performed. All
-%               subfolders will be included
+% INPUT
+% topFolder:   folder in which the search will be performed. All
+%              subfolders will be included. If the current folder is used
+%              as input, the input '' is sufficient
 %
-% varargin =    pairs of attributes and their values. For numeric
-%               values, comparions can be used. If comparisons are
-%               used, the value input needs to be char type examples:
+% varargin:    pairs of attributes and their values. For numeric
+%              values, comparisons can be used. If comparisons are
+%              used, the value input needs to be char type examples:
 %              
 %                   String type
 %                   '/sample/materialType'  'aluminium'
@@ -25,14 +27,14 @@ function files = hdf5FileFindByAttribute(topFolder,varargin)
 %                   '/atomProbeTomography/experiment/specimenTemperature'
 %                   40
 %
-% OUTPUTS
-% files =        files that fulfill the attributes as array of structs
-%                with the fields: name, folder, bytes, date, isdir,
+% OUTPUT
+% files:         files that fulfill the attributes as array of structure
+%                with the fields: name, folder, date, bytes, isdir,
 %                datenum
 %
 
-%MISSING: query for existance of data, ie. if it has an image of the
-%sample, ranges defined or ions defined maybe as 
+% MISSING: query for existence of data, i.e. if it has an image of the
+% sample, ranges defined or ions defined maybe as 
 
 
 % test if number of input argument is viable
