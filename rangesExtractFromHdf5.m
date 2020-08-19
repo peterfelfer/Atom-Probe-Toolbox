@@ -2,16 +2,17 @@ function rangeTable = rangesExtractFromHdf5(fileName)
 % rangesExtractFromHDF5 extracts a list of ranges from an HDF5 file and puts
 % them in a table , akin to rangesExtractFromMassSpec
 %
-% USAGE: rangeTable = rangesExtractFromHDF5(fileName);
+% rangeTable = rangesExtractFromHDF5(fileName);
 %
-% INPUT:    fileName = Name of hdf5 file incl. path
+% INPUT    
+% fileName:     full file name including path as string or char array
 %
-% OUTPUT:   rangeTable = table with the following columns: ionName [string],
-%           chargeState [int], ion [categorical], color [float x3]
+% OUTPUT   
+% rangeTable:   table with the following columns: ionName [string],
+%               chargeState [int], ion [categorical], color [float x3]
 %           
-%           Alternatively false as an output if the file does not contain
-%           range information, i.e. is not an atom probe data file
-%
+% NOTE: Alternatively false as an output if the file does not contain
+% range information, i.e. is not an atom probe data file
 
 % get content structure in HDF5 file
 rangeInfo = h5info(fileName,'/atomProbeTomography/massToChargeRange');
