@@ -1,5 +1,5 @@
 function hdf5rangeTableAdd(fileName,rangeTable)
-% hdf5rangeTableAdd can be used to add range information to an existing HDF5 file.
+% hdf5rangeTableAdd can be used to add range information to an existing HDF5 file
 %
 % hdf5rangeTableAdd(fileName,rangeTable)
 %
