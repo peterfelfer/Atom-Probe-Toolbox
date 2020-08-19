@@ -1,25 +1,25 @@
 function hdf5rangeTableAdd(fileName,rangeTable)
 % hdf5rangeTableAdd can be used to add range information to an existing HDF5 file.
 %
-% USAGE:    hdf5rangeTableAdd(fileName,rangeTable)
+% hdf5rangeTableAdd(fileName,rangeTable)
 %
-% INPUT:    
-% fileName =        full file name of existing hdf5 file
+% INPUT    
+% fileName:         full file name including path as string or char array
 %
-% rangeTable =      table of ranges usually as created by extraction from a
+% rangeTable:       table of ranges usually as created by extraction from a
 %                   mass spectrum plot via rangesExtractFromMassSpec(spec)
 %
 % For each range, written are:
 %
-%/atomProbeTomography/massToChargeRange/1/name [string] % e.g. Fe2 O3
-%/atomProbeTomography/massToChargeRange/1/ion [string] % e.g. 56Fe2 16O3 ++
-%/atomProbeTomography/massToChargeRange/1/begin [float32] % e.g. 32.34
-%/atomProbeTomography/massToChargeRange/1/end [float32] % e.g. 33.34
-%/atomProbeTomography/massToChargeRange/1/reconstructionVolume [float32] [at/nm3] % e.g. 70
+% /atomProbeTomography/massToChargeRange/1/name [string] % e.g. Fe2 O3
+% /atomProbeTomography/massToChargeRange/1/ion [string] % e.g. 56Fe2 16O3 ++
+% /atomProbeTomography/massToChargeRange/1/begin [float32] % e.g. 32.34
+% /atomProbeTomography/massToChargeRange/1/end [float32] % e.g. 33.34
+% /atomProbeTomography/massToChargeRange/1/reconstructionVolume [float32] [at/nm3] % e.g. 70
 %
 % All ranges information is written as attributes in consecutive groups
-%/atomProbeTomography/massToChargeRange/1/name
-%/atomProbeTomography/massToChargeRange/2/name
+% /atomProbeTomography/massToChargeRange/1/name
+% /atomProbeTomography/massToChargeRange/2/name
 % etc...
 %
 
@@ -27,7 +27,7 @@ numRng = height(rangeTable);
 
 basePath = "/atomProbeTomography/massToChargeRange/";
 
-%open the hdf5 file
+% open the hdf5 file
 fid = H5F.open(fileName,'H5F_ACC_RDWR','H5P_DEFAULT');
 
 for r = 1:numRng
