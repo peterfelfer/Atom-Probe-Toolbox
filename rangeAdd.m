@@ -219,7 +219,7 @@ if isValid
         h.UserData.ion = potentialIon{idx};
         h.UserData.chargeState = potentialIonChargeState(idx);
         h.DisplayName = ionConvertName(h.UserData.ion,h.UserData.chargeState);
-        h.FaceColor = colorScheme.color(colorScheme.ion == h.UserData.ion.element(1),:);
+        h.FaceColor = colorScheme.color(colorScheme.ion == ionConvertName(h.UserData.ion.element),:);
     end
     
     % define for all hit multiplicities
