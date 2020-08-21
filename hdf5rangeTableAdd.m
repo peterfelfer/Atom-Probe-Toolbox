@@ -15,13 +15,13 @@ function hdf5rangeTableAdd(fileName,rangeTable)
 % /atomProbeTomography/massToChargeRange/1/ion [string] % e.g. 56Fe2 16O3 ++
 % /atomProbeTomography/massToChargeRange/1/begin [float32] % e.g. 32.34
 % /atomProbeTomography/massToChargeRange/1/end [float32] % e.g. 33.34
+% /atomProbeTomography/massToChargeRange/1/color [float32] % e.g. 0.5 0.5 0.5
 % /atomProbeTomography/massToChargeRange/1/reconstructionVolume [float32] [at/nm3] % e.g. 70
 %
 % All ranges information is written as attributes in consecutive groups
 % /atomProbeTomography/massToChargeRange/1/name
 % /atomProbeTomography/massToChargeRange/2/name
 % etc...
-%
 
 numRng = height(rangeTable);
 
