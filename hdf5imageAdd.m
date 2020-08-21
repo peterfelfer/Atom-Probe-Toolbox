@@ -1,5 +1,15 @@
 function hdf5imageAdd(fileName,image,imageType,contrastMechanism,horizontalPixelScale,verticalPixelScale)
 % image is an 2D Array integer
+%
+%
+%
+%
+%
+%
+%
+%
+%
+
 
 % general base path for images of the sample
 BASEPATH = "/sample/images/";
