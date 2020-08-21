@@ -1,5 +1,5 @@
 function hdf5posTableAdd(fileName,pos)
-% hdf5posTableAdd enables the user to add pos data 
+% hdf5posTableAdd enables the user to add pos/epos data 
 % to an existing HDF5 file with the appropriate groups structure.
 %
 % hdf5posTableAdd(fileName,pos)
@@ -7,7 +7,7 @@ function hdf5posTableAdd(fileName,pos)
 % INPUT 
 % fileName:         full file name including path as string or char array
 %
-% pos:              pos table variable. Should contain the following entries:
+% pos:              pos or epos table variable. Should contain the following entries:
 %                   ionIdx,x,y,z,mc,tof,VDC,VP,detx,dety,deltaP,multi,ion,atom,isotope,chargeState,ionComplexity
 %                   decomposition state is automatically determined and the
 %                   corresponding data is written either into the group:
@@ -30,7 +30,7 @@ end
 % hdf5 write for individual variables
 posColumnNames = pos.Properties.VariableNames;
 for col = 1:width(pos)    
-    if ismember(posColumnNames{col},{'x','y','z'}) %float type coords
+    if ismember(posColumnNames{col},{'x','y','z'}) % float type coords
         data = table2array(pos(:,col));
         h5create(fileName,[dataPath posColumnNames{col}],[numEntries 1]);
         h5write(fileName,[dataPath posColumnNames{col}],data);
