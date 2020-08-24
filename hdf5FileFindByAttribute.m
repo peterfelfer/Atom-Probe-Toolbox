@@ -28,7 +28,7 @@ function files = hdf5FileFindByAttribute(topFolder,varargin)
 %                   40
 %
 % OUTPUT
-% files:         files that fulfill the attributes as array of structure
+% files:         files that fulfil the attributes as array of structure
 %                with the fields: name, folder, date, bytes, isdir,
 %                datenum
 %
