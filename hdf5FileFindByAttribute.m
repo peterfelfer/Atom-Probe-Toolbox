@@ -17,14 +17,14 @@ function files = hdf5FileFindByAttribute(topFolder,varargin)
 %              used, the value input needs to be char type examples:
 %              
 %                   String type
-%                   '/sample/materialType'  'aluminium'
+%                   '/sample/materialType', 'aluminium'
 %
 %                   Numeric with comparison
-%                   '/atomProbeTomography/experiment/specimenTemperature'
+%                   '/atomProbeTomography/experiment/specimenTemperature',
 %                   '<= 40'
 %
 %                   Numeric with exact value
-%                   '/atomProbeTomography/experiment/specimenTemperature'
+%                   '/atomProbeTomography/experiment/specimenTemperature',
 %                   40
 %
 % OUTPUT
