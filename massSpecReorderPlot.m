@@ -1,31 +1,32 @@
 function massSpecReorderPlot(spec,order)
-% massSpecReorderPlot rearranges the mass spectrum visiblity in the selected order
-% order is a cell array of strings as below. 
+% massSpecReorderPlot rearranges the order of the various components of the
+% mass spectrum in the selected order (e.g., text, ion, range,...)
+% order is a cell array of strings as below
 %
 % massSpecReorderPlot(spec)
 % massSpecReorderPlot(spec,order)
 % massSpecReorderPlot(spec,["order1","order2",etc])
 %
 % INPUT
-% spec:     spec is the name of the areaplot that contains the
-%           massspectrum, area.
+% spec:     spec is the name of the area plot that contains the
+%           mass spectrum, area
 %
 % order:    set what kind of information stands in focus. if more
-%           informations are given order can contain follwoing types in any order:
-%           "text": the text in which the art of the ion is written.
-%           "ion": deshed line which shows exact position of element peak.
-%           "range": ranged area of the peaks.
+%           information is given, order can contain following types in any order:
+%           "text": the text of the ion
+%           "ion": stem plot of the ion, which shows the exact position of the peak
+%           "range": ranged area of the peaks
 %           "background": background ranges for the mass spectrum
-%           "massSpectrum": the neutral massspectrum.
-%           "unknown": everything else.
+%           "massSpectrum": the neutral mass spectrum
+%           "unknown": everything else
 %           default order is
-%           ["text","ion","range","massSpectrum","unknown"]
+%           ["text","ion","range","background","massSpectrum","unknown"]
 %           
 % OUTPUT
-%          Massspectrum with focus on wanted informations 
+%          mass spectrum with rearranged order
 
 
-%%
+%% default if no input order is given
 if ~exist('order','var')
     order = ["text","ion","range","background","massSpectrum","unknown"];
 end
