@@ -4,6 +4,14 @@ function graphVMC = voltageCurveMC(epos)
 % x-axis the ion sequence number is plotted.
 % The mass-to-charge values are clipped to a reasonable range starting from
 % 0 Da.
+%
+% INPUT
+% epos:         epos file, table with experiment data
+%
+% OUTPUT
+% graphVMC:     figure, graph with voltage (V) and mass-to-charge ratio
+%               (MC) plotted over the ion sequence number
+
 
 %% create diagram with two graphs (base voltage curve and mc ratio)
 % create new figure
