@@ -1,9 +1,9 @@
-function pos = posAllocateRange(pos,rng,options)
+function pos = posAllocateRange(posIn,rng,options)
 % posAllocateRange takes a pos and a range variable and
 % allocates ion hits to it.
 %
 % INPUT
-% pos:      table of reconstructed atom positions with ionIdx, x, y, z, and m/c
+% posIn:    table of reconstructed atom positions with ionIdx, x, y, z, and m/c
 %
 % rng:      table with extracted ranges from the mass spec
 %           input possible as rangesExtractFromMassSpec(spec)
@@ -20,14 +20,14 @@ function pos = posAllocateRange(pos,rng,options)
 %           additional ion, chargeState, atom, isotope, and ionComplexity fields
 
 % find the range the ion is in
-in = (pos.mc > rng.mcbegin') & (pos.mc < rng.mcend');
+in = (posIn.mc > rng.mcbegin') & (posIn.mc < rng.mcend');
 unranged = ~sum(in,2);
 
 in = [in unranged];
 
 [rngIdx, ~] = find(in');
 
-if ~(length(rngIdx) == height(pos)) % if ions are allocated to more than one range
+if ~(length(rngIdx) == height(posIn)) % if ions are allocated to more than one range
     error('overlapping ranges');
 end
 
@@ -42,16 +42,16 @@ chargeStates = [chargeStates; NaN];
 % allocation by range
 if strcmp(options,'raw')
     % allocate ion name to pos
-    pos.ion = ionNames(rngIdx);
+    posIn.ion = ionNames(rngIdx);
     
     % allocate charge state to pos variable
-    pos.chargeState = chargeStates(rngIdx);
+    posIn.chargeState = chargeStates(rngIdx);
     
     
     
     % allocation with decomposition
 elseif strcmp(options,'decompose')
-    numIon = height(pos);
+    numIon = height(posIn);
     for r = 1:height(rng)
         rngComplexity(r,:) = height(rng.ion{r});
         rngElements(r,1:rngComplexity(r)) = rng.ion{r}.element';
@@ -63,7 +63,7 @@ elseif strcmp(options,'decompose')
     
     % create vector with indices mapping into new table
     ionComplexity = rngComplexity(rngIdx); % complexity of each hit
-    mapVec = (repelem(1:height(pos),ionComplexity))'; % map vector to decomposed pos variable
+    mapVec = (repelem(1:height(posIn),ionComplexity))'; % map vector to decomposed pos variable
     numAtomDecomp = length(mapVec);
     
     % create vectors with ion name, chargeState, element, isotope,
@@ -77,7 +77,7 @@ elseif strcmp(options,'decompose')
     linIdx = sub2ind(size(rngElements),rngIdx(mapVec),atomIdx);
     
     
-    pos = pos(mapVec,:);
+    pos = posIn(mapVec,:);
     pos.ion = ionNames(rngIdx(mapVec));
     pos.chargeState = chargeStates(rngIdx(mapVec));
     pos.atom = rngElements(linIdx);
