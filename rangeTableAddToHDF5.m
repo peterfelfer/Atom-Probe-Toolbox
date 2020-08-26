@@ -1,7 +1,7 @@
-function hdf5rangeTableAdd(fileName,rangeTable)
+function rangeTableAddToHDF5(fileName,rangeTable)
 % hdf5rangeTableAdd can be used to add range information to an existing HDF5 file
 %
-% hdf5rangeTableAdd(fileName,rangeTable)
+% rangeTableAddToHDF5(fileName,rangeTable)
 %
 % INPUT    
 % fileName:         full file name including path as string or char array

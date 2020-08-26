@@ -1,8 +1,8 @@
-function rangeTable = rangesExtractFromHdf5(fileName)
-% rangesExtractFromHDF5 extracts a list of ranges from an HDF5 file and puts
+function rangeTable = rangeTableFromHDF5(fileName)
+% rangeTableFromHDF5 extracts a list of ranges from an HDF5 file and puts
 % them in a table , akin to rangesExtractFromMassSpec
 %
-% rangeTable = rangesExtractFromHDF5(fileName);
+% rangeTable = rangeTableFromHDF5(fileName);
 %
 % INPUT    
 % fileName:     full file name including path as string or char array

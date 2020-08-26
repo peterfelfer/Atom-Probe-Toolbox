@@ -1,7 +1,7 @@
-function hdf5ionTableAdd(fileName,ionTable)
-% hdf5ionTableAdd can be used to write an ion table into an HDF5 file.
+function ionTableAddToHDF5(fileName,ionTable)
+% ionTableAddToHDF5 can be used to write an ion table into an HDF5 file.
 %
-% hdf5ionTableAdd(fileName,ionTable)
+% ionTableAddToHDF5(fileName,ionTable)
 %
 % INPUT
 % fileName:    full file name including path as string or char array of existing HDF5 file
