@@ -1,14 +1,26 @@
 function imageAddToHDF5(fileName,image,imageType,contrastMechanism,horizontalPixelScale,verticalPixelScale)
-% image is an 2D Array integer
+% imageAddToHDF5 adds an image file to the hdf5 file
 %
+% imageAddToHDF5(fileName,image,imageType,contrastMechanism,horizontalPixelScale,verticalPixelScale);
 %
+% INPUT
 %
-%
-%
-%
-%
-%
-%
+% fileName:             name of the already existing .h5 file
+% 
+% image:                variable form the workspace that contains the image
+%                       stored as array integer. The user can use imread() 
+%                       to load the image into the workspace
+% 
+% imageType:            type of the image, for example 'SEM image'
+% 
+% contrastMechanism:    the contrast mechanism with whom the image was
+%                       acquired, e.g. 'secondary electron' for an image
+%                       from a SEM
+% 
+% horizontalPixelScale: is the pixel scale in horizontal direction
+% 
+% verticalPixelScale:   is the pixel scale in vertical direction
+
 
 
 % general base path for images of the sample
