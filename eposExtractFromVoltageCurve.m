@@ -24,5 +24,6 @@ voltageValueEnd = voltageValues(2);                 % but the x coordinates of t
 %%   generate clipped epos table
 eposExtract = epos((epos.ionIdx >= voltageValueStart & epos.ionIdx <= voltageValueEnd),:);
 
+close(gcf);
 end
 
