@@ -1,4 +1,4 @@
-function hdf5imageAdd(fileName,image,imageType,contrastMechanism,horizontalPixelScale,verticalPixelScale)
+function imageAddToHDF5(fileName,image,imageType,contrastMechanism,horizontalPixelScale,verticalPixelScale)
 % image is an 2D Array integer
 %
 %

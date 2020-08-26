@@ -1,16 +1,18 @@
-function ionTable = ionsExtractFromHDF5(fileName)
-% ionsExtractFromHDF5 extracts a list of ions from an HDF5 file and puts
-% them in a table , akin to ionsExtractFromMassSpec
+function ionTable = ionTableFromHDF5(fileName)
+% ionTableFromHDF5 extracts a list of ions from an HDF5 file and puts
+% them in a table, akin to ionsExtractFromMassSpec
 %
-% USAGE: ionList = ionsExtractFromHDF5(fileName);
+% ionTable = ionTableFromHDF5(fileName);
 %
-% INPUT:    fileName = Name of hdf5 file incl. path
+% INPUT    
+% fileName:     Name of hdf5 file incl. path
 %
-% OUTPUT:   ionTable = table with the following columns: ionName [string],
-%           chargeState [int], ion [categorical], color [float x3]
+% OUTPUT   
+% ionTable:     table with the following columns: ionName [string],
+%               chargeState [int], ion [categorical], color [float x3]
 %           
-%           Alternatively false as an output if the file does not contain
-%           range information, i.e. is not an atom probe data file
+% NOTE: Alternatively false as an output if the file does not contain
+%       range information, i.e. is not an atom probe data file
 %
 
 % get content structure in HDF5 file

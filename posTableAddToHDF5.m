@@ -1,8 +1,8 @@
-function hdf5posTableAdd(fileName,pos)
-% hdf5posTableAdd enables the user to add pos/epos data 
+function posTableAddToHDF5(fileName,pos)
+% posTableAddToHDF5 enables the user to add pos/epos data 
 % to an existing HDF5 file with the appropriate groups structure.
 %
-% hdf5posTableAdd(fileName,pos)
+% posTableAddToHDF5(fileName,pos)
 %
 % INPUT 
 % fileName:         full file name including path as string or char array
