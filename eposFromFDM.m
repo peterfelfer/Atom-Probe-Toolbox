@@ -14,16 +14,16 @@ FDM = histogram2(epos.detx,epos.dety,100,'FaceColor','flat');
 axis equal;
 view(90,90);
 camroll(90);
-xlim([-30,30])
-ylim([-30,30])
+xlim([-20,20])
+ylim([-20,25])
 set(gca,'ZDir','reverse');
-xlabel('x');
-ylabel('y');
-% c = uicontrol('String','DONE');
+xlabel('x-coordinate of detector');
+ylabel('y-coordinate of detector');
 
 %   user input of desired area on FDM (ellipse)
-annotation('textbox',[0.35, 1, 0, 0],'String','Press any key if selection is done','FitBoxToText','on');
+annotation('textbox',[0.29, 0.9, 0, 0],'String','Press any key if selection is completed','FitBoxToText','on');
 h = imellipse;
+% h = drawellipse('Color','k','LineWidth',0.5);
 pause;
 
 % convert ellipse vertices into table with columns x and y
@@ -34,28 +34,6 @@ vert.Properties.VariableNames{2} = 'y';
 
 %   create new epos with data of selected area on FDM
 eposExtract = epos(inpolygon(epos.detx, epos.dety, vert.x, vert.y),:);
-
-% % with DRAWELLIPSE
-% FDM = histogram2(epos.detx,epos.dety,100,'FaceColor','flat');
-% axis equal;
-% view(90,90);
-% camroll(90);
-% xlim([-30,30])
-% ylim([-30,30])
-% xlabel('x');
-% ylabel('y');
-% 
-% %   user input of desired area on FDM (ellipse)
-% h = drawellipse;
-% 
-% % convert ellipse vertices into table with columns x and y
-% vert = h.Vertices;
-% vert = array2table(vert);
-% vert.Properties.VariableNames{1} = 'x';
-% vert.Properties.VariableNames{2} = 'y';
-% 
-% %   create new epos with data of selected area on FDM
-% eposExtract = epos(inpolygon(epos.detx, epos.dety, vert.x, vert.y),:);
 
 close(gcf);
 end
