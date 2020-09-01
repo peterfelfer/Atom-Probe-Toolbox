@@ -41,11 +41,13 @@ chargeStates = [chargeStates; NaN];
 
 % allocation by range
 if strcmp(options,'raw')
+    
+    pos = posIn(:,:);
     % allocate ion name to pos
-    posIn.ion = ionNames(rngIdx);
+    pos.ion = ionNames(rngIdx);
     
     % allocate charge state to pos variable
-    posIn.chargeState = chargeStates(rngIdx);
+    pos.chargeState = chargeStates(rngIdx);
     
     
     
