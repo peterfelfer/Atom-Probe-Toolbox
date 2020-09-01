@@ -19,12 +19,12 @@ ylim([-30,30])
 set(gca,'ZDir','reverse');
 xlabel('x');
 ylabel('y');
+% c = uicontrol('String','DONE');
 
 %   user input of desired area on FDM (ellipse)
-% for oder if statement so that the user has to press enter after finished
-% selection
+annotation('textbox',[0.35, 1, 0, 0],'String','Press any key if selection is done','FitBoxToText','on');
 h = imellipse;
-hold on;
+pause;
 
 % convert ellipse vertices into table with columns x and y
 vert = h.getVertices;
