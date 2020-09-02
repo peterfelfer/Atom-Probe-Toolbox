@@ -4,18 +4,18 @@ function h = ionStemPlot(ax, weight, abundance, ionList, chargeStates, colorSche
 % 
 % h = ionStemPlot(ax, weight, abundance, ionList, chargeStates, colorScheme)
 %
-% INPUTS
-% ax:           axis of the current massspectrum
+% INPUT
+% ax:           axis of the current mass spectrum
 %
-% weight:       weight of the ion
+% weight:       weight of the ion in amu
 %
-% adundance:    adundance for the choosen ion
+% adundance:    adundance for the chosen ion
 %
 % ionList:      list of all possible ions
 % 
-% chargeStates: chargestates for the given ions
+% chargeStates: charge states for the given ions
 %
-% colorScheme:  colorScheme as provided or self made
+% colorScheme:  color scheme as provided or self made
 %
 % OUTPUT
 % h:            handle to the stem plot
@@ -42,7 +42,7 @@ h.UserData.ion = ionList;
 h.UserData.chargeState = chargeStates;
 h.ButtonDownFcn = @(~,~) disp(h.DisplayName);
 
-%change stem line depending on chargesate if only one charge state is given
+% change stem line depending on charge state if only one charge state is given
 if length(chargeStates) == 1
     switch chargeStates
         case 1
