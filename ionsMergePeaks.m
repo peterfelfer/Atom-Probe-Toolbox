@@ -9,15 +9,15 @@ function [ionType, abundance, weight] = ionsMergePeaks(ionType, abundance, weigh
 %                               be merged
 % 
 % abundance:                    relativ abundance of the peak in 
-%                               the massspectrum
+%                               the mass spectrum
 %
 % weight:                       weight of the ion
 %
 % mergeMargin:                  peaks within this range will be merged
 % 
 % OUTPUT
-% [ionType, abundance, weight]: cell array of merged Peaks
-%                               sort by molecular weight
+% [ionType, abundance, weight]: cell array of merged peaks
+%                               sorted by molecular weight
 
 [weight, sortIdx] = sort(weight);
 abundance = abundance(sortIdx);
@@ -42,7 +42,7 @@ for i = 1:numCombos-1
     end
 end
 
-%merge individual peaks
+% merge individual peaks
 for i = 1:peakCluster
     weightTmp(i) = mean(weight(peakClusterIdx == i));
     abundanceTmp(i) = sum(abundance(peakClusterIdx == i));
