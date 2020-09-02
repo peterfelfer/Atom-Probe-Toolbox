@@ -1,17 +1,17 @@
 function weight = isotopicWeight(Z,isotope)
 % isotopicWeight gives you the weight of the element in the specific
-% isotope state (If you want to have all possible isotope states and their
-% weight use 'isotopicWeightAll.m')
+% isotope state if input isotope is given. Otherwise all isotopes are listed
 %
+% weight = isotopicWeight(Z)
 % weight = isotopicWeight(Z,isotope)
 % 
 % INPUT 
 % Z:        atomic number
 %
-% isotope:  the isotope of the element
+% isotope:  the isotope of the element (e.g., 56 for Fe), optional
 %
 % OUTPUT
-% weight:   the weight of the element with atomic number Z and isotope
+% weight:   table with (rounded) weight and natural abundance of the element's isotopes
 
 weight = []; % [isotope weight abundance]
 
@@ -243,8 +243,21 @@ end
 
 
 
-weight = weight(weight(:,1)==isotope,2);
-    
 
+if exist('isotope','var')
+    weight = weight(weight(:,1)==isotope,:);
+    weight = array2table(weight);
+    weight.Properties.VariableNames{1} = 'rounded weight';
+    weight.Properties.VariableNames{2} = 'weight';
+    weight.Properties.VariableNames{3} = 'natural abundance';
+    weight.Properties.VariableUnits = {'amu', 'amu', '%'};
+else
+
+weight = array2table(weight);
+weight.Properties.VariableNames{1} = 'rounded weight';
+weight.Properties.VariableNames{2} = 'weight';
+weight.Properties.VariableNames{3} = 'natural abundance';
+weight.Properties.VariableUnits = {'amu', 'amu', '%'};
+end
 
 end
