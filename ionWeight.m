@@ -6,15 +6,15 @@ function w = ionWeight(ion, isotopeTable, chargeState)
 %
 % INPUT
 % ion:          the definition of the ion as a table with ion.element 
-%               categorical vector of chemical element)and 
+%               categorical vector of chemical element) and 
 %               ion.isotope (int vector of isotope number)
 %
-% isotopeTable: table of all isotopes from APT Toolbox database
+% isotopeTable: table of all isotopes from APT toolbox database
 %
 % chargeState:  int of charge state of the ion, optional
 %
 % OUTPUT
-% w:            weight of ion in amu (w/o chargeState) or Da
+% w:            weight of ion in amu (w/o charge state) or Da
 
 %% extract the individual ions and get weight
 
@@ -24,7 +24,7 @@ for i = 1:height(ion)             % sums up the weight in case of complex/molecu
         & isotopeTable.isotope == ion.isotope(i));
 end
 
-%% divide by chargestate if applicable
+%% divide by charge state if applicable
 if exist('chargeState','var')
     w = w/chargeState;
 end
