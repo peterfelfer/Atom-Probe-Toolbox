@@ -30,7 +30,7 @@ opts.DataRange = "A:G";
 
 % Specify column names and types
 opts.VariableNames = ["ion", "+", "++", "+++", "++++", "+++++", "++++++"];
-opts.VariableTypes = ["string", "logical","logical", "logical", "logical", "logical", "logical"];
+opts.VariableTypes = ["string", "logical", "logical", "logical", "logical", "logical", "logical"];
 
 % Specify variable properties
 opts = setvaropts(opts, "ion", "WhitespaceRule", "preserve");
