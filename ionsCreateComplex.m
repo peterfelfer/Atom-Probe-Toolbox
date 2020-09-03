@@ -2,6 +2,7 @@ function ionList = ionsCreateComplex(elements,complexity,isotopeTable,chargeStat
 % ionsCreateComplex creates a list of all complex ions that can be formed
 % by the given elements, based on the isotopeTable. 
 %
+% ionList = ionsCreateComplex(elements,complexity,isotopeTable);
 % ionList = ionsCreateComplex(elements,complexity,isotopeTable,chargeStates);
 % 
 % INPUT
@@ -20,25 +21,23 @@ function ionList = ionsCreateComplex(elements,complexity,isotopeTable,chargeStat
 %               chargeStates are optional, default is +1 - +3
 %
 % OUTPUT
-% ionList:      table that contians the possible individual peaks. 
-%               Table with fields:
-%               ion, ionIsotopic: Categorical with ion names
-%               mc: mass to chargestate value of the individual isotopic
-%               combination in amu
+% ionList:      table with fields:
+%               ion, ionIsotopic: categorical with ion names
+%               mc: mass-to-charge value of the individual isotopic
+%               combinations in amu
 %
 % WARNING: the number of permutations of ions grows with the Gamma
 % function. Beware when creating very large complexities. For the entire
 % periodic system, anything above a complexity of 2 will lead to a very
 % long list.
 
-
-
+%% looking for input chargeStates
 if ~exist('chargeStates','var')
     chargeStates = [1, 2, 3];
 end
 
 
-%% create indivdual permutations of atomic combinations
+%% create individual permutations of atomic combinations
 % if input is cell string, convert to atomic numbers
 if iscell(elements)
     for el = 1:numel(elements)
@@ -71,7 +70,7 @@ wb = waitbar(0,'building isotopic combinations');
 
 for i = 1:length(ionPerm)
     ionIsotopicTmp = {};
-    %create isotope combination list with weights for each elemental permutation
+    % create isotope combination list with weights for each elemental permutation
     [isoCombos, ~, weightTmp] = ionsCreateIsotopeList(ionPerm{i}, isotopeTable);
     for it = 1:length(isoCombos)
         ionIsotopicTmp{it,1} = ionConvertName(isoCombos{it});
