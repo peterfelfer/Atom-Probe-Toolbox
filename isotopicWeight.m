@@ -11,7 +11,8 @@ function weight = isotopicWeight(Z,isotope)
 % isotope:  the isotope of the element (e.g., 56 for Fe), optional
 %
 % OUTPUT
-% weight:   table with (rounded) weight and natural abundance of the element's isotopes
+% weight:   table with mass number, weight, and natural abundance of the
+%           element's isotope(s)
 
 weight = []; % [isotope weight abundance]
 
@@ -236,7 +237,7 @@ switch Z
         
     otherwise
         
-        %disp(' isotope weight undefined!');
+        disp(' isotope weight undefined!');
         weight = [0 0 0];
         
 end
@@ -247,17 +248,17 @@ end
 if exist('isotope','var')
     weight = weight(weight(:,1)==isotope,:);
     weight = array2table(weight);
-    weight.Properties.VariableNames{1} = 'rounded weight';
+    weight.Properties.VariableNames{1} = 'mass number';
     weight.Properties.VariableNames{2} = 'weight';
     weight.Properties.VariableNames{3} = 'natural abundance';
-    weight.Properties.VariableUnits = {'amu', 'amu', '%'};
+    weight.Properties.VariableUnits = {'', 'amu', '%'};
 else
 
 weight = array2table(weight);
-weight.Properties.VariableNames{1} = 'rounded weight';
+weight.Properties.VariableNames{1} = 'mass number';
 weight.Properties.VariableNames{2} = 'weight';
 weight.Properties.VariableNames{3} = 'natural abundance';
-weight.Properties.VariableUnits = {'amu', 'amu', '%'};
+weight.Properties.VariableUnits = {'', 'amu', '%'};
 end
 
 end
