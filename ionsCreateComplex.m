@@ -56,7 +56,7 @@ for comp = 1:length(complexity)
     
     numPerms = size(elementalPermutations,1);
     for elPerm = 1:numPerms
-        ionPerm{end+1,1} = ionConvertName(transp(elementalPermutations(elPerm,:)),NaN,'plain',isotopeTable);
+        ionPerm{end+1,1} = ionConvertName((elementalPermutations(elPerm,:)'),NaN,'plain',isotopeTable);
     end
 end
 
