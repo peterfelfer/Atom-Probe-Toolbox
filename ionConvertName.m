@@ -20,7 +20,7 @@ function varargout = ionConvertName(varargin)
 % array:
 %   ionName = ionConvertName(ionArray,chargeState,format,isotopeTable);
 %
-% INPUT/OUTPUT:
+% INPUT/OUTPUT
 %
 % ionName: Name of the ion
 %   (isotope element count) x N chargestate        '56Fe2 16O3 ++'
