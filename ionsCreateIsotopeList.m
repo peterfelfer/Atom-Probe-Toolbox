@@ -1,16 +1,24 @@
 function [ions, abundance, weight] = ionsCreateIsotopeList(ion, isotopeTable)
-% ionCreateIsotopeList takes an ion type, e.g.'Cr2 O3' and gives all 
+% ionsCreateIsotopeList takes an ion type, e.g. 'Cr2 O3' and gives all 
 % isotopic combinations, based on the supplied isotopeTable
 % 
 % [ions, abundance, weight] = ionsCreateIsotopeList(ion, isotopeTable)
 %
 % INPUT
-% ion:                       ion to whom the combinations are made
+% ion:              string or char of the ion, of which the combinations are made
 %   
-% isotopeTable:              Table of all isotopes of all elements                  
+% isotopeTable:     table of all isotopes of all elements                  
 % 
 % OUTPUT
-% [ions, abundance, weight]: cell arry with all possible combinations 
+% ions:             cell array with all possible isotope combinations of
+%                   the input ion
+%
+% abundance:        array of natural abundance (as fractions) for all
+%                   combinations presented in output ions
+%
+% weight:           array of weight values (in amu) for all combinations
+%                   presented in output ions
+
 %% interpret ion name into a table [element count]
 ionTable = ionConvertName(ion);
 
@@ -23,12 +31,12 @@ atomList = table(element,count);
 %% create individual isotopic abundances
 numElements = height(atomList);
 
-% create seperate isotope combination lists for each element
+% create separate isotope combination lists for each element
 for el = 1:numElements
     isos = isotopeTable(isotopeTable.element == atomList.element(el),:);
     %isoList{el} = isos.isotope(nreplacek(height(isos),atomList.count(el)));
     isoList{el} = isos.isotope(unique(sort(permn(1:height(isos),atomList.count(el)),2),'rows'));
-    idx{el} = 1:length(isoList{el}(:,1)); %used later for indexing into ion List
+    idx{el} = 1:length(isoList{el}(:,1)); % used later for indexing into ion list
 end
 % get combinations of elemental ion combinations
 grid = cell(1,numel(idx));
@@ -57,4 +65,4 @@ for c = 1:numCombos
     ions{c}.isotope = ions{c}.isotope;
 end
 
-abundance = abundance/sum(abundance); % normalize. Abundances wont sum up exactly to 1
+abundance = abundance/sum(abundance); % normalize. Abundances won't sum up exactly to 1
