@@ -1,24 +1,23 @@
 function [ions, chargeStates] = ionsImportFromXLS(fileName)
-%ionsImportFromXLS Imports data of ions names and charge states from
-%  a Microsoft Excel spreadsheet file named fileName.
+% ionsImportFromXLS Imports data of ions names and charge states from
+% a Microsoft Excel spreadsheet file named fileName.
 %
-%  [ions, chargeStates] = ionsImportFromXLS(fileName)
+% [ions, chargeStates] = ionsImportFromXLS(fileName)
 %
-%  INPUT       
-%  fileName:    file name and path of excel spreadsheet with 1st column
-%               being the ion name, subsequent columns for charge states.
-%               Since the chargestates are read as boolean values, the
-%               entry for an exisitng chargestate must be 'true'.
-%               Nonexisitng chargestates need not be denoted as 'false'.
+% INPUT       
+% fileName:        file name and path of excel spreadsheet with 1st column
+%                  being the ion name, subsequent columns for charge states.
+%                  Since the charge states are read as boolean values, the
+%                  entry for an exisitng chargestate must be 'true'.
+%                  Nonexisitng charge states need not be denoted as 'false'.
 %
-%  OUTPUT
-%  ions:        string vector of all ion names in the excel file.
+% OUTPUT
+% ions:            string vector of all ion names in the excel file
 %
-%  chargeStates:NxM logical array with 'true' for any charge state that has
-%               been observed in the literature. N is the same length as
-%               ions, M is 6 (may be expanded if chargeStates >6 are
-%               observed experimentally)
-%
+% chargeStates:    NxM logical array with 'true' for any charge state that has
+%                  been observed in the literature. N is the same length as
+%                  ions, M is 6 (may be expanded if chargeStates >6 are
+%                  observed experimentally)
 
 %% Input handling
 
@@ -33,7 +32,6 @@ opts.DataRange = "A:G";
 opts.VariableNames = ["ion", "+", "++", "+++", "++++", "+++++", "++++++"];
 opts.VariableTypes = ["string", "logical","logical", "logical", "logical", "logical", "logical"];
 
-% Specify variable properties
 % Specify variable properties
 opts = setvaropts(opts, "ion", "WhitespaceRule", "preserve");
 opts = setvaropts(opts, "ion", "EmptyFieldRule", "auto");
