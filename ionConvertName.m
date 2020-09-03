@@ -29,22 +29,22 @@ function varargout = ionConvertName(varargin)
 %   individual nucleides will be sorted by atomic number descending
 %   e.g. 'O H2'
 %
-% ionTable:         Table that contains the element and the isotope
+% ionTable:         table that contains the element and the isotope
 %
 % ionCategorical:   ion table that is stored as an categorical array
 %
-% ionArray:         Matrix of element and isotope number
+% ionArray:         matrix of element and isotope number
 %                   e.g. Fe2O3  [26,56;26,56;8,16;8,16;8,16;]
-%                   Vector of elements
+%                   vector of elements
 %                   e.g. Fe2O3  [26;26;8;8;8]
 %
-% chargeState:      is the charge State of the ion
+% chargeState:      is the charge state of the ion
 %
-% NaN:              if no chargeState is parsed
+% NaN:              if no charge state is parsed
 %
 % format:           can be 'plain' or 'LaTeX'
 %
-% isotopeTable:     Table with all isotopes
+% isotopeTable:     table with all isotopes
 
 %% conversion from array to table/categorical. The new table/categorical is saved as an input
 % argument and is converted to table if isotopes are given, categorical if
@@ -52,7 +52,7 @@ function varargout = ionConvertName(varargin)
 
 % check for input as an array
 if ismatrix(varargin{1}) & ~istable(varargin{1}) & ~iscategorical(varargin{1}) & ~ischar(varargin{1}) & ~isstring(varargin{1})
-    %check for isotopeTable as an input variable
+    % check for isotopeTable as an input variable
     if nargin == 4 & istable(varargin{4})
         ionArray = varargin{1};
         isotopeTable = varargin{4};
@@ -65,7 +65,7 @@ if ismatrix(varargin{1}) & ~istable(varargin{1}) & ~iscategorical(varargin{1}) &
         if isvector(ionArray)
             varargin{1} = categorical(element);         
         else
-            % create isotope List
+            % create isotope list
             isotope = ionArray(:,2);
             % create ionTable with element and isotope
             ionTable = table(element, isotope);
@@ -101,7 +101,7 @@ if istable(varargin{1})
     % sort by atomic number descending
     ionTable = sortrows(ionTable,{'atomicNumber','isotope'},{'descend','descend'},'MissingPlacement','first');
     
-    % get multiplicity of atom occurances in ion and write out names
+    % get multiplicity of atom occurrences in ion and write out names
     ionName = [];
     
     
@@ -131,10 +131,10 @@ if istable(varargin{1})
         ionName = [ionName ' '];
     end
     
-    % add + (or -) for chargestates to the name
+    % add + (or -) for charge states to the name
     if nargin > 1
         chargeState = varargin{2};
-        if ~isnan(chargeState) %NaN for undefined chargestate, e.g. in noise
+        if ~isnan(chargeState) % NaN for undefined charge state, e.g. in noise
             
             if chargeState < 0
                 sym = '-';
@@ -174,7 +174,7 @@ if iscategorical(varargin{1})
     % sort by atomic number descending
     ionTable = sortrows(ionTable,{'atomicNumber'},{'descend'});
     
-    % get multiplicity of atom occurances in ion and write out names
+    % get multiplicity of atom occurrences in ion and write out names
     ionName = [];
     isotopeGroup = sortedFindgroups(ionTable);
     for i = 1:max(isotopeGroup)
@@ -192,10 +192,10 @@ if iscategorical(varargin{1})
     
     
     
-    % add + (or -) for chargestates
+    % add + (or -) for charge states
     if nargin > 1
         chargeState = varargin{2};
-        if ~isnan(chargeState) %NaN for undefined chargestate, e.g. in noise
+        if ~isnan(chargeState) % NaN for undefined charge state, e.g. in noise
             if chargeState < 0
                 sym = '-';
             else
@@ -236,7 +236,7 @@ if ischar(varargin{1})
         chargeState = NaN;
     end
     
-    ionName = strtrim(ionName); %remove any whitespace
+    ionName = strtrim(ionName); % remove any whitespace
     
     % split individual elemental / isotopic parts
     parts = strsplit(ionName);
@@ -292,7 +292,7 @@ for i = 1:length(isotopeGroup)
     isotopeGroup(i) = idx(isotopeGroup(i));
 end
 
-%replace 0s with NaNs again
+% replace 0s with NaNs again
 if any(string(ionTable.Properties.VariableNames) == "isotope")
     ionTable.isotope(ionTable.isotope == 0) = NaN;
 end
