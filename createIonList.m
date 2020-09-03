@@ -1,17 +1,15 @@
 function list = createIonList(elements,chargeStates,maxComplexity,complexFormers,abundanceThreshold)
 % createIonList creates a list of all possible ions up to a max complexity
 % maxComplexity of elements (can be a list of atomic numbers, symbols or
-% 'all' for a list of chargeStates e.g. [1,2,3]. Complex formers can be
+% 'all') for a list of chargeStates e.g. [1,2,3]. Complex formers can be
 % specified.
 % 
-% list = ionTableCreate(elements,chargeStates,isotopeTable,maxComplexity,complexFormers,abundanceThreshold)
+% list = ionTableCreate(elements,chargeStates,maxComplexity,complexFormers,abundanceThreshold)
 %
 % INPUT
 % elements:             can be a list of atomic numbers, symbols or 'all'    
 % 
 % chargeStates:         list of chargeStates e.g. [1,2,3]    
-% 
-% isotopeTable:         isotopeTable as given in the toolbox
 % 
 % maxComplexity:        maximal complexity of the created ions
 % 
@@ -21,7 +19,7 @@ function list = createIonList(elements,chargeStates,maxComplexity,complexFormers
 %                       elements in elements and adds the additional 
 %                       specified elements
 % 
-% abundanceThreshold:   sets an threshold for used isotopes to biuld the
+% abundanceThreshold:   sets an threshold for used isotopes to build the
 %                       list
 % 
 % OUTPUT
