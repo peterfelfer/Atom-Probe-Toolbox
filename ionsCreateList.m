@@ -19,15 +19,13 @@ function ionList = ionsCreateList(elements,chargeStates,maxComplexity,complexFor
 %                       it takes the elements in elements and adds the 
 %                       additional specified elements
 % 
-% abundanceThreshold:   sets an threshold for used isotopes to biuld the
+% abundanceThreshold:   sets an threshold for used isotopes to build the
 %                       list
 % 
 % isotopeTable:         isotopeTable as given in the toolbox
 % 
 % OUTPUT
-%                       struct with .massToCharge (sorted), ionType{},
-%                       relativeAbundance()
-%
+% ionList:              table with ion, ionIsotopic, mc, and ionLaTeX
 
 ionList = createIonList(elements,chargeStates,maxComplexity,complexFormers,abundanceThreshold);
 
