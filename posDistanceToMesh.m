@@ -7,14 +7,12 @@ function distance = posDistanceToMesh(pos,interface)
 % distance = posDistanceToMesh(pos,interface)
 %
 % INPUT
-% pos =         pos file 
+% pos:          pos file 
 %
-% interface =   interface or any other object with faces and vertices
+% interface:    interface or any other object with faces and vertices
 %
 % OUTPUT
-% distance =    distance of the atoms in the pos file to the interface mesh
-
-
+% distance:     distance of the atoms in the pos file to the interface mesh
 
 %%
 % distances are calculated along vertex normals.
@@ -27,5 +25,5 @@ closestVertex = dsearchn(interface.vertices,delaunayn(interface.vertices),[pos.x
 % distance vector to the nearest interface vertex
 distVec = [pos.x, pos.y, pos.z] - interface.vertices(closestVertex,:);
 
-%distance along normal through dot product
+% distance along normal through dot product
 distance = sum(normals(closestVertex,:) .* distVec,2);
