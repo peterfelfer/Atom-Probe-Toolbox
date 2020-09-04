@@ -1,8 +1,8 @@
 function distance = posDistanceToMesh(pos,interface)
 % posDistanceToMesh calculates the distance of individual atoms to a mesh
 % representing e.g. an interface or any other object that can be displayed
-% as a triangulation fv is a triangulation consisting of vertices and
-% faces (Matlab 'patch')
+% as a triangulation 
+% fv is a triangulation consisting of faces and vertices (Matlab 'patch')
 %
 % distance = posDistanceToMesh(pos,interface)
 %
