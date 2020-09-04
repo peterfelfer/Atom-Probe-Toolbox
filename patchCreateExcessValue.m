@@ -3,22 +3,22 @@ function patchCreateExcessValue(pos,parentPos,interface,vertices)
 % interface with an interactive interface for the interfacial excess 
 % determination 
 % reads a pos file (with x, y, and z) and a vertex file 
-% (with x, y, and z) and assigns every atom to the closest vertex
+% with x, y, and z) and assigns every atom to the closest vertex
 %
 % patchCreateExcessValue(pos,parentPos,interface)
 % patchCreateExcessValue(pos,parentPos,interface,vertices)
 %
 % INPUT
-% pos: table, pos file of the atom species, of which an interfacial excess 
-%      should be calculated
+% pos:          table, pos file of the atom species, of which an interfacial excess 
+%               should be calculated
 %
-% parentPos: table, pos file of all atom species; optimally all unranged
-%            atoms are excluded
+% parentPos:    table, pos file of all atom species; optimally all unranged
+%               atoms are excluded
 %
-% interface: structure with fields of faces (f) and vertices (v)
+% interface:    structure with fields of faces (f) and vertices (v)
 %
-% vertices: optional, if the interfacial excess of a specific region is
-%           wanted
+% vertices:     optional, if the interfacial excess of a specific region is
+%               wanted
 
 addpath('dualMesh');
 addpath('patch_normals');
@@ -75,23 +75,3 @@ excessGUI(cumulative,area,interfaceLoc);
 
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
