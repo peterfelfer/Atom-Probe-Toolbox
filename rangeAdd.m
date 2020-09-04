@@ -24,6 +24,7 @@ function [h, txt] = rangeAdd(spec,colorScheme,manualName)
 % generates only area (ans) but no handle or text in the workspace
 %
 % [h, txt] = rangeAdd(spec,colorScheme)
+% [h, txt] = rangeAdd(spec,colorScheme,manualName)
 %
 %
 % INPUT
@@ -116,7 +117,7 @@ if isValid
     isIn = (spec.XData > lim(1)) & (spec.XData < lim(2));
     h = area(spec.XData(isIn),spec.YData(isIn));
     h.FaceColor = [1 1 1];
-    h.UserData.plotType = "range"; %is overwritten for background ranges
+    h.UserData.plotType = "range"; % is overwritten for background ranges
     
     % take care of manual ranges
     if isManual & ~isBackground
