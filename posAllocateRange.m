@@ -92,7 +92,7 @@ elseif strcmp(options,'decompose')
     % return notification if options input is not 'decomposed'
 elseif ~strcmp(options,'decompose')
     
-    error('Invalid options input. Only allowed option is: ''decompose''.');
+    error('Invalid options input. Only allowed options are: ''decompose'' and ''raw''.');
     
 end
 
