@@ -1,4 +1,4 @@
-function meta = metaDataReadTextFile(metaDataFile)
+function meta = metaDataReadTextFile(metaDataFileName)
 % metaDataReadTextFile reads a text file with standard UTF-8 encoding into
 % a matlab cell. Information in the metadata file is the general form of:
 %               variableName [format] = value [unit]
@@ -22,7 +22,7 @@ function meta = metaDataReadTextFile(metaDataFile)
 %%% DATES ARE CURRENTLY DISABLED DUE TO FALSE FORMATS IN THE METADATA FILES! 
 
 %% select text file
-fileStr = fileread(metaDataFile);
+fileStr = fileread(metaDataFileName);
 
 %% pre-formatting of the text file
 % break it into lines
