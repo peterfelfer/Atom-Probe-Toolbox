@@ -42,6 +42,7 @@ switch ext
         idx = 0;
 end
 
+
 if ~idx
     posIn = 0;
     return
