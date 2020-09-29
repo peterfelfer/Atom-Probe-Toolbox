@@ -7,13 +7,13 @@ function conc = posCalculateConcentrationSimple(pos, detEff, excludeList,volumeN
 % conc = posCalculateConcentrationSimple(pos, detEff)
 %
 % INPUT
-% pos:          a decomposed pos file that contains ion and chargestate of
+% pos:          decomposed pos file that contains ion and charge state of
 %               the individual atoms
 %
-% detEff:       detector Efficiency of the atom probe, can be parsed as 
-%               or as a fraction(LEAP 4000X HR 0.37)
+% detEff:       detector efficiency of the atom probe, can be parsed as 
+%               or as a fraction (for a LEAP 4000X HR it is 0.37)
 %               
-% excludeList:  is a cell array that contains as character the individual
+% excludeList:  cell array that contains as character the individual
 %               ions that shall not be considered for the concentration 
 %               calculation, unranged atoms appear as 'unranged', if not 
 %               parsed, no atoms will be excluded
@@ -23,7 +23,7 @@ function conc = posCalculateConcentrationSimple(pos, detEff, excludeList,volumeN
 %
 % OUTPUT
 % conc:         is a table that contains the count, concentration, and 
-%               variance foreach atom/ion that is not on the excludeList.
+%               variance for each atom/ion that is not on the excludeList.
 %               statistical deviation calculated after Danoix et al., 
 %               https://doi.org/10.1016/j.ultramic.2007.02.005
 %               variance(conc) = conc*(1-conc)/numAtomsDetected * (1 - detEff)
