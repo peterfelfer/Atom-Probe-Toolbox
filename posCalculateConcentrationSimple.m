@@ -1,4 +1,4 @@
-function conc = posCalculateConcentrationSimple(pos, detEff, excludeList,volumeName)
+function conc = posCalculateConcentrationSimple(pos,detEff,excludeList,volumeName)
 % posCalculateConcentrationSimple calculates the concentration of a
 % categorical list of atoms or ions
 %
