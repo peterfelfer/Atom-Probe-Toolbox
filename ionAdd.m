@@ -141,7 +141,7 @@ else
     elseif strcmp(maxHeight,'most abundant')
         % adjusts the height of the most abundant peak to the closest peak
         % in the mass spectrum
-        mostAbundant = find(plotAbundance == max(plotAbundance)); % if multiple chargestates are present, there are as many max height peaks as charge states
+        mostAbundant = find(plotAbundance == max(plotAbundance)); % if multiple charge states are present, there are as many max height peaks as charge states
         mostAbundant = mostAbundant(1);
         peak = plotAbundance(mostAbundant);
         
