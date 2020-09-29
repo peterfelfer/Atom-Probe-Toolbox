@@ -33,8 +33,7 @@ ionAlreadyExist = false;
 for j = 1:length(1,1)
         if colorScheme.ion(j,1) == ionName(1,:)
             disp ('ion already exists in colorScheme')
-            match = false; % don't start the color searching loop  
-            ionAlreadyExist = true;
+            return % don't start the color searching loop 
         else 
             match = true; 
             ionAlreadyExist = false;
