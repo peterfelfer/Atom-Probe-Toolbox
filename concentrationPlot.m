@@ -1,7 +1,7 @@
-function [p, ax, f] = concentrationPlot(conc,excludeList, plotType, colorScheme)
+function [p, ax, f] = concentrationPlot(conc,excludeList,plotType,colorScheme)
 % concentrationPlot plots the concentration given by the variable conc. It
 % excludes all the atoms that are on the excludeList. The plot type can be
-% a pie or bar chart. The coloring is according to the colorScheme.
+% a pie or bar chart. The coloring is according to the colorScheme (if given).
 %
 % [p, ax, f] = concentrationPlot(conc, excludeList, plotType, colorScheme)
 % [p, ax, f] = concentrationPlot(conc, excludeList, plotType)
@@ -9,18 +9,18 @@ function [p, ax, f] = concentrationPlot(conc,excludeList, plotType, colorScheme)
 % [p, ax, f] = concentrationPlot(conc)
 %
 % INPUT
-% conc:         is a table that contains the counts or the concentration of 
+% conc:         table that contains the counts or the concentration of 
 %               one or more volumes. If multiple volumes are in the 
 %               variable, the name will be atom/ion + volume name
 %
-% excludeList:  is a cell array that contains as character the individual
+% excludeList:  cell array that contains as character the individual
 %               ions that shall not be considered for the plot of the 
 %               concentration, unranged atoms appear as 'unranged', if not 
 %               parsed, no atoms will be excluded
 %
-% plotType:     can be a 'pie' or 'bar', default is 'bar'
+% plotType:     defines the chart type can be 'pie' or 'bar', default is 'bar'
 %
-% colorScheme:  coloring will be according to colorScheme
+% colorScheme:  coloring will be according to colorScheme if given
 %               If multiple volumes are parsed and you want to color by 
 %               volume, than don't parse any colorScheme, default will 
 %               color the bars by volume.
@@ -94,7 +94,7 @@ y = y(:,~isZero);
 
 
 % categories in the categorical need to be ordered, otherwise plot would be
-% sorted alphabetical
+% sorted alphabetically
 x = categorical(plotTable.Properties.VariableNames(~isZero(1,:)));
 x = reordercats(x, plotTable.Properties.VariableNames(~isZero(1,:)));
 
@@ -109,7 +109,7 @@ if strcmp(plotType,'bar')
     else
         p = bar(x,ytrans); % display counts
         type = char(conc.type);
-        type = type(1:end-2); % loose the 'ic' in 'atomic'
+        type = type(1:end-2); % lose the 'ic' in 'atomic'
         ax.YLabel.String = [char(conc.format) ' [' type 's]'];
     end
 
@@ -135,7 +135,7 @@ elseif strcmp(plotType,'pie')
     p = pie(y);
     for b = 1:length(y) % go through individual bars
         % pie charts are collections of patches. A text and a pie slice for
-        % each category, i.e. number of categories * 2 plothandles
+        % each category, i.e. number of categories * 2 plot handles
         if isColorScheme
             col(b,:) = colorScheme.color(colorScheme.ion == char(x(b)),:);
             p(b*2-1).FaceColor = col(b,:);
