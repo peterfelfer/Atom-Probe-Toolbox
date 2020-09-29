@@ -8,10 +8,10 @@ function ionList = ionsCreateComplex(elements,complexity,isotopeTable,chargeStat
 % INPUT
 % elements:     list of elements that form the complexes, either as cell,
 %               string {'Fe','Cr','O',...} or as vector of atomic numbers
-%               HINT: the cell string can be extracted from the decomposed
-%               posfile as elements = categories(pos.atom)
+%               HINT: the cell can be extracted from the decomposed
+%               pos file as elements = categories(pos.atom)
 %               HINT: to use many elements, standard matlab linear vector
-%               generation can be used, e.g. elements = 1:100% 
+%               generation can be used, e.g. elements = 1:100 
 %
 % complexity:   vector of ion complexities to be included, e.g. [1 2 3]
 %
