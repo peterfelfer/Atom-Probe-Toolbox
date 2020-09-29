@@ -1,16 +1,16 @@
 function handle = massSpecPlot(mc, bin, mode)
-% massSpecPlot plots the data from pos to get a Massspectrum as a figure
+% massSpecPlot plots the data from pos to get a mass spectrum as a figure
 %
 % handle = plotMassSpec(mc, bin, mode)
 % handle = plotMassSpec(mc, bin)
 %
 % INPUT
 % mc:       is the mass-to-charge(mc)-ratio [Da] of the events in the
-%           APT-Measurement stored in pos, table
+%           APT measurement stored in pos, table
 %
-% bin:      is the width of the steps in which the plot is performed,
+% bin:      is the width of the steps in which the plot is performed
 %
-% mode:     Specifies the way the counts are applied
+% mode:     specifies the way the counts are applied
 %           'count' records the number of counts
 %           'normalised' records the number of counts if the bin was one Da
 %           wide over the overall number of counts
@@ -73,9 +73,9 @@ end
 
 %% annotation with range stats
 t = annotation('textbox');
-% determining the background at 4Da
-upperLim = 4.5; %Da
-lowerLim = 3.5; %Da
+% determining the background at 4 Da
+upperLim = 4.5; % Da
+lowerLim = 3.5; % Da
 BG4 = sum(y((x >= lowerLim) & (x <= upperLim)))/(upperLim-lowerLim);
 BG4 = BG4/length(mc) * 1E6;
 t.String = {['bin width: ' num2str(bin) ' Da'], ['num atoms: ' num2str(length(mc)) ], ['backG @ 4Da: ' num2str(BG4,3) ' ppm/Da']};
