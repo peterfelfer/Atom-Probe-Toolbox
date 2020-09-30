@@ -6,23 +6,22 @@ function vox = posToVoxel(pos,gridVec,species)
 % vox = posToVoxel(pos,gridVec)
 %
 % INPUT
-% pos:     posfile with allocated range. A decomposed pos file is also
-%          possible.
+% pos:     pos file; when input species is given, ranges must be allocated.
+%          A decomposed pos file is also possible.
 %
 % gridVec: are the gridVectors for the grid. If the grid vectors need to be
-%          created, use binCenters (Output from binVectorsFromDistance
+%          created, use binCenters (output from binVectorsFromDistance
 %          function)
 %
-% species: Species can be a species list as in {'Fe', 'Mn'}. Ions or Atoms 
-%          in pos can be parsed. Alternatively it can be a logical vector 
-%          with the same legth as the pos file.
+% species: can be a species list as in {'Fe', 'Mn'}. Ions or atoms 
+%          in pos can be parsed. Alternatively, it can be a logical vector 
+%          with the same length as the pos file.
 %          If no species variable is given, all atoms/ions are taken.
-%          To get all ranged atoms, use species = categories(pos.atoms)
-%          To get all ranged ions, use species = categories(pos.ions)
+%          To get all ranged atoms, use species = categories(pos.atom)
+%          To get all ranged ions, use species = categories(pos.ion)
 %
 % OUTPUT
 % vox:     voxelisation of the point cloud stored in pos
-
 
 %% Check for species
 if ~exist('species','var')
@@ -45,14 +44,14 @@ end
 
 pos = [pos.x(species), pos.y(species), pos.z(species)];
 
-%% calcualting 3d histogram
+%% calculating 3d histogram
 
 bin = [gridVec{1}(2)-gridVec{1}(1) gridVec{2}(2)-gridVec{2}(1) gridVec{3}(2)-gridVec{3}(1)];
 
 % calculating bin association (I do not pretend to know what all of this
 % does)
 for d = 1:3
-    % calculate edge vecotrs from bin centers
+    % calculate edge vectors from bin centers
     edgeVec{d} = [gridVec{d}-bin(d)/2 gridVec{d}(end)+bin(d)/2];
     
     [useless loc(:,d)] = histc(pos(:,d),edgeVec{d},1);
