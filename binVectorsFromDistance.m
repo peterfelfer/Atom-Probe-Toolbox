@@ -25,7 +25,7 @@ function [binCenters, binEdges] = binVectorsFromDistance(dist,bin,mode)
 %               mode 'distance' the center is the mean value of the distance
 %               mode 'count' the center is the median of the distance (bin
 %               middle by index)               
-% binEdges:     edges of of each bin
+% binEdges:     edges of each bin
 %% 
 isConstantCount = strcmp(mode, 'count');
 isConstantDistance = strcmp(mode, 'distance');
