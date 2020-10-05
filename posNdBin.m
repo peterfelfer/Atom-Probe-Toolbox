@@ -15,11 +15,8 @@ function vox = posNdBin(pos, distance, binEdges)
 %
 % OUTPUT
 % vox:      voxel of the dataset
-
-
-
-
-
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 % nD voxelisation for 1, 2 and 3 dimensions
 % depending on how many distance entries are given
