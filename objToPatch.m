@@ -1,5 +1,6 @@
 function objPatch = objToPatch(fullfilename)
 % objToPatch imports an .obj file into the Matlab workspace
+% and creates variable with faces and vertices
 % 
 % patch = objToPatch(fullfilename);
 % 
@@ -12,15 +13,6 @@ function objPatch = objToPatch(fullfilename)
 %                 Multiple objects can be parsed
 %
 % (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
-
-
-%Description: Similar to read_wobj_v2. Reads obj and creates variable obj 
-%containing vertices and faces for the interface from blender. ‘gr’ contains
-%the groups made in blender in an array of structs each containing the 
-%group name and associated vertices.
-
-
-
 
 if ~exist('fullfilename','var')
     [file path] = uigetfile('*.obj','select .obj file');
