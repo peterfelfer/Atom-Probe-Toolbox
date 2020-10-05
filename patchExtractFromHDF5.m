@@ -1,4 +1,4 @@
-function [meshObject, WCS] = patchExtractFromHdf5(fileName,objectName)
+function [meshObject, WCS] = patchExtractFromHDF5(fileName,objectName)
 % patchExtractFromHdf5 retrieves a mesh object and in the case of an ROI
 % also the corresponding work coordinate system from an hdf5 file. The mesh
 % object can be added to the file using hdf5AddMeshRoi.
