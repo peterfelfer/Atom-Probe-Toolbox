@@ -1,6 +1,24 @@
-function [ions, abundance, weight] = ionsCreateIsotopeList(ion, isotopeTable)
-% takes an ion type, e.g.'Cr2 O3' and gives all isotopic combinations,
+function [ions, abundance, weight] = ionsCreateIsotopeList(ion,isotopeTable)
+% takes an ion type, e.g. 'Cr2 O3' and gives all isotopic combinations,
 % based on the supplied isotopeTable
+%
+% [ions, abundance, weight] = ionsCreateIsotopeList(ion, isotopeTable);
+%
+% INPUT
+% ion:          categorical or string array of the ion (e.g., 'Cr2 O3')
+%
+% isotopeTable: table with all the isotopes of various elements
+%
+% OUTPUT
+% ions:         cell array with Mx2 tables, denoting the element and
+%               isotope; M is the number of isotopic combinations
+%
+% abundance:    array of abundance values corresponding to entries in 'ions'
+%
+% weight:       array of weight values corresponding to entries in 'ions'
+% 
+% NOTE: In case of a complex ion, there must be a space between the
+% different elements.
 %
 % (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
