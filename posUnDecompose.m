@@ -11,6 +11,8 @@ function pos = posUnDecompose(pos)
 % NOTE: the output is the same as the result of the function
 % posAllocateRange when using the initial pos file (posIn) and the option
 % 'raw' as inputs
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 [~, uniqueIonIdx] = unique(pos.ionIdx);
 

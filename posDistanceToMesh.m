@@ -13,6 +13,8 @@ function distance = posDistanceToMesh(pos,interface)
 %
 % OUTPUT
 % distance:     Mx1 array with M as the number of atoms, distance of the atoms in the pos file to the interface mesh
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %%
 % distances are calculated along vertex normals.

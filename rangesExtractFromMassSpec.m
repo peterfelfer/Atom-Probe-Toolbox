@@ -13,6 +13,8 @@ function rangeTable = rangesExtractFromMassSpec(spec)
 % OUTPUT 
 % rangeTable:   table with allocated ranges of the ions and additional 
 %               information(charge state, corresponding color code)
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 plots = spec.Parent.Children;
 

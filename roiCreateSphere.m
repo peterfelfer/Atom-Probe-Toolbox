@@ -20,6 +20,8 @@ function sh = roiCreateSphere(radius,subDivisions,location,ax)
 %
 % OUTPUT
 % sh:           handle to the ROIsphere
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 if not(exist('radius','var'))
     radius = 10;

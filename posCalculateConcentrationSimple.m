@@ -27,6 +27,8 @@ function conc = posCalculateConcentrationSimple(pos,detEff,excludeList,volumeNam
 %               statistical deviation calculated after Danoix et al., 
 %               https://doi.org/10.1016/j.ultramic.2007.02.005
 %               variance(conc) = conc*(1-conc)/numAtomsDetected * (1 - detEff)
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %% detector efficiency
 if detEff > 1

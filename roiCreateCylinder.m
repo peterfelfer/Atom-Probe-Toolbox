@@ -23,6 +23,8 @@ function ch = roiCreateCylinder(radius,height,location,numSegments,ax)
 %
 % OUTPUT
 % ch:           handle to the ROIcylinder
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %% sets default radius to 5
 if not(exist('radius','var'))

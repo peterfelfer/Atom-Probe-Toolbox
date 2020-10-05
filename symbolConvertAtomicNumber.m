@@ -10,6 +10,8 @@ function symnum = symbolConvertAtomicNumber(input)
 %
 % OUTPUT
 % symnum: symbol of the element or atomic number of the element
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 if exist('input','var')
     

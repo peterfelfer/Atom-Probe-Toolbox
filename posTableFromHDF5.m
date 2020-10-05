@@ -1,6 +1,8 @@
 function pos = posTableFromHDF5(fileName)
 % posTableFromHDF5 extracts all per - hit/ion/atom information in an hdf5
 % file. 
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 % check is file is decomposed or not
 

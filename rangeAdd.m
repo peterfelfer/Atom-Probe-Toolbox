@@ -40,6 +40,8 @@ function [h, txt] = rangeAdd(spec,colorScheme,manualName)
 % OUTPUT
 % h:            handle to the area plot of the range
 % txt:          corresponding text
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %% set current axes
 ax = spec.Parent;

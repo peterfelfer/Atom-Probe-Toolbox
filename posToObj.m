@@ -20,6 +20,8 @@ function posToObj(pos,fileName,species)
 % 
 % OUTPUT
 % .obj file stored with the fileName
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 % get file name if it is not provided
 if ~exist('fileName','var')

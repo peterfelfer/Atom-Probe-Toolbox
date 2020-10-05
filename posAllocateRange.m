@@ -18,6 +18,8 @@ function pos = posAllocateRange(posIn,rng,options)
 %           second case, with 'decompose' as options input used: table of
 %           reconstructed atom positions with ionIdx, x, y, z, m/c, and
 %           additional ion, chargeState, atom, isotope, and ionComplexity fields
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 % find the range the ion is in
 in = (posIn.mc > rng.mcbegin') & (posIn.mc < rng.mcend');
