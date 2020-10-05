@@ -19,6 +19,8 @@ function ionTableAddToHDF5(fileName,ionTable)
 % /atomProbeTomography/identifiedIon/1/ion
 % /atomProbeTomography/identifiedIon/2/ion
 % etc...
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 numIon = height(ionTable);
 

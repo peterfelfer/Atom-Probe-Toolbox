@@ -10,6 +10,8 @@ function objPatch = objToPatch(fullfilename)
 % OUTPUT
 % objPatch:       variable that contains faces and vertices of the object.
 %                 Multiple objects can be parsed
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 %Description: Similar to read_wobj_v2. Reads obj and creates variable obj 

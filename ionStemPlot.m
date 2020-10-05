@@ -19,6 +19,8 @@ function h = ionStemPlot(ax, weight, abundance, ionList, chargeStates, colorSche
 %
 % OUTPUT
 % h:            handle to the stem plot
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 % generate ion name

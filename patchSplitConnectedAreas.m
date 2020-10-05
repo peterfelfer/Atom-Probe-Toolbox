@@ -11,5 +11,7 @@ function fvs = patchSplitConnectedAreas(fv)
 % OUTPUTS:
 % fvs       vector of patches with fv.faces and fv.vertices with each patch
 %           individually fully connected
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 fvs = splitFV(fv.faces,fv.vertices);

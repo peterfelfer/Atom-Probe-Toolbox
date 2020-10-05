@@ -13,6 +13,8 @@ function ionTable = ionsExtractFromMassSpec(spec)
 % OUTPUT 
 % ionTable: table with allocated ions and additional information
 %           (charge state, corresponding color code)
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %%
 plots = spec.Parent.Children;

@@ -8,6 +8,7 @@ function eposExtract = eposExtractFromVoltageCurve(epos)
 % eposExtract: table with experiment data, subset of initial epos file,
 %              clipped on the basis of the user's selection
 %
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %%   plot voltage curve
 figure;

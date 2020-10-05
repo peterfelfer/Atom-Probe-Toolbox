@@ -12,6 +12,8 @@ function fv = patchFilterSize(fv,Nmin)
 %
 % OUTPUT
 % fv =      residua patches that are bigger than Nmin
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 patches = splitFV(fv);
 numPatches = length(patches);

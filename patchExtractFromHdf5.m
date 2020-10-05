@@ -24,6 +24,8 @@ function [meshObject, WCS] = patchExtractFromHdf5(fileName,objectName)
 %           WCS = struct defining a work coordinate system. Fields are
 %           'origin' (1x3 vector) and 'coordinateSystemVectors' (3x3 list
 %           of 3 basis vectors of coordinate system (exx exy exz; eyx eyy eyz; ezx ezy ezz)
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 % get list of properties saved for the object
 path = ['/objects/meshObject/' objectName '/'];

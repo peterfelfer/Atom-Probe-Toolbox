@@ -56,7 +56,8 @@ function h = ionAdd(spec,ion,chargeState,isotopeTable,colorScheme,sumMargin,minA
 %   - implement isnumeric('minHeight')
 %   - implement 'least squares'
 %   - implement checking for duplicate ions
-% 
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %% check ion name
 if isstring(ion)

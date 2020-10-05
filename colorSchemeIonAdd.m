@@ -18,6 +18,8 @@ function colorScheme = colorSchemeIonAdd(colorScheme, newIon, selection)
 % OUTPUT
 % colorScheme:  the new colorScheme with the new ion added at the end of
 %               the table
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %% number of random colors to be generated for farthest point sampling
 NCOLS = 10000; 

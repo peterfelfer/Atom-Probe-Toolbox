@@ -13,6 +13,8 @@ function weight = isotopicWeight(Z,isotope)
 % OUTPUT
 % weight:   table with mass number, weight, and natural abundance of the
 %           element's isotope(s)
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 weight = []; % [isotope weight abundance]
 

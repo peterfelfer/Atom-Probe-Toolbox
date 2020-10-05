@@ -14,7 +14,10 @@ function fv = patchDeleteExternalPoints(fv,pos,numRims)
 % 
 % OUTPUT
 % points:   points transformed to the new coordinate system   
-%numRims is the number of edge loops to be deleted on top of the unused verts.
+%           numRims is the number of edge loops to be deleted on top of 
+%           the unused verts
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 % calculate which vertices are inside the dataset

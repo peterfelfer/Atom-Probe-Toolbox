@@ -19,6 +19,8 @@ function [proxi, binVector] = lineCreateProxigram(posSpecies,pos,line,bin)
 %               the proxigram
 %
 % binVector:    corresponding distance values; x-values of the proxigram
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 % distances are calculated perpendicular to the line elements.

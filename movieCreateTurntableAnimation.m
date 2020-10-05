@@ -17,7 +17,9 @@ function mov = movieCreateTurntableAnimation(deg,frameRate,fileName)
 %
 %
 % OUTPUT
-%           movie of the turning atom probe tip.
+% mov:       movie of the turning atom probe tip
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 if ~exist('frameRate','var')
     frameRate = 30;     % default value set to 30

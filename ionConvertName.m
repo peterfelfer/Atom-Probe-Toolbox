@@ -45,6 +45,8 @@ function varargout = ionConvertName(varargin)
 % format:           can be 'plain' or 'LaTeX'
 %
 % isotopeTable:     table with all isotopes
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %% conversion from array to table/categorical. The new table/categorical is saved as an input
 % argument and is converted to table if isotopes are given, categorical if

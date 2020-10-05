@@ -17,6 +17,8 @@ function points = coordSystemTransform(ROIobject, points)
 %               produces and Nx3 output, while a table input produces a
 %               table output in which only the x, y and z columns have been
 %               changed.
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 isTab = istable(points);

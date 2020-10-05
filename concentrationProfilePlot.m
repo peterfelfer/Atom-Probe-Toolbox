@@ -30,6 +30,7 @@ function [p, ax, f] = concentrationProfilePlot(conc,excludeList,colorScheme)
 %       concentration:  conc([conc.format=='concentration'], :)
 %       count:          conc([conc.format=='count'], :)
 %
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 if ~exist('excludeList','var')
     excludeList = {};
