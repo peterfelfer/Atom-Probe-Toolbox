@@ -23,7 +23,9 @@ function meta = metaDataReadTextFile(metaDataFileName)
 
 %% select text file
 fileStr = fileread(metaDataFileName);
-
+if fileStr(1:3) == '﻿'
+    fileStr(1:3) = [];
+end
 %% pre-formatting of the text file
 % break it into lines
 fileByLine = regexp(fileStr, '\n', 'split');
@@ -44,7 +46,7 @@ fileByLine( cellfun(@isempty,fileByLine) ) = [];
 fileByLine = strtrim(fileByLine);
 
 % remove comments
-fileByLine( cellfun(@(x) any(x(1:3) == '%'),fileByLine )) = [];
+fileByLine( cellfun(@(x) x(1) == '%',fileByLine)) = [];
 
 %% going through each line of metadata
 meta = {};
