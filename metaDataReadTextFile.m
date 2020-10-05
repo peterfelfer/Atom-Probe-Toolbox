@@ -18,6 +18,8 @@ function meta = metaDataReadTextFile(metaDataFileName)
 %
 % HINT:         the user may need to change the selection of displayed 
 %               file types within the selection window
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %%% DATES ARE CURRENTLY DISABLED DUE TO FALSE FORMATS IN THE METADATA FILES! 
 
