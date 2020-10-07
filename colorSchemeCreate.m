@@ -9,6 +9,8 @@ function colorScheme = colorSchemeCreate(ionTable)
 %
 % OUTPUT:
 % colorScheme:  table with ion field and corresponding color field
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 %% Check for ions that are twice in the ionTable because of their charge state

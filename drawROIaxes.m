@@ -8,7 +8,9 @@ function lh = drawROIaxes(roi)
 % roi: name of roi as given before
 %
 % OUTPUT
-% lh:   handle to the axes of the roi, colors as described before    
+% lh:   handle to the axes of the roi, colors as described before 
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 lh(1) = line(roi.UserData.ROIxaxis(:,1),roi.UserData.ROIxaxis(:,2),roi.UserData.ROIxaxis(:,3),'LineWidth',4,'Color','r');
 lh(2) = line(roi.UserData.ROIyaxis(:,1),roi.UserData.ROIyaxis(:,2),roi.UserData.ROIyaxis(:,3),'LineWidth',4,'Color','g');

@@ -11,6 +11,8 @@ function graphVMC = voltageCurveMC(epos)
 % OUTPUT
 % graphVMC:     figure, graph with voltage (V) and mass-to-charge ratio
 %               (MC) plotted over the ion sequence number
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 %% create diagram with two graphs (base voltage curve and mc ratio)

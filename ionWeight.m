@@ -15,6 +15,8 @@ function w = ionWeight(ion, isotopeTable, chargeState)
 %
 % OUTPUT
 % w:            weight of ion in amu (w/o charge state) or Da
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %% extract the individual ions and get weight
 w = 0;

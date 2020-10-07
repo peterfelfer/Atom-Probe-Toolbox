@@ -21,6 +21,8 @@ function rangeTableAddToHDF5(fileName,rangeTable)
 % /atomProbeTomography/massToChargeRange/1/name
 % /atomProbeTomography/massToChargeRange/2/name
 % etc...
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 numRng = height(rangeTable);
 

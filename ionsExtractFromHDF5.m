@@ -12,6 +12,7 @@ function ionTable = ionsExtractFromHDF5(fileName)
 %           Alternatively false as an output if the file does not contain
 %           range information, i.e. is not an atom probe data file
 %
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 % get content structure in HDF5 file
 ionInfo = h5info(fileName,'/atomProbeTomography/identifiedIon');

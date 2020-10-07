@@ -14,6 +14,8 @@ function distance = posDistanceAlongVector(pos,origin,direction)
 % OUTPUT
 % distance:      distance between entries in a pos file along a specified
 %                vector
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 points = [pos.x pos.y pos.z];
 points = points - repmat(origin,[height(pos),1]); % re-center origin

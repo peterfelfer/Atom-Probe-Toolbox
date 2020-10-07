@@ -30,6 +30,8 @@ function ionList = ionsCreateComplex(elements,complexity,isotopeTable,chargeStat
 % function. Beware when creating very large complexities. For the entire
 % periodic system, anything above a complexity of 2 will lead to a very
 % long list.
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %% looking for input chargeStates
 if ~exist('chargeStates','var')

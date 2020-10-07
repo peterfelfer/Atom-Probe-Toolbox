@@ -20,6 +20,8 @@ function imageAddToHDF5(fileName,image,imageType,contrastMechanism,horizontalPix
 % horizontalPixelScale: is the pixel scale in horizontal direction
 % 
 % verticalPixelScale:   is the pixel scale in vertical direction
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 

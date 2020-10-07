@@ -19,6 +19,8 @@ function bh = roiCreateBox(dimensions,location,ax)
 %
 % OUTPUT
 % bh:           handle to the ROIbox
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %% sets default dimensions to [10 10 10]
 if not(exist('dimensions','var'))

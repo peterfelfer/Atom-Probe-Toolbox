@@ -16,6 +16,8 @@ function distance = posDistanceToLine(pos,line)
 % OUTPUT
 % distance:     distance between entries in a pos file along a specified
 %               line    
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %% distances are calculated perpendicular to the line elements.
 [lineVector, ~] = lineVectors(line.vertices,line.edges);

@@ -16,7 +16,13 @@ function rangeAddAll(spec,colorScheme,rangeMargin,useMin)
 %
 % rangeMargin:  is the number of Da before and after the peak that are
 %               displayed
-% useMin:       
+% useMin:       the user can choose between 'true' and 'false'
+%               false:  the user will be taken through every peak
+%               true: the user can draw a line over the mass spectrum and
+%               only the peaks higher than the line are taken into account
+%               for the ranging
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 xPlotLimits = spec.Parent.XLim; % current plot limits
 yPlotLimits = spec.Parent.YLim; % current plot limits

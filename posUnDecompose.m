@@ -1,4 +1,4 @@
-function pos = posUnDecompose(pos)
+function posRaw = posUnDecompose(pos)
 % posUnDecompose takes a decomposed pos table and turns it into a 
 % state with only ranges allocated
 %
@@ -11,11 +11,13 @@ function pos = posUnDecompose(pos)
 % NOTE: the output is the same as the result of the function
 % posAllocateRange when using the initial pos file (posIn) and the option
 % 'raw' as inputs
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 [~, uniqueIonIdx] = unique(pos.ionIdx);
 
-pos = table(pos.ionIdx(uniqueIonIdx),...
+posRaw = table(pos.ionIdx(uniqueIonIdx),...
     pos.x(uniqueIonIdx),pos.y(uniqueIonIdx),pos.z(uniqueIonIdx),...
     pos.mc(uniqueIonIdx),pos.ion(uniqueIonIdx),pos.chargeState(uniqueIonIdx));
 
-pos.Properties.VariableNames = {'ionIdx','x','y','z','mc','ion','chargeState'};
+posRaw.Properties.VariableNames = {'ionIdx','x','y','z','mc','ion','chargeState'};

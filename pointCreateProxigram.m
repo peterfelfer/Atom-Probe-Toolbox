@@ -18,6 +18,7 @@ function [proxi, binVector] = pointCreateProxigram(posSpecies,pos,vertices,bin)
 %
 % binVector:    corresponding distance values; x-values of the proxigram
 %
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 vertices = vertices(:,1:3);
 

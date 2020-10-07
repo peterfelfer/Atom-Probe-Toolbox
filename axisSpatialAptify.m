@@ -4,6 +4,8 @@ function axisSpatialAptify
 % z-axis and the plot is ready to rotate the reconstructed APT tip.
 % 
 % axisSpatialAptify
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 axis equal;
 rotate3d on;

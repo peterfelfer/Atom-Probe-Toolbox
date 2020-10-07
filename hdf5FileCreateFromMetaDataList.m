@@ -17,6 +17,8 @@ function hdf5FileCreateFromMetaDataList(fileName,metaData)
 % OUTPUT
 % a hdf5 file with the entire metadata, automatically saved in the current
 % folder
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 %% creating hdf5 file 

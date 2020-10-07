@@ -18,6 +18,8 @@ function [ions, chargeStates] = ionsImportFromXLS(fileName)
 %                  been observed in the literature. N is the same length as
 %                  ions, M is 6 (may be expanded if chargeStates >6 are
 %                  observed experimentally)
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %% Input handling
 

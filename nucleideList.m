@@ -7,6 +7,8 @@ function isoList = nucleideList
 % OUTPUT
 % isoList:  List with all isotopes of all elements with all weights and
 %           abundances
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 isoList = [];
 

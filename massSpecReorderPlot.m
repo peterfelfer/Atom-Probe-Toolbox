@@ -24,6 +24,8 @@ function massSpecReorderPlot(spec,order)
 %           
 % OUTPUT
 %          mass spectrum with rearranged order
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 %% default if no input order is given

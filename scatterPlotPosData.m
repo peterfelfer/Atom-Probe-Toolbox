@@ -34,6 +34,8 @@ function [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size,plotAx
 % p:              plot handle
 %
 % ax:             axis from the plot, important for tiled plot
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 %%

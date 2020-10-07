@@ -22,6 +22,8 @@ function vox = posToVoxel(pos,gridVec,species)
 %
 % OUTPUT
 % vox:     voxelisation of the point cloud stored in pos
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %% Check for species
 if ~exist('species','var')

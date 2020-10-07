@@ -19,6 +19,8 @@ function patchToObj(patch,objName,fileName)
 % objName: object names can be parsed in 'objNames'
 %
 % fileName: desired name of saved file with .obj as suffix
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 if ~exist('patch','var')         
     object = gco;

@@ -32,6 +32,7 @@ function files = hdf5FileFindByAttribute(topFolder,varargin)
 %                with the fields: name, folder, date, bytes, isdir,
 %                datenum
 %
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 % MISSING: query for existence of data, i.e. if it has an image of the
 % sample, ranges defined or ions defined maybe as 

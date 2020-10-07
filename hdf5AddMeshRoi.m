@@ -20,6 +20,8 @@ function hdf5AddMeshRoi(fileName,meshOrRoi,objectName)
 %           objectName = name of a mesh object that parsed as patch or name
 %           to override the name in meshOrRoi.DisplayName (property of
 %           matlab graphics objects)
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 % check if mesh object already exists
 

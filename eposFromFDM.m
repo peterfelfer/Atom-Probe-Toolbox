@@ -8,6 +8,8 @@ function eposExtract = eposFromFDM(epos)
 % OUTPUT
 % eposExtract:      table with experiment data, subset of initial epos file,
 %                   clipped on the basis of the user's selection
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %   create rudimentary field desorption map (FDM) (with IMELLIPSE)
 FDM = histogram2(epos.detx,epos.dety,100,'FaceColor','flat');

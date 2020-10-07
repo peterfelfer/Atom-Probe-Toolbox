@@ -20,6 +20,8 @@ function handle = massSpecPlot(mc, bin, mode)
 % handle:   handle to the plot that contains counts or
 %           (counts/Dalton)/totalCounts over Dalton. Used in further
 %           analysis to find new ions
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %%
 % count is default mode

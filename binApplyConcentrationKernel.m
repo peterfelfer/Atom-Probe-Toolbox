@@ -24,6 +24,8 @@ function conc = binApplyConcentrationKernel(vox,binCenters,concentrationKernel,d
 %
 % To DO: implement distance variable assignement for numDim > 1
 % maybe rename distance to location as it fits better with numDim > 1
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 

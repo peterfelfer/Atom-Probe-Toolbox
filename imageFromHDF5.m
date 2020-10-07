@@ -10,6 +10,8 @@ function image = imageFromHDF5(fileName, numImg)
 %
 % OUTPUT
 % image:    variable that contains the image
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 % extract an image from HDF5 file 

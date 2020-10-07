@@ -20,7 +20,9 @@ function massSpecShowLegend(spec,items)
 %
 % OUTPUT
 %           shows the legend of the ranged ions in the mass spectrum
-%           
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+
 %%
 if ~exist('items','var')
     items = ["ion", "unknown"]; % "ion" "text" "massSpectrum" "range"

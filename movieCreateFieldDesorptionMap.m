@@ -39,6 +39,7 @@ function fdmStack = movieCreateFieldDesorptionMap(detx,dety,frames,sample,RES,fi
 % OUTPUTS:
 %       fdmStack: matrix of size (frames)x(resolution)x(resolution)
 %
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 

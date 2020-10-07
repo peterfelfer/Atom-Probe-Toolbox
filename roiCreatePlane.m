@@ -21,6 +21,8 @@ function ph = roiCreatePlane(dimensions,spacing,location,ax)
 %
 % OUTPUT
 % ph:           handle to the ROIplane
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 % get axis if necessary
 if not(exist('ax','var'))

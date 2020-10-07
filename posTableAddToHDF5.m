@@ -15,6 +15,8 @@ function posTableAddToHDF5(fileName,pos)
 %                   (undecomposed)
 %                   '/atomProbeTomography/reconstruction/atom/'
 %                   (decomposed)
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 %% writing pos data ==> APT specific!

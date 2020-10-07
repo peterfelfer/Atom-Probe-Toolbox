@@ -17,6 +17,8 @@ function wcsh = wcsCreate(size,location,ax)
 % OUTPUT
 % points:       points transformed to the new coordinate system
 %
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+%
 %% default size is [10 10]
 if not(exist('size','var'))
     size = [10 10 10];

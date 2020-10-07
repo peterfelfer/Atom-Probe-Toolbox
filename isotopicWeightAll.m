@@ -12,6 +12,8 @@ function weight = isotopicWeightAll(Z)
 % OUTPUT
 % weight:   a table with all of the possible isotopes and their 
 %           corresponding weights
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 weight = []; % [isotope weight abundance]

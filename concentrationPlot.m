@@ -47,6 +47,8 @@ function [p, ax, f] = concentrationPlot(conc,excludeList,plotType,colorScheme)
 %
 %
 % missing: reduce distance between groups of bars for multiple volumes
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 %% default plot type is 'bar'
