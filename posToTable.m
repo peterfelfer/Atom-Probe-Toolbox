@@ -16,7 +16,7 @@ function posIn = posToTable(fileName)
 % hint: in case of an epos file as input, be aware to select (*.epos) as
 %       displayed data type in the dialog box
 %
-% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nï¿½rnberg
 %%
 if ~exist('fileName','var')
     [file, path, idx] = uigetfile({'*.pos';'*.epos'},'Select a pos file');
@@ -90,7 +90,7 @@ elseif idx == 2
     pulse = pulse';
     
     posIn = table(ionIdx,posIn(:,1),posIn(:,2),posIn(:,3),posIn(:,4),posIn(:,5),posIn(:,6),posIn(:,7),posIn(:,8),posIn(:,9),pulse(:,1),pulse(:,2),(1:numAtoms)');
-    posIn.Properties.VariableNames = {'ionIdx','x','y','z','mc','tof','VDC','VP','detx','dety','deltaP','multi','atom#'};
+    posIn.Properties.VariableNames = {'ionIdx','x','y','z','mc','tof','VDC','VP','detx','dety','deltaP','multi','atomNum'};
     posIn.Properties.VariableUnits = {'1','nm','nm','nm','Da','ns','V','V','mm','mm','1','1','1'};    
     
 end
