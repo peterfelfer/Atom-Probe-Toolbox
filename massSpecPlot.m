@@ -64,7 +64,7 @@ ax = get(handle,'Parent');
 set(gca,'YScale','Log');
 set(gcf, 'Name', 'Mass spectrum');
 set(gcf, 'Color', [1 1 1]);
-set(get(gca,'XLabel'),'String','mass-to-charge ratio [Da]');
+set(get(gca,'XLabel'),'String','mass-to-charge-state ratio [Da]');
 
 if strcmp(mode,'count')
     ylabel('frequency [counts]');
