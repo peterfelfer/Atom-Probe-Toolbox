@@ -64,7 +64,7 @@ ax = get(handle,'Parent');
 set(gca,'YScale','Log');
 set(gcf, 'Name', 'Mass spectrum');
 set(gcf, 'Color', [1 1 1]);
-set(get(gca,'XLabel'),'String','mass-to-chargestate [Da]');
+set(get(gca,'XLabel'),'String','mass-to-charge-state ratio [Da]');
 
 if strcmp(mode,'count')
     ylabel('frequency [counts]');
@@ -80,7 +80,7 @@ upperLim = 4.5; % Da
 lowerLim = 3.5; % Da
 BG4 = sum(y((x >= lowerLim) & (x <= upperLim)))/(upperLim-lowerLim);
 BG4 = BG4/length(mc) * 1E6;
-t.String = {['bin width: ' num2str(bin) ' Da'], ['num atoms: ' num2str(length(mc)) ], ['backG @ 4Da: ' num2str(BG4,3) ' ppm/Da']};
+t.String = {['bin width: ' num2str(bin) ' Da'], ['num atoms: ' num2str(length(mc)) ], ['backG @ 4 Da: ' num2str(BG4,3) ' ppm/Da']};
 t.BackgroundColor = 'w';
 t.FaceAlpha = 0.8;
 t.Position = [.15 .8 .27 .1];
