@@ -9,16 +9,25 @@ massSpecReorderPlot(spec);
 %% a table of all ion stem plot y values
 stemPlots = findobj('Type','Stem');
 % get the y coordinates
-for i = 1:numel(stemPlots);
-    yCo = stemPlots(i).YData;
+% for i = 1:numel(stemPlots);
+%     yCo = stemPlots(i).YData;
+%     yCo = yCo';
+%     onlyPart = yCo;
+%     allPartsCombined = [onlyPart; yCo];
+%     yCo = allPartsCombined;
+%     yCo = table(yCo);
+%     yCo.Properties.VariableNames{1} = 'y values of ion stem plots';
+% end
+allYCo = table();  % table with all the Y coordinates
+for i = 1:numel(stemPlots)      % get the number of all stem plots
+    yCo = stemPlots(i).YData;   % get all the Y coordinates of the corresponding stem plot (can be more than 1)
     yCo = yCo';
-    onlyPart = yCo;
-    allPartsCombined = [onlyPart; yCo];
-    yCo = allPartsCombined;
-    yCo = table(yCo);
-    yCo.Properties.VariableNames{1} = 'y values of ion stem plots';
+    yCo = table(yCo);           % create a table 
+    allYCo = [allYCo; yCo] ; % add the new Y Coordinates from one stem plot with the y coordinates of the other stem plots 
 end
- 
+allYCo.Properties.VariableNames{1} = 'y values of ion stem plots'; % name of the first row
+
+
  
 %% y value of ion stem plot of the isotope and max y value of corresponding range
 ionStem = findobj('Type','Stem');
