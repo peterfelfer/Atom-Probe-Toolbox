@@ -47,7 +47,7 @@ else
     species = {species}; % convert to cell array to be consistant with input of multiple species
 end
 
-% default size is 36, if size is not given
+% default size is 15, if size is not given
 if ~exist('size','var')
     size = 15;
 end
