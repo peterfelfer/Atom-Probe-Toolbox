@@ -11,7 +11,7 @@ function [fv energy] = patchSnapToAtomPositions(fv,pos,rad)
 %convergence measurments.
 
 
-addpath('patch_normals');
+addpath('utilities_patch_normals');
 
 
 debug = false;

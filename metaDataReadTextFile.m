@@ -19,7 +19,7 @@ function meta = metaDataReadTextFile(metaDataFileName)
 % HINT:         the user may need to change the selection of displayed 
 %               file types within the selection window
 %
-% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nï¿½rnberg
 
 %%% DATES ARE CURRENTLY DISABLED DUE TO FALSE FORMATS IN THE METADATA FILES! 
 
@@ -49,6 +49,9 @@ fileByLine = strtrim(fileByLine);
 
 % remove comments
 fileByLine( cellfun(@(x) x(1) == '%',fileByLine)) = [];
+
+% remove first line (dunno why thats necessary)
+fileByLine(1) = [];
 
 %% going through each line of metadata
 meta = {};
