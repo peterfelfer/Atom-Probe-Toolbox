@@ -1,4 +1,4 @@
-function posToObj(pos,fileName,species)
+function posToObj(pos,species,fileName)
 % posToObj exports pos file's coordinates to an obj file, so that it can be
 % read into various computer graphics programs such as Blender.
 %
@@ -21,7 +21,7 @@ function posToObj(pos,fileName,species)
 % OUTPUT
 % .obj file stored with the fileName
 %
-% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nï¿½rnberg
 
 % get file name if it is not provided
 if ~exist('fileName','var')

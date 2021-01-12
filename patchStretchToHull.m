@@ -4,7 +4,7 @@ function fv = patchStretchToHull(fv,boundary)
 
 DEBUG = false;
 
-addpath('patch_normals');
+addpath('utilities_patch_normals');
 addpath('TriangleRayIntersection');
 
 %% determine which vertices belong to the boundary

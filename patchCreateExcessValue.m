@@ -20,11 +20,12 @@ function patchCreateExcessValue(pos,parentPos,interface,vertices)
 % vertices:     optional, if the interfacial excess of a specific region is
 %               wanted
 %
-% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nï¿½rnberg
 
-addpath('dualMesh');
-addpath('patch_normals');
+addpath('utilities_dualMesh');
+addpath('utilities_patch_normals');
 addpath('resources');
+addpath('utilities');
 
 normals = patchnormals(interface);
 
