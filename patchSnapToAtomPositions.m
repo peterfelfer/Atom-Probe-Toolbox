@@ -55,13 +55,9 @@ pos(~in,:) = [];
 clear in
 
 
-
-
-
 %% calculate distance between verts and points and DCOM step
 numAtoms = length(pos(:,1));
 rad2 = rad^2;
-
 
 
 
