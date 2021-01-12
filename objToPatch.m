@@ -1,18 +1,16 @@
-function objPatch = objToPatch(fullfilename)
-% objToPatch imports an .obj file into the Matlab workspace
-% and creates variable with faces and vertices
-% 
-% patch = objToPatch(fullfilename);
-% 
-% INPUT
-% fullfilename:   optional, the user will be asked to find the file if 
-%                 there is no input
-%
-% OUTPUT
-% objPatch:       variable that contains faces and vertices of the object.
-%                 Multiple objects can be parsed
-%
-% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+function [obj, gr] = objToPatch(fullfilename)
+
+%Input: fullfilename
+%ï¿½fullfilenameï¿½ is optional, the user will be asked to find file if there is no input.
+%Output: obj, gr
+
+%Description: Similar to read_wobj_v2. Reads obj and creates variable obj 
+%containing vertices and faces for the interface from blender. ï¿½grï¿½ contains
+%the groups made in blender in an array of structs each containing the 
+%group name and associated vertices.
+
+
+addpath('Resources');
 
 if ~exist('fullfilename','var')
     [file path] = uigetfile('*.obj','select .obj file');
@@ -20,33 +18,27 @@ if ~exist('fullfilename','var')
 end
 
 
-fileCells = file2cellarray( fullfilename);
+fileCells = file2cellarray(fullfilename);
 
 [ftype fdata]= fixlines(fileCells);
 
-objects = 0;  % number of objects stored in one .obj file 
+objects = 0;
+vertices = 0;
 obj.vertices = [];
-obj.faces = []; 
-
 which_group = 0;
 gr.name = 'No Groups';
 gr.vertices = [];
-
 g = 1;
 
 for c = 1:size(fileCells,2)
-    
     try
         type = fileCells{1,c}{1,1};
     catch
         type = 'not recognized';
     end
-    
 
-        switch type  % first sign in the .obj file 
-            
-            case 'g'
-                
+        switch type           
+            case 'g'                
                 % Checks if the the group has ended by checking if the
                 % group 'name' is (null)
                 if strcmp('(null)', fileCells{1,c}(1,2)) == 0 
@@ -65,57 +57,39 @@ for c = 1:size(fileCells,2)
                 else
                     which_group = 0;
                 end
+
+            case 'v'
+                vertices = vertices +1;
+                obj.vertices(vertices,:) = [str2double(fileCells{1, c}{1,2}) str2double(fileCells{1, c}{1,3}) str2double(fileCells{1, c}{1,4})];
                 
-            case 'o'
-
-               objects = objects +1;
-               objPatch(objects) = obj;
-              
-
-
-            case 'v' % vertices
-
-                vertice = [str2double(fileCells{1, c}{1,2}) str2double(fileCells{1, c}{1,3}) str2double(fileCells{1, c}{1,4})];
-                obj.vertices = [obj.vertices; vertice];
-                if which_group ~= 0 
-                    
+                if which_group ~= 0                   
                     groupPosition = find(strcmp({gr.name},{which_group}));
-                    gr(groupPosition).vertices = [gr(groupPosition).vertices, str2double(fileCells{1, c}{1,2}), str2double(fileCells{1, c}{1,3}), str2double(fileCells{1, c}{1,4})];
-                    
+                    gr(groupPosition).vertices = [gr(groupPosition).vertices, str2double(fileCells{1, c}{1,2}), str2double(fileCells{1, c}{1,3}), str2double(fileCells{1, c}{1,4})];              
                 end
 
-            case 'p'
+            case 'o'
+                objects = objects +1;
+                obj.objects{objects}.type = fileCells{1, c+1}{1,1};       
+                obj.objects{objects}.vertices = [];
 
+            case 'p'
                 point = str2num(fileCells{1,c}{1,2});
-                obj.faces = [obj.faces; point];
+                obj.objects{objects}.vertices = [obj.objects{objects}.vertices; point];
 
             case 'l'
-
                 line = [str2num(fileCells{1,c}{1,2}) str2num(fileCells{1,c}{1,3})];
-                obj.faces = [obj.faces; line];
+                obj.objects{objects}.vertices = [obj.objects{objects}.vertices; line];
 
             case 'f'
-
                 face = [str2num(fileCells{1,c}{1,2}) str2num(fileCells{1,c}{1,3}) str2num(fileCells{1,c}{1,4})];
-                obj.faces = [obj.faces; face];
-           
-                
-                
+                obj.objects{objects}.vertices = [obj.objects{objects}.vertices; face];
                  if which_group ~= 0 
                     face = face';
                     groupPosition = find(strcmp({gr.name},{which_group}));
                     gr(groupPosition).vertices = cat(1, gr(groupPosition).vertices, face);
                     gr(groupPosition).vertices = unique(gr(groupPosition).vertices);
-                    
-                 end
-
-
+                end
         end
-        
-
-    
-    
-    
 end
 
 

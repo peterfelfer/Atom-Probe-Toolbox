@@ -1,11 +1,11 @@
-function [obj, gr] = obj2patch(fullfilename)
+function [obj, gr] = objToPatch(fullfilename)
 
 %Input: fullfilename
-%‘fullfilename’ is optional, the user will be asked to find file if there is no input.
+%ï¿½fullfilenameï¿½ is optional, the user will be asked to find file if there is no input.
 %Output: obj, gr
 
 %Description: Similar to read_wobj_v2. Reads obj and creates variable obj 
-%containing vertices and faces for the interface from blender. ‘gr’ contains
+%containing vertices and faces for the interface from blender. ï¿½grï¿½ contains
 %the groups made in blender in an array of structs each containing the 
 %group name and associated vertices.
 
@@ -32,18 +32,14 @@ gr.vertices = [];
 g = 1;
 
 for c = 1:size(fileCells,2)
-    
     try
         type = fileCells{1,c}{1,1};
     catch
         type = 'not recognized';
     end
-    
 
-        switch type
-            
-            case 'g'
-                
+        switch type           
+            case 'g'                
                 % Checks if the the group has ended by checking if the
                 % group 'name' is (null)
                 if strcmp('(null)', fileCells{1,c}(1,2)) == 0 
@@ -63,67 +59,38 @@ for c = 1:size(fileCells,2)
                     which_group = 0;
                 end
 
-
             case 'v'
-
                 vertices = vertices +1;
-
                 obj.vertices(vertices,:) = [str2double(fileCells{1, c}{1,2}) str2double(fileCells{1, c}{1,3}) str2double(fileCells{1, c}{1,4})];
                 
-                if which_group ~= 0 
-                    
+                if which_group ~= 0                   
                     groupPosition = find(strcmp({gr.name},{which_group}));
-                    gr(groupPosition).vertices = [gr(groupPosition).vertices, str2double(fileCells{1, c}{1,2}), str2double(fileCells{1, c}{1,3}), str2double(fileCells{1, c}{1,4})];
-                    
+                    gr(groupPosition).vertices = [gr(groupPosition).vertices, str2double(fileCells{1, c}{1,2}), str2double(fileCells{1, c}{1,3}), str2double(fileCells{1, c}{1,4})];              
                 end
 
-
-
             case 'o'
-
                 objects = objects +1;
-
-                obj.objects{objects}.type = fileCells{1, c+1}{1,1};
-                
+                obj.objects{objects}.type = fileCells{1, c+1}{1,1};       
                 obj.objects{objects}.vertices = [];
 
-
-
             case 'p'
-
                 point = str2num(fileCells{1,c}{1,2});
-
                 obj.objects{objects}.vertices = [obj.objects{objects}.vertices; point];
 
-
             case 'l'
-
                 line = [str2num(fileCells{1,c}{1,2}) str2num(fileCells{1,c}{1,3})];
-
                 obj.objects{objects}.vertices = [obj.objects{objects}.vertices; line];
 
-
-
             case 'f'
-
                 face = [str2num(fileCells{1,c}{1,2}) str2num(fileCells{1,c}{1,3}) str2num(fileCells{1,c}{1,4})];
-
                 obj.objects{objects}.vertices = [obj.objects{objects}.vertices; face];
-                
                  if which_group ~= 0 
                     face = face';
                     groupPosition = find(strcmp({gr.name},{which_group}));
                     gr(groupPosition).vertices = cat(1, gr(groupPosition).vertices, face);
                     gr(groupPosition).vertices = unique(gr(groupPosition).vertices);
-                    
                 end
-
         end
-        
-
-    
-    
-    
 end
 
 
