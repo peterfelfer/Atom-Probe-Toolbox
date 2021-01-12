@@ -13,18 +13,18 @@ function [fv energy] = patchSnapToAtomPositions(fv,pos,rad)
 
 addpath('utilities_patch_normals');
 
+if istable(pos)
+    pos = [pos.x, pos.y, pos.z];
+end
 
 debug = false;
 noTris = false;
 
-if debug
-    
+if debug 
     fvOld = fv;
-    
     figure('Name','surface evolution');
     patch(fv,'FaceColor',[0 1 1],'FaceAlpha',0);
-    axis equal; rotate3d on;
-    
+    axis equal; rotate3d on;   
     tic;
 end
 
