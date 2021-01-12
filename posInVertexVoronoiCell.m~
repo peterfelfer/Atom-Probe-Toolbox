@@ -17,8 +17,7 @@ function inOrIdx = posInVertexVoronoiCell(pos,interface,vertexIdx)
 % inOrIdx:      if vertexIdx is parsed, it is a logical variable which is
 %               true if an atom is closer to a vertex in the vertex list 
 %               than any other vertex
-%               If no vertexIdx are parsed, it gives the index of the
-%               closest vertex to each atomic position.
+%               If no vertexIdx are 
 %
 
 
