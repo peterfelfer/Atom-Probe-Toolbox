@@ -1,4 +1,4 @@
-function distance = posDistanceToMesh(pos,interface)
+function location = posDistanceToMesh(pos,interface)
 % posDistanceToMesh calculates the distance of individual atoms to a mesh
 % representing e.g. an interface or any other object that can be displayed
 % as a triangulation 
@@ -12,7 +12,9 @@ function distance = posDistanceToMesh(pos,interface)
 % interface:    structure, interface or any other object with fields of faces and vertices
 %
 % OUTPUT
-% distance:     Mx1 array with M as the number of atoms, distance of the atoms in the pos file to the interface mesh
+% distance:     table with location: Mx1 array with M as the number of atoms, 
+%               distance of the atoms in the pos file to the interface mesh
+%               closestVertex: index of the vertex closest to the atom
 %
 % (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
@@ -29,3 +31,6 @@ distVec = [pos.x, pos.y, pos.z] - interface.vertices(closestVertex,:);
 
 % distance along normal through dot product
 distance = sum(normals(closestVertex,:) .* distVec,2);
+
+% output as table
+location = table(distance,closestVertex);
