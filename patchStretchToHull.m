@@ -4,8 +4,7 @@ function fv = patchStretchToHull(fv,boundary)
 
 DEBUG = false;
 
-addpath('utilities_patch_normals');
-addpath('TriangleRayIntersection');
+addpath('utilities_patch_normals/TriangleRayIntersection');
 
 %% determine which vertices belong to the boundary
 % those who belong to an edge that only belongs to one triangle
