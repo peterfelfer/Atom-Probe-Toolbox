@@ -24,7 +24,6 @@ function patchCreateExcessValue(pos,parentPos,interface,vertices)
 
 addpath('utilities_dualMesh');
 addpath('utilities_patch_normals');
-addpath('resources');
 addpath('utilities');
 
 normals = patchnormals(interface);
