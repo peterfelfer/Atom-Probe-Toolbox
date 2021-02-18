@@ -15,7 +15,7 @@ function colorScheme = colorSchemeCreate(ionTable)
 
 %% Check for ions that are twice in the ionTable because of their charge state
 
-Tnew = unique(ionTable.ionName);
+Tnew = unique(ionTable.ion);
 ionTable = table(Tnew);
 ionTable.Properties.VariableNames{1} = 'ionName';
 
