@@ -113,11 +113,13 @@ plot(r_uniqueSizes(2:end),r_y(2:end).*r_uniqueSizes(2:end),':k','LineWidth',2);
 set(gca,'YScale','log');
 set(gcf,'Color','w');
 
-legend('cluster size distribution','cluster size distribution (randomized)');
+
 xlabel('cluster size [atoms]');
 ylabel('frequency [cts]');
 
+leg = "Nmin = " + string(Nmin);
 stem(plot_limits_N,max_y,'-r','LineWidth',2,'Marker','none');
+legend('cluster size distribution','cluster size distribution (randomized)', leg);
 
 
 

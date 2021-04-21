@@ -1,5 +1,5 @@
 function [numClustered, clusterCutoff, histCounts, experimentalVolumes, randomVolumes] = voronoiVolumeAnalysis(clusterPos, pos,vis,bins, Vmax)
-% voronoivolumeAnalysisNEW calculates the Voronoi Volume for a given data set
+% voronoivolumeAnalysis calculates the Voronoi Volume for a given data set
 %
 % [numClustered clusterCutoff histCounts experimentalVolumes randomVolumes]
 % = voronoiVolumeAnalysisNEW(clusterPos, pos,vis,bins,Vmax);
@@ -34,34 +34,50 @@ end
 %% calculating the volume of the Voronoi cell of each atom 
 vol = vertexVolume(clusterPos);
 
-%calculating the volume of the Voronoi cells of a random sample of atoms
-randpos = pos(randsample(height(pos),height(clusterPos)),2:4);
-randVol = vertexVolume(randpos);
+for i = 1:2
+    if i == 1   % check if clusterCutoff is zero, if so, create a new random dataset
+    %% calculating the volume of the Voronoi cells of a random sample of atoms
+        randpos = pos(randsample(height(pos),height(clusterPos)),2:4); % random atoms from the dataset 
+        randVol = vertexVolume(randpos);
 
 
-%% determine maximum volume to plot to
-if ~exist('Vmax','var')
-    VmaxE = median(vol);
-    VmaxR = median(randVol);
-    
-     Vmax = max(VmaxE,VmaxR) * 3;
+        %% determine maximum volume to plot to
+        if ~exist('Vmax','var')
+            VmaxE = median(vol);
+            VmaxR = median(randVol);
+
+             Vmax = max(VmaxE,VmaxR) * 3;
+        end
+
+
+        volHis = histcounts(vol(vol<Vmax),bins); % blue line 
+        volHisRand = histcounts(randVol(randVol<Vmax),bins); % green line
+        emr = volHis - volHisRand;   % emr is the difference between the random histogram and the experimental, red line
+        cs = cumsum(emr); % cummulated sum of emr
+
+        % beim random datensatz kann es passieren dass er größer ist als volHis
+        % damit ist die kummulative Summe immer negativ und als numClustered kommt
+        % zum Beispiel -7 raus wenn das an erster Stelle in der Tabelle steht, 
+        % dann wird ja die 1 von x gneommen und die ist immer null...
+        % vllt verbot die eins zu nehmen von x? oder auswurf argument dass man die
+        % zufälligen ionen neu berechnen soll ? 
+
+
+        %% determining the clustering parameters
+        numClustered = max(cs); % find the max of the histogram
+        mx = find(cs == numClustered,1); % calculate in which field of the histogram is the max value 
+
+        x = linspace(0,Vmax,bins); % create an x vector from 0 to the max value with the bins
+        clusterCutoff = x(mx);
+    end
+    if clusterCutoff == 0
+        i = 1;
+    elseif clusterCutoff < min(randVol) 
+        i = 1;
+    else 
+        i = 2;
+    end
 end
-
-
-volHis = histcounts(vol(vol<Vmax),bins); % blue line 
-volHisRand = histcounts(randVol(randVol<Vmax),bins); % green line
-emr = volHis - volHisRand;   % emr is the difference between the random histogram and the experimental, red line
-cs = cumsum(emr);
-
-
-
-%% determining the clustering parameters
-numClustered = max(cs); % find the max of the histogram
-mx = find(cs == numClustered,1); % calculate in which field of the histogram is the max value 
-
-x = linspace(0,Vmax,bins); % create an x vector from 0 to the max value with the bins
-clusterCutoff = x(mx);
-
 %% plotting
 if exist('vis','var')
     %plotting results
@@ -69,15 +85,15 @@ if exist('vis','var')
     plot(x,volHis,'LineWidth',2,'DisplayName','experimental','XDataSource','x','YDataSource','volHis');
     hold on;
     plot(x,volHisRand,'g','LineWidth',2,'DisplayName','random','XDataSource','x','YDataSource','volHisRand');
-    
+
     %experimental - random
-    
+
     hold on;
     plot(x,emr,'r','LineWidth',2,'DisplayName','experimental - random','XDataSource','x','YDataSource','emr');
-    
+
     legend('experimental','random','experimental - random');
-    
-    
+
+
     xlabel('Voronoi volume of atom [nm3]');
     ylabel('frequency [cts]');
     %set(gca,'XLabel','Voronoi volume of atom [nm3]','YLabel','frequency [cts]');
@@ -89,9 +105,9 @@ end
 
 %% set outputs
 histCounts = table(volHis', volHisRand');
-histCounts.Properties .VariableNames = {'experimental', 'random'};
-experimentalVolumes = table(vol');
-experimentalVolumes.Properties.VariableNames = {'expVol'};
+histCounts.Properties.VariableNames = {'experimental', 'random'};
+experimentalVolumes = table(vol',clusterPos.x, clusterPos.y, clusterPos.z);
+experimentalVolumes.Properties.VariableNames = {'expVol', 'x', 'y', 'z'};
 randomVolumes = table(randVol', randpos.x, randpos.y, randpos.z);
 randomVolumes.Properties.VariableNames = {'randVol', 'x', 'y', 'z'};
 end

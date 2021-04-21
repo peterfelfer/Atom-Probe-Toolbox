@@ -1,4 +1,4 @@
-function [pass, Nmin, clusterCutoff, clusteredAtoms] = clusterDetermination(clusterPos,pos,Nmin)
+function [clusterParameter, clusteredAtoms, clusterPosVol, randomVolumes] = clusterDetermination(clusterPos,pos,Nmin)
 %clusterDetermination calculates with the Voronoi tesselation and the
 %Delaunay triangulation the cluster of the given dataset
 %
@@ -15,10 +15,10 @@ function [pass, Nmin, clusterCutoff, clusteredAtoms] = clusterDetermination(clus
 %
 % OUTPUT
 % pass:         logical (1 or 0) 
-%               0 the data set passes the Kolmogorov-Smirnov test, that
+%               1 the data set passes the Kolmogorov-Smirnov test, that
 %               means that the voronoi volume distribution deviates from
 %               random
-%               1 the data set does not pass the Kolmogorov-Smirnov test
+%               0 the data set does not pass the Kolmogorov-Smirnov test
 % Nmin:         at this value, the cluster has a higher probability that it
 %               it is clustered non-randomly than it's probability to be a random cluster
 % clusterCutoff:    max volume of the voronoi cell of the clustered atoms
@@ -43,20 +43,20 @@ end
 
 
 %% actual Voronoi cluster analysis
-figure;
+
 figName = [];
 figName = ['Voronoi volume analysis of ' figName];
 
-[numClustered, clusterCutoff, ~, experimentalVolumes, randomVolumes] = ...
+[numClustered, clusterCutOff, ~, experimentalVolumes, randomVolumes] = ...
     voronoiVolumeAnalysis(clusterPos, pos,true);
 
 figure;
 %% analysis of cluster sizes
 % experimental
-[clusterIdx, numClusters] = clusterIdentification(clusterPos,clusterCutoff,experimentalVolumes.expVol);
+[clusterIdx, numClusters] = clusterIdentification(clusterPos,clusterCutOff,experimentalVolumes.expVol);
 
 % random
-[randomClusterIdx, randomNumClusters] = clusterIdentification(randomVolumes, clusterCutoff, randomVolumes.randVol);
+[randomClusterIdx, randomNumClusters] = clusterIdentification(randomVolumes, clusterCutOff, randomVolumes.randVol);
 
 clusterSizes = histcounts(clusterIdx, numClusters);
 randomClusterSizes = histcounts(randomClusterIdx, randomNumClusters);
@@ -68,11 +68,16 @@ if exist('NminTmp','var')
 end
 
 %% Kolmogorov - Smirnov test:
-significanceLimit = 1.92 / sqrt(height(clusterPos)) *100;
+significanceLimit = 1.92 / sqrt(height(clusterPos)) ; % *100 Martina: ich glaube das sollte weg sein sonst passt pass nicht mehr 
 
 pass = (numClustered/height(clusterPos)) > significanceLimit;
 
 clusterPct = (numClustered/height(clusterPos)) * 100;
+if pass == 0
+    disp('the dataset does NOT pass the Kolmogorov-Smirnov test')
+else 
+    disp('the dataset PASS the Kolmogorov-Smirnov test')
+end
 % significanceLimit;
 
 %% identifying clustered atoms
@@ -80,8 +85,10 @@ significantClusterIdx = find(clusterSizes >= Nmin);
 
 % actually creating the atomic positions
 isClustered = ismember(clusterIdx,significantClusterIdx);
-%clusteredAtoms = [clusterPos(isClustered,:), clusterIdx(isClustered)'];
-
+isClusteredTable = table(clusterIdx(isClustered)', 'VariableNames', {'clusterIdx'});
+clusteredAtoms = [clusterPos(isClustered,:), isClusteredTable];
+clusterPosVol = addvars(clusterPos, experimentalVolumes.expVol);
+clusterParameter = table(pass, clusterPct, Nmin, clusterCutOff, 'VariableNames', {'KolSmir Test', 'clusterPct', 'Nmin', 'clusterCutOff'});
 
 end
 

@@ -1,4 +1,4 @@
-function [vol errCts] = vertexVolume(pointCloud,serial)
+function [vol, errCts] = vertexVolume(pointCloud,serial)
 % vertexVolume calculates the volume a point takes up in a point cloud by voronoi
 % tesselating the space within the point cloud and calculating the volume
 % of the convex hull of every point. Boundary points need special
@@ -32,7 +32,7 @@ if ~exist('serial','var')
     [Vverts, Vcells] = voronoin(coords(:,1:3));
     
     %ppm = ParforProgressStarter2('calculating voronoi volumes',numCoords,1);
-    parfor vvol = 1:numCoords
+    for vvol = 1:numCoords
         cellVertices = Vverts(Vcells{vvol},:);
         if sum(isinf(cellVertices))
             
