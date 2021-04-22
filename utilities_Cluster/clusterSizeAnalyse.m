@@ -11,7 +11,9 @@ function Nmin = clusterSizeAnalyse(expClusterSizes,ranClusterSizes)
 % ranClustersizes: random cluster sizes
 %
 % OUTPUT
-% Nmin 
+% Nmin: at this value, the cluster has a higher probability that it
+%       it is clustered non-randomly than it's probability to be a
+%       random cluster
 
 %% experimental cluster sizes
 expClusterSizes = sort(expClusterSizes);
@@ -111,6 +113,7 @@ hold on
 plot(r_uniqueSizes(2:end),r_y(2:end).*r_uniqueSizes(2:end),':k','LineWidth',2);
 
 set(gca,'YScale','log');
+set(gca,'XScale','log');
 set(gcf,'Color','w');
 
 

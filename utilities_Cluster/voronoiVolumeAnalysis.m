@@ -37,7 +37,16 @@ vol = vertexVolume(clusterPos);
 for i = 1:2
     if i == 1   % check if clusterCutoff is zero, if so, create a new random dataset
     %% calculating the volume of the Voronoi cells of a random sample of atoms
+    k = 1;
+    while k == 1 % cut out the duplicated points -> creates problems with the voronoi calculation
         randpos = pos(randsample(height(pos),height(clusterPos)),2:4); % random atoms from the dataset 
+        if height(randpos) ~= height(unique(randpos))
+            k = 1 ;
+        else
+            k = 2;
+        end
+    end  
+        
         randVol = vertexVolume(randpos);
 
 
@@ -70,10 +79,9 @@ for i = 1:2
         x = linspace(0,Vmax,bins); % create an x vector from 0 to the max value with the bins
         clusterCutoff = x(mx);
     end
-    if clusterCutoff == 0
+    if clusterCutoff == 0  || clusterCutoff < min(randVol)
         i = 1;
-    elseif clusterCutoff < min(randVol) 
-        i = 1;
+ 
     else 
         i = 2;
     end
@@ -108,6 +116,7 @@ histCounts = table(volHis', volHisRand');
 histCounts.Properties.VariableNames = {'experimental', 'random'};
 experimentalVolumes = table(vol',clusterPos.x, clusterPos.y, clusterPos.z);
 experimentalVolumes.Properties.VariableNames = {'expVol', 'x', 'y', 'z'};
+
 randomVolumes = table(randVol', randpos.x, randpos.y, randpos.z);
 randomVolumes.Properties.VariableNames = {'randVol', 'x', 'y', 'z'};
 end

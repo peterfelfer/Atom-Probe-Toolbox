@@ -8,21 +8,26 @@ function [clusterParameter, clusteredAtoms, clusterPosVol, randomVolumes] = clus
 % clusterDetermination(clusterPos,pos);
 %
 % INPUT
+% 
 % clusterPos:   pos file that contains the atoms that are in the clusters
 % pos:          pos file of the entire dataset
 % Nmin:         at this value, the cluster has a higher probability that it
 %               it is clustered non-randomly than it's probability to be a random cluster
 %
 % OUTPUT
-% pass:         logical (1 or 0) 
-%               1 the data set passes the Kolmogorov-Smirnov test, that
-%               means that the voronoi volume distribution deviates from
-%               random
-%               0 the data set does not pass the Kolmogorov-Smirnov test
-% Nmin:         at this value, the cluster has a higher probability that it
-%               it is clustered non-randomly than it's probability to be a random cluster
-% clusterCutoff:    max volume of the voronoi cell of the clustered atoms
+% clusterParameter: table that contains the genereal cluster Parameter
+%                   the KolSmirTest (1 = passed that means that the voronoi volume distribution deviates from
+%                   random , 0 = failed),
+%                   the clusterPercentage, 
+%                   Nmin (at this value, the cluster has a higher probability that it
+%                   it is clustered non-randomly than it's probability to be a
+%                   random cluster) and the 
+%                   clusterCutOff Volume (max volume of the voronoi cell of the clustered atoms)
 % clusteredAtoms:   pos file of the clustered atoms
+% clusterPosVol:    clusterPos with an additional row that contain the
+%                   calculated VornoiVolumes of each cell
+% randomVolumes     the randomly calculated Dataset and the corresponding
+%                   random Volume
 %
 % For more information read the paper:
 % Detecting and extracting clusters in atom probe data: A simple, automated
