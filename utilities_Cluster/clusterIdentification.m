@@ -36,7 +36,7 @@ end
 % clusterPos.z]); % visualisation of the triangles
 
 %% checking if the volume threshold is defined. If not, it is calculated
-if height(volThreshORpos) == 1
+if size(volThreshORpos) == [1,1]
     volThresh = volThreshORpos;
 else
     [~, volThresh] = voronoiVolumeAnalysis(clusterPos,volThreshORpos);
@@ -54,13 +54,6 @@ clusteredAtomsIndices = find(volVoronoi<=volThresh);
 %% determining in the delaunay triangulation which atoms are clustered and to which cluster they belong
 delAdjacency = delaunayToAdjacencyMat(posDelaunay,clusteredAtomsIndices);
 
-% Eine Adjazenzmatrix (manchmal auch Nachbarschaftsmatrix) eines Graphen ist
-% eine Matrix, die speichert, welche Knoten des Graphen durch eine Kante verbunden sind. 
-% Sie besitzt für jeden Knoten eine Zeile und eine Spalte, woraus sich für n Knoten 
-% eine n x n-Matrix ergibt. Ein Eintrag in der i-ten 
-% Zeile und j-ten Spalte gibt hierbei an, ob eine Kante von dem i-ten zu dem j-ten Knoten führt. 
-% Steht an dieser Stelle eine 0, ist keine Kante vorhanden – eine 1 gibt an, 
-% dass eine Kante existiert[1], siehe Abbildung rechts. (wikipedia)
 
 %[numClusters clusterIdx] = graphconncomp(delAdjacency,'Directed',false);
 [numClusters, clusterIdx] = conncomp(delAdjacency);

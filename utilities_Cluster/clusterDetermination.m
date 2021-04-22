@@ -47,6 +47,7 @@ end
 figName = [];
 figName = ['Voronoi volume analysis of ' figName];
 
+
 [numClustered, clusterCutOff, ~, experimentalVolumes, randomVolumes] = ...
     voronoiVolumeAnalysis(clusterPos, pos,true);
 
@@ -74,9 +75,9 @@ pass = (numClustered/height(clusterPos)) > significanceLimit;
 
 clusterPct = (numClustered/height(clusterPos)) * 100;
 if pass == 0
-    disp('the dataset does NOT pass the Kolmogorov-Smirnov test')
+    disp('the dataset FAILED the Kolmogorov-Smirnov test')
 else 
-    disp('the dataset PASS the Kolmogorov-Smirnov test')
+    disp('the dataset PASSED the Kolmogorov-Smirnov test')
 end
 % significanceLimit;
 
