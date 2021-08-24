@@ -1,6 +1,6 @@
 function patchToObj(patch,objName,fileName)
 % exports obj file into Wavefront obj
-% if a list (vector) of patches is parsed it will be saved in one obj file 
+% if a list (vector) of patches is parsed it will be saved in one obj file
 % object names can be parsed in 'objNames'
 %
 % patchToObj();
@@ -22,12 +22,12 @@ function patchToObj(patch,objName,fileName)
 %
 % (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
-if ~exist('patch','var')         
+if ~exist('patch','var')
     object = gco;
     patch.vertices = get(object,'vertices');
     patch.faces = get(object,'faces');
 end
-numPatch = length(patch); 
+numPatch = length(patch);
 
 if ~exist('fileName','var')             % Create filepath
     [file path] = uiputfile('*.obj','Save *.obj file to');
@@ -68,7 +68,9 @@ end
 for p = 1:numPatch
     oName = ['o ' objName{p} '\n'];
     fprintf(fid, oName);
-    fprintf(fid, 'f %u %u %u\n', patch(p).faces');
+    if not(isempty(patch(p).faces))
+        fprintf(fid, 'f %u %u %u\n', patch(p).faces');
+    end
 end
 
 
