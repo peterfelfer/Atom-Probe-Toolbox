@@ -34,7 +34,7 @@ for r = 1:numRng
     isColor = strcmp(attributes(:,1),'color');
     
     % convert ion name to table and charge state value
-    [it, cs] = ionConvertName(attributes{isIon,end});
+    [it, cs] = ionConvertName(string(attributes{isIon,end}));
     
     rangeName(r,:) = string(attributes{isName,end});
     chargeState(r,:) = cs;
