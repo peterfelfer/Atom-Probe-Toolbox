@@ -28,6 +28,7 @@ if isDecomposed
 else
     dataPath = '/atomProbeTomography/reconstruction/ion/';
 end
+dataPathDetectorEvent = '/atomProbeTomography/detectorEvent/';
 
 % hdf5 write for individual variables
 posColumnNames = pos.Properties.VariableNames;
@@ -64,39 +65,39 @@ for col = 1:width(pos)
         % epos variables
     elseif ismember(posColumnNames{col},{'tof'}) % export of ion flight times
         data = table2array(pos(:,col));
-        h5create(fileName,'/atomProbeTomography/detectorEvent/timeOfFlight/',[numEntries 1]);
-        h5write(fileName,'/atomProbeTomography/detectorEvent/timeOfFlight/',data);
-        h5writeatt(fileName,'/atomProbeTomography/detectorEvent/timeOfFlight/','unit','ns','TextEncoding','UTF-8');
+        h5create(fileName,[dataPathDetectorEvent 'timeOfFlight'],[numEntries 1]);
+        h5write(fileName,[dataPathDetectorEvent 'timeOfFlight'],data);
+        h5writeatt(fileName,[dataPathDetectorEvent 'timeOfFlight'],'unit','ns','TextEncoding','UTF-8');
         
     elseif ismember(posColumnNames{col},{'VDC'}) % export of experiment standing voltage
         data = table2array(pos(:,col));
-        h5create(fileName,'/atomProbeTomography/detectorEvent/standingVoltage',[numEntries 1]);
-        h5write(fileName,'/atomProbeTomography/detectorEvent/standingVoltage',data);
-        h5writeatt(fileName,'/atomProbeTomography/detectorEvent/standingVoltage','unit','V','TextEncoding','UTF-8');
+        h5create(fileName,[dataPathDetectorEvent 'standingVoltage'],[numEntries 1]);
+        h5write(fileName,[dataPathDetectorEvent 'standingVoltage'],data);
+        h5writeatt(fileName,[dataPathDetectorEvent 'standingVoltage'],'unit','V','TextEncoding','UTF-8');
         
     elseif ismember(posColumnNames{col},{'VP'}) % export of experiment pulse voltage
         data = table2array(pos(:,col));
-        h5create(fileName,'/atomProbeTomography/detectorEvent/voltagePulseAmplitude/',[numEntries 1]);
-        h5write(fileName,'/atomProbeTomography/detectorEvent/voltagePulseAmplitude/',data);
-        h5writeatt(fileName,'/atomProbeTomography/detectorEvent/voltagePulseAmplitude/','unit','V','TextEncoding','UTF-8');
+        h5create(fileName,[dataPathDetectorEvent 'voltagePulseAmplitude'],[numEntries 1]);
+        h5write(fileName,[dataPathDetectorEvent 'voltagePulseAmplitude'],data);
+        h5writeatt(fileName,[dataPathDetectorEvent 'voltagePulseAmplitude'],'unit','V','TextEncoding','UTF-8');
         
     elseif ismember(posColumnNames{col},{'detx'}) % export of detector x hit coordinates
         data = table2array(pos(:,col));
-        h5create(fileName,'/atomProbeTomography/detectorEvent/x/',[numEntries 1]);
-        h5write(fileName,'/atomProbeTomography/detectorEvent/x/',data);
-        h5writeatt(fileName,'/atomProbeTomography/detectorEvent/x/','unit','mm','TextEncoding','UTF-8');
+        h5create(fileName,[dataPathDetectorEvent 'x'],[numEntries 1]);
+        h5write(fileName,[dataPathDetectorEvent 'x'],data);
+        h5writeatt(fileName,[dataPathDetectorEvent 'x'],'unit','mm','TextEncoding','UTF-8');
         
     elseif ismember(posColumnNames{col},{'dety'})% export of detector y hit coordinates
         data = table2array(pos(:,col));
-        h5create(fileName,'/atomProbeTomography/detectorEvent/y/',[numEntries 1]);
-        h5write(fileName,'/atomProbeTomography/detectorEvent/y/',data);
-        h5writeatt(fileName,'/atomProbeTomography/detectorEvent/y/','unit','mm','TextEncoding','UTF-8');
+        h5create(fileName,[dataPathDetectorEvent 'y'],[numEntries 1]);
+        h5write(fileName,[dataPathDetectorEvent 'y'],data);
+        h5writeatt(fileName,[dataPathDetectorEvent 'y'],'unit','mm','TextEncoding','UTF-8');
         
     elseif ismember(posColumnNames{col},{'deltaP'})% export of detector pulse trigger intervals
         data = table2array(pos(:,col));
-        h5create(fileName,'/atomProbeTomography/detectorEvent/pulseInterval/',[numEntries 1]);
-        h5write(fileName,'/atomProbeTomography/detectorEvent/pulseInterval/',data);
-        h5writeatt(fileName,'/atomProbeTomography/detectorEvent/pulseInterval/','unit','1','TextEncoding','UTF-8');
+        h5create(fileName,[dataPathDetectorEvent 'pulseInterval'],[numEntries 1]);
+        h5write(fileName,[dataPathDetectorEvent 'pulseInterval'],data);
+        h5writeatt(fileName,[dataPathDetectorEvent 'pulseInterval'],'unit','1','TextEncoding','UTF-8');
         
     end
 
