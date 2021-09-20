@@ -1,4 +1,4 @@
-function [h, txt] = rangeAdd(spec,colorScheme,manualName)
+function [h, txt] = rangeAdd(spec,colorScheme,manualName,rangeLimits)
 % adds a range to a mass spectrum using graphical input
 % output is the handle to the area plot and the corresponding text
 %
@@ -36,6 +36,12 @@ function [h, txt] = rangeAdd(spec,colorScheme,manualName)
 %
 % manualName:   name of range if no ion is defined, following keywords
 %               are possible: 'background'. This defines a background range
+%               If it is a valid ion name including charge state and 
+%               isotope information, e.g. 16O 1H2 +, the range table is
+%               filled out analogous to a regular range
+%
+% rangeLimits: limits of the range without graphical input. Used for
+%              building up a range figure e.g. from an HDF5
 %
 % OUTPUT
 % h:            handle to the area plot of the range
@@ -48,7 +54,13 @@ ax = spec.Parent;
 axes(ax);
 
 %% user input
-lim = ginput(2);
+if not(exist('rangeLimits','var'))
+    lim = ginput(2);
+    isManualLimts = false;
+else
+    lim = rangeLimits';
+    isManualLimits = true;
+end
 
 % check how many points were marked
 isValid = false;
@@ -62,9 +74,13 @@ if isValid
     %% check for manual range name input
     isManual = exist('manualName','var'); % is a manual name present?
     isBackground = false;
+    isValidIonName = false;
     if isManual
         isBackground = strcmp(manualName,'background'); % is it a background range?
+        
     end
+    
+    
     
     %% check for overlap with already existing peak range
     plots = spec.Parent.Children;
@@ -124,6 +140,10 @@ if isValid
     % take care of manual ranges
     if isManual & ~isBackground
         [ion, chargeState] = ionConvertName(manualName);
+        if not(isnan(chargeState)) & not(any(isnan(ion.isotope)))
+            isValidIonName = true;
+        end
+        
         if ~isnan(chargeState)
             h.UserData.ion = ion;
             h.UserData.chargeState = chargeState;
@@ -230,7 +250,7 @@ if isValid
     
     % add text to denote range if it's not a background range
     if ~isBackground
-        if isManual
+        if isManual && not(isValidIonName)
             txt = text(h.XData(1),max(h.YData)*1.4,manualName,'clipping','on');
             txt.DisplayName = manualName;
         else
@@ -243,4 +263,7 @@ if isValid
         % delete function for ion text and corresponding range
         h.DeleteFcn = @(~,~) delete(txt);
     end
+    
+else
+    error('invalid number of range limits');
 end
