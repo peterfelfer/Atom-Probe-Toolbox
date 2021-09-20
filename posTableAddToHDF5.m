@@ -40,10 +40,10 @@ for col = 1:width(pos)
         h5write(fileName,[dataPath posColumnNames{col}],data);
         h5writeatt(fileName,[dataPath posColumnNames{col}],'unit','nm','TextEncoding','UTF-8');
         
-    elseif ismember(posColumnNames{col},{'chargeState','isotope','ionComplexity'}) % int type coords
-        data = table2array(pos(:,col));
-        h5create(fileName,[dataPath posColumnNames{col}],[numEntries 1]);
-        h5write(fileName,[dataPath posColumnNames{col}],data);
+%     elseif ismember(posColumnNames{col},{'chargeState','isotope','ionComplexity'}) % int type coords
+%         data = table2array(pos(:,col));
+%         h5create(fileName,[dataPath posColumnNames{col}],[numEntries 1]);
+%         h5write(fileName,[dataPath posColumnNames{col}],data);
         
     elseif ismember(posColumnNames{col},{'mc'}) % mass to charge state in Da
         data = table2array(pos(:,col));
@@ -56,11 +56,14 @@ for col = 1:width(pos)
         h5create(fileName,[dataPath 'fieldEvaporationSequenceIndex'],[numEntries 1]);
         h5write(fileName,[dataPath 'fieldEvaporationSequenceIndex'],data);
         
-    elseif ismember(posColumnNames{col},{'ion','atom'}) % categorical arrays converted to string arrays
-        %data = string(table2array(pos(:,col)));
+    % elseif ismember(posColumnNames{col},{'ion'}) % categorical arrays converted to string arrays
+%         data = string(table2array(pos(:,col)));
+%         h5create(fileName,[dataPath 'ion'],[numEntries 1]);
+%         h5write(fileName,[dataPath 'ion'],data);
         %dataType = 'string';
-        data = [1];
-        dataType = 'single';
+%         data = [1];
+%         dataType = 'single';
+        % string arrays are not supported yet with the h5write function
         
         
         % epos variables
@@ -99,7 +102,7 @@ for col = 1:width(pos)
         h5create(fileName,[dataPathDetectorEvent 'pulseInterval'],[numEntries 1]);
         h5write(fileName,[dataPathDetectorEvent 'pulseInterval'],data);
         h5writeatt(fileName,[dataPathDetectorEvent 'pulseInterval'],'unit','1','TextEncoding','UTF-8');
-        
+   
     end
 
 end
