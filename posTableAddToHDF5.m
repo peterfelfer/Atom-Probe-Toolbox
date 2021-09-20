@@ -23,20 +23,36 @@ function posTableAddToHDF5(fileName,pos)
 numEntries = height(pos);
 isDecomposed = numEntries > max(pos.ionIdx); % check if pos file is decomposed
 
-if isDecomposed
+if isDecomposed == 0 
     dataPath = '/atomProbeTomography/reconstruction/atom/';
+    h5writeatt(fileName,'/atomProbeTomography/reconstruction','isDecomposed', 'false');
 else
     dataPath = '/atomProbeTomography/reconstruction/ion/';
+    h5writeatt(fileName,'/atomProbeTomography/reconstruction','isDecomposed', 'true');
 end
+
+
 
 dataPathDetectorEvent = '/atomProbeTomography/detectorEvent/';
 
-% hdf5 write for individual variables
+%% Bring decomposed/raw pos file back to initial pos file
+% Delete the columns ion, chargeState, atom, isotope, ionComplexity
+posColumnNames = pos.Properties.VariableNames;
+for col = 1:width(pos)
+    if ismember(posColumnNames{col},{'ion','chargeState','atom', 'isotope', 'ionComplexity'})
+      pos = removevars(pos, posColumnNames{col});  
+    end
+end
+% delete duplicate rows
+pos = unique(pos);
+numEntriesNew = height(pos);
+
+%% hdf5 write for individual variables
 posColumnNames = pos.Properties.VariableNames;
 for col = 1:width(pos)    
     if ismember(posColumnNames{col},{'x','y','z'}) % float type coords
         data = table2array(pos(:,col));
-        h5create(fileName,[dataPath posColumnNames{col}],[numEntries 1]);
+        h5create(fileName,[dataPath posColumnNames{col}],[numEntriesNew 1]);
         h5write(fileName,[dataPath posColumnNames{col}],data);
         h5writeatt(fileName,[dataPath posColumnNames{col}],'unit','nm','TextEncoding','UTF-8');
         
@@ -47,13 +63,13 @@ for col = 1:width(pos)
         
     elseif ismember(posColumnNames{col},{'mc'}) % mass to charge state in Da
         data = table2array(pos(:,col));
-        h5create(fileName,[dataPath 'massToChargeState'],[numEntries 1]);
+        h5create(fileName,[dataPath 'massToChargeState'],[numEntriesNew 1]);
         h5write(fileName,[dataPath 'massToChargeState'],data);
         h5writeatt(fileName,[dataPath 'massToChargeState'],'unit','Da','TextEncoding','UTF-8');
         
     elseif ismember(posColumnNames{col},{'ionIdx'}) % field evaporation index in the sequence
         data = table2array(pos(:,col));
-        h5create(fileName,[dataPath 'fieldEvaporationSequenceIndex'],[numEntries 1]);
+        h5create(fileName,[dataPath 'fieldEvaporationSequenceIndex'],[numEntriesNew 1]);
         h5write(fileName,[dataPath 'fieldEvaporationSequenceIndex'],data);
         
     % elseif ismember(posColumnNames{col},{'ion'}) % categorical arrays converted to string arrays
@@ -65,44 +81,61 @@ for col = 1:width(pos)
 %         dataType = 'single';
         % string arrays are not supported yet with the h5write function
         
-        
         % epos variables
     elseif ismember(posColumnNames{col},{'tof'}) % export of ion flight times
         data = table2array(pos(:,col));
-        h5create(fileName,[dataPathDetectorEvent 'timeOfFlight'],[numEntries 1]);
+        h5create(fileName,[dataPathDetectorEvent 'timeOfFlight'],[numEntriesNew 1]);
         h5write(fileName,[dataPathDetectorEvent 'timeOfFlight'],data);
         h5writeatt(fileName,[dataPathDetectorEvent 'timeOfFlight'],'unit','ns','TextEncoding','UTF-8');
         
     elseif ismember(posColumnNames{col},{'VDC'}) % export of experiment standing voltage
         data = table2array(pos(:,col));
-        h5create(fileName,[dataPathDetectorEvent 'standingVoltage'],[numEntries 1]);
+        h5create(fileName,[dataPathDetectorEvent 'standingVoltage'],[numEntriesNew 1]);
         h5write(fileName,[dataPathDetectorEvent 'standingVoltage'],data);
         h5writeatt(fileName,[dataPathDetectorEvent 'standingVoltage'],'unit','V','TextEncoding','UTF-8');
         
     elseif ismember(posColumnNames{col},{'VP'}) % export of experiment pulse voltage
         data = table2array(pos(:,col));
-        h5create(fileName,[dataPathDetectorEvent 'voltagePulseAmplitude'],[numEntries 1]);
+        h5create(fileName,[dataPathDetectorEvent 'voltagePulseAmplitude'],[numEntriesNew 1]);
         h5write(fileName,[dataPathDetectorEvent 'voltagePulseAmplitude'],data);
         h5writeatt(fileName,[dataPathDetectorEvent 'voltagePulseAmplitude'],'unit','V','TextEncoding','UTF-8');
         
     elseif ismember(posColumnNames{col},{'detx'}) % export of detector x hit coordinates
         data = table2array(pos(:,col));
-        h5create(fileName,[dataPathDetectorEvent 'x'],[numEntries 1]);
+        h5create(fileName,[dataPathDetectorEvent 'x'],[numEntriesNew 1]);
         h5write(fileName,[dataPathDetectorEvent 'x'],data);
         h5writeatt(fileName,[dataPathDetectorEvent 'x'],'unit','mm','TextEncoding','UTF-8');
         
     elseif ismember(posColumnNames{col},{'dety'})% export of detector y hit coordinates
         data = table2array(pos(:,col));
-        h5create(fileName,[dataPathDetectorEvent 'y'],[numEntries 1]);
+        h5create(fileName,[dataPathDetectorEvent 'y'],[numEntriesNew 1]);
         h5write(fileName,[dataPathDetectorEvent 'y'],data);
         h5writeatt(fileName,[dataPathDetectorEvent 'y'],'unit','mm','TextEncoding','UTF-8');
         
     elseif ismember(posColumnNames{col},{'deltaP'})% export of detector pulse trigger intervals
         data = table2array(pos(:,col));
-        h5create(fileName,[dataPathDetectorEvent 'pulseInterval'],[numEntries 1]);
+        h5create(fileName,[dataPathDetectorEvent 'pulseInterval'],[numEntriesNew 1]);
         h5write(fileName,[dataPathDetectorEvent 'pulseInterval'],data);
         h5writeatt(fileName,[dataPathDetectorEvent 'pulseInterval'],'unit','1','TextEncoding','UTF-8');
    
+    elseif ismember(posColumnNames{col},{'multi'})% export of detector pulse trigger intervals
+        data = table2array(pos(:,col));
+        h5create(fileName,[dataPathDetectorEvent 'multi'],[numEntriesNew 1]);
+        h5write(fileName,[dataPathDetectorEvent 'multi'],data);
+      
+    elseif ismember(posColumnNames{col},{'atomNum'})% export of detector pulse trigger intervals
+        data = table2array(pos(:,col));
+        h5create(fileName,[dataPathDetectorEvent 'atomNum'],[numEntriesNew 1]);
+        h5write(fileName,[dataPathDetectorEvent 'atomNum'],data);
+    
+        
     end
 
+    if width(pos) >= 6
+        posType =  "epos";
+    else 
+        posType = "pos";
+    end
+    h5writeatt(fileName,'/atomProbeTomography/reconstruction','posType', posType);
+    
 end

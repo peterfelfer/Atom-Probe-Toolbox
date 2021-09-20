@@ -5,9 +5,11 @@ function pos = posTableFromHDF5(fileName)
 
 %% check for pos / epos file 
 
-attval = h5readatt(fileName,'/atomProbeTomography/reconstruction','isDecomposed');
 
-if attval == 'true'
+attval = h5readatt(fileName,'/atomProbeTomography/reconstruction','isDecomposed');
+posType = h5readatt(fileName,'/atomProbeTomography/reconstruction','posType');
+
+if attval == "false" 
     dataPath = '/atomProbeTomography/reconstruction/atom/';
 else
     dataPath = '/atomProbeTomography/reconstruction/ion/';
@@ -17,26 +19,27 @@ dataPathDetectorEvent = '/atomProbeTomography/detectorEvent/';
 
 %% get the data out of the h5 file 
 
-% stored in /atomProbeTomography/reconstruction/atom/
+% stored in /atomProbeTomography/reconstruction/atom/ or /ion
 ionIdx = h5read(fileName, [dataPath 'fieldEvaporationSequenceIndex']);
 x = h5read(fileName, [dataPath 'x']);
 y = h5read(fileName, [dataPath 'y']);
 z = h5read(fileName, [dataPath 'z']);
-mc = h5read(fileName, [dataPath 'massToChargeState']);
+mc = h5read(fileName, [dataPath 'massToChargeState']); % end for pos file
+
+if posType == "epos"
+    % stored in the group '/atomProbeTomography/detectorEvent/'
+    tof = h5read(fileName, [dataPathDetectorEvent 'timeOfFlight']);
+    VDC = h5read(fileName, [dataPathDetectorEvent 'standingVoltage']);
+    VP = h5read(fileName, [dataPathDetectorEvent 'voltagePulseAmplitude']);
+    detx = h5read(fileName, [dataPathDetectorEvent 'x']);
+    dety = h5read(fileName, [dataPathDetectorEvent 'y']);
+    deltaP = h5read(fileName, [dataPathDetectorEvent 'pulseInterval']); 
+    multi = h5read(fileName, [dataPathDetectorEvent 'multi']);
+    atomNum = h5read(fileName, [dataPathDetectorEvent 'atomNum']); % end for epos file
+end
 
 %for bug fixing
 bug = length(x);
-
-% stored in the group '/atomProbeTomography/detectorEvent/'
-tof = h5read(fileName, [dataPathDetectorEvent 'timeOfFlight']);
-VDC = h5read(fileName, [dataPathDetectorEvent 'standingVoltage']);
-VP = h5read(fileName, [dataPathDetectorEvent 'voltagePulseAmplitude']);
-detx = h5read(fileName, [dataPathDetectorEvent 'x']);
-dety = h5read(fileName, [dataPathDetectorEvent 'y']);
-deltaP = h5read(fileName, [dataPathDetectorEvent 'pulseInterval']);
-
-multi = (1 : bug)'; % not yet stored in the h5 files
-atomNum = (1 : bug)';
 
 % h5write does not support writing strings therefore just the pos file is
 % stored in an h5 data set
@@ -50,10 +53,10 @@ atomNum = (1 : bug)';
 % end
 
 
-if attval == true
-    pos = table(ionIdx, x, y, z, mc, tof, VDC, VP, detx, dety, deltaP, multi, atomNum, ion, chargeState, atom, isotope, ionComplexity); % complete decomposed epos file
+if posType == "pos"
+    pos = table(ionIdx, x, y, z, mc); % complete initial pos file
 else 
-    pos = table(ionIdx, x, y, z, mc, tof, VDC, VP, detx, dety, deltaP, multi, atomNum, ion, chargeState); % complete raw epos file
+    pos = table(ionIdx, x, y, z, mc, tof, VDC, VP, detx, dety, deltaP, multi, atomNum); % complete initial epos file
 end
 
 
