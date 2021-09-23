@@ -42,7 +42,7 @@ h.LineWidth = 2;
 h.UserData.plotType = "ion";
 h.UserData.ion = ionList;
 h.UserData.chargeState = chargeStates;
-h.ButtonDownFcn = @(~,~) disp(h.DisplayName);
+h.ButtonDownFcn = @(~,~) disp([h.DisplayName ' RGB color: ' num2str(h.Color)]);
 
 % change stem line depending on charge state if only one charge state is given
 if length(chargeStates) == 1

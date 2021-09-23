@@ -19,7 +19,7 @@ function ionTable = ionsExtractFromMassSpec(spec)
 %%
 plots = spec.Parent.Children;
 
-idx = 1;
+idx = 0;
 
 
 for pl = 1:length(plots)
@@ -32,16 +32,20 @@ for pl = 1:length(plots)
     end
     
     if type == "ion"
+        idx = idx + 1;
         ion{idx,:} = plots(pl).UserData.ion{1}.element; % do not extract isotope information
         chargeState(idx,:) = plots(pl).UserData.chargeState(1);
         ionName{idx,:} = ionConvertName(plots(pl).UserData.ion{1}.element);
         color(idx,:) = plots(pl).Color;
         
-        idx = idx + 1;
-        
     end
     
 end
 
-ionName = categorical(ionName);
-ionTable = table(ionName,chargeState,ion,color);
+if idx > 0
+    ionName = categorical(ionName);
+    ionTable = table(ionName,chargeState,ion,color);
+else
+    ionName = [];
+    ionTable = [];
+end
