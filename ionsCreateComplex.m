@@ -33,6 +33,12 @@ function ionList = ionsCreateComplex(elements,complexity,isotopeTable,chargeStat
 %
 % (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
+%% input validation
+if isstring(elements)
+    elements = cellstr(elements);
+end
+
+
 %% looking for input chargeStates
 if ~exist('chargeStates','var')
     chargeStates = [1, 2, 3];

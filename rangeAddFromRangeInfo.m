@@ -1,4 +1,4 @@
-function [h, txt, colorScheme] = rangeAddFromRRNG(spec, colorScheme, isotopeTable, rrng, ionList, useRrngColor)
+function [h, txt, colorScheme] = rangeAddFromRangeInfo(spec, colorScheme, isotopeTable, ionList, mcBegin, mcEnd, ionName, ionVolume, ionColor, useRrngColor)
 % takes a range line from an RRNG file and interprets it. It creates a
 % range and an ion if the ion does not yet exist in the plot. Ions are take
 % from the ion list provided and compared to the ions in the range file. 
@@ -8,48 +8,23 @@ function [h, txt, colorScheme] = rangeAddFromRRNG(spec, colorScheme, isotopeTabl
 % colors are either overwritten or missing colors are added. the initial
 % colorScheme can also be empty.
 
-rrng = char(rrng);
-
 % default is the use of the exisiting color scheme
 if not(exist('useRrngColor','var'))
     useRrngColor = false;
 end
 
-% constants and data preparation
-HEXRANGE = 256;
-rrng = [rrng ' '];
-
 % constants for ion fitting
 IONFITTYPE = 'most abundant';
 
-
-
-% interpret line
-%ion volume TODO - GET INTO RANGE
-vol = str2num(extractBefore(rrng(strfind(rrng,'Vol')+4:end),' '));
-
-% ion color
-colHex = extractBefore(rrng(strfind(rrng,'Color')+6:end),' ');
-ionColor = [hex2dec(colHex(1:2)) hex2dec(colHex(3:4)) hex2dec(colHex(5:6))]/HEXRANGE;
-
-% range limits
-rangeLimits = str2num(extractBefore(extractAfter(rrng,'='),'Vol'));
-
-% ion type - find match in ion list
-ionStr = strtrim(extractAfter(extractAfter(extractBefore(rrng,'Color'),'Vol'),' '));
-ionStr = ionStr(ionStr ~= ':');
-ionStr = ionConvertName(ionConvertName(ionStr)); %back and forth conversion for sanity checking
-
 % checking if an ion from the ion list can be identified in the range
-potentialIons = ionList(ionList.ion == ionStr,:);
-
+potentialIons = ionList(ionList.ion == ionName,:);
 
 
 if isempty(potentialIons)
-    disp(['ion ' ionStr ' is not on ion list. pls expand list to include ion']);
+    disp(['ion ' ionName ' is not on ion list. pls expand list to include ion']);
     isIn = 0;
 else
-    isIn = potentialIons.mc > rangeLimits(1) & potentialIons.mc < rangeLimits(2);
+    isIn = potentialIons.mc > mcBegin & potentialIons.mc < mcEnd;
     potentialIons = potentialIons(isIn,:);
     chargeState = nnz(char(potentialIons.ionIsotopic(1)) == '+');
 end
@@ -84,8 +59,8 @@ elseif nnz(isIn) > 1
 else
     ion = char(potentialIons.ionIsotopic);
     
-    [h, txt] = rangeAdd(spec,colorScheme,ion,[rangeLimits(1) rangeLimits(2)]);
-    h.UserData.ionVolume = vol;
+    [h, txt] = rangeAdd(spec,colorScheme,ion,[mcBegin mcEnd]);
+    h.UserData.ionVolume = ionVolume;
     h.UserData.ionVolumeUnit = 'nm3';
     addIon = true;
 end
