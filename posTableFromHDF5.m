@@ -1,3 +1,4 @@
+
 function pos = posTableFromHDF5(fileName)
 % posTableFromHDF5 extract the pos/epos table from an h5 file
 %   Detailed explanation goes here
@@ -7,7 +8,7 @@ function pos = posTableFromHDF5(fileName)
 
 
 attval = h5readatt(fileName,'/atomProbeTomography/reconstruction','isDecomposed');
-posType = h5readatt(fileName,'/atomProbeTomography/reconstruction','posType');
+
 
 if attval == "false" 
     dataPath = '/atomProbeTomography/reconstruction/atom/';
@@ -16,6 +17,15 @@ else
 end
 
 dataPathDetectorEvent = '/atomProbeTomography/detectorEvent/';
+% check for posType
+    attrInfo = h5info(fileName,'/atomProbeTomography/detectorEvent'); 
+    allDatasets = {attrInfo.Datasets.Name}.';
+    tof = strcmp('timeOfFlight', allDatasets);
+    if sum(tof) == 1 
+        posType = "epos";
+    else 
+        posType = "pos";
+    end
 
 %% get the data out of the h5 file 
 
@@ -33,9 +43,18 @@ if posType == "epos"
     VP = h5read(fileName, [dataPathDetectorEvent 'voltagePulseAmplitude']);
     detx = h5read(fileName, [dataPathDetectorEvent 'x']);
     dety = h5read(fileName, [dataPathDetectorEvent 'y']);
-    deltaP = h5read(fileName, [dataPathDetectorEvent 'pulseInterval']); 
-    multi = h5read(fileName, [dataPathDetectorEvent 'multi']);
-    atomNum = h5read(fileName, [dataPathDetectorEvent 'atomNum']); % end for epos file
+    deltaP = h5read(fileName, [dataPathDetectorEvent 'pulseInterval']);
+    %check if multi is stored in the HDF5 file
+    multiCheck = strcmp('multi', allDatasets);
+    if sum(multiCheck) == 1
+        multi = h5read(fileName, [dataPathDetectorEvent 'multi']);
+    end
+    
+    atomNumCheck = strcmp('atomNum', allDatasets);
+    if sum(atomNumCheck) == 1
+        atomNum = h5read(fileName, [dataPathDetectorEvent 'atomNum']);
+    end
+    % end for epos file
 end
 
 %for bug fixing
@@ -55,8 +74,12 @@ bug = length(x);
 
 if posType == "pos"
     pos = table(ionIdx, x, y, z, mc); % complete initial pos file
-else 
-    pos = table(ionIdx, x, y, z, mc, tof, VDC, VP, detx, dety, deltaP, multi, atomNum); % complete initial epos file
+else
+    if sum(multiCheck) + sum(atomNumCheck)== 2
+        pos = table(ionIdx, x, y, z, mc, tof, VDC, VP, detx, dety, deltaP, multi, atomNum); % complete initial epos file
+    else
+        pos = table(ionIdx, x, y, z, mc, tof, VDC, VP, detx, dety, deltaP);
+    end
 end
 
 

@@ -136,6 +136,6 @@ for col = 1:width(pos)
     else 
         posType = "pos";
     end
-    h5writeatt(fileName,'/atomProbeTomography/reconstruction','posType', posType);
+    % h5writeatt(fileName,'/atomProbeTomography/reconstruction','posType', posType);
     
 end
