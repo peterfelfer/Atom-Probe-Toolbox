@@ -39,7 +39,7 @@ if not(isempty(potentialIons))
         colorScheme.color(end,:) = ionColor;
         
         % if it exists, override needs to be activated
-    elseif any(colorScheme.ion == potentialIons.ion(1)) & useRrngColor
+    elseif any(colorScheme.ion == potentialIons.ion(1)) && useRrngColor
         colorScheme.color(colorScheme.ion == potentialIons.ion(1),:) = ionColor;
     end
 end

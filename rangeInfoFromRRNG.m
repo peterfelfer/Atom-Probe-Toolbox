@@ -9,9 +9,16 @@ rrngLine = [rrngLine ' '];
 
 if strcmp(rrngLine(1:5),'Range')
     % range limits
-    rangeLimits = str2num(extractBefore(extractAfter(rrngLine,'='),'Vol'));
-    mcBegin = min(rangeLimits);
-    mcEnd = max(rangeLimits);
+      rangeLimits = extractBefore(extractAfter(rrngLine,'='),'Vol');
+      rangeLimits = replace(rangeLimits, ',', '.');
+      mcBegin = str2double(extractBefore(rangeLimits, ' '));
+      mcEnd = str2double(extractAfter(rangeLimits, ' '));
+      
+%     rangeLimits = str2num(extractBefore(extractAfter(rrngLine,'='),'Vol'));
+%     mcBegin = min(rangeLimits);
+%     mcEnd = max(rangeLimits);
+
+        
     
     % ion type - find match in ion list
     ionName = strtrim(extractAfter(extractAfter(extractBefore(rrngLine,'Color'),'Vol'),' '));
