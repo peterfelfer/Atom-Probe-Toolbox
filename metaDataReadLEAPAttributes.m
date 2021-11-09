@@ -40,7 +40,7 @@ end
 meta(contains(meta(:,1),'experiment/pulsePeriod'),2) = num2cell((1/intRow.PulseFrequency_Hz_)*10^9);
 meta(contains(meta(:,1),'instrument/flightPathLength'),2) = num2cell(intRow.FlightPathLength_mm_);
 if ~isnan(intRow.LaserPulseEnergy_nJ_)
-    meta(contains(meta(:,1),'experiment/laserPulseEnergynJ'),2) = num2cell(intRow.LaserPulseEnergy_nJ_);
+    meta(contains(meta(:,1),'experiment/laserPulseEnergy'),2) = num2cell(intRow.LaserPulseEnergy_nJ_);
     meta(contains(meta(:,1),'experiment/pulseType'),2) = {'laserPulsed'};
 end
 meta(contains(meta(:,1),'experiment/notes'),2) = intRow.Comments;
