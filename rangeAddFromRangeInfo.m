@@ -1,9 +1,9 @@
 function [h, txt, colorScheme] = rangeAddFromRangeInfo(spec, colorScheme, isotopeTable, ionList, mcBegin, mcEnd, ionName, ionVolume, ionColor, useRrngColor)
 % takes a range line from an RRNG file and interprets it. It creates a
 % range and an ion if the ion does not yet exist in the plot. Ions are take
-% from the ion list provided and compared to the ions in the range file. 
+% from the ion list provided and compared to the ions in the range file.
 %
-% 
+%
 % the output color scheme has the colors from the range file. Pre-existing
 % colors are either overwritten or missing colors are added. the initial
 % colorScheme can also be empty.
@@ -25,8 +25,12 @@ if isempty(potentialIons)
     isIn = 0;
 else
     isIn = potentialIons.mc > mcBegin & potentialIons.mc < mcEnd;
-    potentialIons = potentialIons(isIn,:);
-    chargeState = nnz(char(potentialIons.ionIsotopic(1)) == '+');
+    if any(isIn)
+        potentialIons = potentialIons(isIn,:);
+        chargeState = nnz(char(potentialIons.ionIsotopic(1)) == '+');
+    else
+        isIn = 0;
+    end
 end
 
 
@@ -37,7 +41,7 @@ if not(isempty(potentialIons))
     if not(any(colorScheme.ion == ionName))
         colorScheme.ion(end+1) = ionName;
         colorScheme.color(end,:) = ionColor;
-        
+
         % if it exists, override needs to be activated
     elseif any(colorScheme.ion == potentialIons.ion(1)) && useRrngColor
         colorScheme.color(colorScheme.ion == potentialIons.ion(1),:) = ionColor;
@@ -58,7 +62,7 @@ elseif nnz(isIn) > 1
     addIon = true;
 else
     ion = char(potentialIons.ionIsotopic);
-    
+
     [h, txt] = rangeAdd(spec,colorScheme,ion,[mcBegin mcEnd]);
     h.UserData.ionVolume = ionVolume;
     h.UserData.ionVolumeUnit = 'nm3';
@@ -73,7 +77,7 @@ if addIon
     il = ionsExtractFromMassSpec(spec);
     if isempty(il)
         ionAdd(spec,char(potentialIons.ion(1)),chargeState,isotopeTable,colorScheme,0,0,IONFITTYPE,0.1);
-        
+
     elseif not(any(il.chargeState == chargeState & il.ionName == char(potentialIons.ion(1))))
         ionAdd(spec,char(potentialIons.ion(1)),chargeState,isotopeTable,colorScheme,0,0,IONFITTYPE,0.1);
     end
