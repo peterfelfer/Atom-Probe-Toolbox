@@ -1,0 +1,20 @@
+function pos = posReconstruct3DGeiser(pos,flightPathLength,detectorEfficiency,effectiveDetectorArea,ionVolume,radiusEvolution,ICF,objects)
+%atom probe reconstruction after: Gault et al., Ultramicroscopy 111 (2011) 448 - 457
+%detx, dety are the detector hit coordinates in mm
+%kf is the field factor and ICF is the image compression factor
+% for reflectron data an image correction is required!
+
+%% fundamental data reconstruction
+% detector coordinates in polar form
+[ang, rad] = cart2pol(detx, dety);
+
+% launch angle relaive to specimen axis
+thetaP = atan(rad / flightLength); % mm/mm
+
+% image compression correction
+theta = thetaP + asin((ICF - 1) * sin(thetaP));
+
+% distance from axis and z shift of each hit
+[zP, d] = pol2cart(theta, Rspec); % nm
+
+%% co-reconstruction of objects
