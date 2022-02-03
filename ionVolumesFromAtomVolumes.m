@@ -20,7 +20,10 @@ function ionVolumeList = ionVolumesFromAtomVolumes(ions,isotopeTable)
 %% input validation
     
 if istable(ions)
-    ions = categorical(ions.ion(ions.ionComplexity >= 1));
+    ions = categorical(ions.ion);
+elseif isstring(ions)
+    ions = split(ions);
+    ions = categorical(ions);
 else
     ions = categorical(ions);
 end
