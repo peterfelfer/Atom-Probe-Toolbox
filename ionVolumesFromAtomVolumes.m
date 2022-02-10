@@ -43,7 +43,7 @@ for  i = 1:height(ions)
         k = k+volumeElement;
     end
     ionVolume(i,1) = k;
-    waitbar(i/length(ions),wb)
+    waitbar(i/height(ions),wb)
 end
 
 ionVolumeList = addvars(ions, ionVolume); % Ionen Liste mit gewichten 
@@ -74,7 +74,7 @@ for i = 1:height(ionVolumeList)
             ions.testVolumen(j) = ionVolumeList.ionVolume(i);
         end 
     end 
-    waitbar(i/length(ionVolumeList),wb)
+    waitbar(i/height(ionVolumeList),wb)
 end
 
 
