@@ -1,7 +1,9 @@
-function rangeAdd_cllBck(hsrc, ~)
+function rangeAdd_cllBck(fH)
 
 % simple callback function to jump to next ion
 
-eventName = get(gcf,'SelectionType');
+eventName = get(fH,'SelectionType');
 
-disp(eventName);
+if strcmp(eventName,'alt')
+   return; 
+end
