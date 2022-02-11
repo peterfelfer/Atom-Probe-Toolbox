@@ -29,6 +29,7 @@ zP = radiusEvolution - zP;
 
 % accumulative part of z
 omega = 1 ./ ionVolume / detectorEfficiency; % atomic volume in nm^3
+omega(isnan(omega)) = 0;
 
 % magnification M at ion index
 M = flightPathLength./ICF ./radiusEvolution;
