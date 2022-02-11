@@ -1,10 +1,7 @@
 function roi_Obj = roiFromObj(obj)
-% ionVolumesFromAtomVolumes outputs a list of ion volumes based on the ions
-% that are contained in the variable ions. 
-% As input parameters table, categorical or an array of elements is
-% possible.
+% roiFromObj loads any .obj-data and forms it into a roi
 %
-% [ionVolumeList, ionsOut] = ionVolumesFromAtomVolumes(ions,isotopeTable);
+% roi_Obj = roiFromObj(obj)
 %
 % INPUT
 %
