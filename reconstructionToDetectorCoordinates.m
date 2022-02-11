@@ -30,10 +30,9 @@ function detectorCoordinates = reconstructionToDetectorCoordinates(reconstructio
 % coordinated, as large datasets lead to excessive memory use and compute
 % times. Downsampled dataset sizes of 10^5 - 10^6 are reasonable on a
 % machine with 16GB RAM. Use e.g.: 
-%
 % numSampledAtoms = 1E5;
 % sample = sort(randsample(height(pos),numSampledAtoms));
-% fvDetector.vertices = object2detectorCoords(fv.vertices,pos(sample,:));
+% fvDetector.vertices = reconstructionToDetectorCoordinates(fv.vertices,pos(sample,:));
 %
 % (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
