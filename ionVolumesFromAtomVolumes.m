@@ -55,7 +55,7 @@ ionVolumeList = addvars(ionsCat, ionVolume);
 
 [ionsOut, order] = outerjoin(ions,ionVolumeList,"Type","left","LeftKeys","ion",...
     "RightKeys","ionName",'RightVariables','ionVolume');
-ionsOut(order,:)=ionsOut;
+ionsOut(order,:) = ionsOut;
 
     
 end
