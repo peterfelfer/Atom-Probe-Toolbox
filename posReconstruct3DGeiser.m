@@ -1,4 +1,4 @@
-function [pos, objects] = posReconstruct3DGeiser(pos,flightPathLength,...
+function [pos, objectsR] = posReconstruct3DGeiser(pos,flightPathLength,...
     detectorEfficiency,effectiveDetectorArea,ionVolume,radiusEvolution,...
     ICF,objects)
 %atom probe reconstruction after: Gault et al., Ultramicroscopy 111 (2011) 448 - 457
@@ -28,10 +28,10 @@ theta = thetaP + asin((ICF - 1) * sin(thetaP));
 zP = radiusEvolution - zP;
 
 % accumulative part of z
-omega = 1 ./ ionVolume; % atmic volume in nm^3
+omega = 1 ./ ionVolume / detectorEfficiency; % atomic volume in nm^3
 
 % magnification M at ion index
-M = flightPathLength./(ICF * radiusEvolution);
+M = flightPathLength./ICF ./radiusEvolution;
 % currently evaporating area of the specimen
 specArea = effectiveDetectorArea ./ M.^2;
 %individual depth increment
@@ -52,11 +52,11 @@ if exist('objects','var')
         [ang, rad] = cart2pol(objects(o).vertices(:,1),objects(o).vertices(:,2));
         
         % launch angle relaive to specimen axis
-        thetaP = atan(rad / flightLength); % mm/mm
+        thetaP = atan(rad / flightPathLength); % mm/mm
         theta = thetaP + asin((ICF - 1) * sin(thetaP));
         
         % distance from axis and z shift of each hit
-        [zP, d] = pol2cart(theta, Rspec(round(objects(o).vertices(:,3)))); % nm
+        [zP, d] = pol2cart(theta, radiusEvolution(round(objects(o).vertices(:,3)))); % nm
         
         % x and y coordinates from the angle on the detector and the distance to
         % the specimen axis.
@@ -64,7 +64,7 @@ if exist('objects','var')
         
         
         % the z shift with respect to the top of the cap is Rspec - zP
-        zP = Rspec(round(objects(o).vertices(:,3))) - zP;
+        zP = radiusEvolution(round(objects(o).vertices(:,3))) - zP;
         
         objectsR(o).vertices(:,3) = cumZ(round(objects(o).vertices(:,3))) + zP;
         
