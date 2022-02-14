@@ -87,7 +87,11 @@ for ion = 1:length(unrangedIonLocations)
     % put a marker there
     
     % range the peak
-    rangeAdd(spec,colorScheme);
+    rngH = rangeAdd(spec,colorScheme);
+    
+    %if isempty(rngH)
+    %    return
+    %end
 end
 
 spec.Parent.XLim = xPlotLimits; %revert to old plot limits.

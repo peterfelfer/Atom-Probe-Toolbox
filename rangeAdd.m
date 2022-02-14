@@ -55,7 +55,15 @@ axes(ax);
 
 %% user input
 if not(exist('rangeLimits','var'))
-    lim = ginput(2);
+    % mbIdx defines mouse button (1: left, 2: middle, 3: right)
+    [xLim, yLim, mbIdx] = ginput(2); 
+    if sum(mbIdx==3)>0
+        h = [];
+        txt = [''];
+        return
+    else
+        lim = [xLim,yLim];
+    end
     isManualLimts = false;
 else
     lim = rangeLimits';
