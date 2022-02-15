@@ -36,7 +36,15 @@ for pl = 1:length(plots)
         
         mcbegin(rngIdx,:) = plots(pl).XData(1);
         mcend(rngIdx,:) = plots(pl).XData(end);
-        if istable(plots(pl).UserData.ion)
+        % errors in rangeAdd lead to area plots without allocated name
+        if sum(strcmp(fieldnames(plots(pl).UserData),'ion')) == 0
+            rangeName{rngIdx,:} = 'not assigned';
+            chargeState(rngIdx,:) = NaN;
+            ion{rngIdx,:} = table({'not assigned'});
+            
+            display(['Range between ' num2str(round(mcbegin./0.01).*0.01) ' and ' num2str(round(mcend./0.01).*0.01) ...
+                    ' cannot be allocated to ion/atom!']);
+        elseif istable(plots(pl).UserData.ion) 
             rangeName{rngIdx,:} = ionConvertName(plots(pl).UserData.ion.element);
             ion{rngIdx,:} = plots(pl).UserData.ion;
             chargeState(rngIdx,:) = plots(pl).UserData.chargeState;
