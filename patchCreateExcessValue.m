@@ -39,8 +39,8 @@ closest = dsearchn(interface.vertices,delaunayn(interface.vertices),[parentPos.x
 
 
 % if local IE values are calculated, only atomic positions associated with
-% the vertices on the vertex list are used
-if exist('vertices','var') || isempty(vertices)
+% the vertices on the vertex list are used (if they are not empty)
+if nargin > 3 && ~isempty(vertices)
     isLocal = ismember(closest,vertices);
     parentPos = parentPos(isLocal,:);
     closest = closest(isLocal,:);
