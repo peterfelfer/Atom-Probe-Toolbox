@@ -37,16 +37,8 @@ vol = vertexVolume(clusterPos);
 for i = 1:2
     if i == 1   % check if clusterCutoff is zero, if so, create a new random dataset
     %% calculating the volume of the Voronoi cells of a random sample of atoms
-    k = 1;
-    while k == 1 % cut out the duplicated points -> creates problems with the voronoi calculation
+
         randpos = pos(randsample(height(pos),height(clusterPos)),2:4); % random atoms from the dataset 
-        if height(randpos) ~= height(unique(randpos))
-            k = 1 ;
-        else
-            k = 2;
-        end
-    end  
-        
         randVol = vertexVolume(randpos);
 
 
