@@ -10,7 +10,7 @@ function [pos, objectsR] = posReconstruct3DGeiser(pos,flightPathLength,...
 % detector coordinates in polar form
 [ang, rad] = cart2pol(pos.detx, pos.dety);
 
-% launch angle relaive to specimen axis
+% launch angle relative to specimen axis
 thetaP = atan(rad / flightPathLength); % mm/mm
 
 % image compression correction

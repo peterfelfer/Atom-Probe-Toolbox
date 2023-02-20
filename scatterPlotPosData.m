@@ -96,14 +96,14 @@ for pl = 1:numPlots % number of species
     
     % check if color already exist in colorScheme, if not, an error will
     % appear
-    iT = ionConvertName(species{1,pl});
-    iN = ionConvertName(iT);
-    iC = cellstr(iN);
-    iCat = categorical(iC);
-    colorExist = (colorScheme.ion==iCat);
-    if sum(colorExist)==0 
-       error('color of the molecule is not in the colorScheme. Please add color to your colorScheme with colorSchemeIonAdd.m')
-    end
+%     iT = ionConvertName(species{1,pl});
+%     iN = ionConvertName(iT);
+%     iC = cellstr(iN);
+%     iCat = categorical(iC);
+%     colorExist = (colorScheme.ion==iCat);
+%     if sum(colorExist)==0 
+%        error('color of the molecule is not in the colorScheme. Please add color to your colorScheme with colorSchemeIonAdd.m')
+%     end
     
     
     % finding the atoms in the pos file
