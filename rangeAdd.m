@@ -228,7 +228,7 @@ if isValid
         h.UserData.ion = potentialIon{1};
         h.UserData.chargeState = potentialIonChargeState(1);
         h.DisplayName = ionConvertName(h.UserData.ion,h.UserData.chargeState);
-        h.FaceColor = colorScheme.color(colorScheme.ion == ionConvertName(h.UserData.ion.element),:);
+%         h.FaceColor = colorScheme.color(colorScheme.ion == ionConvertName(h.UserData.ion.element),:);
         
         
     elseif ~isManual % selection
@@ -250,8 +250,16 @@ if isValid
         h.UserData.ion = potentialIon{idx};
         h.UserData.chargeState = potentialIonChargeState(idx);
         h.DisplayName = ionConvertName(h.UserData.ion,h.UserData.chargeState);
-        h.FaceColor = colorScheme.color(colorScheme.ion == ionConvertName(h.UserData.ion.element),:);
+%         h.FaceColor = colorScheme.color(colorScheme.ion == ionConvertName(h.UserData.ion.element),:);
     end
+    
+    % check for color in the color Scheme
+    if sum(colorScheme.ion == ionConvertName(h.UserData.ion.element)) == 1
+       h.FaceColor = colorScheme.color(colorScheme.ion == ionConvertName(h.UserData.ion.element),:);
+    else
+        delete(h);
+        error('This ion does not exist in the colorScheme. Please add the ion with a color to the colorScheme with colorSchemeIonAdd()');
+    end 
     
     % define for all hit multiplicities
     h.UserData.hitMultiplicities = [0 Inf];

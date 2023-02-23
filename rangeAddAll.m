@@ -27,6 +27,27 @@ function rangeAddAll(spec,colorScheme,rangeMargin,useMin)
 xPlotLimits = spec.Parent.XLim; % current plot limits
 yPlotLimits = spec.Parent.YLim; % current plot limits
 
+%% check for color of the ion in the color Scheme
+
+ionTable = ionsExtractFromMassSpec(spec);
+% find categories in ionTable and colorScheme
+testIonTable =  categories(ionTable.ionName);
+testColorScheme = categories(colorScheme.ion);
+% check if ion is in colorScheme
+       compIonColor = zeros(size(testIonTable));
+        for k = 1:height(testColorScheme)
+        compIonColor(strncmp(testIonTable, testColorScheme(k,1), 15)) = k;
+        end
+        
+        % find zeros = no ion defined
+        posZeros = find(~compIonColor);
+        if posZeros > 0
+            error('Ions in the mass spectra have no defined color in the colorScheme. Please add the ion to the colorScheme with colorSchemeIonAdd()');
+        end 
+        
+        
+
+
 
 
 %% find individual peaks and determine if a range is defined
