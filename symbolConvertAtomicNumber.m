@@ -21,7 +21,7 @@ if exist('input','var')
         case 'H'
             symnum = 1;
 
-        case 'He'
+        case 'D'
             symnum = 2;
 
         case 'Li'
@@ -382,7 +382,7 @@ if exist('input','var')
             symnum = 'H';
 
         case 2 
-            symnum = 'He';
+            symnum = 'D';
 
         case 3
             symnum = 'Li';

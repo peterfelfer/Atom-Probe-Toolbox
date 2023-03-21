@@ -124,8 +124,13 @@ for pl = 1:numPlots % number of species
         if height(ionTable) > 1
             error('plotting of ions based on isotopic information not currently supported');
         end
-        speciesIdx = find(pos.atom == ionConvertName(ionTable.element) & pos.isotope == ionTable.isotope);
-        color = colorScheme.color(colorScheme.ion == ionConvertName(ionTable.element),:);
+        if ionTable.element == 'Da'
+                  color = colorScheme.color(colorScheme.ion == species{pl},:);
+            speciesIdx = find(pos.ion == species{pl});
+        else
+            speciesIdx = find(pos.atom == ionConvertName(ionTable.element) & pos.isotope == ionTable.isotope);
+            color = colorScheme.color(colorScheme.ion == ionConvertName(ionTable.element),:);
+        end
         
     elseif ~any(isnan(ionTable.isotope)) && ~isnan(ionChargeState)
         error('plotting of ions based on isotopic information not currently supported');
@@ -135,12 +140,19 @@ for pl = 1:numPlots % number of species
         speciesIdx = find(pos.ion == ionConvertName(ionTable.element) & pos.chargeState == ionChargeState);
         color = colorScheme.color(colorScheme.ion == ionConvertName(ionTable.element),:);
     % finds specific ions without chargestate
+    elseif sum(colorScheme.ion == species{pl}) == 1
+        color = colorScheme.color(colorScheme.ion == species{pl},:);
+        speciesIdx = find(pos.ion == species{pl});
     else
+        % check if ion is in colorScheme
+        if sum(colorScheme.ion == ionTable.element)< 1
+            error('ion is not defined in the colorScheme')
+        end
         speciesIdx = find(pos.ion == ionConvertName(ionTable.element));
         if height(ionTable) == 1
             displayName = [displayName ' (ion)'];
         end
-        color = colorScheme.color(colorScheme.ion == ionConvertName(ionTable.element),:);
+     color = colorScheme.color(colorScheme.ion == ionConvertName(ionTable.element),:);
         
     end
     

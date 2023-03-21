@@ -139,7 +139,9 @@ if isValid
         end
     end
     %%
-    
+    if lim(1) == lim (2)
+        error('manual input failed, try again')
+    end
     isIn = (spec.XData > lim(1)) & (spec.XData < lim(2));
     h = area(spec.XData(isIn),spec.YData(isIn));
     h.FaceColor = [1 1 1];
@@ -253,8 +255,14 @@ if isValid
 %         h.FaceColor = colorScheme.color(colorScheme.ion == ionConvertName(h.UserData.ion.element),:);
     end
     
+    % check for manual name
+    
+    
+    
     % check for color in the color Scheme
-    if sum(colorScheme.ion == ionConvertName(h.UserData.ion.element)) == 1
+    if isManual == 1 && sum(colorScheme.ion == manualName) == 1
+        h.FaceColor = colorScheme.color(colorScheme.ion == manualName,:);
+    elseif sum(colorScheme.ion == ionConvertName(h.UserData.ion.element)) == 1
        h.FaceColor = colorScheme.color(colorScheme.ion == ionConvertName(h.UserData.ion.element),:);
     else
         delete(h);

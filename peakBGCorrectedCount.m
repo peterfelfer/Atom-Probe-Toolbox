@@ -14,13 +14,16 @@ function [peakData] = peakBGCorrectedCount(pos, varargin)
 % INPUT
 % massSpec   a massSpec plot - created with massSpecPlot.m
 % pos        pos file - in raw format
-% ionName    ion Name in this form [14N 12C2] it is important to write the
+% ionName    ion Name in this form [14N 12C2 +] it is important to write the
 %            specific isotopes
 % boundary   range in Da before and after the peak that should be used for
 %            background correction either one value or two [3 3] are
-%            allowed. If no value is parsed, the default value of 1 Da is used 
+%            allowed. If no value is parsed, the default value of 0.5 Da is used 
 % figure     true - figure window is created (default)
 %            false - figure window is suppressed
+% offset     if you want to have an offset between the range from the
+%            rangeTable and the background correction range just possible
+%            with boundaries
 % options    'r': add a fictional range and calculate the signal to background for that
 %            range
 %            'a': same as 'r', but automatically created ranges by optimising the
@@ -51,16 +54,21 @@ rngLabelHeight = 0.65; % height of the stem plot delineating the range
 % rangeTable = rangesExtractFromMassSpec(massSpec);
 
 %% check for RAW pos file
-isTableCol = @(pos, atom) ismember(atom, pos.Properties.VariableNames);
-rawCheck = isTableCol(pos, 'atom');
-if rawCheck == 1     
-     pos = posUnDecompose(pos);
+if ismember('atom',posIn.Properties.VariableNames)
+    posIn = posUnDecompose(posIn);
 end
+% isTableCol = @(pos, atom) ismember(atom, pos.Properties.VariableNames);
+% rawCheck = isTableCol(pos, 'atom');
+% if rawCheck == 1     
+%      pos = posUnDecompose(pos);
+% end
 
 %% Check for variable input and divide it to ionNameTable, boundary and options
 
 % preset
 figOut = 1;
+t = 0;
+offset = 0;
 
 
 for k = 1:length(varargin)
@@ -73,6 +81,9 @@ for k = 1:length(varargin)
         end
     elseif ~ischar(varargin{k})&& length(varargin{k})>1
         boundary = varargin{k};
+        t = 1; % count index - first numbers are for boundary second for offset
+    elseif ~ischar(varargin{k})&& length(varargin{k})>1 && t == 1;
+        offset = varargin{k};
     elseif ischar(varargin{k}) && length(varargin{k})==1
         options = varargin{k};
     elseif islogical(varargin{k})
@@ -102,14 +113,18 @@ if exist('boundary', 'var') && exist('ionNameTable', 'var')
         mcEnd = rangeTable.mcend(i);      
     end
 
+    if exist('boundary', 'var') && length(boundary) == 1
+        boundary = [boundary boundary]; 
+    end
+    if exist('offset', 'var') && length(offset) == 1
+        offset = [offset offset];
+    end
+    
     % use boundary to get xLim
-
     if ~exist('boundary', 'var') % no boundary - use default value 1Da
-        xLim = [mcBegin-1, mcBegin, mcEnd, mcEnd+1];
+        xLim = [mcBegin-0.5, mcBegin, mcEnd, mcEnd+0.5];
     elseif length(boundary)== 2 % specific background calculation width before and after peak range
-       xLim = [mcBegin-boundary(1), mcBegin, mcEnd, mcEnd + boundary(2)];
-    elseif length(boundary) == 1 % same value for before and after
-        xLim = [mcBegin-boundary, mcBegin, mcEnd, mcEnd+boundary];
+       xLim = [mcBegin-offset(1)-boundary(1), mcBegin-offset(1), mcEnd+offset(2), mcEnd+offset(2)+ boundary(2)];
     end
 else
     % get baseline input
@@ -155,7 +170,7 @@ in = or(inBefore,inAfter);
 
 %% get the counts per bin    
 % neues Count - wie viele ionen hab ich pro bin?
-counts = hist(pos.mc,mcScale); % for the entire dataset
+counts = hist(pos.mc,mcScale); 
 %brauch ich vllt nicht wegen entire range 
 cntData = counts(in); % just select the bins that are in the range 
 % calculation Range - range based for the calculation with the adjacent
@@ -218,7 +233,7 @@ if figOut == 1
     txt = {['ions in peak: ' num2str(round(pkcnt))],...
         ['pct of all ions: ' num2str(pct,3) sym],...
         ['peak location: ' num2str(pkloc) ' Da']};
-    %%%%%%%%%%%%%%%%% aber hier eigentlich nach 'r' und 'a' und vor OUtput
+    %%%%%%%%%%%%%%%%% ab hier eigentlich nach 'r' und 'a' und vor OUtput
     %%%%%%%%%%%%%%%%% table
     % plotting numerical results
     text(txtPos(1),txtPos(2),txt);
@@ -231,40 +246,7 @@ end
 %% executing optional commands
 % if exist('options','var')
 %     
-%     switch options
-%         case 'r'
-%             
-%             %signal/background for range
-%             rec = getrect(gca);
-%             
-%             mcmin = rec(1);
-%             mcmax = mcmin + rec(3);
-%             
-%             rngCtsPk = sum(cnt((mc>mcmin) & (mc<mcmax)));
-%             rngCtsBg = sum(fitCts((mc>mcmin) & (mc<mcmax)));
-%             
-%             BGfraction = rngCtsBg/(rngCtsPk+rngCtsBg)*100;
-%             
-%             rngBgGlobal = rngCtsBg/(numAtoms * (mcmax - mcmin));
-%             
-%             sym = ' %';
-%             if BGfraction < 0.1
-%                 BGfraction = pct/100 * 1E6;
-%                 sym = ' ppm';
-%             end
-%             
-%             txt{end+1} = ' ';
-%             txt{end+1} = ['range: ' num2str(mcmin) ' - ' num2str(mcmax) ' Da'];
-%             txt{end+1} = ['range background: ' num2str(BGfraction,3) sym];
-%             txt{end+1} = ['range background: ' num2str(rngBgGlobal*1E6,3) ' ppm/Da'];
-%             
-%             
-%             missedAt = 100 - (rngCtsPk - rngCtsBg)/pkcnt *100;
-%             txt{end+1} = ['missed atoms: ' num2str(missedAt) ' %'];
-%             
-%             
-%             stem([mcmin mcmax],[yLim(2)*rngLabelHeight yLim(2)*rngLabelHeight],'k','Marker','none','LineWidth',2);
-%             
+%     switch options           
 %             
 %         case 'a'
 %             
@@ -277,17 +259,19 @@ end
 %             
 %             % divide into before and after peak
 %             
-%             % before
-%             ctsBeforePk = cnt(mc<pkloc);
+%             % Counts before Peak 
+%             % mc enspricht mcScale pkloc - peak location
 %             
-%             mcBeforePk = mc(mc<pkloc);
-%             fitCtsBeforePk = fitCts(mc<pkloc);
-%             
+%             % Before peak
+%             ctsBeforePk = counts(mcScale<pkloc);
+%             mcBeforePk = mcScale(mcScale<pkloc);
+%             fitCtsBeforePk = fitCts(mcScale<pkloc);
+%             % Sum before the peak of the normal counts and the fitted
 %             rngCtsPk = cumsum(ctsBeforePk);
 %             rangeCtsBg = cumsum(fitCtsBeforePk);
 %             
 %             BGincluded = rangeCtsBg(end) - rangeCtsBg;
-%             missedAtoms = rngCtsPk - rangeCtsBg;
+%             missedAtoms = rngCtsPk' - rangeCtsBg;
 %             
 %             bal = BGincluded - missedAtoms;
 %             
@@ -295,28 +279,28 @@ end
 %             
 %             
 %             
-%             
+%         
 %             %after
-%             ctsAfterPk = cnt(mc>=pkloc);
+%             ctsAfterPk = counts(mcScale>=pkloc);
 %             ctsAfterPk = fliplr(ctsAfterPk);
 %             
-%             mcAfterPk = mc(mc>=pkloc);
+%             mcAfterPk = mcScale(mcScale>=pkloc);
 %             mcAfterPk = fliplr(mcAfterPk);
 %             
-%             fitCtsAfterPk = fitCts(mc>=pkloc);
+%             fitCtsAfterPk = fitCts(mcScale>=pkloc);
 %             fitCtsAfterPk = fliplr(fitCtsAfterPk);
 %             
 %             rngCtsPk = cumsum(ctsAfterPk);
 %             rangeCtsBg = cumsum(fitCtsAfterPk);
 %             
 %             BGincluded = rangeCtsBg(end) - rangeCtsBg;
-%             missedAtoms = rngCtsPk - rangeCtsBg;
+%             missedAtoms = rngCtsPk' - rangeCtsBg;
 %             
 %             bal = BGincluded - missedAtoms;
 %             
 %             mcEnd = min(mcAfterPk(bal>0));
 %             
-%             
+%    
 %             
 %             % determination of mislabeled atoms
 %             mcmin = mcBegin;
@@ -351,9 +335,6 @@ end
 %             
 %             stem([mcmin mcmax],[yLim(2)*rngLabelHeight yLim(2)*rngLabelHeight],'k','Marker','none','LineWidth',2);
 %     end
-% end
-
-
 
 
 %% Output Table
@@ -361,7 +342,12 @@ peakData.counts = round(pkcnt);
 peakData.pct = pct;
 peakData.loc = pkloc;
 
-
-
-
 end
+
+
+
+
+
+
+
+
