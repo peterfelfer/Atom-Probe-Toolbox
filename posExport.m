@@ -40,6 +40,9 @@ if idx == 1
     fwrite(fid, posData(:), 'float32', 'b');
     
 elseif idx == 2
+% Problem: beim reimportieren von dem epos file mit posToTable - werden die
+% ersten zwei Spalten geskippt - also nur 00 angezeigt und detx und dety
+% fehlen die Spalten sind um 2 Spalten verschoben... Was ist falsch?
 
     posData = posIn{:, 2:10};
     posData = posData';
