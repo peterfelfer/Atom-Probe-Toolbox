@@ -6,16 +6,16 @@ function [peakData] = peakBGCorrectedCount(pos, varargin)
 % 
 % [peakData] = peakBGCorrectedCount(pos, rangeTable, ionName, boundary)
 % 
-% [peakData] = peakBGCorrectedCount(massSpec, pos) 
-% [peakData] = peakBGCorrectedCount(massSpec, pos, ionName)
-% [peakData] = peakBGCorrectedCount(massSpec, pos, ionName, boundary)
-% [peakData] = peakBGCorrectedCount(massSpec, pos, ionName, boundary, options)
+% [peakData] = peakBGCorrectedCount( pos, ionName)
+% [peakData] = peakBGCorrectedCount( pos, ionName, boundary)
+% [peakData] = peakBGCorrectedCount( pos, ionName, boundary, options)
 %
 % INPUT
 % massSpec   a massSpec plot - created with massSpecPlot.m
 % pos        pos file - in raw format
-% ionName    ion Name in this form [14N 12C2 +] it is important to write the
+% ionName    ion Name in this form '14N 12C2 +' it is important to write the
 %            specific isotopes
+% rangeTable
 % boundary   range in Da before and after the peak that should be used for
 %            background correction either one value or two [3 3] are
 %            allowed. If no value is parsed, the default value of 0.5 Da is used 
@@ -54,8 +54,8 @@ rngLabelHeight = 0.65; % height of the stem plot delineating the range
 % rangeTable = rangesExtractFromMassSpec(massSpec);
 
 %% check for RAW pos file
-if ismember('atom',posIn.Properties.VariableNames)
-    posIn = posUnDecompose(posIn);
+if ismember('atom',pos.Properties.VariableNames)
+    pos = posUnDecompose(pos);
 end
 % isTableCol = @(pos, atom) ismember(atom, pos.Properties.VariableNames);
 % rawCheck = isTableCol(pos, 'atom');
