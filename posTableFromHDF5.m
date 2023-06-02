@@ -1,4 +1,3 @@
-
 function pos = posTableFromHDF5(fileName)
 % posTableFromHDF5 extract the pos/epos table from an h5 file
 %   Detailed explanation goes here

@@ -40,14 +40,12 @@ if idx == 1
     fwrite(fid, posData(:), 'float32', 'b');
     
 elseif idx == 2
-% Problem: beim reimportieren von dem epos file mit posToTable - werden die
-% ersten zwei Spalten geskippt - also nur 00 angezeigt und detx und dety
-% fehlen die Spalten sind um 2 Spalten verschoben... Was ist falsch?
 
     posData = posIn{:, 2:10};
+    posData = [posData zeros(height(posData),2)]; %% creates two dummy values to be placeholder for the uint32 data 
     posData = posData';
     frewind(fid);
-    fwrite(fid, posData, '9*float32',8, 'ieee-be');
+    fwrite(fid, posData, '11*float32',0, 'ieee-be');
 
     frewind(fid);
     pulseData = posIn{:, 11:12};
