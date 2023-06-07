@@ -26,7 +26,9 @@ if strcmp(rrngLine(1:5),'Range')
     ionName = ionConvertName(ionConvertName(ionName)); %back and forth conversion for sanity checking anf formatting
     
     %ion volume
-    ionVolume = str2num(extractBefore(rrngLine(strfind(rrngLine,'Vol')+4:end),' '));
+    ionVolGer = extractBefore(rrngLine(strfind(rrngLine,'Vol')+4:end),' ');
+    ionVolAm = replace(ionVolGer, ',', '.');
+    ionVolume = str2num(ionVolAm);
     
     % ion color
     colHex = extractBefore(rrngLine(strfind(rrngLine,'Color')+6:end),' ');

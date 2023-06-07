@@ -18,7 +18,7 @@ end
 dataPathDetectorEvent = '/atomProbeTomography/detectorEvent/';
 % check for posType
     attrInfo = h5info(fileName,'/atomProbeTomography/detectorEvent'); 
-    allDatasets = {attrInfo.Datasets.Name}.';
+    allDatasets = {attrInfo.Name}.';
     tof = strcmp('timeOfFlight', allDatasets);
     if sum(tof) == 1 
         posType = "epos";

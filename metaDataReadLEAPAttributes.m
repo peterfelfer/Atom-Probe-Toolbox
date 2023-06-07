@@ -24,7 +24,7 @@ date = datestr(t, 'yyyy-mm-dd');
 time = datestr(t, 'HH:MM:SS.FFF');
 meta(contains(meta(:,1),'experiment/beginDateTime'),2) = cellstr([date ' ' time]);
 % end time
-endDateTime = intRow.Date + minutes(intRow.RunTime_Hrs_*60);
+endDateTime = intRow.Date + minutes(intRow.RunTime_Hrs_ * 60);
 endDate = datestr(endDateTime, 'yyyy-mm-dd');
 endTime = datestr(endDateTime, 'HH:MM:SS.FFF');
 meta(contains(meta(:,1),'experiment/endDateTime'),2) = cellstr([endDate ' ' endTime]);
@@ -39,11 +39,15 @@ if ~isnan(intRow.PulseFraction___)
 end
 meta(contains(meta(:,1),'experiment/pulsePeriod'),2) = num2cell((1/intRow.PulseFrequency_Hz_)*10^9);
 meta(contains(meta(:,1),'instrument/flightPathLength'),2) = num2cell(intRow.FlightPathLength_mm_);
-if ~isnan(intRow.LaserPulseEnergy_nJ_)
-    meta(contains(meta(:,1),'experiment/laserPulseEnergy'),2) = num2cell(intRow.LaserPulseEnergy_nJ_);
-    meta(contains(meta(:,1),'experiment/pulseType'),2) = {'laserPulsed'};
-end
-meta(contains(meta(:,1),'experiment/notes'),2) = intRow.Comments;
+meta(contains(meta(:,1),'experiment/laserPulseEnergy'),2) = num2cell(intRow.LaserPulseEnergy_nJ_);
+% meta(contains(meta(:,1),'experiment/pulseType'),2) = {'laserPulsed'};
+
+
+%if ~isnan(intRow.LaserPulseEnergy)
+    %meta(contains(meta(:,1),'experiment/laserPulseEnergy'),2) = num2cell(intRow.LaserPulseEnergy);
+%     meta(contains(meta(:,1),'experiment/pulseType'),2) = {'laserPulsed'};
+% end
+%meta(contains(meta(:,1),'experiment/notes'),2) = intRow.Comments;
 
 end
 
