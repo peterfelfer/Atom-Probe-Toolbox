@@ -6,16 +6,17 @@ function [peakData] = peakBGCorrectedCount(pos, varargin)
 % 
 % [peakData] = peakBGCorrectedCount(pos, rangeTable, ionName, boundary)
 % 
-% [peakData] = peakBGCorrectedCount( pos, ionName)
-% [peakData] = peakBGCorrectedCount( pos, ionName, boundary)
-% [peakData] = peakBGCorrectedCount( pos, ionName, boundary, options)
+% [peakData] = peakBGCorrectedCount( pos, rangeTable, ionName)
+% [peakData] = peakBGCorrectedCount( pos, rangeTable, ionName, boundary)
+% [peakData] = peakBGCorrectedCount( pos, rangeTable, ionName, boundary, options)
 %
 % INPUT
 % massSpec   a massSpec plot - created with massSpecPlot.m
 % pos        pos file - in raw format
 % ionName    ion Name in this form '14N 12C2 +' it is important to write the
 %            specific isotopes
-% rangeTable
+% rangeTable if no range Table is parsed - the gcf has to be the massSpec
+%               of the pos variable
 % boundary   range in Da before and after the peak that should be used for
 %            background correction either one value or two [3 3] are
 %            allowed. If no value is parsed, the default value of 0.5 Da is used 
@@ -46,22 +47,13 @@ rngLabelHeight = 0.65; % height of the stem plot delineating the range
 %%%%%%%%%% machen ? - wenn ja müssen für boundary 2 werte eingegeben werden
 %%%%%%%%%% ansonsten kann man es ja nicht unterscheiden was für was ist. 
 
-%%%%%%%%%% Außerdem verstehe ich nicht was mit den options 'r'und 'a'
-%%%%%%%%%% gemeint ist und was die genau machen
-%% get info of the massSpec
-%%%%%%%%%%%%%%%%%%%%%%%%%ion Table gebraucht??
-% ionTable = ionsExtractFromMassSpec(massSpec);
-% rangeTable = rangesExtractFromMassSpec(massSpec);
+
 
 %% check for RAW pos file
 if ismember('atom',pos.Properties.VariableNames)
     pos = posUnDecompose(pos);
 end
-% isTableCol = @(pos, atom) ismember(atom, pos.Properties.VariableNames);
-% rawCheck = isTableCol(pos, 'atom');
-% if rawCheck == 1     
-%      pos = posUnDecompose(pos);
-% end
+
 
 %% Check for variable input and divide it to ionNameTable, boundary and options
 
@@ -96,7 +88,7 @@ for k = 1:length(varargin)
         
 end
 
-%% Check if manual input needed or if varaible input with ranges is there
+%% Check if manual input needed or if variable input with ranges is there
 
 if exist('boundary', 'var') && exist('ionNameTable', 'var')
     % find ranges From range Table
@@ -143,12 +135,6 @@ end
 %%%%%%%%%%%%%         und einfach wenn dann nur den rangeTable für die
 %%%%%%%%%%%%%         Funktion nehmen
 
-% if exist('massSpec','var')
-%     handles = get(gca,'Children');
-%     mcScale = get(handles(end),'Xdata'); % spec X achse - als vektor
-% else
-%     error("please create a massSpectra with the function massSpecPlot")
-% end
 
 
 % calculates mcScale x vector for interesting range
@@ -170,7 +156,8 @@ in = or(inBefore,inAfter);
 
 %% get the counts per bin    
 % neues Count - wie viele ionen hab ich pro bin?
-counts = hist(pos.mc,mcScale); 
+% counts = hist(pos.mc,mcScale); 
+counts = histcounts(pos.mc,mcScale);
 %brauch ich vllt nicht wegen entire range 
 cntData = counts(in); % just select the bins that are in the range 
 % calculation Range - range based for the calculation with the adjacent
@@ -178,7 +165,7 @@ cntData = counts(in); % just select the bins that are in the range
 calcRange = table(mcData', cntData', 'VariableNames', {'mcRange' 'counts'});
 
 % find the start and end point of the range for background correction of the entire data set 
-idxBeg = find(mcScale == min(calcRange.mcRange));
+idxBeg = find(mcScale == min(calcRange.mcRange)); 
 idxEnd = find(mcScale == max(calcRange.mcRange));
 
 % get the entire range for background correction + peak in between both
@@ -244,97 +231,122 @@ if figOut == 1
 end
 
 %% executing optional commands
-% if exist('options','var')
-%     
-%     switch options           
-%             
-%         case 'a'
-%             
-%             % auto range optimisation. moves borders of range until the
-%             % peak background matches the amount of ions missed.
-%             
-%             % pkloc = peak location
-%             % cnt = counts per bin
-%             % mc = mass to charge center of bin
-%             
-%             % divide into before and after peak
-%             
-%             % Counts before Peak 
-%             % mc enspricht mcScale pkloc - peak location
-%             
-%             % Before peak
-%             ctsBeforePk = counts(mcScale<pkloc);
-%             mcBeforePk = mcScale(mcScale<pkloc);
-%             fitCtsBeforePk = fitCts(mcScale<pkloc);
-%             % Sum before the peak of the normal counts and the fitted
-%             rngCtsPk = cumsum(ctsBeforePk);
-%             rangeCtsBg = cumsum(fitCtsBeforePk);
-%             
-%             BGincluded = rangeCtsBg(end) - rangeCtsBg;
-%             missedAtoms = rngCtsPk' - rangeCtsBg;
-%             
-%             bal = BGincluded - missedAtoms;
-%             
-%             mcBegin = min(mcBeforePk(bal<0));
-%             
-%             
-%             
-%         
-%             %after
-%             ctsAfterPk = counts(mcScale>=pkloc);
-%             ctsAfterPk = fliplr(ctsAfterPk);
-%             
-%             mcAfterPk = mcScale(mcScale>=pkloc);
-%             mcAfterPk = fliplr(mcAfterPk);
-%             
-%             fitCtsAfterPk = fitCts(mcScale>=pkloc);
-%             fitCtsAfterPk = fliplr(fitCtsAfterPk);
-%             
-%             rngCtsPk = cumsum(ctsAfterPk);
-%             rangeCtsBg = cumsum(fitCtsAfterPk);
-%             
-%             BGincluded = rangeCtsBg(end) - rangeCtsBg;
-%             missedAtoms = rngCtsPk' - rangeCtsBg;
-%             
-%             bal = BGincluded - missedAtoms;
-%             
-%             mcEnd = min(mcAfterPk(bal>0));
-%             
-%    
-%             
-%             % determination of mislabeled atoms
-%             mcmin = mcBegin;
-%             mcmax = mcEnd;
-%             
-%             rngCtsPk = sum(cnt((mc>mcmin) & (mc<mcmax)));
-%             rngCtsBg = sum(fitCts((mc>mcmin) & (mc<mcmax)));
-%             
-%             BGfraction = rngCtsBg/(rngCtsPk+rngCtsBg)*100;
-%             
-%             rngBgGlobal = rngCtsBg/(numAtoms * (mcmax - mcmin));
-%             
-%             peakData.mcbegin = mcBegin;
-%             peakData.mcend = mcEnd;
-%             
-%             sym = ' %';
-%             if BGfraction < 0.1
-%                 BGfraction = pct/100 * 1E6;
-%                 sym = ' ppm';
-%             end
-%             
-%             txt{end+1} = ' ';
-%             txt{end+1} = ['range: ' num2str(mcmin) ' - ' num2str(mcmax) ' Da'];
-%             txt{end+1} = ['range background: ' num2str(BGfraction,3) sym];
-%             txt{end+1} = ['range background: ' num2str(rngBgGlobal*1E6,3) ' ppm/Da'];
-%             
-%             
-%             
-%             missedAt = 100 - (rngCtsPk - rngCtsBg)/pkcnt *100;
-%             txt{end+1} = ['missed atoms: ' num2str(missedAt) ' %'];
-%             
-%             
-%             stem([mcmin mcmax],[yLim(2)*rngLabelHeight yLim(2)*rngLabelHeight],'k','Marker','none','LineWidth',2);
-%     end
+if exist('options','var')
+
+    switch options           
+
+        case 'a'
+
+            % auto range optimisation. moves borders of range until the
+            % peak background matches the amount of ions missed.
+
+            % pkloc = peak location
+            % cnt = counts per bin
+            % mc = mass to charge center of bin
+
+            % divide into before and after peak
+
+            % Counts before Peak 
+            % mc enspricht mcScale pkloc - peak location
+            
+            %% check if fitCts and mcScale have the same size
+            if length(mcScale) > length(fitCts)
+                mcScale(1)=[];
+                mcScale(end) = [];
+            end
+
+            
+            % Before peak
+            ctsBeforePk = counts(mcScale<pkloc);
+            mcBeforePk = mcScale(mcScale<pkloc);
+            fitCtsBeforePk = fitCts(mcScale<pkloc);
+            % Sum before the peak of the normal counts and the fitted
+            rngCtsPk = cumsum(ctsBeforePk);
+            rngCtsBg = cumsum(fitCtsBeforePk);
+
+           
+            BGincluded = rngCtsBg(end) - rngCtsBg;
+            missedAtoms = rngCtsPk' - rngCtsBg;
+
+
+            bal = BGincluded - missedAtoms;
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% mit Peter
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% absprechen!!!!!!!!!!!!!!!!!!!!!!!!!
+            if sum(bal<0) == 0
+                bal = BGincluded + missedAtoms;
+            end
+
+            mcBegin = min(mcBeforePk(bal<0));
+
+
+
+            % mcBefore Pk - sind alle werte bevor der Peak losgeht - also
+            
+            % die mc die x achse
+            % bal = 
+
+
+            %after
+            ctsAfterPk = counts(mcScale>=pkloc);
+            ctsAfterPk = fliplr(ctsAfterPk);
+
+            mcAfterPk = mcScale(mcScale>=pkloc);
+            mcAfterPk = fliplr(mcAfterPk);
+
+            fitCtsAfterPk = fitCts(mcScale>=pkloc);
+            fitCtsAfterPk = fliplr(fitCtsAfterPk);
+
+            rngCtsPk = cumsum(ctsAfterPk);
+            rngCtsBg = cumsum(fitCtsAfterPk);
+
+            BGincluded = rngCtsBg(end) - rngCtsBg;
+            missedAtoms = rngCtsPk' - rngCtsBg;
+
+            bal = BGincluded - missedAtoms;
+
+            mcEnd = min(mcAfterPk(bal>0));
+
+
+
+            % determination of mislabeled atoms
+            mcmin = mcBegin;
+            mcmax = mcEnd;
+            mc = mcScale;
+            rngCtsPk = sum(counts((mc>mcmin) & (mc<mcmax)));
+            rngCtsBg = sum(fitCts((mc>mcmin) & (mc<mcmax)));
+
+            BGfraction = rngCtsBg/(rngCtsPk+rngCtsBg)*100;
+
+            rngBgGlobal = rngCtsBg/(numAtoms * (mcmax - mcmin));
+
+            peakData.mcbegin = mcBegin;
+            peakData.mcend = mcEnd;
+
+            % calculation of the amount of hydrogen of all ions
+            ctsPk = rngCtsPk - rngCtsBg;
+            corrPct = ctsPk/height(pos) * 100;
+            ppm = corrPct/100 * 1E6;
+
+            peakData.countsNew = ctsPk;
+            peakData.ppmNew = ppm;
+            peakData.pctNew = corrPct;
+
+            sym = ' %';
+            if BGfraction < 0.1
+                BGfraction = pct/100 * 1E6;
+                sym = ' ppm';
+            end
+           
+            if figOut ==1
+                txt{end+1} = ' ';
+                txt{end+1} = ['range: ' num2str(mcmin) ' - ' num2str(mcmax) ' Da'];
+                txt{end+1} = ['range background: ' num2str(BGfraction,3) sym];
+                txt{end+1} = ['range background: ' num2str(rngBgGlobal*1E6,3) ' ppm/Da'];
+                missedAt = 100 - (rngCtsPk - rngCtsBg)/pkcnt *100;
+                txt{end+1} = ['missed atoms: ' num2str(missedAt) ' %'];
+                stem([mcmin mcmax],[yLim(2)*rngLabelHeight yLim(2)*rngLabelHeight],'k','Marker','none','LineWidth',1, 'DisplayName', 'optimised range' );
+            end
+    end
 
 
 %% Output Table
