@@ -8,12 +8,12 @@
 % each group can contain more than one entry, e.g. /project/1/, specimen/1/
 
 % metadata metadata
-/metaData/templateVersion [string] = 1 []
+/metaData/templateVersion [string] = 0.2 []
 /metaData/templateURL [string] = NULL []
 
 % project metadata
-/project/identifier [string] = HydMet []
-/project/contactPerson [string] = Peter Felfer []
+/project/identifier [string] =  []
+/project/contactPerson [string] =  []
 /project/confidentiality [enum] = open [open, embargoed, confidental]
 /project/dataSharingLicense [string] = CC by []
 /project/startDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
@@ -24,9 +24,9 @@
 % required general experiment metadata
 /specimen/name [string] = NULL []
 /specimen/description [string] = NULL []
-/specimen/uniqueIdentifier [string] = HydMet-ABCD []
+/specimen/uniqueIdentifier [string] =  []
 /specimen/notes [string] = NULL []
-/specimen/materialType [string] = aluminium []
+/specimen/materialType [string] = NULL []
 /specimen/compositionNominal [string] = NULL [%] % elemental for metals: Ag72Cu28
 
 /specimen/images/1/type [string] = NULL []
@@ -37,24 +37,24 @@
 
 
 /experiment/type [string] = atomProbeTomographyExperiment []
-/experiment/instrumentOperator [string] = Peter Felfer []
+/experiment/instrumentOperator [string] = NULL []
 /experiment/beginDateTime [dateTime] = 2020-07-01 10:14:36.000 [yyyy-MM-dd HH:mm:ss.SSS]
 /experiment/beginTimeZone [timeZone] = CET []
 /experiment/endDateTime [dateTime] = 2020-07-01 10:14:36.000 [yyyy-MM-dd HH:mm:ss.SSS]
 /experiment/endTimeZone [timeZone] = CET []
-/experiment/uniqueIdentifier [string] = Ox000001 []
+/experiment/uniqueIdentifier [string] = R56 []
 /experiment/status [enum] = finished [planned, inProgress, finished]
-/experiment/result [enum] = ok [short, ok, questionable, failed]
-/experiment/notes [string] = man that was a hard experiment []
-/experiment/dataEmbargoPeriodEndDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
+/experiment/result [enum] = goodData [short, ok, questionable, failed]
+/experiment/notes [string] = NULL []
+/experiment/dataEmbargoPeriodEndDate [dateTime] =  [yyyy-MM-dd]
 /experiment/dataIsEncrypted [bool] = false []
 /experiment/dataEncryptionInformation [string] = NULL []
 /experiment/data/publicationDOI [string] = NULL []
 
 % structure the institution name hierachically, comma separated
 /experiment/institution [string] =  Friedrich-Alexander Universität Erlangen-Nürnberg, Department of Materials Science, Institute for General Materials Properties []
-/experiment/longitude [float64] = 11.027098 [degree]
-/experiment/latitude [float64] = 49.573321 [degree]
+/experiment/longitude [float64] = 49.573321 [degree]
+/experiment/latitude [float64] = 11.027098 [degree]
 
 /instrument/family [string] = LEAP 4000X HR []
 /instrument/type [string] = Microelectrode Atom Probe []
@@ -95,26 +95,26 @@
 /atomProbeTomography/instrument/t0 [float32] = 55.7 [ns]
 /atomProbeTomography/instrument/detectionEfficiency [float32] = 0.37 []
 /atomProbeTomography/instrument/apertureType [string] = conical microelectrode []
-/atomProbeTomography/instrument/apertureUniqueIdentifier [string] = Ox00 []
+/atomProbeTomography/instrument/apertureUniqueIdentifier [string] = NULL []
 /atomProbeTomography/instrument/detectorReadout [string] = discriminator []
 /atomProbeTomography/instrument/detectorResolution [float32] = 0.02 [mm]
 /atomProbeTomography/instrument/detectorSize [float32] = 80,80 [mm]
 /atomProbeTomography/instrument/laserIncidenceDirection [float32] = 1,2,3 []
 
-/atomProbeTomography/specimen/preparation/method [enum] = electropolishing [electropolishing, FIB, BIB]
+/atomProbeTomography/specimen/preparation/method [enum] = NULL [electropolishing, FIB, BIB]
 /atomProbeTomography/specimen/preparation/instrument [string] = NULL []
 /atomProbeTomography/specimen/preparation/finalIonBeamEnergy [float32] = NULL [keV]
 /atomProbeTomography/specimen/preparation/electroPolishingAgent [string] = NULL []
 /atomProbeTomography/specimen/preparation/electroPolishingVoltage [float32] = NULL [V,s] % may be V-t curve
-/atomProbeTomography/specimen/preparation/electroPolishingTemperature [float32] = NULL [C]
+/atomProbeTomography/specimen/preparation/electropolishingTemperature [float32] = NULL [C]
 
 % optional atom probe experiment specific metadata
 % not set if data is continuously recorded during experiment
 % if data is continuously recorded, pls use corresponding variable names below
 
-/atomProbeTomography/experiment/pulseType [enum] = voltagePulsed [voltagePulsed, laserPulsed]
-/atomProbeTomography/experiment/specimenTemperatureActual [float32] = 40 [K]
-/atomProbeTomography/experiment/specimenTemperatureNominal [float32] = 40 [K]
+/atomProbeTomography/experiment/pulseType [enum] = NULL [voltagePulsed, laserPulsed]
+/atomProbeTomography/experiment/specimenTemperatureActual [float32] = [K]
+/atomProbeTomography/experiment/specimenTemperatureNominal [float32] =  [K]
 /atomProbeTomography/experiment/measurementChamberPressure [float32] =  [torr]
 /atomProbeTomography/experiment/pulseFraction [float32] = NULL [1]
 /atomProbeTomography/experiment/laserPulseEnergy [float32] = NULL [J]
