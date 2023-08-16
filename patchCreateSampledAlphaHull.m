@@ -76,8 +76,8 @@ end
 fv.vertices = samplePos(idx(:,1),:);
 fv.faces = bnd;
 
-f = figure('Name', 'Dataset hull');
-patch(fv,'FaceColor',[0 1 1],'FaceAlpha',.2); rotate3d on; axis equal;
+% f = figure('Name', 'Dataset hull');
+% patch(fv,'FaceColor',[0 1 1],'FaceAlpha',.2); rotate3d on; axis equal;
 
 
 
