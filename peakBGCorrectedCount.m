@@ -190,8 +190,11 @@ sumCnt = sum(entireRange.counts);
 pkcnt = sumCnt - sumFitCnt;
 
 %% plotting of results
-numAtoms = sum(counts);
-pct = pkcnt/numAtoms * 100;
+numAtoms = max(pos.atomNum);
+ions(isundefined(ions))='0';
+numIons = 
+pctAtoms = pkcnt/numAtoms * 100;
+pctIons = pkcnt/numAtoms * 100;
 sym = ' %';
 
 
@@ -347,8 +350,7 @@ if exist('options','var')
                 stem([mcmin mcmax],[yLim(2)*rngLabelHeight yLim(2)*rngLabelHeight],'k','Marker','none','LineWidth',1, 'DisplayName', 'optimised range' );
             end
     end
-
-
+end
 %% Output Table
 peakData.counts = round(pkcnt);
 peakData.pct = pct;
