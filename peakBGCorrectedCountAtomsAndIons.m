@@ -193,24 +193,23 @@ pkcnt = sumCnt - sumFitCnt;
 % peakcount is diveded by all atoms of whole dataset
 numAtoms = max(pos.atomNum);
 pctAtoms = pkcnt/numAtoms * 100;
-sym = ' %';
+symAtoms = ' %';
 
 if pctAtoms < 0.1
     pctAtoms = pctAtoms/100 * 1E6;
-    sym = ' ppm';
+    symAtoms = ' ppm';
 end
 %% calculating ion percentage
 ions = pos.ion;
 ions(isundefined(ions))='0';
 numIons = sum(ions~='0');
 pctIons = pkcnt/numIons * 100;
-sym = ' %';
+symIons = ' %';
 
 if pctIons < 0.1
     pctIons = pctIons/100 * 1E6;
-    sym = ' ppm';
+    symIons = ' ppm';
 end
-
 %% plotting of results
 
 if figOut == 1
@@ -231,8 +230,8 @@ if figOut == 1
     txtPos = [xLim(1) + 0.02 * (xLim(2) - xLim(1)); ...
         yLim(1) + 0.8 * (yLim(2) - yLim(1))];
     txt = {['ions in peak: ' num2str(round(pkcnt))],...
-        ['pct of all atoms: ' num2str(pctAtoms,3) sym],...
-        ['pct of all ions: ' num2str(pctIons,3) sym],...
+        ['pct of all atoms: ' num2str(pctAtoms,3) symAtoms],...
+        ['pct of all ions: ' num2str(pctIons,3) symIons],...
         ['peak location: ' num2str(pkloc) ' Da']};
     %%%%%%%%%%%%%%%%% ab hier eigentlich nach 'r' und 'a' und vor OUtput
     %%%%%%%%%%%%%%%%% table
