@@ -25,7 +25,8 @@ function fv = patchCreateSampledAlphaHull(pos,alpha,sample)
 %
 % OUTPUT:
 %       fv: structure with fv.vertices and fv.faces (triangulated)
-
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 if ~exist('alpha','var')
     alpha = 20;

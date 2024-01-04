@@ -1,8 +1,13 @@
 function datasetSliceMassSpec(posIn,varargin)
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
-% Input
-% ionTable & posIn file
+% datasetSliceMassSpec lets you slice your dataset in a defined intervall
+% size and creates for each slice a figure with the respective mass Spectra
+% A specific region of interestet of the mass spectra can also be choosen
+% to highlight certain areas of interest
+%
+% datasetSliceMassSpec(posIn,ionTable, colorScheme, isotopeTable)
+% datasetSliceMassSpec(posIn,ionTable, colorScheme, isotopeTable, interval)
+% datasetSliceMassSpec(posIn,ionTable, colorScheme, isotopeTable, interval, axisROI, dataName, binWidth, mode)
+% 
 % INPUT
 % posIn = pos file
 % ionTable = ion Table of the pos file if you want the ions to be displayed
@@ -13,6 +18,9 @@ function datasetSliceMassSpec(posIn,varargin)
 % dataName = Name of the dataset
 % binWidth = binWidth of the massSpec
 % mode = 'normalised' or 'counts'
+%
+% OUTPUT
+% figures with the massSpec of different dataset slices
 
 %% Basics - Define Input Variables
 s = 1;

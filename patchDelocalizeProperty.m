@@ -1,6 +1,8 @@
 function deloc = patchDelocalizeProperty(fv,prop)
 % averages the property prop between a vertex and its neighbours of a patch
 % fv.
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 edgeList = tri2edgeList(fv.faces);

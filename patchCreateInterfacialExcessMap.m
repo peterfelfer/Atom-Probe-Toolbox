@@ -3,6 +3,11 @@ function IEmap = patchCreateInterfacialExcessMap(pos,interface,lim,deloc)
 %   INPLEMENT BACKGROUND PICKING, INDIVIDUAL BACKGROUNDS
 % calculates an IE map for the patch 'interface' for the atoms in 'pos'
 % within 'lim' nm of the interface
+
+
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+
 DEBUG = false;
 
 %%reads a pos file [x,y,z] converted to a Matlab variable and a vertex file

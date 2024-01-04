@@ -1,5 +1,5 @@
 function meta = metaDataReadLEAPAttributes(meta, exNum, exList)
-%metaDataReadLEAPAttributes adds the extracted attributes of a LEAP
+% metaDataReadLEAPAttributes adds the extracted attributes of a LEAP
 % measurement to the corresponding meta Data file
 %
 % INPUT
@@ -9,9 +9,11 @@ function meta = metaDataReadLEAPAttributes(meta, exNum, exList)
 %
 % OUTPUT
 % meta = meta Data File with the Attributes
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
-% get important row out of exList
+%% get important row out of exList
 intRow = exList(exList.ExperimentID == exNum, :);
 
 % sort Variables 

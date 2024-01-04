@@ -14,7 +14,7 @@ function ionTable = ionsExtractFromHDF5(fileName)
 %
 % (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
-% get content structure in HDF5 file
+%% get content structure in HDF5 file
 ionInfo = h5info(fileName,'/atomProbeTomography/identifiedIon');
 ionInfo = ionInfo.Groups;
 

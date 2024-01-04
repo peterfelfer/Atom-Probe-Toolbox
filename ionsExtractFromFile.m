@@ -1,9 +1,9 @@
 function ionTable = ionsExtractFromFile(fileName)
-% ionsExtractFromMassSpec pulls all ions and corresponding information 
+% ionsExtractFromFile pulls all ions and corresponding information 
 % from a mass spectrum plot and gets all plots connected to the mass 
 % spectrum
 %
-% ionTable = ionsExtractFromMassSpec(spec)
+% ionTable = ionsExtractFromFile(spec)
 %
 % INPUT
 % fileName: MATLAB figure file containing area plot that displays the mass 
@@ -16,7 +16,7 @@ function ionTable = ionsExtractFromFile(fileName)
 %           (charge state, corresponding color code)
 %
 % (c) by Prof. Peter Felfer Group @FAU Erlangen-N�rnberg
-
+%%
 if ~exist('fileName','var')
     [file, path] = uigetfile('*.fig','select figure file with ranges');
     fileName = [path '/' file];

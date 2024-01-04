@@ -4,7 +4,10 @@ function map = patchCreate2DconcentrationMap(pos,parentPos,fv,d)
 % probe dataset parPos
 % its like a 2D concentration profile, but for general manifolds and is
 % calculated within a clipping distance d. If d is a 2 part vector its from
-%d(1) to d(2)
+% d(1) to d(2)
+%
+% 
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 numVerts = length(fv.vertices);
 
