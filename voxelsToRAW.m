@@ -2,7 +2,8 @@ function voxelsToRAW(volume, gv, fileName)
 %NEEDS DOCUMENTATION
 %saves a volume value matrix to an 8bit raw file for volumetric analysis
 %and display in external programs such as Blender
-
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 if ~exist('fileName','var')
     [file, path] = uiputfile('*.RAW','Select RAW file');

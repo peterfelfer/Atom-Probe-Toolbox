@@ -2,6 +2,8 @@ function [x, y, z, objectsR] = posGeiserReconstructFromDetector(detx, dety, V, k
 %atom probe reconstruction after: Gault et al., Ultramicroscopy 111 (2011) 448 - 457
 %detx, dety are the detector hit coordinates in mm
 %kf is the field factor and ICF is the image compression factor
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 

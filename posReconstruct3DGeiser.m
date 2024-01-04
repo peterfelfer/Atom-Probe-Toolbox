@@ -5,6 +5,8 @@ function [pos, objectsR] = posReconstruct3DGeiser(pos,flightPathLength,...
 %detx, dety are the detector hit coordinates in mm
 %kf is the field factor and ICF is the image compression factor
 % for reflectron data an image correction is required!
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %% fundamental data reconstruction
 % detector coordinates in polar form

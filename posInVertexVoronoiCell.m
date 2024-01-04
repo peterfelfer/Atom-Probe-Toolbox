@@ -20,6 +20,8 @@ function inOrIdx = posInVertexVoronoiCell(pos,interface,vertexIdx)
 %               If no vertexIdx are parsed, it gives the index of the
 %               closest vertex to each atomic position.
 %
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 if istable(pos)

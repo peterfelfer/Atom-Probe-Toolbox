@@ -1,6 +1,8 @@
 function [mcBegin, mcEnd, ionName, ionVolume, ionColor] = rangeInfoFromRRNG(rrngLine)
 % rangeInfoFromRRNG interpetes a line from an RRNG file and extracts the
 % information needed to create an ion and a range in a range figure
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 % constants and data preparation
 HEXRANGE = 256;

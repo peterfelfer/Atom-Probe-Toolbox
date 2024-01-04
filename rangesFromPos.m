@@ -11,6 +11,8 @@ function [rangeTable colorScheme] = rangesFromPos(pos, colorScheme, isotopeTable
 % rangeTable    Table variable with all the ranges in the pos variable
 %
 %
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 %% check if pos is in Raw format

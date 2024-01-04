@@ -34,7 +34,8 @@ function [peakData] = peakBGCorrectedCount(pos, varargin)
 % peakData   struct array with the counts of the ions in the peak, the
 %            percentage and the location of the peak
 % figure     figure with the peak and the correction
-
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 rngLabelHeight = 0.65; % height of the stem plot delineating the range
 %% generelle Änderungen
