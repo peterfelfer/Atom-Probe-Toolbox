@@ -6,6 +6,8 @@ function rangesToRRNG(rangeTable,fileName)
 %   rangeTable = rangeTable extracted from a mass spectra
 %   fileName = fileName as a string with storage location if needed e.g.
 %              "Z:\Test\Test.rrng"
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 
 %% first Part Ions

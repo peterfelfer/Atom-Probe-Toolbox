@@ -1,7 +1,8 @@
 function fv = patchStretchToHull(fv,boundary)
 % NEEDS DOCUMENTATION
 %stretches the boundary of a mesh to a specified boundary hull mesh
-
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 DEBUG = false;
 
 addpath('utilities_patch_normals/TriangleRayIntersection');

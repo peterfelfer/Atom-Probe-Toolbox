@@ -18,6 +18,8 @@ function pos = reflectronImageTransform(pos, intersectionCoordinates)
 % pos:          table variable with all entries identical to the input pos
 %               variable except for the detx and dety, which have been
 %               corrected for the reflectron image distortions.
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 ALPHA = 10; % alpha value for alpha shape the triangulation is based on.
 

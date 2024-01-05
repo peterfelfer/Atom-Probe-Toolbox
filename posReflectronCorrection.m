@@ -10,7 +10,8 @@ function posCorrected = posReflectronCorrection(transPos, intersections)
 % OUTPUT:
 % posCorrected = corrected pos table with the corrected detx and dety
 % coordinates - an adjacent reconstruction of the dataset is needed!
-
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 %% triangulation of the dataset
 alpha = 10; % [mm] alpha value for triangulation
 gridTris = alphaTriangulation(alphaShape(intersections.detectorX,intersections.detectorY, alpha));

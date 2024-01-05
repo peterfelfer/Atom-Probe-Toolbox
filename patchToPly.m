@@ -30,6 +30,7 @@ function patchToPly(fv,vertColors,fileName,comment)
 %
 %
 % 
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 %
 %
 if ~exist('fileName','var')

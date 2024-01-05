@@ -43,8 +43,15 @@ for r = 1:numRng
     h5writeatt(fileName,path, "name", string(rangeTable.rangeName(r)));
     
     % write range ion
-    rangeIon = string(ionConvertName(rangeTable.ion{r},rangeTable.chargeState(r)));
-    h5writeatt(fileName,path, "ion", rangeIon);
+        % check: if rangeName is an individual Name and does not have a specific
+        % ion 
+    if ~isempty(rangeTable.ion{r})
+        rangeIon = string(ionConvertName(rangeTable.ion{r},rangeTable.chargeState(r)));
+        h5writeatt(fileName,path, "ion", rangeIon);
+    else
+        rangeIon = string(rangeTable.rangeName(r));
+        h5writeatt(fileName,path, "ion", rangeIon);
+    end
     
     % write range bounds
     h5writeatt(fileName,path, "begin", rangeTable.mcbegin(r));

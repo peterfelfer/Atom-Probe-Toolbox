@@ -6,7 +6,8 @@ function [vertColors colBar] = valueToColor(values,colorMap, limits)
 % colormap 'cmap'. Default is jet. Also outputs the colorbar colorBar,
 % which is a clolrmapped patch that can be used in the actual visualisation
 % program.
-
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 if max(values) < 0
     values = uminus(values);
 end

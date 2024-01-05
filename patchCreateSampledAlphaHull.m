@@ -25,7 +25,8 @@ function fv = patchCreateSampledAlphaHull(pos,alpha,sample)
 %
 % OUTPUT:
 %       fv: structure with fv.vertices and fv.faces (triangulated)
-
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 if ~exist('alpha','var')
     alpha = 20;
@@ -76,8 +77,8 @@ end
 fv.vertices = samplePos(idx(:,1),:);
 fv.faces = bnd;
 
-f = figure('Name', 'Dataset hull');
-patch(fv,'FaceColor',[0 1 1],'FaceAlpha',.2); rotate3d on; axis equal;
+% f = figure('Name', 'Dataset hull');
+% patch(fv,'FaceColor',[0 1 1],'FaceAlpha',.2); rotate3d on; axis equal;
 
 
 

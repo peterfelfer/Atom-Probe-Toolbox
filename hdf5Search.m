@@ -1,13 +1,20 @@
-function result = hdf5Search(topFolder,attributes)
-%HDF5SEARCH looks in a set of HDF5 files for 
+ function result = hdf5Search(topFolder,attributes)
+% HDF5SEARCH looks in a folder with HDF5 files for attributes
 %  
+% result = hdf5Search(topFolder,attributes)
+%
+% INPUT
+% topFolder = folder that contains all of the HDF5 files
+% attributes = struct array with attributes, containing location and name
+%               of attribute, you can extract this attribute array by 
+%               loading a metaDataFile array in Matlab and extracting the 
+%               desired variables
+% OUTPUT
+% result = table with the result 
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
-%  topFolder = folder that contains all of the HDF5 files
-%  attributes = struct array with attributes, containing location and name
-%               of attribute, 
-%                 You can extract this attribute array by loading a metaDataFile array in Matlab and extracting the desired variables
-%  result = table with the result 
-%  Detailed explanation goes here
+
 
 
 %% look for HDF5 files in the folder

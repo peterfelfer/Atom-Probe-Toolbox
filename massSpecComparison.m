@@ -1,5 +1,5 @@
 function specComp = massSpecComparison(varargin)
-% mssSpecComparison takes the pos Variables and plots the massSpec in one figure
+% massSpecComparison plots multiple massSpec in one figure
 % 
 % specComp = massSpecComparison(pos1, pos2);
 % specComp = massSpecComparison(pos1, pos2, mode);
@@ -21,6 +21,8 @@ function specComp = massSpecComparison(varargin)
 %
 % OUTPUT
 % specComp = with all the pos variables plotted
+% 
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 %% default
 

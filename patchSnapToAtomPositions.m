@@ -9,10 +9,11 @@ function [fv energy] = patchSnapToAtomPositions(fv,pos,rad)
 
 %the DCOM energy is the sum of the square of all displacements - for
 %convergence measurments.
-
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 % addpath('utilities_patch_normals');
-
+%%
 if istable(pos)
     pos = [pos.x, pos.y, pos.z];
 end

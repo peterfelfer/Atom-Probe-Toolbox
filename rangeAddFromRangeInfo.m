@@ -7,6 +7,8 @@ function [h, txt, colorScheme] = rangeAddFromRangeInfo(spec, colorScheme, isotop
 % the output color scheme has the colors from the range file. Pre-existing
 % colors are either overwritten or missing colors are added. the initial
 % colorScheme can also be empty.
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 % default is the use of the exisiting color scheme
 if not(exist('useRrngColor','var'))

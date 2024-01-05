@@ -3,7 +3,16 @@ function elements = elementsExtractFromText(text)
 % and outputs them as a string array. This can be used to create ion lists.
 % For this the Element needs to be present as a one or two element
 % character only with whitespace or special characters around it (colons etc..).
-
+%
+% elements = elementsExtractFromText(text)
+%
+% INPUT
+% text =  text document with the element as a one or two element character 
+%         only with whitespace or special characters around it
+%
+% OUTPUT
+% elements = string array with the elements
+%%
 text = string(text);
 
 allElements = ["H","He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar",...

@@ -4,7 +4,11 @@ function remesh = patchCentroidalVoronoiTessellation(origMesh, CVTsteps, angLim)
 % algorithm. boundary point where the edge angle is  < angLim are not
 % influneced. If CVTsteps < 1, an energy criterion for convergence is used
 % and the amount of iterations is automatically determined.
+%
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
+%%
 DEBUG = false;
 PLOT = false;
 

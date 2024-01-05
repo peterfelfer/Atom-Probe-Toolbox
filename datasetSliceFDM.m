@@ -1,8 +1,8 @@
 function totalFDM = datasetSliceFDM(posIn, varargin)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%datasetSliceFDM plots FDM images of different parts of the dataset and lets you
+%save the images in a specific folder
 % INPUT
-% posIn = posfile with detx and dety coordinates
+% posIn = pos file with detx and dety coordinates
 % sampleName = Name of the Sample
 % interval = number of ions for one interval
 % range = start and end ion sequence number

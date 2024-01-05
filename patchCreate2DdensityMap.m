@@ -5,6 +5,8 @@ function map = patchCreate2DdensityMap(pos,fv,d)
 % its like a 2D concentration profile, but for general manifolds and is
 % calculated within a clipping distance d. If d is a 2 part vector its from
 %d(1) to d(2)
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 numVerts = length(fv.vertices);
 

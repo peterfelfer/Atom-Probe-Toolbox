@@ -1,5 +1,7 @@
 function rEvo = radiusEvolutionFnct(varargin)
 
+%
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
 % "shankAngle": shank angle (in degree)
 
