@@ -17,7 +17,6 @@
 
 # How to use the atom probe
 - You can download the repository from GitHub to your computer and add the repository to your active folder in Matlab
-- # Or
 - You can download the packed toolbox and install it to your Matlab version
 
 # First start
