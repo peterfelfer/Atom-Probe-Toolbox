@@ -29,7 +29,7 @@ https://www.youtube.com/watch?v=Eid6iTGl48M&list=PLLr-VNeczShDzrm-wdIyz9ORjFL5KD
 
 # Authors
 
-Prof Peter Felfer
+Prof. Dr. Peter Felfer
 
 Martina Heller
 
