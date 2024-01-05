@@ -28,7 +28,16 @@ https://www.youtube.com/watch?v=Eid6iTGl48M&list=PLLr-VNeczShDzrm-wdIyz9ORjFL5KD
 # Please feel invited to contribute to the Matlab Toolbox
 
 # Authors
+
 Prof Peter Felfer
+
 Martina Heller
+
 Benedict Ott
+
 Dr. Valentin Dalbauer
+
+Friedrich-Alexander-Universität Erlangen Nürnberg, Lehrstuhl für Allgemeine Werkstoffeigenschaften
+
+
+(c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
