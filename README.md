@@ -16,8 +16,9 @@
  - Analyse an HDF5 database filled with APT datasets
 
 # How to use the atom probe
-1. You can download the repository from GitHub to your computer and add the repository to your active folder in Matlab
-2. You can download the packed toolbox and install it to your Matlab version
+- You can download the repository from GitHub to your computer and add the repository to your active folder in Matlab
+- # Or
+- You can download the packed toolbox and install it to your Matlab version
 
 # First start
 In the folder doc is a Getting started guide with a description of each workflow and function. 
