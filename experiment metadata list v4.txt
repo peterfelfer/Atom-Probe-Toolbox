@@ -8,7 +8,7 @@
 % each group can contain more than one entry, e.g. /project/1/, specimen/1/
 
 % metadata metadata
-/metaData/templateVersion [string] = 0.2 []
+/metaData/templateVersion [string] = 4 []
 /metaData/templateURL [string] = NULL []
 
 % project metadata
@@ -159,3 +159,7 @@
 /atomProbeTomography/massToChargeRange/end [float32] = NULL [Da] % e.g. 33.34
 /atomProbeTomography/massToChargeRange/reconstructionVolume [float32] = NULL [at/nm3] % e.g. 70
 /atomProbeTomography/massToChargeRange/color [float32] = NULL [] % RGB 0-1 e.g. 0.23 , 0.4, 1.0
+
+/atomProbeTomography/analysisSoftware/name [string] = NULL [] % e.g. IVAS
+/atomProbeTomography/analysisSoftware/version [string] = NULL [] % e.g. 3.8.0
+/atomProbeTomography/analysisSoftware/code [string] = NULL [] % e.g. rtf or txt of analysis code
