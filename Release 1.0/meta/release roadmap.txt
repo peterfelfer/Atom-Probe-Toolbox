@@ -1,0 +1,6 @@
+Release Roadmap:
+ 1.1
+
+
+2.0
+new ROI system using WCS that are graphics group objects - needs to show up in legend

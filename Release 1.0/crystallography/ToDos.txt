@@ -1,0 +1,22 @@
+functionality to implement:
+
+basic:
+definition of a crystal structure (*.cif import?)
+definition of a crystal orientation
+definition of a crystal object
+  -structure
+  -orientation
+  -boundaries
+display of crystal orientation (primitive cubes/hexagons etc.)
+containment test for grains
+calculation of directions and planes
+IPF colouring for interfaces (can orientations be included?)
+IPF property plotting (e.g. concentration or interfacial excess)
+plane fitting for linear objects
+lattice generation
+local orientation / signal strength analysis (SDM/FFT?)
+
+optional advanced:
+Wulff plots for FDMs
+Piecewise linear interpolation of orientations for orientation gradients
+lattice rectification

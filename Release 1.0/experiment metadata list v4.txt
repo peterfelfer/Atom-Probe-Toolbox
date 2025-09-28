@@ -1,0 +1,165 @@
+% EXPERIMENT METADATA FILE TEMPLATE
+% description of experiment data metadata
+%
+% general form: variableName [format] = value [unit]
+%
+% variables can be a scalar or vector depending on context
+%
+% each group can contain more than one entry, e.g. /project/1/, specimen/1/
+
+% metadata metadata
+/metaData/templateVersion [string] = 4 []
+/metaData/templateURL [string] = NULL []
+
+% project metadata
+/project/identifier [string] =  []
+/project/contactPerson [string] =  []
+/project/confidentiality [enum] = open [open, embargoed, confidental]
+/project/dataSharingLicense [string] = CC by []
+/project/startDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
+/project/endDate [dateTime] = 2020-07-01 [yyyy-MM-dd]
+% multiple projects allowed
+
+
+% required general experiment metadata
+/specimen/name [string] = NULL []
+/specimen/description [string] = NULL []
+/specimen/uniqueIdentifier [string] =  []
+/specimen/notes [string] = NULL []
+/specimen/materialType [string] = NULL []
+/specimen/compositionNominal [string] = NULL [%] % elemental for metals: Ag72Cu28
+
+/specimen/images/1/type [string] = NULL []
+/specimen/images/1/contrastMechanism [string] = NULL []
+/specimen/images/1/image [uint32] = NULL []
+/specimen/images/1/horizontalPixelScale [float32] = NULL [µm]
+/specimen/images/1/verticalPixelScale [float32] = NULL [µm]
+
+
+/experiment/type [string] = atomProbeTomographyExperiment []
+/experiment/instrumentOperator [string] = NULL []
+/experiment/beginDateTime [dateTime] = 2020-07-01 10:14:36.000 [yyyy-MM-dd HH:mm:ss.SSS]
+/experiment/beginTimeZone [timeZone] = CET []
+/experiment/endDateTime [dateTime] = 2020-07-01 10:14:36.000 [yyyy-MM-dd HH:mm:ss.SSS]
+/experiment/endTimeZone [timeZone] = CET []
+/experiment/uniqueIdentifier [string] = R56 []
+/experiment/status [enum] = finished [planned, inProgress, finished]
+/experiment/result [enum] = goodData [short, ok, questionable, failed]
+/experiment/notes [string] = NULL []
+/experiment/dataEmbargoPeriodEndDate [dateTime] =  [yyyy-MM-dd]
+/experiment/dataIsEncrypted [bool] = false []
+/experiment/dataEncryptionInformation [string] = NULL []
+/experiment/data/publicationDOI [string] = NULL []
+
+% structure the institution name hierachically, comma separated
+/experiment/institution [string] =  Friedrich-Alexander Universität Erlangen-Nürnberg, Department of Materials Science, Institute for General Materials Properties []
+/experiment/longitude [float64] = 49.573321 [degree]
+/experiment/latitude [float64] = 11.027098 [degree]
+
+/instrument/family [string] = LEAP 4000X HR []
+/instrument/type [string] = Microelectrode Atom Probe []
+/instrument/acquisitionDevice [string] = CAMECA DLD []
+/instrument/manufacturer [string] = CAMECA []
+/instrument/lastCalibrationDate [dateTime] = NULL [yyyy-MM-dd]
+
+/laboratory/ambientTemperature [float32] = NULL [degC]
+
+
+% User defined analysis data
+
+% for ROIs, isosurfaces etc.
+/objects/meshObject/name [string] = NULL []
+/objects/meshObject/information [string] = NULL [] %e.g. 5 pct. Cr isosurface
+/objects/meshObject/isoValue [float64] = NULL [1] %e.g. 0.05
+% for mesh objects, the size of the data changes depending on if being a mesh (Nx3), line (Nx2) or point (Nx1) collection
+/objects/meshObject/vertices [float64] = NULL, NULL, NULL [nm] % change unit for context of data
+/objects/meshObject/faces [float64] = NULL, NULL, NULL [nm] % change unit for context of data
+/objects/meshObject/origin [float64] = NULL, NULL, NULL [nm] % change unit for context of data
+/objects/meshObject/coordinateSystemVectors [float64] = NULL [1] % 3x3 matrix (exx exy exz; eyx eyy eyz; ezx ezy ezz)
+/objects/meshObject/vertexColor [float64] = NULL, NULL, NULL [] % RGB 0-1 e.g. 0.23 , 0.4, 1.0, either whole or per vertex
+/objects/meshObject/faceColor [float64] = NULL, NULL, NULL [] % RGB 0-1 e.g. 0.23 , 0.4, 1.0, either whole or per vertex
+/objects/meshObject/faceAlpha [float64] = NULL [] % 0-1 either whole or per item
+/objects/meshObject/lineColor [float64] = NULL, NULL, NULL [] % RGB 0-1 e.g. 0.23 , 0.4, 1.0, either whole or per vertex
+/objects/meshObject/lineAlpha [float64] = NULL [] % R0-1 either whole or per item
+
+/objects/workCoordinateSystem/name [string] = NULL []
+/objects/workCoordinateSystem/origin [float64] = NULL, NULL, NULL [nm] % change unit for context of data
+/objects/workCoordinateSystem/coordinateSystemVectors [float64] = NULL [1] % 3x3 matrix (exx exy exz; eyx eyy eyz; ezx ezy ezz)
+
+/analysis/information [string] = NULL []
+/analysis/script [string] = NULL []
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% required atom probe experiment specific metadata
+/atomProbeTomography/instrument/flightPathLength [float32] = 110 [mm]
+/atomProbeTomography/instrument/t0 [float32] = 55.7 [ns]
+/atomProbeTomography/instrument/detectionEfficiency [float32] = 0.37 []
+/atomProbeTomography/instrument/apertureType [string] = conical microelectrode []
+/atomProbeTomography/instrument/apertureUniqueIdentifier [string] = NULL []
+/atomProbeTomography/instrument/detectorReadout [string] = discriminator []
+/atomProbeTomography/instrument/detectorResolution [float32] = 0.02 [mm]
+/atomProbeTomography/instrument/detectorSize [float32] = 80,80 [mm]
+/atomProbeTomography/instrument/laserIncidenceDirection [float32] = 1,2,3 []
+
+/atomProbeTomography/specimen/preparation/method [enum] = NULL [electropolishing, FIB, BIB]
+/atomProbeTomography/specimen/preparation/instrument [string] = NULL []
+/atomProbeTomography/specimen/preparation/finalIonBeamEnergy [float32] = NULL [keV]
+/atomProbeTomography/specimen/preparation/electroPolishingAgent [string] = NULL []
+/atomProbeTomography/specimen/preparation/electroPolishingVoltage [float32] = NULL [V,s] % may be V-t curve
+/atomProbeTomography/specimen/preparation/electropolishingTemperature [float32] = NULL [C]
+
+% optional atom probe experiment specific metadata
+% not set if data is continuously recorded during experiment
+% if data is continuously recorded, pls use corresponding variable names below
+
+/atomProbeTomography/experiment/pulseType [enum] = NULL [voltagePulsed, laserPulsed]
+/atomProbeTomography/experiment/specimenTemperatureActual [float32] = [K]
+/atomProbeTomography/experiment/specimenTemperatureNominal [float32] =  [K]
+/atomProbeTomography/experiment/measurementChamberPressure [float32] =  [torr]
+/atomProbeTomography/experiment/pulseFraction [float32] = NULL [1]
+/atomProbeTomography/experiment/laserPulseEnergy [float32] = NULL [J]
+/atomProbeTomography/experiment/laserPosition [float32] = NULL,NULL,NULL [mm]
+/atomProbeTomography/experiment/pulsePeriod [float32] = NULL [ns] % period between two voltage or laser pulses
+/atomProbeTomography/experiment/specimenStagePosition [float32] = NULL,NULL,NULL [mm]
+
+/atomProbeTomography/detectorEvent/laserPulseCount [uint64] = NULL [1]
+/atomProbeTomography/detectorEvent/voltagePulseCount [uint64] = NULL [1]
+/atomProbeTomography/detectorEvent/x [float32] = NULL [mm]
+/atomProbeTomography/detectorEvent/y [float32] = NULL [mm]
+/atomProbeTomography/detectorEvent/timeOfFlight [float32] = NULL [nm]
+/atomProbeTomography/detectorEvent/standingVoltage [float32] = NULL [V]
+/atomProbeTomography/detectorEvent/voltagePulseAmplitude [float32] = NULL [V]
+/atomProbeTomography/detectorEvent/fieldDesorptionMap [uint32] = NULL, NULL [1]
+
+/atomProbeTomography/reconstruction/isDecomposed [bool] = true []
+/atomProbeTomography/reconstruction/protocolPublicationDOI [string] = NULL []
+/atomProbeTomography/reconstruction/protocolParameterSet [string] = NULL []
+/atomProbeTomography/reconstruction/ion/x [float32] = NULL [nm]
+/atomProbeTomography/reconstruction/ion/y [float32] = NULL [nm]
+/atomProbeTomography/reconstruction/ion/z [float32] = NULL [nm]
+/atomProbeTomography/reconstruction/ion/massToChargeState [float32] = NULL [nm]
+/atomProbeTomography/reconstruction/ion/chargeState [uint8] = NULL []
+/atomProbeTomography/reconstruction/ion/reconstructionVolume [float32] = NULL []
+/atomProbeTomography/reconstruction/ion/fieldEvaporationSequenceIndex [int32] = NULL [nm]
+/atomProbeTomography/reconstruction/ion/ion [string] = NULL []
+
+/atomProbeTomography/reconstruction/atom/element [string] = NULL []
+/atomProbeTomography/reconstruction/atom/isotope [uint8] = NULL []
+/atomProbeTomography/reconstruction/atom/x [float32] = NULL [nm]
+/atomProbeTomography/reconstruction/atom/y [float32] = NULL [nm]
+/atomProbeTomography/reconstruction/atom/z [float32] = NULL [nm]
+
+% experiment analysis variables (multiline heterogeneous data)
+/atomProbeTomography/identifiedIon/ion [string] = NULL [] % e.g. Fe2 O3 ++
+/atomProbeTomography/identifiedIon/color [float32] = NULL [] % RGB 0-1 e.g. 0.23 , 0.4, 1.0
+
+/atomProbeTomography/massToChargeRange/name [string] = NULL [] % e.g. Fe2 O3
+/atomProbeTomography/massToChargeRange/ion [string] = NULL [] % e.g. 56Fe2 16O3 ++
+/atomProbeTomography/massToChargeRange/begin [float32] = NULL [Da] % e.g. 32.34
+/atomProbeTomography/massToChargeRange/end [float32] = NULL [Da] % e.g. 33.34
+/atomProbeTomography/massToChargeRange/reconstructionVolume [float32] = NULL [at/nm3] % e.g. 70
+/atomProbeTomography/massToChargeRange/color [float32] = NULL [] % RGB 0-1 e.g. 0.23 , 0.4, 1.0
+
+/atomProbeTomography/analysisSoftware/name [string] = NULL [] % e.g. IVAS
+/atomProbeTomography/analysisSoftware/version [string] = NULL [] % e.g. 3.8.0
+/atomProbeTomography/analysisSoftware/code [string] = NULL [] % e.g. rtf or txt of analysis code

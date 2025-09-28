@@ -1,0 +1,3 @@
+function crystal = defineCrystalStructure()
+
+end
