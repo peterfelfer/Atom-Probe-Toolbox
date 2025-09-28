@@ -193,15 +193,15 @@ pkcnt = sumCnt - sumFitCnt;
 
 %% plotting of results
 numAtoms = max(pos.atomNum);
-ions(isundefined(ions))='0';
-numIons = 
+%ions(isundefined(ions))='0';
+numIons = height(pos(:,1));
 pctAtoms = pkcnt/numAtoms * 100;
 pctIons = pkcnt/numAtoms * 100;
 sym = ' %';
 
 
-if pct < 0.1
-    pct = pct/100 * 1E6;
+if pctAtoms < 0.1
+    pctAtoms = pctAtoms/100 * 1E6;
     sym = ' ppm';
 end
 
@@ -223,7 +223,7 @@ if figOut == 1
     txtPos = [xLim(1) + 0.02 * (xLim(2) - xLim(1)); ...
         yLim(1) + 0.8 * (yLim(2) - yLim(1))];
     txt = {['ions in peak: ' num2str(round(pkcnt))],...
-        ['pct of all ions: ' num2str(pct,3) sym],...
+        ['pct of all ions: ' num2str(pctIons,3) sym],...
         ['peak location: ' num2str(pkloc) ' Da']};
     %%%%%%%%%%%%%%%%% ab hier eigentlich nach 'r' und 'a' und vor OUtput
     %%%%%%%%%%%%%%%%% table
@@ -355,7 +355,7 @@ if exist('options','var')
 end
 %% Output Table
 peakData.counts = round(pkcnt);
-peakData.pct = pct;
+peakData.pct = pctIons;
 peakData.loc = pkloc;
 
 end

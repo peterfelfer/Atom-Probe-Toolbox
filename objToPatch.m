@@ -98,7 +98,11 @@ for c = 1:size(fileCells,2)
             obj.objects(objects).faces = [obj.objects(objects).faces; line];
             
         case 'f'
-            face = [str2num(fileCells{1,c}{1,2}) str2num(fileCells{1,c}{1,3}) str2num(fileCells{1,c}{1,4}), str2num(fileCells{1,c}{1,5})];
+            if numel(fileCells{1,c}) == 4
+                face = [str2num(fileCells{1,c}{1,2}) str2num(fileCells{1,c}{1,3}) str2num(fileCells{1,c}{1,4})];
+            else
+                face = [str2num(fileCells{1,c}{1,2}) str2num(fileCells{1,c}{1,3}) str2num(fileCells{1,c}{1,4}) str2num(fileCells{1,c}{1,5})];
+            end
             obj.objects(objects).faces = [obj.objects(objects).faces; face];
             if which_group ~= 0
                 face = face';
