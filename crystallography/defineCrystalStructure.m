@@ -1,3 +1,0 @@
-function crystal = defineCrystalStructure()
-
-end
