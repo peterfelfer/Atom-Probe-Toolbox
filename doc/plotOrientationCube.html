@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>plotOrientationCube - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>plotOrientationCube</h1>
+<pre>
+  PLOTORIENTATIONCUBE Plot a cube representing crystallographic orientation in 3D
+ 
+    H = PLOTORIENTATIONCUBE(ORIENTATIONINPUT) plots an orientation cube
+    at the origin with default size.
+ 
+    H = PLOTORIENTATIONCUBE(ORIENTATIONINPUT, 'Name', Value, ...) specifies
+    additional options using name-value pairs.
+ 
+    Input:
+        orientationInput - Either:
+                           - 3x3 rotation matrix describing the orientation
+                             of the crystal coordinate system relative to the
+                             world coordinate system (crystal to world transform)
+                           - crystalOrientation object
+ 
+    Optional Name-Value Pairs:
+        'position'   - [x, y, z] position for cube center (default: [0, 0, 0])
+                       If a crystalOrientation object is passed and has a non-zero
+                       position, that position is used unless overridden.
+        'mesh'       - Mesh structure with 'vertices' field. If provided,
+                       cube is placed at center of gravity (mean of vertices).
+                       Overrides 'position' if both are specified.
+        'size'       - Cube size (default: 1)
+        'axes'       - Axes handle to plot into (default: current axes or new figure)
+        'showAxes'   - Logical, show crystal axis arrows and labels (default: true)
+        'faceAlpha'  - Face transparency 0-1 (default: 0.8)
+        'edgeColor'  - Edge color (default: 'k')
+        'lineWidth'  - Edge line width (default: 1.5)
+ 
+    Output:
+        h - Structure containing handles to graphical objects:
+            h.patch  - Handle to cube patch object
+            h.arrows - Handles to axis arrows (quiver3)
+            h.labels - Handles to axis labels (text)
+ 
+    Example:
+        

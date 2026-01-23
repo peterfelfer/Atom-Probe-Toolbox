@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>rangeAddAll - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>rangeAddAll</h1>
+<pre>
+  rangeAddAll is a convenient function that guides the user through the
+  ranging process for all defined ionic peaks that currently have no range
+  associated with them. The focus in the figure is automatically given to
+  the current peak and the region around it. 
+  When the peak is in focus, the user needs to range it manually. If the 
+  peak should be skipped, enter must be pressed.
+ 
+  rangeAddAll(spec,colorScheme,rangeMargin)
+ 
+  INPUT
+  spec:         figure, that holds the mass spectrum with the peaks which 
+                will be ranged
+ 
+  colorScheme:  color scheme with colors for the ranges
+ 
+  rangeMargin:  is the number of Da before and after the peak that are
+                displayed
+  useMin:       the user can choose between 'true' and 'false'
+                false:  the user will be taken through every peak
+                true: the user can draw a line over the mass spectrum and
+                only the peaks higher than the line are taken into account
+                for the ranging
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

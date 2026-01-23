@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>clusterDBSCAN - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>clusterDBSCAN</h1>
+<pre>
+  CLUSTERDBSCAN Density-based spatial clustering for APT data
+ 
+  [clusterIdx, clusterInfo] = clusterDBSCAN(pos, epsilon, minPts)
+  [clusterIdx, clusterInfo] = clusterDBSCAN(pos, epsilon, minPts, 'useGPU', true)
+ 
+  Performs DBSCAN (Density-Based Spatial Clustering of Applications with
+  Noise) clustering on atom probe position data. Automatically uses GPU
+  acceleration when available with CPU fallback.
+ 
+  INPUT:
+    pos      - Nx3 array of atom positions [x, y, z] in nm
+               OR position table with x, y, z columns
+    epsilon  - Neighborhood radius in nm (typical: 0.3-1.0 nm for APT)
+    minPts   - Minimum points to form a cluster (typical: 5-20)
+ 
+  OPTIONS:
+    'useGPU'      - Try to use GPU acceleration (default: true)
+    'useParallel' - Use parallel processing for CPU (default: true)
+    'soluteIdx'   - Logical or index vector of solute atoms to cluster
+                    (default: all atoms)
+    'chunkSize'   - Points per chunk for large datasets (default: 50000)
+    'showProgress'- Show progress indicator (default: true)
+    'algorithm'   - 'kdtree' or 'bruteforce' (default: 'kdtree')
+ 
+  OUTPUT:
+    clusterIdx  - Nx1 array of cluster assignments
+                  -1 = noise, 0 = not analyzed, 1,2,3... = cluster ID
+    clusterInfo - Structure with cluster statistics:
+        .nClusters      - Number of clusters found
+        .nNoise         - Number of noise points
+        .nClustered     - Number of clustered points
+        .clusterSizes   - Number of atoms per cluster
+        .clusterCenters - Centroid of each cluster [nClusters x 3]
+        .clusterRadii   - Radius of gyration per cluster
+        .computeTime    - Time taken for clustering
+        .method         - 'GPU' or 'CPU'
+ 
+  ALGORITHM:
+    DBSCAN groups points that are closely packed together, marking points
+    in low-density regions as outliers. Unlike k-means, it doesn't require
+    specifying the number of clusters and can find arbitrarily shaped clusters.
+ 
+  EXAMPLES:
+    

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>misorientation - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>misorientation</h1>
+<pre>
+  MISORIENTATION Calculate misorientation between two crystal orientations
+ 
+  [angle, axis, details] = misorientation(orientation1, orientation2)
+  [angle, axis, details] = misorientation(orientation1, orientation2, 'cubic')
+ 
+  Calculates the misorientation angle and axis between two crystal
+  orientations, accounting for crystal symmetry to find the minimum
+  (disorientation) angle.
+ 
+  INPUT:
+    orientation1 - First orientation as:
+                   - 3x3 rotation matrix
+                   - 4-element quaternion [w, x, y, z]
+                   - 3-element Euler angles [phi1, Phi, phi2] in degrees (Bunge convention)
+                   - crystalOrientation object
+    orientation2 - Second orientation (same format as orientation1)
+    crystalSystem - Crystal symmetry (default: 'cubic')
+                    Options: 'cubic', 'hexagonal', 'tetragonal', 'orthorhombic',
+                            'monoclinic', 'triclinic'
+ 
+  OUTPUT:
+    angle   - Misorientation angle in degrees (disorientation - minimum angle)
+    axis    - Rotation axis [x, y, z] (unit vector in crystal frame)
+    details - Structure with additional information:
+        .fullAngle      - Angle before symmetry reduction
+        .quaternion     - Misorientation quaternion
+        .rotationMatrix - Misorientation rotation matrix
+        .eulerAngles    - Euler angles [phi1, Phi, phi2]
+        .symmetryOp     - Symmetry operator used
+        .cslType        - CSL boundary type if applicable (Sigma value)
+ 
+  THEORY:
+    Misorientation: g_mis = g2 * g1^(-1)
+    Disorientation: minimum angle considering all crystal symmetry equivalents
+ 
+    For cubic crystals, the maximum disorientation angle is 62.8 degrees.
+ 
+  EXAMPLES:
+    

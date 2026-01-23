@@ -1,0 +1,221 @@
+{
+    "_schemaVersion": "1.0.0",
+    "_comment": "Function signatures for Atom Probe Toolbox - enables code completion and hints",
+
+    "setupToolbox": {
+        "inputs": [
+            {"name": "options", "kind": "namevalue", "type": "choices={'checkDeps','quiet','permanent'}"}
+        ]
+    },
+
+    "checkDependencies": {
+        "inputs": [
+            {"name": "verbose", "kind": "namevalue", "type": "logical", "default": "true"},
+            {"name": "autoAddPath", "kind": "namevalue", "type": "logical", "default": "true"},
+            {"name": "checkOptional", "kind": "namevalue", "type": "logical", "default": "false"}
+        ],
+        "outputs": [
+            {"name": "status", "type": "logical"},
+            {"name": "report", "type": "struct"}
+        ]
+    },
+
+    "ionAdd": {
+        "inputs": [
+            {"name": "ionName", "kind": "required", "type": "char"},
+            {"name": "ionTable", "kind": "ordered", "type": "table"}
+        ],
+        "outputs": [
+            {"name": "ionTable", "type": "table"}
+        ]
+    },
+
+    "rangeAdd": {
+        "inputs": [
+            {"name": "mcRange", "kind": "required", "type": ["numeric", "size=1,2"]},
+            {"name": "ionName", "kind": "required", "type": "char"},
+            {"name": "ionTable", "kind": "required", "type": "table"},
+            {"name": "rangeTable", "kind": "ordered", "type": "table"}
+        ],
+        "outputs": [
+            {"name": "rangeTable", "type": "table"}
+        ]
+    },
+
+    "massSpecPlot": {
+        "inputs": [
+            {"name": "massToCharge", "kind": "required", "type": "numeric"},
+            {"name": "mode", "kind": "namevalue", "type": "choices={'count','normalised'}", "default": "'count'"}
+        ]
+    },
+
+    "massSpecAnalysis": {
+        "inputs": [
+            {"name": "mass", "kind": "required", "type": "numeric"},
+            {"name": "binWidth", "kind": "namevalue", "type": "numeric", "default": "0.01"},
+            {"name": "massRange", "kind": "namevalue", "type": ["numeric", "size=1,2"]},
+            {"name": "peakThreshold", "kind": "namevalue", "type": "numeric", "default": "0.001"},
+            {"name": "bgMethod", "kind": "namevalue", "type": "choices={'moving','polynomial','exponential'}", "default": "'moving'"},
+            {"name": "showPlot", "kind": "namevalue", "type": "logical", "default": "true"}
+        ],
+        "outputs": [
+            {"name": "results", "type": "struct"}
+        ]
+    },
+
+    "scatterPlotPosData": {
+        "inputs": [
+            {"name": "posTable", "kind": "required", "type": "table"},
+            {"name": "colorScheme", "kind": "namevalue", "type": "table"}
+        ]
+    },
+
+    "roiCreateBox": {
+        "inputs": [
+            {"name": "center", "kind": "required", "type": ["numeric", "size=1,3"]},
+            {"name": "dimensions", "kind": "required", "type": ["numeric", "size=1,3"]}
+        ],
+        "outputs": [
+            {"name": "roi", "type": "struct"}
+        ]
+    },
+
+    "roiCreateCylinder": {
+        "inputs": [
+            {"name": "point1", "kind": "required", "type": ["numeric", "size=1,3"]},
+            {"name": "point2", "kind": "required", "type": ["numeric", "size=1,3"]},
+            {"name": "radius", "kind": "required", "type": "numeric"}
+        ],
+        "outputs": [
+            {"name": "roi", "type": "struct"}
+        ]
+    },
+
+    "roiCreateSphere": {
+        "inputs": [
+            {"name": "center", "kind": "required", "type": ["numeric", "size=1,3"]},
+            {"name": "radius", "kind": "required", "type": "numeric"}
+        ],
+        "outputs": [
+            {"name": "roi", "type": "struct"}
+        ]
+    },
+
+    "posCalculateConcentrationSimple": {
+        "inputs": [
+            {"name": "posTable", "kind": "required", "type": "table"},
+            {"name": "ranges", "kind": "required", "type": "table"}
+        ],
+        "outputs": [
+            {"name": "concentration", "type": "struct"}
+        ]
+    },
+
+    "concentrationUncertainty": {
+        "inputs": [
+            {"name": "counts", "kind": "required", "type": "numeric"},
+            {"name": "method", "kind": "namevalue", "type": "choices={'poisson','binomial','clopper'}", "default": "'binomial'"},
+            {"name": "confidence", "kind": "namevalue", "type": "numeric", "default": "0.95"},
+            {"name": "detectionEfficiency", "kind": "namevalue", "type": "numeric", "default": "1"}
+        ],
+        "outputs": [
+            {"name": "uncertainty", "type": "struct"},
+            {"name": "details", "type": "struct"}
+        ]
+    },
+
+    "clusterDBSCAN": {
+        "inputs": [
+            {"name": "pos", "kind": "required", "type": ["numeric", "size=:,3"]},
+            {"name": "epsilon", "kind": "required", "type": "numeric"},
+            {"name": "minPts", "kind": "required", "type": "numeric"},
+            {"name": "useGPU", "kind": "namevalue", "type": "logical", "default": "true"},
+            {"name": "useParallel", "kind": "namevalue", "type": "logical", "default": "true"},
+            {"name": "soluteIdx", "kind": "namevalue", "type": "logical"},
+            {"name": "showProgress", "kind": "namevalue", "type": "logical", "default": "true"}
+        ],
+        "outputs": [
+            {"name": "clusterIdx", "type": "numeric"},
+            {"name": "clusterInfo", "type": "struct"}
+        ]
+    },
+
+    "spatialStatistics": {
+        "inputs": [
+            {"name": "pos", "kind": "required", "type": ["numeric", "size=:,3"]},
+            {"name": "rdfMaxR", "kind": "namevalue", "type": "numeric", "default": "3"},
+            {"name": "rdfBinWidth", "kind": "namevalue", "type": "numeric", "default": "0.05"},
+            {"name": "nnMaxK", "kind": "namevalue", "type": "numeric", "default": "10"},
+            {"name": "computeRDF", "kind": "namevalue", "type": "logical", "default": "true"},
+            {"name": "computeNN", "kind": "namevalue", "type": "logical", "default": "true"},
+            {"name": "computeK", "kind": "namevalue", "type": "logical", "default": "true"}
+        ],
+        "outputs": [
+            {"name": "stats", "type": "struct"}
+        ]
+    },
+
+    "dataQualityMetrics": {
+        "inputs": [
+            {"name": "pos", "kind": "required", "type": ["numeric", "size=:,3"]},
+            {"name": "mass", "kind": "namevalue", "type": "numeric"},
+            {"name": "voxelSize", "kind": "namevalue", "type": "numeric", "default": "1"},
+            {"name": "showPlots", "kind": "namevalue", "type": "logical", "default": "false"}
+        ],
+        "outputs": [
+            {"name": "metrics", "type": "struct"}
+        ]
+    },
+
+    "misorientation": {
+        "inputs": [
+            {"name": "orientation1", "kind": "required"},
+            {"name": "orientation2", "kind": "required"},
+            {"name": "crystalSystem", "kind": "ordered", "type": "choices={'cubic','hexagonal','tetragonal','orthorhombic','monoclinic','triclinic'}", "default": "'cubic'"}
+        ],
+        "outputs": [
+            {"name": "angle", "type": "numeric"},
+            {"name": "axis", "type": ["numeric", "size=1,3"]},
+            {"name": "details", "type": "struct"}
+        ]
+    },
+
+    "batchProcess": {
+        "inputs": [
+            {"name": "dataFiles", "kind": "required", "type": "cell"},
+            {"name": "analysisFcn", "kind": "required", "type": "function_handle"},
+            {"name": "parallel", "kind": "namevalue", "type": "logical", "default": "false"},
+            {"name": "continueOnError", "kind": "namevalue", "type": "logical", "default": "true"},
+            {"name": "saveResults", "kind": "namevalue", "type": "logical", "default": "false"},
+            {"name": "showProgress", "kind": "namevalue", "type": "logical", "default": "true"}
+        ],
+        "outputs": [
+            {"name": "results", "type": "struct"}
+        ]
+    },
+
+    "validateInputs": {
+        "inputs": [
+            {"name": "varargin", "kind": "required", "repeating": true}
+        ]
+    },
+
+    "APTConfig.getInstance": {
+        "outputs": [
+            {"name": "config", "type": "APTConfig"}
+        ]
+    },
+
+    "APTConfig.get": {
+        "inputs": [
+            {"name": "key", "kind": "required", "type": "char"}
+        ]
+    },
+
+    "APTConfig.set": {
+        "inputs": [
+            {"name": "key", "kind": "required", "type": "char"},
+            {"name": "value", "kind": "required"}
+        ]
+    }
+}

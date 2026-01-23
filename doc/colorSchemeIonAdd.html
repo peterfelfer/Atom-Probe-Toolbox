@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>colorSchemeIonAdd - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>colorSchemeIonAdd</h1>
+<pre>
+  colorSchemeIonAdd adds new ions to the colorScheme table and adds a new
+  color which was not used before.
+  
+  colorScheme = colorSchemeIonAdd(colorScheme, newIon, select)
+  colorScheme = colorSchemeIonAdd(colorScheme, newIon)
+ 
+  INPUT
+  colorScheme:  The existing colorScheme
+  newIon:       Name of the newIon, if the ion already exists, the function will
+                end and the command window shows "ion already exists in
+                colorScheme"
+  selection:    'select' if you want to choose the color
+                if nothing is parsed, the color is randomly generated
+                'create' a new color by picking the one that is the farthest 
+                from all existing colors
+  
+  OUTPUT
+  colorScheme:  the new colorScheme with the new ion added at the end of
+                the table
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

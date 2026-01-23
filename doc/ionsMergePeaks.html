@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ionsMergePeaks - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>ionsMergePeaks</h1>
+<pre>
+  ionsMergePeaks takes a list of isotopic combinations and merges peaks 
+  that are closer than mergeMargin
+  
+  [ionType, abundance, weight] = ionsMergePeaks(ionType, abundance, weight, mergeMargin)
+  
+  INPUT
+  ionType:                      type of the ion for that peaks should 
+                                be merged
+  
+  abundance:                    relativ abundance of the peak in 
+                                the mass spectrum
+ 
+  weight:                       weight of the ion
+ 
+  mergeMargin:                  peaks within this range will be merged
+  
+  OUTPUT
+  [ionType, abundance, weight]: cell array of merged peaks
+                                sorted by molecular weight
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>roiCreateBox - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>roiCreateBox</h1>
+<pre>
+  roiCreateBox creates a box in the current or parsed axis with specified 
+  width and height at the location. 
+  Output is handle to the object for later manipulation.
+ 
+  bh = roiCreateBox()
+  bh = roiCreateBox(dimensions)
+  bh = roiCreateBox(dimensions,location)
+  bh = roiCreateBox(dimensions,location,ax)
+ 
+  INPUT
+  dimensions:   the length, width and height (x,y,z) of the ROI given as 
+                [x y z], default is [10 10 10]
+ 
+  location:     the start coordinates of the ROI given as [x y z],
+                default is [0 0 0]
+ 
+  ax:           axes in which the ROI is orientated
+ 
+  OUTPUT
+  bh:           handle to the ROIbox
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

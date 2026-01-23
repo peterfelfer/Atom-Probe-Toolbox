@@ -1,43 +1,387 @@
 # Atom Probe Toolbox
- Matlab toolbox for APT analysis
 
- This toolbox covers mutliple possibilities to analyse atom probe datasets.
- Starting point is a .pos or .epos file. These main analysis methods are covered:
- - Create a mass spectrum and range ions
- - 3D plot of your point cloud data
- - Select regions of interest as a cylinder/sphere/box/plane and perform analysis
- - Concentration calculation
- - Grain boundary analysis
- - Cluster Analysis
- - interfacial Excess
- - Isosurface analysis
- - Correct the distortions introduced by the Reflectron
- - Create one HDF5 format for your measurement and add meta data
- - Analyse an HDF5 database filled with APT datasets
+**A comprehensive MATLAB toolbox for Atom Probe Tomography (APT) data analysis**
 
-# How to use the atom probe
-- You can download the repository from GitHub to your computer and add the repository to your active folder in Matlab
-- You can download the packed toolbox and install it to your Matlab version
+[![MATLAB](https://img.shields.io/badge/MATLAB-R2019b%2B-blue.svg)](https://www.mathworks.com/products/matlab.html)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Version](https://img.shields.io/badge/Version-1.0-orange.svg)](https://github.com/peterfelfer/Atom-Probe-Toolbox)
 
-# First start
-In the folder doc is a Getting started guide with a description of each workflow and function. 
-A good start is the Workflow_FirstSteps.mlx
-For a visual introduction, on youtube are some tutorial videos on the channel of Peter Felfer:
-https://www.youtube.com/watch?v=Eid6iTGl48M&list=PLLr-VNeczShDzrm-wdIyz9ORjFL5KDeYT
+Developed by the [Felfer Group](https://www.wtm.tf.fau.de/) at Friedrich-Alexander-Universität Erlangen-Nürnberg.
 
-# Please feel invited to contribute to the Matlab Toolbox
+---
 
-# Authors
+## Table of Contents
 
-Prof. Dr. Peter Felfer
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Documentation](#documentation)
+- [Function Reference](#function-reference)
+- [Workflows](#workflows)
+- [Contributing](#contributing)
+- [Citation](#citation)
+- [Authors](#authors)
+- [License](#license)
 
-Martina Heller
+---
 
-Benedict Ott
+## Features
 
-Dr. Valentin Dalbauer
+### Data Import & Export
+- Read `.pos`, `.epos`, and `.APT` (CAMECA) file formats
+- HDF5 database creation with standardized metadata schema
+- Export to `.obj`, `.ply`, `.h5` formats
+- RRNG range file import
 
-Friedrich-Alexander-Universität Erlangen Nürnberg, Lehrstuhl für Allgemeine Werkstoffeigenschaften
+### Mass Spectrum Analysis
+- Interactive mass spectrum plotting and ranging
+- Automated peak detection and background fitting
+- Isotope pattern matching
+- Peak deconvolution
+- Charge state ratio analysis
 
+### 3D Visualization & ROI
+- Interactive 3D point cloud visualization
+- Region of Interest (ROI) selection: box, cylinder, sphere, plane
+- ROI manipulation GUI (`roiManipulate.mlapp`)
+- Custom color schemes per ion species
 
-(c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+### Composition Analysis
+- Local and global concentration calculation
+- 1D and 2D concentration profiles
+- Proxigram analysis (point, line, and surface-based)
+- Concentration uncertainty quantification
+- Interfacial excess calculations
+
+### Cluster Analysis
+- DBSCAN clustering with GPU acceleration (CPU fallback)
+- Voronoi volume analysis
+- Cluster size distribution analysis
+- Spatial distribution functions (RDF, nearest neighbor)
+
+### Crystallography
+- Crystal orientation handling
+- Inverse Pole Figure (IPF) coloring
+- Grain boundary characterization
+- Misorientation angle calculations
+- CSL boundary identification (Sigma values)
+- Stereographic projections
+
+### Reconstruction & Correction
+- Geiser reconstruction algorithm
+- Reflectron distortion correction
+- Field desorption map analysis
+
+### Correlative Microscopy
+- Volume resampling and rotation
+- Isosurface extraction
+- 3D data registration tools
+
+---
+
+## Requirements
+
+### Required
+- **MATLAB R2019b or later**
+- **Statistics and Machine Learning Toolbox**
+- **Image Processing Toolbox**
+
+### Optional (for enhanced functionality)
+- Curve Fitting Toolbox - for advanced peak fitting
+- Optimization Toolbox - for parameter optimization
+- Parallel Computing Toolbox - for accelerated batch processing
+
+### Check Your Installation
+```matlab
+checkDependencies();
+```
+
+---
+
+## Installation
+
+### Option 1: Clone from GitHub (Recommended)
+```bash
+git clone https://github.com/peterfelfer/Atom-Probe-Toolbox.git
+```
+
+Then in MATLAB:
+```matlab
+cd('/path/to/Atom-Probe-Toolbox')
+setupToolbox();
+```
+
+### Option 2: Download ZIP
+1. Download the repository from [GitHub](https://github.com/peterfelfer/Atom-Probe-Toolbox)
+2. Extract to your desired location
+3. Run `setupToolbox()` in MATLAB
+
+### Option 3: MATLAB Toolbox Installer
+Download the `.mltbx` file from the Releases page and double-click to install.
+
+### Make Installation Permanent
+```matlab
+setupToolbox('permanent', true);
+```
+
+---
+
+## Quick Start
+
+### Initialize the Toolbox
+```matlab
+setupToolbox();
+```
+
+### Load and Visualize Data
+```matlab
+% Load a .pos file
+pos = posLoad('mydata.pos');
+
+% Create a mass spectrum
+massSpecPlot(pos.mc);
+
+% 3D visualization
+scatterPlotPosData(pos);
+```
+
+### Define Ions and Ranges
+```matlab
+% Create ion definitions
+ions = ionAdd('Fe');
+ions = ionAdd('Cr', ions);
+ions = ionAdd('C', ions);
+
+% Define mass-to-charge ranges
+ranges = rangeAdd([55.8, 56.1], 'Fe', ions);
+ranges = rangeAdd([51.9, 52.2], 'Cr', ions, ranges);
+```
+
+### Calculate Composition
+```matlab
+% Simple concentration
+conc = posCalculateConcentrationSimple(pos, ranges);
+
+% With uncertainty
+unc = concentrationUncertainty(conc.counts);
+```
+
+### Cluster Analysis
+```matlab
+% Find clusters using DBSCAN
+[clusterIdx, info] = clusterDBSCAN(pos, 0.5, 10);
+fprintf('Found %d clusters\n', info.nClusters);
+```
+
+### Check Data Quality
+```matlab
+metrics = dataQualityMetrics(pos);
+disp(metrics.summary);
+```
+
+---
+
+## Documentation
+
+### Getting Started Guide
+Open the interactive getting started guide:
+```matlab
+open('doc/GettingStarted.mlx')
+```
+
+### Video Tutorials
+Watch our [YouTube tutorial series](https://www.youtube.com/watch?v=Eid6iTGl48M&list=PLLr-VNeczShDzrm-wdIyz9ORjFL5KDeYT).
+
+### Workflow Examples
+The toolbox includes 30+ workflow files (`.mlx`) demonstrating common analysis tasks:
+```matlab
+% Open a workflow
+open('Workflow_FirstSteps.mlx')
+open('Workflow_ClusterDetermination.mlx')
+open('Workflow_Proxigram.mlx')
+```
+
+---
+
+## Function Reference
+
+### Data I/O
+| Function | Description |
+|----------|-------------|
+| `posLoad` | Load .pos/.epos files |
+| `posExport` | Export position data |
+| `rangesExtractFromFile` | Import RRNG range files |
+| `hdf5FileCreateFromMetaDataList` | Create HDF5 database |
+| `posTableAddToHDF5` | Save data to HDF5 |
+| `posTableFromHDF5` | Load data from HDF5 |
+
+### Ion & Range Management
+| Function | Description |
+|----------|-------------|
+| `ionAdd` | Add ion to ion list |
+| `ionConvertName` | Convert ion name formats |
+| `ionsCreateIsotopeList` | Generate isotope patterns |
+| `rangeAdd` | Add mass-to-charge range |
+| `rangesFromPos` | Auto-generate ranges |
+
+### Visualization
+| Function | Description |
+|----------|-------------|
+| `massSpecPlot` | Plot mass spectrum |
+| `scatterPlotPosData` | 3D atom visualization |
+| `colorSchemeCreate` | Create color scheme |
+| `colorSchemeIonAdd` | Add ion colors |
+
+### ROI Operations
+| Function | Description |
+|----------|-------------|
+| `roiCreateBox` | Create box ROI |
+| `roiCreateCylinder` | Create cylindrical ROI |
+| `roiCreateSphere` | Create spherical ROI |
+| `roiCreatePlane` | Create planar ROI |
+| `roiManipulate.mlapp` | Interactive ROI GUI |
+
+### Analysis
+| Function | Description |
+|----------|-------------|
+| `posCalculateConcentrationSimple` | Calculate composition |
+| `concentrationUncertainty` | Uncertainty quantification |
+| `pointCreateProxigram` | Point-based proxigram |
+| `lineCreateProxigram` | Line-based proxigram |
+| `patchCreateProxigram` | Surface proxigram |
+| `spatialStatistics` | RDF, nearest neighbor analysis |
+| `dataQualityMetrics` | Data quality assessment |
+| `massSpecAnalysis` | Automated peak analysis |
+
+### Cluster Analysis
+| Function | Description |
+|----------|-------------|
+| `clusterDBSCAN` | DBSCAN clustering (GPU/CPU) |
+| `clusterDetermination` | Cluster identification |
+| `voronoiVolumeAnalysis` | Voronoi-based analysis |
+| `clusterSizeAnalyse` | Cluster statistics |
+
+### Crystallography
+| Function | Description |
+|----------|-------------|
+| `crystalOrientation` | Orientation object |
+| `ipfColor` | IPF coloring |
+| `ipfHistogram` | IPF distribution |
+| `misorientation` | Misorientation calculation |
+| `boundaryCharacter` | GB characterization |
+| `stereoProj` | Stereographic projection |
+
+### Utilities
+| Function | Description |
+|----------|-------------|
+| `setupToolbox` | Initialize toolbox |
+| `checkDependencies` | Check requirements |
+| `APTConfig` | Configuration management |
+| `batchProcess` | Batch processing |
+| `ProgressTracker` | Progress indication |
+| `validateInputs` | Input validation |
+
+---
+
+## Workflows
+
+| Workflow | Description |
+|----------|-------------|
+| `Workflow_FirstSteps.mlx` | Introduction and basics |
+| `Workflow_1DConcentrationProfile.mlx` | 1D composition profiles |
+| `Workflow_2DConcentrationMap.mlx` | 2D composition mapping |
+| `Workflow_3D_Visualisation_of_APT_data.mlx` | 3D visualization |
+| `Workflow_ClusterDetermination.mlx` | Cluster analysis |
+| `Workflow_Proxigram.mlx` | Proxigram analysis |
+| `Workflow_interfacialExcess.mlx` | Interfacial excess |
+| `Workflow_Isosurface.mlx` | Isosurface extraction |
+| `Workflow_ModellingGB.mlx` | Grain boundary modeling |
+| `Workflow_HDF5_IO.mlx` | HDF5 database operations |
+| `Workflow_reconstruction.mlx` | 3D reconstruction |
+| `Workflow_ReflectronCorrection.mlx` | Reflectron correction |
+
+---
+
+## Configuration
+
+### Instrument Presets
+```matlab
+cfg = APTConfig.getInstance();
+cfg.applyInstrumentPreset('LEAP5000XR');  % or 'LEAP4000XHR', 'LEAP5000XS', 'EIKOS'
+```
+
+### Material Presets
+```matlab
+cfg.applyMaterialPreset('Al');  % Sets atomic volume for aluminum
+% Available: Fe, Al, Cu, Ni, Ti, W, Si, Mg
+```
+
+### Custom Configuration
+```matlab
+cfg.reconstruction.detectionEfficiency = 0.52;
+cfg.analysis.clusterEpsilon = 0.6;
+cfg.save();  % Persist settings
+```
+
+---
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+### Ways to Contribute
+- Report bugs and issues
+- Suggest new features
+- Submit pull requests
+- Improve documentation
+- Share workflow examples
+
+---
+
+## Citation
+
+If you use this toolbox in your research, please cite:
+
+```bibtex
+@software{AtomProbeToolbox,
+  author = {Felfer, Peter and Heller, Martina and Ott, Benedict and Dalbauer, Valentin},
+  title = {Atom Probe Toolbox},
+  year = {2024},
+  publisher = {GitHub},
+  url = {https://github.com/peterfelfer/Atom-Probe-Toolbox}
+}
+```
+
+---
+
+## Authors
+
+**Prof. Dr. Peter Felfer** - Principal Investigator
+
+**Martina Heller** - Developer
+
+**Benedict Ott** - Developer
+
+**Dr. Valentin Dalbauer** - Developer
+
+[Chair of General Materials Properties](https://www.wtm.tf.fau.de/)
+Friedrich-Alexander-Universität Erlangen-Nürnberg
+
+---
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## Acknowledgments
+
+- The atom probe community for feedback and feature requests
+- [CAMECA](https://www.cameca.com/) for instrument support
+- All contributors and users of this toolbox
+
+---
+
+**(c) 2024 Prof. Peter Felfer Group @ FAU Erlangen-Nürnberg**

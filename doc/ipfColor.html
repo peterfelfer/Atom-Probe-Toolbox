@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ipfColor - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>ipfColor</h1>
+<pre>
+  IPFCOLOR Computes IPF color for crystallographic direction (cubic system)
+ 
+    RGB = IPFCOLOR(DIRECTION) returns the RGB color for a crystallographic
+    direction in a cubic crystal system using the standard IPF coloring
+    scheme with the [001]-[011]-[111] standard triangle.
+ 
+    RGB = IPFCOLOR(CRYSTALORIENTATION, WORLDDIRECTION) returns the IPF color
+    for a world direction transformed into the crystal frame using the given
+    crystalOrientation object. This is useful for coloring surfaces based on
+    their normal directions.
+ 
+    [RGB, AX] = IPFCOLOR(..., 'plot', true) additionally plots the
+    standard triangle with the direction marked and returns the axes handle.
+ 
+    Input:
+        direction - 3-component vector [h k l] specifying crystallographic direction
+ 
+        OR
+ 
+        crystalOrientation - crystalOrientation object
+        worldDirection     - 3-component vector in world coordinates
+ 
+    Optional Name-Value Pairs:
+        'plot'      - logical, if true creates a plot (default: false)
+        'MarkerSize'- size of the marker in the plot (default: 100)
+ 
+    Output:
+        rgb - 1x3 RGB color vector (values 0-1)
+        ax  - axes handle (only if 'plot' is true)
+ 
+    Color scheme:
+        [001] = Blue  (bottom-left)
+        [011] = Green (bottom-right)
+        [111] = Red   (top)
+ 
+    Example:
+        

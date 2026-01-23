@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>dataQualityMetrics - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>dataQualityMetrics</h1>
+<pre>
+  DATAQUALITYMETRICS Assess reconstruction quality and data integrity
+ 
+  metrics = dataQualityMetrics(pos)
+  metrics = dataQualityMetrics(pos, 'mass', mass)
+ 
+  Computes various metrics to assess the quality of APT data and
+  reconstruction, including spatial resolution estimates, density
+  variations, and detection artifacts.
+ 
+  INPUT:
+    pos - Nx3 array of atom positions [x, y, z] in nm
+          OR position table with x, y, z columns (and optionally mass, tof)
+ 
+  OPTIONS:
+    'mass'           - Mass-to-charge values (for mass spectrum quality)
+    'tof'            - Time-of-flight values
+    'detectionEfficiency' - Known detection efficiency (default: estimate)
+    'voxelSize'      - Voxel size for density analysis in nm (default: 1)
+    'showPlots'      - Generate diagnostic plots (default: false)
+    'atomicVolume'   - Expected atomic volume in nm^3 (default: 0.012)
+ 
+  OUTPUT:
+    metrics - Structure containing:
+        .summary - Overall quality assessment string
+        .resolution - Spatial resolution estimates
+            .lateral    - Estimated lateral resolution (nm)
+            .depth      - Estimated depth resolution (nm)
+            .method     - Method used for estimation
+        .density - Density analysis
+            .mean       - Mean atomic density (atoms/nm^3)
+            .std        - Standard deviation of local density
+            .cv         - Coefficient of variation
+            .expected   - Expected density based on atomic volume
+            .efficiency - Estimated detection efficiency
+        .geometry - Specimen geometry
+            .boundingBox - [minX minY minZ; maxX maxY maxZ]
+            .dimensions  - [lengthX lengthY lengthZ]
+            .volume      - Analyzed volume (nm^3)
+            .aspectRatio - Aspect ratios
+        .artifacts - Artifact detection
+            .densityHoles    - Suspected low-density regions
+            .densitySpikes   - Suspected high-density artifacts
+            .trajectoryOverlap - Detected trajectory overlap
+        .massSpectrum - Mass spectrum quality (if mass provided)
+            .peakToBackground - Peak to background ratio
+            .massResolution   - Estimated mass resolution
+            .thermalTails     - Thermal tail assessment
+ 
+  EXAMPLES:
+    

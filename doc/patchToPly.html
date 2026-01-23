@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>patchToPly - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>patchToPly</h1>
+<pre>
+  patchToPly saves a patch to a ply file (polygon file format). This format
+  contains information about the coloring of individual vertices and can be
+  read by many popular 3d programs. A file definition can be found on: <a href="http://paulbourke.net/dataformats/ply/">http://paulbourke.net/dataformats/ply/</a>
+ 
+  patchToPly(fv);                
+        opens a "Save *.ply file to" window
+ 
+  patchToPly(fv, vertColors);    
+        opens a "Save *.ply file to" window
+ 
+  patchToPly(fv, vertColors, 'filename.ply'); 
+        saves filename.ply in current folder
+  
+  patchToPly(fv, vertColors, 'filename.ply', 'comment');
+        saves filename.ply in current folder, including a comment
+ 
+  INPUTS:
+    fv:          structure with faces (f) and vertices (v)
+    
+    vertColors:  represents color code for all vertices;
+                 must be a n-by-3 array with n = number of vertices 
+                 color code values must be all integers between 0 and 255
+                 or all values &lt;1
+    
+    fileName:    desired filename, input as character array with .ply suffix
+ 
+    comment:     optional, inserts comment about values used as limits into ply
+                 input as character array
+ 
+ 
+  
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

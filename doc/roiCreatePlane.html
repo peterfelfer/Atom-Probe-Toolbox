@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>roiCreatePlane - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>roiCreatePlane</h1>
+<pre>
+  roiCreatePlane creates a plane in the current or parsed axis with 
+  specified width and height at location. 
+  spacing gives the approximate spacing between vertices for later analysis
+  purposes. leave at 0 for simple plane object with no subdivision.
+  Output is handle to the object for later manipulation.
+ 
+  ph = roiCreatePlane(dimensions,spacing)
+  ph = roiCreatePlane(dimensions,spacing,location)
+  ph = roiCreatePlane(dimensions,spacing,location,ax)
+ 
+  INPUT
+  dimensions:   1x2 array with x and y dimensions of the plane
+ 
+  spacing:      1x2 array with the spacing value in x and y direction
+ 
+  location:     coordinates of the ROI's center given as [x y] 
+                default is [0 0]
+ 
+  ax:           axes in which the ROI is orientated
+ 
+  OUTPUT
+  ph:           handle to the ROIplane
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>patchCreateExcessValue - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>patchCreateExcessValue</h1>
+<pre>
+  patchCreateExcessValue calculates the average interfacial excess for an 
+  interface with an interactive interface for the interfacial excess 
+  determination 
+  reads a pos file (with x, y, and z) and a vertex file 
+  with x, y, and z) and assigns every atom to the closest vertex
+ 
+  patchCreateExcessValue(pos,parentPos,interface)
+  patchCreateExcessValue(pos,parentPos,interface,vertices)
+ 
+  INPUT
+  pos:          table, pos file of the atom species, of which an interfacial excess 
+                should be calculated
+ 
+  parentPos:    table, pos file of all atom species; optimally all unranged
+                atoms are excluded
+ 
+  interface:    structure with fields of faces (f) and vertices (v)
+ 
+  vertices:     optional, if the interfacial excess of a specific region is
+                wanted
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-N�rnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

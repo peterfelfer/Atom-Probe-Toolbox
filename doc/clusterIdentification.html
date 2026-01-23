@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>clusterIdentification - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>clusterIdentification</h1>
+<pre>
+  clusterIdentification calculates the number of clusters and their
+  corresponding cluster Index after Voronoi Tesselation and Dealaunay
+  triangulation
+  
+  [clusterIdx, numClusters] =
+  clusterIdentification(clusterPos,volThreshORpos,volVoronoi,posDelaunay);
+  [clusterIdx, numClusters] =
+  clusterIdentification(clusterPos,volThreshORpos,volVoronoi);
+  [clusterIdx, numClusters] =
+  clusterIdentification(clusterPos,volThreshORpos);
+ 
+  INPUT
+  clusterPos:       a pos file with the atoms that are in the cluster 
+  volThreshORpos:   is the clusterCutoff calculated by the voronoiVolume
+                    Analysis or a pos file containing the entire data set;
+  volVoronoi:       the voronoi volume of the atoms from clusterPos
+  posDelaunay:      delaunay triangulation of the clusterPos data set, is a mx4
+                    matrix that defines the tetrahedron
+ 
+  OUTPUT
+  clusterIdx:       is a vector with the corresponding cluster number for
+                    each clustered atom
+  numClusters:      total number of clusters
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

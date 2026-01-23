@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ipfHistogram - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>ipfHistogram</h1>
+<pre>
+  IPFHISTOGRAM Create orientation histogram in the IPF standard triangle
+ 
+    [HISTDATA, AX] = IPFHISTOGRAM(FV, CRYSTALORIENTATION) creates a histogram
+    of surface normal orientations in the standard triangle (IPF) for cubic
+    crystals. The histogram shows the frequency distribution of crystallographic
+    orientations of the mesh surface.
+ 
+    [HISTDATA, AX] = IPFHISTOGRAM(FV, CRYSTALORIENTATION, 'property', PROP, ...)
+    creates a property-weighted histogram where PROP is a per-vertex array of
+    values (e.g., concentration) to be aggregated by orientation.
+ 
+    Input:
+        fv - Mesh structure with fields:
+             fv.vertices - Nx3 array of vertex coordinates
+             fv.faces    - Mx3 array of face indices (triangles)
+ 
+        orientationInput - Either:
+                           - 3x3 rotation matrix (crystal to world)
+                           - crystalOrientation object
+ 
+    Optional Name-Value Pairs:
+        'property'     - Nx1 array of property values per vertex (default: [])
+        'binning'      - 'angular' (default) or 'adaptive'
+        'resolution'   - Angular resolution in degrees for angular binning (default: 2)
+        'nBins'        - Number of bins for adaptive binning (default: 500)
+        'aggregation'  - 'count', 'mean', 'sum' (default: 'count' if no property,
+                         'mean' if property provided)
+        'areaWeighted' - Logical, weight by face area (default: false)
+        'colormap'     - Colormap name or Nx3 array (default: 'parula')
+        'plot'         - Logical, create plot (default: true)
+        'showColorbar' - Logical, show colorbar (default: true)
+ 
+    Output:
+        histData - Structure with fields:
+                   .bins          - Bin center positions [h, k, l]
+                   .counts        - Count/weight per bin
+                   .values        - Aggregated property values per bin
+                   .crystalNormals - Nx3 crystal normals for all vertices
+                   .binIndices    - Bin assignment for each vertex
+ 
+        ax - Axes handle (if plot is true)
+ 
+    Example:
+        

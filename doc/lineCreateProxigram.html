@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>lineCreateProxigram - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>lineCreateProxigram</h1>
+<pre>
+  lineCreateProxigram calculates a proxigram for the line object 'line' for
+  the atoms in 'posSpecies', which are a subset of the atoms in 'pos' with 
+  a bin width of 'bin'.
+ 
+  line is parsed as a struct with line.vertices (Nx3) and line.edges (Mx2)
+ 
+  INPUT
+  posSpecies:   pos of the desired species, subset of initial pos
+ 
+  pos:          initial pos file with pos.x, pos.y, and pos.z
+ 
+  line:         structure, with fields of vertices (Nx3) and edges (Mx2)
+ 
+  bin:          bin width in nm
+ 
+  OUTPUT
+  proxi:        concentration values of the desired species; y-values of
+                the proxigram
+ 
+  binVector:    corresponding distance values; x-values of the proxigram
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>patchToObj - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>patchToObj</h1>
+<pre>
+  exports obj file into Wavefront obj
+  if a list (vector) of patches is parsed it will be saved in one obj file
+  object names can be parsed in 'objNames'
+ 
+  patchToObj();
+            opens a "Save *.obj file to" window if selected object is a
+            patch
+  patchToObj(patch);
+            opens a "Save *.obj file to" window
+  patchToObj(patch,[],fileName);
+            saves file in current folder
+  patchToObj(patch,objName,fileName);
+            saves file in current folder
+ 
+  INPUTS:
+  patch: structure with faces (f) and vertices (v)
+ 
+  objName: object names can be parsed in 'objNames'
+ 
+  fileName: desired name of saved file with .obj as suffix
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

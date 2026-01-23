@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>runTests - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>runTests</h1>
+<pre>
+  RUNTESTS Run all tests for the Atom Probe Toolbox
+ 
+  results = runTests()
+  results = runTests('pattern', 'test_*.m')
+  results = runTests('verbose', true)
+ 
+  Discovers and runs test files throughout the toolbox. Test files should
+  be named with 'test_' prefix and contain functions that return true/false.
+ 
+  OPTIONS:
+    'pattern'    - File pattern to match (default: 'test_*.m')
+    'folder'     - Specific folder to search (default: all)
+    'verbose'    - Show detailed output (default: true)
+    'stopOnFail' - Stop on first failure (default: false)
+ 
+  OUTPUT:
+    results - Structure with test results:
+        .total    - Total tests run
+        .passed   - Number passed
+        .failed   - Number failed
+        .skipped  - Number skipped
+        .duration - Total time
+        .details  - Table with per-test results
+ 
+  TEST FILE FORMAT:
+    Test files should define functions that return true (pass) or false (fail).
+    Functions starting with 'test' are automatically discovered.
+ 
+    Example test_myFeature.m:
+    ```
+    function success = test_basic()
+        x = myFunction(1, 2);
+        success = (x == 3);
+    end
+ 
+    function success = test_edge_case()
+        try
+            myFunction([], []);
+            success = false;  

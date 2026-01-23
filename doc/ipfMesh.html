@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ipfMesh - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>ipfMesh</h1>
+<pre>
+  IPFMESH Colors a mesh based on crystallographic surface normal orientation
+ 
+    [FVCOLORED, AX] = IPFMESH(FV, ORIENTATIONINPUT) takes a mesh structure
+    and a crystal orientation, calculates the crystallographic direction of
+    each vertex normal, and displays the mesh colored according to the IPF
+    coloring scheme for cubic crystals.
+ 
+    Input:
+        fv - Mesh structure with fields:
+             fv.vertices - Nx3 array of vertex coordinates
+             fv.faces    - Mx3 array of face indices (triangles)
+ 
+        orientationInput - Either:
+                           - 3x3 rotation matrix describing the orientation
+                             of the crystal coordinate system relative to the
+                             world coordinate system. The matrix transforms
+                             vectors from crystal to world coordinates:
+                             world_vector = R * crystal_vector
+                           - crystalOrientation object
+ 
+    Optional Name-Value Pairs:
+        'plot'       - logical, if true displays the mesh (default: true)
+        'showLegend' - logical, if true shows IPF triangle legend (default: true)
+        'lighting'   - logical, if true adds lighting (default: false)
+ 
+    Output:
+        fvColored - Structure with fields:
+                    .vertices - same as input
+                    .faces    - same as input
+                    .faceVertexCData - Nx3 RGB colors for each vertex
+                    .vertexNormals   - Nx3 vertex normals in world coords
+                    .crystalNormals  - Nx3 vertex normals in crystal coords
+ 
+        ax - Axes handle (if plot is true)
+ 
+    Example:
+        

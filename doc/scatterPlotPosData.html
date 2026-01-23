@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>scatterPlotPosData - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>scatterPlotPosData</h1>
+<pre>
+  scatterPlotPosData plots APT data in the typical APT style.
+  
+  [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size,plotAxis)
+  [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size)
+  [p, ax] = scatterPlotPosData(pos,species,sample,colorScheme)
+  
+  INPUT
+  pos:            decomposed or allocated pos file with pos.ion column      
+  
+  species:        Which ion/atom species should be plotted
+                  one single ion {'C'}
+                  more ions {'H','C','N'}
+                  if multiple species are given and no plotAxis, array of 
+                  axes is plotted with synched axis movement. 
+                  Otherwise they all go into the same axis.
+  
+  sample:         allows the specification of a subset to plot. 
+                  If sample &lt;1, it is a fraction of the overall number of
+                  atoms, if &gt;1, it is a fixed number. Can be a scalar or a 
+                  vector with same length as species.
+  
+  colorScheme:    a colorScheme can be parsed or a RGB color vector
+ 
+  size:           size of the single atoms in the plot
+                  can be a scalar or a vector with same length as species.
+ 
+  plotAxis:       an axis for the plot can be parsed. If no plotAxis is 
+                  parsed, a new axis is created. If you want to plot
+                  mulitple Ions in one plot write axes(figure()) for
+                  plotAxis.
+  
+  OUTPUT
+  p:              plot handle
+ 
+  ax:             axis from the plot, important for tiled plot
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

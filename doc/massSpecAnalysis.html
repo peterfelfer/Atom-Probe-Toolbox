@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>massSpecAnalysis - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>massSpecAnalysis</h1>
+<pre>
+  MASSSPECANALYSIS Comprehensive mass spectrum analysis for APT data
+ 
+  results = massSpecAnalysis(mass)
+  results = massSpecAnalysis(mass, 'binWidth', 0.01)
+ 
+  Performs automated analysis of mass-to-charge spectrum including peak
+  detection, background fitting, mass resolution estimation, and optional
+  peak deconvolution.
+ 
+  INPUT:
+    mass - Vector of mass-to-charge values (Da)
+ 
+  OPTIONS:
+    'binWidth'       - Histogram bin width in Da (default: 0.01)
+    'massRange'      - [min, max] mass range to analyze (default: auto)
+    'peakThreshold'  - Minimum peak height as fraction of max (default: 0.001)
+    'bgMethod'       - Background method: 'moving', 'polynomial', 'exponential'
+                       (default: 'moving')
+    'bgWindow'       - Window size for moving background (default: 100 bins)
+    'bgPolyOrder'    - Polynomial order for background (default: 3)
+    'fitPeaks'       - Fit Gaussian to peaks (default: true)
+    'deconvolve'     - Attempt peak deconvolution (default: false)
+    'showPlot'       - Display results plot (default: true)
+ 
+  OUTPUT:
+    results - Structure containing:
+        .spectrum - Spectrum data
+            .edges      - Bin edges
+            .centers    - Bin centers (mass-to-charge)
+            .counts     - Raw counts per bin
+            .countRate  - Counts per Da
+        .background - Background estimation
+            .values     - Background at each bin
+            .method     - Method used
+            .corrected  - Background-corrected counts
+        .peaks - Detected peaks table with columns:
+            .position   - Peak center (Da)
+            .height     - Peak height (counts)
+            .area       - Integrated peak area
+            .fwhm       - Full width at half maximum
+            .resolution - Mass resolution (M/dM)
+            .snr        - Signal-to-noise ratio
+        .statistics - Overall spectrum statistics
+            .totalCounts    - Total counts
+            .meanResolution - Mean mass resolution
+            .noiseLevel     - Estimated noise level
+ 
+  EXAMPLES:
+    

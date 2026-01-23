@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ionConvertName - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>ionConvertName</h1>
+<pre>
+  ionConvertName converts an ion name to a table variable and reverse.
+  As input parameters, also categorical or an array of elements is
+  possible.
+ 
+  Create ionTable
+  ionTable = ionConvertName(ionName);
+  [ionTable chargeState] = ionConvertName(ionName);
+ 
+  Create ionName
+  table:
+    ionName = ionConvertName(ionTable,chargeState,format);
+    ionName = ionConvertName(ionTable,chargeState);
+    ionName = ionConvertName(ionTable,NaN,format);
+    ionName = ionConvertName(ionTable);
+  categorical:
+    ionName = ionConvertName(ionCategorical,chargeState,format);
+    ionName = ionConvertName(ionCategorical,chargeState);
+    ionName = ionConvertName(ionCategorical)
+  array:
+    ionName = ionConvertName(ionArray,chargeState,format,isotopeTable);
+ 
+  INPUT/OUTPUT
+ 
+  ionName: Name of the ion
+    (isotope element count) x N chargestate        '56Fe2 16O3 ++'
+    (element count) x N chargestate                'Fe2 O3 ++'
+    (element count) x N                            'Fe2 O3'
+    individual nucleides will be sorted by atomic number descending
+    e.g. 'O H2'
+ 
+  ionTable:         table that contains the element and the isotope
+ 
+  ionCategorical:   ion table that is stored as an categorical array
+ 
+  ionArray:         matrix of element and isotope number
+                    e.g. Fe2O3  [26,56;26,56;8,16;8,16;8,16;]
+                    vector of elements
+                    e.g. Fe2O3  [26;26;8;8;8]
+ 
+  chargeState:      is the charge state of the ion
+ 
+  NaN:              if no charge state is parsed
+ 
+  format:           can be 'plain' or 'LaTeX'
+ 
+  isotopeTable:     table with all isotopes
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Function Reference - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>Function Reference</h1>
+<p>Functions organized by category.</p>
+
+<h2 id="io">Data Import/Export</h2>
+<table border="1" cellpadding="5">
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><a href="posLoad.html">posLoad</a></td><td>pos = posLoad(fileName)</td></tr>
+<tr><td><a href="posExport.html">posExport</a></td><td>tableToPos(posIn, fileName)</td></tr>
+<tr><td><a href="posTableAddToHDF5.html">posTableAddToHDF5</a></td><td>to an existing HDF5 file with the appropriate groups structure.</td></tr>
+<tr><td><a href="posTableFromHDF5.html">posTableFromHDF5</a></td><td>Detailed explanation goes here</td></tr>
+<tr><td><a href="rangesExtractFromFile.html">rangesExtractFromFile</a></td><td>from a MATLAB figure containing a mass spectrum</td></tr>
+<tr><td><a href="hdf5FileCreateFromMetaDataList.html">hdf5FileCreateFromMetaDataList</a></td><td>that is provided in the metaData variable. This variable is a cell array</td></tr>
+<tr><td><a href="patchToObj.html">patchToObj</a></td><td>exports obj file into Wavefront obj</td></tr>
+<tr><td><a href="patchToPly.html">patchToPly</a></td><td>contains information about the coloring of individual vertices and can be</td></tr>
+<tr><td><a href="posToObj.html">posToObj</a></td><td>read into various computer graphics programs such as Blender.</td></tr>
+</table>
+
+<h2 id="ions">Ion and Range Management</h2>
+<table border="1" cellpadding="5">
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><a href="ionAdd.html">ionAdd</a></td><td>and its corresponding charge state. The stem line will be according to</td></tr>
+<tr><td><a href="ionConvertName.html">ionConvertName</a></td><td>As input parameters, also categorical or an array of elements is</td></tr>
+<tr><td><a href="ionsCreateIsotopeList.html">ionsCreateIsotopeList</a></td><td>takes an ion type, e.g. 'Cr2 O3' and gives all isotopic combinations,</td></tr>
+<tr><td><a href="ionsCreateComplex.html">ionsCreateComplex</a></td><td>by the given elements, based on the isotopeTable.</td></tr>
+<tr><td><a href="ionsMergePeaks.html">ionsMergePeaks</a></td><td>that are closer than mergeMargin</td></tr>
+<tr><td><a href="rangeAdd.html">rangeAdd</a></td><td>adds a range to a mass spectrum using graphical input</td></tr>
+<tr><td><a href="rangeAddAll.html">rangeAddAll</a></td><td>ranging process for all defined ionic peaks that currently have no range</td></tr>
+<tr><td><a href="rangesFromPos.html">rangesFromPos</a></td><td>rangeTable = rangesFromPos(pos, colorScheme)</td></tr>
+<tr><td><a href="symbolConvertAtomicNumber.html">symbolConvertAtomicNumber</a></td><td>his symbol and vice versa</td></tr>
+</table>
+
+<h2 id="massspec">Mass Spectrum Analysis</h2>
+<table border="1" cellpadding="5">
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><a href="massSpecPlot.html">massSpecPlot</a></td><td>handle = plotMassSpec(mc, bin, mode)</td></tr>
+<tr><td><a href="massSpecAnalysis.html">massSpecAnalysis</a></td><td>results = massSpecAnalysis(mass)</td></tr>
+<tr><td><a href="massSpecComparison.html">massSpecComparison</a></td><td>specComp = massSpecComparison(pos1, pos2);</td></tr>
+<tr><td><a href="peakBGCorrectedCount.html">peakBGCorrectedCount</a></td><td>based on 'brushed' background bins. For this, the mass spectrum has to be</td></tr>
+<tr><td><a href="chargeStateRatioCalculate.html">chargeStateRatioCalculate</a></td><td>chargeStateRatioTable = chargeStateRatioCalculate(element,pos,chargeStates)</td></tr>
+</table>
+
+<h2 id="visualization">Visualization</h2>
+<table border="1" cellpadding="5">
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><a href="scatterPlotPosData.html">scatterPlotPosData</a></td><td>[p, ax] = scatterPlotPosData(pos,species,sample,colorScheme,size,plotAxis)</td></tr>
+<tr><td><a href="colorSchemeCreate.html">colorSchemeCreate</a></td><td>the colors are generated in a way, that no two colors are perceived as similar</td></tr>
+<tr><td><a href="colorSchemeIonAdd.html">colorSchemeIonAdd</a></td><td>color which was not used before.</td></tr>
+<tr><td><a href="valueToColor.html">valueToColor</a></td><td>NEEDS DOCUMENTATION</td></tr>
+<tr><td><a href="movieCreateTurntableAnimation.html">movieCreateTurntableAnimation</a></td><td>figure and returns movie variable. The movie is saved in an *.avi format.</td></tr>
+</table>
+
+<h2 id="roi">Region of Interest</h2>
+<table border="1" cellpadding="5">
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><a href="roiCreateBox.html">roiCreateBox</a></td><td>width and height at the location.</td></tr>
+<tr><td><a href="roiCreateCylinder.html">roiCreateCylinder</a></td><td>specified radius and height.</td></tr>
+<tr><td><a href="roiCreateSphere.html">roiCreateSphere</a></td><td>radius. Output is handle to the object for later manipulation.</td></tr>
+<tr><td><a href="roiCreatePlane.html">roiCreatePlane</a></td><td>specified width and height at location.</td></tr>
+<tr><td><a href="roiFromObj.html">roiFromObj</a></td><td>roi_Obj = roiFromObj(obj)</td></tr>
+<tr><td><a href="posInConvexHull.html">posInConvexHull</a></td><td>in = posInConvexHull(pos,xyz)</td></tr>
+</table>
+
+<h2 id="concentration">Concentration Analysis</h2>
+<table border="1" cellpadding="5">
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><a href="posCalculateConcentrationSimple.html">posCalculateConcentrationSimple</a></td><td>categorical list of atoms or ions</td></tr>
+<tr><td><a href="concentrationUncertainty.html">concentrationUncertainty</a></td><td>[uncertainty, details] = concentrationUncertainty(counts)</td></tr>
+<tr><td><a href="binApplyConcentrationKernel.html">binApplyConcentrationKernel</a></td><td>concentration function to it the binCenters are put into the</td></tr>
+<tr><td><a href="calculate1Dprofile.html">calculate1Dprofile</a></td><td>calculates a 1D concentration profile along the axis given. allAtoms is</td></tr>
+<tr><td><a href="calculate2Dprofile.html">calculate2Dprofile</a></td><td>calculates 2D concentration profile of 'atoms' compared to 'allAtoms'. If</td></tr>
+</table>
+
+<h2 id="proxigram">Proxigram Analysis</h2>
+<table border="1" cellpadding="5">
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><a href="pointCreateProxigram.html">pointCreateProxigram</a></td><td>for the atoms in 'posSpecies', which are a subset of the atoms in 'pos'</td></tr>
+<tr><td><a href="lineCreateProxigram.html">lineCreateProxigram</a></td><td>the atoms in 'posSpecies', which are a subset of the atoms in 'pos' with</td></tr>
+<tr><td><a href="patchCreateProxigram.html">patchCreateProxigram</a></td><td>for the atoms in 'posSpecies', which are a subset of the atoms in 'pos'</td></tr>
+<tr><td><a href="patchCreateInterfacialExcessMap.html">patchCreateInterfacialExcessMap</a></td><td>NEEDS REWORK AND DOCUMENTATION</td></tr>
+<tr><td><a href="patchCreateExcessValue.html">patchCreateExcessValue</a></td><td>interface with an interactive interface for the interfacial excess</td></tr>
+</table>
+
+<h2 id="cluster">Cluster Analysis</h2>
+<table border="1" cellpadding="5">
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><a href="clusterDBSCAN.html">clusterDBSCAN</a></td><td>[clusterIdx, clusterInfo] = clusterDBSCAN(pos, epsilon, minPts)</td></tr>
+<tr><td><a href="clusterDetermination.html">clusterDetermination</a></td><td>Delaunay triangulation the cluster of the given dataset</td></tr>
+<tr><td><a href="voronoiVolumeAnalysis.html">voronoiVolumeAnalysis</a></td><td>[numClustered clusterCutoff histCounts experimentalVolumes randomVolumes]</td></tr>
+<tr><td><a href="clusterIdentification.html">clusterIdentification</a></td><td>corresponding cluster Index after Voronoi Tesselation and Dealaunay</td></tr>
+<tr><td><a href="clusterSizeAnalyse.html">clusterSizeAnalyse</a></td><td>the y axis is the 'concentration' the occurences. This is the invertse of</td></tr>
+</table>
+
+<h2 id="spatial">Spatial Statistics</h2>
+<table border="1" cellpadding="5">
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><a href="spatialStatistics.html">spatialStatistics</a></td><td>stats = spatialStatistics(pos)</td></tr>
+<tr><td><a href="spatialDistributionMap.html">spatialDistributionMap</a></td><td>calculates a 3d spatial distribution map for the 'points', with a bin size of</td></tr>
+<tr><td><a href="dataQualityMetrics.html">dataQualityMetrics</a></td><td>metrics = dataQualityMetrics(pos)</td></tr>
+</table>
+
+<h2 id="crystallography">Crystallography</h2>
+<table border="1" cellpadding="5">
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><a href="crystalOrientation.html">crystalOrientation</a></td><td>The crystalOrientation class stores and manipulates crystal orientations</td></tr>
+<tr><td><a href="ipfColor.html">ipfColor</a></td><td>RGB = IPFCOLOR(DIRECTION) returns the RGB color for a crystallographic</td></tr>
+<tr><td><a href="ipfHistogram.html">ipfHistogram</a></td><td>[HISTDATA, AX] = IPFHISTOGRAM(FV, CRYSTALORIENTATION) creates a histogram</td></tr>
+<tr><td><a href="ipfMesh.html">ipfMesh</a></td><td>[FVCOLORED, AX] = IPFMESH(FV, ORIENTATIONINPUT) takes a mesh structure</td></tr>
+<tr><td><a href="misorientation.html">misorientation</a></td><td>[angle, axis, details] = misorientation(orientation1, orientation2)</td></tr>
+<tr><td><a href="boundaryCharacter.html">boundaryCharacter</a></td><td>[CHARDATA, AX] = BOUNDARYCHARACTER(FV, ORI1, ORI2) analyzes the character</td></tr>
+<tr><td><a href="stereoProj.html">stereoProj</a></td><td>[ORI, AX] = STEREOPROJ(CRYSTALORIENTATION) creates a stereographic projection</td></tr>
+<tr><td><a href="plotOrientationCube.html">plotOrientationCube</a></td><td>H = PLOTORIENTATIONCUBE(ORIENTATIONINPUT) plots an orientation cube</td></tr>
+</table>
+
+<h2 id="reconstruction">Reconstruction</h2>
+<table border="1" cellpadding="5">
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><a href="posReconstruct3DGeiser.html">posReconstruct3DGeiser</a></td><td>atom probe reconstruction after: Gault et al., Ultramicroscopy 111 (2011) 448 - 457</td></tr>
+<tr><td><a href="posReflectronCorrection.html">posReflectronCorrection</a></td><td>posReflectronCorrected - corrects the reflectron image distortion in a</td></tr>
+<tr><td><a href="reflectronImageTransform.html">reflectronImageTransform</a></td><td>this function transforms the real hit locations of an instrument with a</td></tr>
+</table>
+
+<h2 id="utilities">Utilities</h2>
+<table border="1" cellpadding="5">
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><a href="setupToolbox.html">setupToolbox</a></td><td></td></tr>
+<tr><td><a href="checkDependencies.html">checkDependencies</a></td><td>[status, report] = checkDependencies()</td></tr>
+<tr><td><a href="APTConfig.html">APTConfig</a></td><td>Singleton class providing centralized configuration management.</td></tr>
+<tr><td><a href="batchProcess.html">batchProcess</a></td><td>results = batchProcess(dataFiles, analysisFcn)</td></tr>
+<tr><td><a href="ProgressTracker.html">ProgressTracker</a></td><td>Provides both command-line and graphical progress feedback with</td></tr>
+<tr><td><a href="validateInputs.html">validateInputs</a></td><td></td></tr>
+<tr><td><a href="runTests.html">runTests</a></td><td>results = runTests()</td></tr>
+</table>
+
+</body>
+</html>

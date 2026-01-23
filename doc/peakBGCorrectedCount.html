@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>peakBGCorrectedCount - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>peakBGCorrectedCount</h1>
+<pre>
+  peakBGCorrectedCount fits a linear background (least squares) to a peak in a mass spectrum
+  based on 'brushed' background bins. For this, the mass spectrum has to be
+  in the active axes, with the background bins marked. Also plots the
+  results.
+  
+  [peakData] = peakBGCorrectedCount(pos, rangeTable, ionName, boundary)
+  
+  [peakData] = peakBGCorrectedCount( pos, rangeTable, ionName)
+  [peakData] = peakBGCorrectedCount( pos, rangeTable, ionName, boundary)
+  [peakData] = peakBGCorrectedCount( pos, rangeTable, ionName, boundary, options)
+ 
+  INPUT
+  massSpec   a massSpec plot - created with massSpecPlot.m
+  pos        pos file - in raw format
+  ionName    ion Name in this form '14N 12C2 +' it is important to write the
+             specific isotopes
+  rangeTable if no range Table is parsed - the gcf has to be the massSpec
+                of the pos variable
+  boundary   range in Da before and after the peak that should be used for
+             background correction either one value or two [3 3] are
+             allowed. If no value is parsed, the default value of 0.5 Da is used 
+  figure     true - figure window is created (default)
+             false - figure window is suppressed
+  offset     if you want to have an offset between the range from the
+             rangeTable and the background correction range just possible
+             with boundaries
+  options    'r': add a fictional range and calculate the signal to background for that
+             range
+             'a': same as 'r', but automatically created ranges by optimising the
+             ratio of missed atoms / background atoms = 1
+ 
+  OUTPUT
+  peakData   struct array with the counts of the ions in the peak, the
+             percentage and the location of the peak
+  figure     figure with the peak and the correction
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>concentrationUncertainty - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>concentrationUncertainty</h1>
+<pre>
+  CONCENTRATIONUNCERTAINTY Calculate concentration uncertainty from counting statistics
+ 
+  [uncertainty, details] = concentrationUncertainty(counts)
+  [uncertainty, details] = concentrationUncertainty(counts, 'method', 'binomial')
+ 
+  Calculates the uncertainty in composition measurements based on counting
+  statistics. Several methods are available depending on the analysis context.
+ 
+  INPUT:
+    counts - Vector or matrix of atom counts per element/ion
+             Each row represents a measurement, columns are elements
+             OR a table with ion counts
+ 
+  OPTIONS:
+    'method'    - Uncertainty calculation method (default: 'binomial')
+                  'poisson'  - sqrt(N) counting statistics
+                  'binomial' - Full binomial uncertainty (recommended)
+                  'clopper'  - Clopper-Pearson exact confidence interval
+    'confidence' - Confidence level for intervals (default: 0.95)
+    'detectionEfficiency' - Detector efficiency for correction (default: 1)
+    'background' - Background counts to subtract (default: 0)
+ 
+  OUTPUT:
+    uncertainty - Structure containing:
+        .concentration  - Calculated concentrations (atomic fraction)
+        .sigma          - Standard deviation of concentration
+        .ciLower        - Lower confidence interval
+        .ciUpper        - Upper confidence interval
+        .totalAtoms     - Total atom count per measurement
+ 
+    details - Additional calculation details
+ 
+  THEORY:
+    For binomial statistics, the variance of concentration c = n/N is:
+    Var(c) = c(1-c)/N
+ 
+    This accounts for the constraint that concentrations must sum to 1.
+ 
+  EXAMPLES:
+    

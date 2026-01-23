@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>crystalOrientation - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>crystalOrientation</h1>
+<pre>
+  CRYSTALORIENTATION Represents crystallographic orientation of a location/volume
+ 
+    The crystalOrientation class stores and manipulates crystal orientations
+    with support for multiple representation formats and all crystal systems.
+    Can also store full crystal structure data from CIF files.
+ 
+    Constructor Signatures:
+        ori = crystalOrientation(R, crystalSystem)
+        ori = crystalOrientation(R, crystalSystem, 'Name', Value, ...)
+        ori = crystalOrientation('euler', [phi1, Phi, phi2], crystalSystem, ...)
+        ori = crystalOrientation('quaternion', [w, x, y, z], crystalSystem, ...)
+ 
+    Static Factory Methods:
+        ori = crystalOrientation.fromCIF(filename)
+        ori = crystalOrientation.fromCIF(filename, 'Name', Value, ...)
+ 
+    Properties:
+        rotationMatrix  - 3x3 rotation matrix (crystal to world)
+        eulerAngles     - [phi1, Phi, phi2] in degrees (Bunge ZXZ)
+        quaternion      - [w, x, y, z] unit quaternion
+        position        - [x, y, z] location in world coordinates
+        crystalSystem   - 'cubic', 'hexagonal', 'tetragonal', etc.
+        latticeParams   - struct with a, b, c, alpha, beta, gamma
+        source          - origin of data ('EBSD', 'APT', 'manual', 'CIF')
+        spaceGroup      - Space group name (Hermann-Mauguin notation)
+        atomPositions   - Nx3 array of fractional coordinates
+        atomTypes       - Nx1 cell array of element symbols
+        atomLabels      - Nx1 cell array of atom site labels
+ 
+    Example:
+        

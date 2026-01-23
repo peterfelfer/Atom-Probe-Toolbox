@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>APTConfig - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>APTConfig</h1>
+<pre>
+  APTCONFIG Global configuration management for Atom Probe Toolbox
+ 
+  Singleton class providing centralized configuration management.
+  User settings persist across sessions via a JSON config file.
+ 
+  USAGE:
+    cfg = APTConfig.getInstance();
+    cfg.reconstruction.detectionEfficiency = 0.52;
+    cfg.save();
+ 
+    

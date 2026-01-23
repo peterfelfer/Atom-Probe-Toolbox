@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>voronoiVolumeAnalysis - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>voronoiVolumeAnalysis</h1>
+<pre>
+  voronoivolumeAnalysis calculates the Voronoi Volume for a given data set
+ 
+  [numClustered clusterCutoff histCounts experimentalVolumes randomVolumes]
+  = voronoiVolumeAnalysisNEW(clusterPos, pos,vis,bins,Vmax);
+  [numClustered clusterCutoff histCounts experimentalVolumes randomVolumes]
+  = voronoiVolumeAnalysisNEW(clusterPos, pos,vis,bins);
+  [numClustered clusterCutoff histCounts experimentalVolumes randomVolumes]
+  = voronoiVolumeAnalysisNEW(clusterPos, pos,vis);
+ [numClustered clusterCutoff histCounts experimentalVolumes randomVolumes]
+  = voronoiVolumeAnalysisNEW(clusterPos, pos);
+ 
+  INPUT
+  clusterPos:   a pos file with the atoms that are in the cluster     
+  pos:          the parent pos file with all ions of the dataset
+  vis:          true logical value for visualisation output
+  Vmax:         maximum volume of 
+  bins:         the bin size for the histogram default 50
+ 
+  OUTPUT
+  numClustered:     number of the cluster with max volume of clusterCutoff
+  clusterCutoff:    max volume of the voronoi cell of the clustered atoms
+  experimental:     histcounts of the experimental dataset
+  random:           histcounts of the random dataset
+  experimentalVolumes:  the voronoi volume of each atom of the experimental
+                        dataset
+  randomVolumes:    the voronoi volume of each atom of the random dataset
+  randpos:          pos file of the random dataset
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

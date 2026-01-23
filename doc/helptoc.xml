@@ -1,74 +1,142 @@
 <?xml version='1.0' encoding="utf-8"?>
-
 <toc version="2.0">
-<!-- First tocitem specifies top level in Help browser Contents pane -->
-<!-- This can be a roadmap page, as shown below, or a content page -->
-    <tocitem target="mytoolbox_product_page.html">MyToolbox Toolbox
-        <!-- Nest tocitems to create hierarchical entries in  Contents-->
-        <!-- To include icons, use the following syntax for tocitems: -->
-        <!-- <tocitem target="foo.html" image="HelpIcon.NAME"> -->
-        <!-- Title-of-Section </tocitem> -->
-        <!-- where NAME is one of the following (use capital letters): -->
-        <!-- FUNCTION, USER_GUIDE, EXAMPLES, BLOCK, GETTING_STARTED, -->
-        <!-- DEMOS, RELEASE_NOTES --> 
-        <!-- Icon images used for these entries are also stored in -->
-        <!-- matlabroot/toolbox/matlab/icons -->
-        <!-- A Getting Started Guide usually comes first -->
-        <tocitem target="mytbx_gs_top.html" image="HelpIcon.GETTING_STARTED">
-            Getting Started with the MyToolbox Toolbox
-            <tocitem target="mytbx_reqts_example.html">System Requirements
+    <tocitem target="GettingStarted.html">Atom Probe Toolbox
+
+        <!-- Getting Started Guide -->
+        <tocitem target="GettingStarted.html" image="HelpIcon.GETTING_STARTED">
+            Getting Started
+            <tocitem target="matlab:setupToolbox">Run Setup</tocitem>
+            <tocitem target="matlab:checkDependencies">Check Dependencies</tocitem>
+            <tocitem target="matlab:open('Workflow_FirstSteps.mlx')">First Steps Workflow</tocitem>
+            <tocitem target="matlab:APTConfig.show">View Configuration</tocitem>
+        </tocitem>
+
+        <!-- Function Reference -->
+        <tocitem target="function_reference.html" image="HelpIcon.FUNCTION">
+            Function Reference
+
+            <tocitem target="functions_io.html">Data Import/Export
+                <tocitem target="matlab:doc posLoad">posLoad</tocitem>
+                <tocitem target="matlab:doc posExport">posExport</tocitem>
+                <tocitem target="matlab:doc posTableAddToHDF5">posTableAddToHDF5</tocitem>
+                <tocitem target="matlab:doc posTableFromHDF5">posTableFromHDF5</tocitem>
+                <tocitem target="matlab:doc rangesExtractFromFile">rangesExtractFromFile</tocitem>
+                <tocitem target="matlab:doc hdf5FileCreateFromMetaDataList">hdf5FileCreateFromMetaDataList</tocitem>
+                <tocitem target="matlab:doc patchToObj">patchToObj</tocitem>
+                <tocitem target="matlab:doc patchToPly">patchToPly</tocitem>
             </tocitem>
-            <tocitem target="mytbx_features_example.html">Features
-                <!-- 2nd and lower TOC levels usually have anchor IDs -->
-                <tocitem target="mytbx_feature1_example.htm#10187">Feature 1
-                </tocitem>
-                <tocitem target="mytbx_feature2_example.htm#10193">Feature 2
-                </tocitem>
+
+            <tocitem target="functions_ions.html">Ion and Range Management
+                <tocitem target="matlab:doc ionAdd">ionAdd</tocitem>
+                <tocitem target="matlab:doc ionConvertName">ionConvertName</tocitem>
+                <tocitem target="matlab:doc ionsCreateIsotopeList">ionsCreateIsotopeList</tocitem>
+                <tocitem target="matlab:doc ionsCreateComplex">ionsCreateComplex</tocitem>
+                <tocitem target="matlab:doc rangeAdd">rangeAdd</tocitem>
+                <tocitem target="matlab:doc rangesFromPos">rangesFromPos</tocitem>
+                <tocitem target="matlab:doc symbolConvertAtomicNumber">symbolConvertAtomicNumber</tocitem>
+            </tocitem>
+
+            <tocitem target="functions_massspec.html">Mass Spectrum Analysis
+                <tocitem target="matlab:doc massSpecPlot">massSpecPlot</tocitem>
+                <tocitem target="matlab:doc massSpecAnalysis">massSpecAnalysis</tocitem>
+                <tocitem target="matlab:doc massSpecComparison">massSpecComparison</tocitem>
+                <tocitem target="matlab:doc peakBGCorrectedCount">peakBGCorrectedCount</tocitem>
+                <tocitem target="matlab:doc chargeStateRatioCalculate">chargeStateRatioCalculate</tocitem>
+            </tocitem>
+
+            <tocitem target="functions_visualization.html">Visualization
+                <tocitem target="matlab:doc scatterPlotPosData">scatterPlotPosData</tocitem>
+                <tocitem target="matlab:doc colorSchemeCreate">colorSchemeCreate</tocitem>
+                <tocitem target="matlab:doc colorSchemeIonAdd">colorSchemeIonAdd</tocitem>
+                <tocitem target="matlab:doc valueToColor">valueToColor</tocitem>
+            </tocitem>
+
+            <tocitem target="functions_roi.html">Region of Interest
+                <tocitem target="matlab:doc roiCreateBox">roiCreateBox</tocitem>
+                <tocitem target="matlab:doc roiCreateCylinder">roiCreateCylinder</tocitem>
+                <tocitem target="matlab:doc roiCreateSphere">roiCreateSphere</tocitem>
+                <tocitem target="matlab:doc roiCreatePlane">roiCreatePlane</tocitem>
+            </tocitem>
+
+            <tocitem target="functions_concentration.html">Concentration Analysis
+                <tocitem target="matlab:doc posCalculateConcentrationSimple">posCalculateConcentrationSimple</tocitem>
+                <tocitem target="matlab:doc concentrationUncertainty">concentrationUncertainty</tocitem>
+                <tocitem target="matlab:doc binApplyConcentrationKernel">binApplyConcentrationKernel</tocitem>
+                <tocitem target="matlab:doc calculate1Dprofile">calculate1Dprofile</tocitem>
+                <tocitem target="matlab:doc calculate2Dprofile">calculate2Dprofile</tocitem>
+            </tocitem>
+
+            <tocitem target="functions_proxigram.html">Proxigram Analysis
+                <tocitem target="matlab:doc pointCreateProxigram">pointCreateProxigram</tocitem>
+                <tocitem target="matlab:doc lineCreateProxigram">lineCreateProxigram</tocitem>
+                <tocitem target="matlab:doc patchCreateProxigram">patchCreateProxigram</tocitem>
+                <tocitem target="matlab:doc patchCreateInterfacialExcessMap">patchCreateInterfacialExcessMap</tocitem>
+            </tocitem>
+
+            <tocitem target="functions_cluster.html">Cluster Analysis
+                <tocitem target="matlab:doc clusterDBSCAN">clusterDBSCAN</tocitem>
+                <tocitem target="matlab:doc clusterDetermination">clusterDetermination</tocitem>
+                <tocitem target="matlab:doc voronoiVolumeAnalysis">voronoiVolumeAnalysis</tocitem>
+                <tocitem target="matlab:doc clusterSizeAnalyse">clusterSizeAnalyse</tocitem>
+            </tocitem>
+
+            <tocitem target="functions_spatial.html">Spatial Statistics
+                <tocitem target="matlab:doc spatialStatistics">spatialStatistics</tocitem>
+                <tocitem target="matlab:doc spatialDistributionMap">spatialDistributionMap</tocitem>
+                <tocitem target="matlab:doc dataQualityMetrics">dataQualityMetrics</tocitem>
+            </tocitem>
+
+            <tocitem target="functions_crystallography.html">Crystallography
+                <tocitem target="matlab:doc crystalOrientation">crystalOrientation</tocitem>
+                <tocitem target="matlab:doc ipfColor">ipfColor</tocitem>
+                <tocitem target="matlab:doc ipfHistogram">ipfHistogram</tocitem>
+                <tocitem target="matlab:doc misorientation">misorientation</tocitem>
+                <tocitem target="matlab:doc boundaryCharacter">boundaryCharacter</tocitem>
+                <tocitem target="matlab:doc stereoProj">stereoProj</tocitem>
+            </tocitem>
+
+            <tocitem target="functions_reconstruction.html">Reconstruction
+                <tocitem target="matlab:doc posReconstruct3DGeiser">posReconstruct3DGeiser</tocitem>
+                <tocitem target="matlab:doc posReflectronCorrection">posReflectronCorrection</tocitem>
+            </tocitem>
+
+            <tocitem target="functions_utilities.html">Utilities
+                <tocitem target="matlab:doc setupToolbox">setupToolbox</tocitem>
+                <tocitem target="matlab:doc checkDependencies">checkDependencies</tocitem>
+                <tocitem target="matlab:doc APTConfig">APTConfig</tocitem>
+                <tocitem target="matlab:doc batchProcess">batchProcess</tocitem>
+                <tocitem target="matlab:doc ProgressTracker">ProgressTracker</tocitem>
+                <tocitem target="matlab:doc validateInputs">validateInputs</tocitem>
+                <tocitem target="matlab:doc runTests">runTests</tocitem>
             </tocitem>
         </tocitem>
-        <!-- User Guide comes next -->
-        <tocitem target="mytbx_ug_intro.html" 
-            image="HelpIcon.USER_GUIDE">MyToolbox User Guide
-            <tocitem target="mytbx_ch_1.html">Setting Up MyToolbox
-            </tocitem>
-            <tocitem target="mytbx_ch_2.html">Processing Data
-            </tocitem>
-            <tocitem target="mytbx_ch_3.html">Verifying MyToolbox outputs 
-                <tocitem target="mytbx_ch_3a.html">Handling Test Failures
-                </tocitem>
-            </tocitem>
+
+        <!-- Workflow Examples -->
+        <tocitem target="matlab:open('Workflow_FirstSteps.mlx')" image="HelpIcon.EXAMPLES">
+            Workflow Examples
+            <tocitem target="matlab:open('Workflow_FirstSteps.mlx')">First Steps</tocitem>
+            <tocitem target="matlab:open('Workflow_1DConcentrationProfile.mlx')">1D Concentration Profile</tocitem>
+            <tocitem target="matlab:open('Workflow_2DConcentrationMap.mlx')">2D Concentration Map</tocitem>
+            <tocitem target="matlab:open('Workflow_3D_Visualisation_of_APT_data.mlx')">3D Visualization</tocitem>
+            <tocitem target="matlab:open('Workflow_ClusterDetermination.mlx')">Cluster Determination</tocitem>
+            <tocitem target="matlab:open('Workflow_Proxigram.mlx')">Proxigram Analysis</tocitem>
+            <tocitem target="matlab:open('Workflow_interfacialExcess.mlx')">Interfacial Excess</tocitem>
+            <tocitem target="matlab:open('Workflow_Isosurface.mlx')">Isosurface Analysis</tocitem>
+            <tocitem target="matlab:open('Workflow_ModellingGB.mlx')">Grain Boundary Modeling</tocitem>
+            <tocitem target="matlab:open('Workflow_HDF5_IO.mlx')">HDF5 Database</tocitem>
+            <tocitem target="matlab:open('Workflow_reconstruction.mlx')">Reconstruction</tocitem>
+            <tocitem target="matlab:open('Workflow_ReflectronCorrection.mlx')">Reflectron Correction</tocitem>
+            <tocitem target="matlab:open('Workflow_FDM.mlx')">Field Desorption Map</tocitem>
         </tocitem>
-        <!-- Function reference next -->
-        <!-- First item is page describing function categories, if any -->
-        <tocitem target="helpfuncbycat.html" 
-                 image="HelpIcon.FUNCTION">Function Reference
-            <!-- First category, with link to anchor in above page -->
-            <tocitem target="helpfuncbycat.html#1">First Category
-                <!-- Inside category, list its functions alphabetically -->
-                <tocitem target="function_1.html">function_1</tocitem>
-                <tocitem target="function_2.html">function_2</tocitem>
-                <!-- ... -->
-            </tocitem>
-            <!-- Second category, with link to anchor in above page -->
-            <tocitem target="helpfuncbycat.html#2">Second Category
-                <!-- Inside category, list its functions alphabetically -->
-                <tocitem target="function_3.html">function_3</tocitem>
-                <tocitem target="function_4.html">function_4</tocitem>
-                <!-- ... -->
-             </tocitem>
-            <!-- Third category, with link to anchor in above page -->
-            <tocitem target="helpfuncbycat.html#3">Third category 
-                <!-- ... -->
-            </tocitem>
-        </tocitem>
-        <!-- Optional List of Examples, with hyperlinks to examples in other files -->
-        <tocitem target="mytbx_example.html" 
-                 image="HelpIcon.HelpIcon.EXAMPLES">Mytoolbox Examples
-        </tocitem>
-        <!-- Optional link or links to your or other Web sites -->
-        <tocitem target="http://www.mathworks.com" 
+
+        <!-- External Links -->
+        <tocitem target="https://github.com/peterfelfer/Atom-Probe-Toolbox"
                  image="$toolbox/matlab/icons/webicon.gif">
-        MyToolbox Web Site (Example only: goes to mathworks.com)
+            GitHub Repository
+        </tocitem>
+        <tocitem target="https://www.youtube.com/playlist?list=PLLr-VNeczShDzrm-wdIyz9ORjFL5KDeYT"
+                 image="$toolbox/matlab/icons/webicon.gif">
+            Video Tutorials
         </tocitem>
     </tocitem>
 </toc>

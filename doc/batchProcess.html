@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>batchProcess - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>batchProcess</h1>
+<pre>
+  BATCHPROCESS Apply analysis pipeline to multiple APT datasets
+ 
+  results = batchProcess(dataFiles, analysisFcn)
+  results = batchProcess(dataFiles, analysisFcn, 'parallel', true)
+ 
+  Processes multiple APT datasets through a common analysis pipeline,
+  collecting results and handling errors gracefully.
+ 
+  INPUT:
+    dataFiles   - Cell array of file paths OR folder path with wildcard
+                  e.g., {'file1.pos', 'file2.pos'} or '/data/*.pos'
+    analysisFcn - Function handle that takes a file path and returns results
+                  Signature: result = analysisFcn(filePath)
+                  OR: result = analysisFcn(filePath, idx, total) for progress info
+ 
+  OPTIONS:
+    'parallel'      - Use parallel processing (default: false)
+    'continueOnError' - Continue if one file fails (default: true)
+    'saveResults'   - Save results after each file (default: false)
+    'outputFolder'  - Folder for saving results (default: pwd)
+    'outputPrefix'  - Prefix for output files (default: 'batch_')
+    'showProgress'  - Show progress bar (default: true)
+    'logFile'       - Path to log file (default: '' = no logging)
+ 
+  OUTPUT:
+    results - Structure array with fields:
+        .fileName   - Original file name
+        .filePath   - Full file path
+        .success    - Whether analysis succeeded
+        .error      - Error message if failed
+        .data       - Analysis results (from analysisFcn)
+        .duration   - Processing time in seconds
+ 
+  EXAMPLES:
+    

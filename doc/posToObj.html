@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>posToObj - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>posToObj</h1>
+<pre>
+  posToObj exports pos file's coordinates to an obj file, so that it can be
+  read into various computer graphics programs such as Blender.
+ 
+  posToObj(pos)                     exports obj file
+  posToObj(pos,species)             exports obj file of selected species
+  posToObj(pos,{})                  exports obj file of species selected dl
+  posToObj(pos,species,fileName)    export to specific file name       
+  posToObj(pos,~,fileName)          export whole variable to file name
+  
+  INPUT
+  pos =         pos is the pos variable to be exported
+  
+  fileName =    name of the file
+  
+  species =     optional with the format cellstr {'Fe','Cr',...} or 
+                string ["Fe", "Cr",..]
+                if species is an empty cell variable {}, an dialogue will
+                pop up with the possible selections
+  
+  OUTPUT
+  .obj file stored with the fileName
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-N�rnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

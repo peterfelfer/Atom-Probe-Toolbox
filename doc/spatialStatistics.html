@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>spatialStatistics - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>spatialStatistics</h1>
+<pre>
+  SPATIALSTATISTICS Compute spatial distribution statistics for APT data
+ 
+  stats = spatialStatistics(pos)
+  stats = spatialStatistics(pos, 'rdfMaxR', 5)
+ 
+  Calculates various spatial statistics including radial distribution
+  function (RDF/pair correlation), nearest neighbor distribution, and
+  K-function (Ripley's K) for analyzing clustering and ordering.
+ 
+  INPUT:
+    pos - Nx3 array of atom positions [x, y, z] in nm
+          OR position table with x, y, z columns
+ 
+  OPTIONS:
+    'rdfMaxR'      - Maximum radius for RDF in nm (default: 3)
+    'rdfBinWidth'  - Bin width for RDF in nm (default: 0.05)
+    'nnMaxK'       - Maximum k for k-th nearest neighbor (default: 10)
+    'sampleSize'   - Points to sample for large datasets (default: 50000)
+    'reference'    - Reference positions for cross-RDF (default: same as pos)
+    'edgeCorrection' - Apply edge correction (default: true)
+    'showProgress' - Show progress bar (default: true)
+    'computeRDF'   - Compute RDF (default: true)
+    'computeNN'    - Compute nearest neighbor (default: true)
+    'computeK'     - Compute Ripley's K (default: true)
+ 
+  OUTPUT:
+    stats - Structure containing:
+        .rdf - Radial distribution function
+            .r        - Radii (bin centers)
+            .g        - g(r) values
+            .gError   - Standard error of g(r)
+            .nPairs   - Number of pairs per bin
+        .nn  - Nearest neighbor statistics
+            .k        - Neighbor order (1st, 2nd, ..., k-th)
+            .meanDist - Mean distance to k-th neighbor
+            .stdDist  - Standard deviation
+            .histogram - Distribution of distances for each k
+        .ripley - Ripley's K function
+            .r        - Radii
+            .K        - K(r) values
+            .L        - L(r) = sqrt(K(r)/pi) - r (linearized)
+            .Ktheory  - Theoretical K for random (CSR)
+        .density - Local density estimate
+        .nPoints - Number of points analyzed
+ 
+  THEORY:
+    RDF g(r): Probability of finding an atom at distance r relative to
+    a uniform random distribution. g(r) = 1 for random, &gt;1 for clustering,
+    &lt;1 for ordering/repulsion.
+ 
+    Nearest neighbor: In a random (Poisson) distribution, the mean
+    nearest neighbor distance is d_nn = 0.554 * rho^(-1/3)
+ 
+  EXAMPLES:
+    

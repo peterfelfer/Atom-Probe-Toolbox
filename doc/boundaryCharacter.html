@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>boundaryCharacter - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>boundaryCharacter</h1>
+<pre>
+  BOUNDARYCHARACTER Analyze and visualize grain boundary character
+ 
+    [CHARDATA, AX] = BOUNDARYCHARACTER(FV, ORI1, ORI2) analyzes the character
+    of a grain boundary between two crystals with orientations ORI1 and ORI2.
+    Displays the boundary mesh colored by misorientation angle by default.
+ 
+    The boundary character is determined by:
+    - Misorientation: The rotation relating the two crystal orientations
+    - Boundary plane: The interface normal expressed in each crystal's frame
+ 
+    Input:
+        fv   - Boundary mesh structure with fields:
+               fv.vertices - Nx3 array of vertex coordinates
+               fv.faces    - Mx3 array of face indices (triangles)
+ 
+        ori1 - crystalOrientation object or 3x3 rotation matrix for crystal 1
+        ori2 - crystalOrientation object or 3x3 rotation matrix for crystal 2
+ 
+    Optional Name-Value Pairs:
+        'colorBy'      - What to color the mesh by:
+                         'misorientation' (default) - misorientation angle
+                         'plane1' - boundary plane IPF color in crystal 1 frame
+                         'plane2' - boundary plane IPF color in crystal 2 frame
+                         'csl'    - CSL sigma value (special boundaries)
+        'property'     - Nx1 per-vertex property to weight (optional)
+        'showIPF'      - Logical, show side-by-side IPF triangles (default: true)
+        'showCSL'      - Logical, identify CSL boundaries (default: true)
+        'cslTolerance' - Angular tolerance for CSL detection in degrees (default: 2)
+        'colormap'     - Colormap for scalar values (default: 'parula')
+        'plot'         - Logical, create visualization (default: true)
+ 
+    Output:
+        charData - Structure with fields:
+                   .misorientation     - Misorientation struct with angle, axis
+                   .boundaryPlane1     - Nx3 boundary normals in crystal 1 frame
+                   .boundaryPlane2     - Nx3 boundary normals in crystal 2 frame
+                   .cslSigma           - CSL sigma value (NaN if not CSL)
+                   .faceColors         - Mx3 RGB colors based on colorBy mode
+                   .vertexNormals      - Nx3 boundary normals in world frame
+ 
+        ax - Axes handles (struct with .mesh, .ipf1, .ipf2 if showIPF is true)
+ 
+    Example:
+        

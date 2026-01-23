@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>stereoProj - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>stereoProj</h1>
+<pre>
+  STEREOPROJ Creates a stereographic projection of crystallographic poles
+ 
+    [ORI, AX] = STEREOPROJ(CRYSTALORIENTATION) creates a stereographic projection
+    showing the poles of common crystallographic plane families for a crystal
+    with the given orientation.
+ 
+    The projection uses the APT (atom probe tomography) convention:
+    - View is looking down the +Z axis (analysis direction)
+    - +Z direction is at the center of the projection
+    - X-Y plane forms the projection plane (+X right, +Y up)
+ 
+    Input:
+        orientationInput - Either:
+                           - 3x3 rotation matrix describing the orientation
+                             of the crystal coordinate system relative to the
+                             world coordinate system (crystal to world transform)
+                           - crystalOrientation object
+ 
+    Optional Name-Value Pairs:
+        'crystalSystem' - Crystal system name (default: 'cubic')
+                          Only used if input is a rotation matrix.
+                          Options: 'cubic', 'hexagonal', 'tetragonal',
+                                   'orthorhombic', 'monoclinic', 'triclinic'
+        'poles'       - Cell array of pole families to display
+                        (default: {'001', '011', '111'})
+        'showWulff'   - logical, show Wulff net grid (default: true)
+        'showLabels'  - logical, show pole labels (default: true)
+        'upperOnly'   - logical, show only upper hemisphere (default: true)
+        'markerSize'  - size of pole markers (default: 80)
+        'showCube'    - logical, show orientation cube (default: true)
+ 
+    Output:
+        ori - crystalOrientation object with current orientation
+        ax  - Axes handle
+ 
+    Interactive Use:
+        After interactive manipulation, retrieve the current orientation:
+            ori = getCurrentOrientation(figHandle)
+ 
+    Pole family notation:
+        '001' - {100} family: (100), (010), (001), etc.
+        '011' - {110} family: (110), (101), (011), etc.
+        '111' - {111} family: (111), etc.
+        '012' - {012} family: (012), (021), (102), etc.
+        '112' - {112} family
+        '122' - {122} family
+        '113' - {113} family
+ 
+    Example:
+        

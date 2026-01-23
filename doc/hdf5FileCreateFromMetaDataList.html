@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>hdf5FileCreateFromMetaDataList - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>hdf5FileCreateFromMetaDataList</h1>
+<pre>
+  hdf5FileCreateFromMetaDataList creates a hdf5 file with all the metadata
+  that is provided in the metaData variable. This variable is a cell array
+  with variable name, including path in the first column, variable value in
+  the second, and variable unit in the third column. Experimental data and
+  data from the analysis can then be added to this file. 
+ 
+  hdf5FileCreateFromMetaDataList(fileName,metaData)
+ 
+  INPUT
+  fileName =      full file name including path as string or char array
+                  (e.g. '

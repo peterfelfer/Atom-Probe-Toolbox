@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>validateInputs - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>validateInputs</h1>
+<pre>
+  VALIDATEINPUTS Unified input validation for Atom Probe Toolbox functions
+ 
+  validateInputs(name1, value1, type1, name2, value2, type2, ...)
+ 
+  Validates input arguments with informative error messages.
+ 
+  INPUTS:
+    Arguments come in triplets: (name, value, type)
+    - name: string, the parameter name for error messages
+    - value: the value to validate
+    - type: string or cell array specifying validation rules
+ 
+  SUPPORTED TYPES:
+    'posTable'      - Valid position table with required columns
+    'ranges'        - Valid ranges table
+    'ions'          - Valid ions table
+    'numeric'       - Numeric array (any size)
+    'scalar'        - Single numeric value
+    'positive'      - Positive numeric value(s)
+    'nonnegative'   - Non-negative numeric value(s)
+    'integer'       - Integer value(s)
+    'vector'        - 1D numeric array
+    'matrix'        - 2D numeric array
+    'string'        - Character array or string
+    'logical'       - Logical value
+    'table'         - MATLAB table
+    'struct'        - Structure
+    'cell'          - Cell array
+    'function'      - Function handle
+    'file'          - Existing file path
+    'directory'     - Existing directory path
+    'patch'         - Valid patch structure (vertices, faces)
+    'colorScheme'   - Valid color scheme table
+    'quaternion'    - Valid quaternion (4-element unit vector)
+    'rotationMatrix'- Valid 3x3 rotation matrix
+    {'option', {'a','b','c'}} - Value must be one of the listed options
+    {'size', [m,n]}          - Array must have specified size
+    {'minLength', n}         - Minimum length for arrays
+    {'columns', {'col1','col2'}} - Table must have specified columns
+ 
+  EXAMPLES:
+    validateInputs('pos', pos, 'posTable', 'radius', r, 'positive');
+    validateInputs('method', method, {'option', {'linear','nearest'}});
+    validateInputs('data', data, {'size', [3, NaN]}); 

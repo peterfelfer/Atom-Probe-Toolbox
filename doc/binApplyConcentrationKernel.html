@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>binApplyConcentrationKernel - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>binApplyConcentrationKernel</h1>
+<pre>
+  binApplyConcentrationKernel takes a voxelisation and applies a 
+  concentration function to it the binCenters are put into the
+  concentration values for plotting
+ 
+  conc = binApplyConcentrationKernel(vox,binCenters, concentrationKernel, distanceUnits)
+ 
+  INPUT
+  vox:                  pos file in voxel
+ 
+  binCenters:           binCenters of the voxel, calculated with the
+                        binVectorsFromDistance function 
+ 
+  concentrationKernel:  concentration function that will calculate the
+                        concentration for each voxel
+ 
+  distanceUnits:   Units to measure the distance e.g. {'nm'}     
+ 
+  OUTPUT
+  conc: cocentration 
+        for 1D, output is a table
+        for more dimenstions, output is a cell array of concentration
+        tables
+ 
+  To DO: implement distance variable assignement for numDim &gt; 1
+  maybe rename distance to location as it fits better with numDim &gt; 1
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

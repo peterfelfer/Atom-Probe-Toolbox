@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>setupToolbox - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>setupToolbox</h1>
+<pre>
+  SETUPTOOLBOX Initialize the Atom Probe Toolbox
+ 
+  setupToolbox()
+  setupToolbox('checkDeps', true)
+  setupToolbox('quiet', true)
+ 
+  Adds all necessary paths and optionally checks dependencies.
+  Run this once per MATLAB session before using the toolbox.
+ 
+  OPTIONS:
+    'checkDeps'  - Run dependency check (default: true)
+    'quiet'      - Suppress output messages (default: false)
+    'permanent'  - Save paths permanently (default: false)
+ 
+  EXAMPLES:
+    setupToolbox();                    

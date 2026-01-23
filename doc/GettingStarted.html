@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Atom Probe Toolbox</title>
+  <link rel="stylesheet" href="matlab:helpwin('helpwin')">
+</head>
+<body>
+<h1>Atom Probe Toolbox</h1>
+<p>A comprehensive MATLAB toolbox for Atom Probe Tomography (APT) data analysis.</p>
+
+<h2>Getting Started</h2>
+<ul>
+  <li><a href="matlab:setupToolbox">Run setupToolbox</a> to initialize the toolbox</li>
+  <li><a href="matlab:checkDependencies">Run checkDependencies</a> to verify installation</li>
+  <li><a href="matlab:open('Workflow_FirstSteps.mlx')">Open First Steps Workflow</a></li>
+</ul>
+
+<h2>Quick Start</h2>
+<pre>
+% Initialize
+setupToolbox();
+
+% Load data
+pos = posLoad('mydata.pos');
+
+% Create mass spectrum
+massSpecPlot(pos.mc);
+
+% Define ions
+ions = ionAdd('Fe');
+ions = ionAdd('Cr', ions);
+</pre>
+
+<h2>Documentation</h2>
+<ul>
+  <li><a href="function_reference.html">Function Reference</a></li>
+  <li><a href="matlab:open('doc/API_Reference.md')">API Quick Reference</a></li>
+  <li><a href="matlab:open('doc/TROUBLESHOOTING.md')">Troubleshooting Guide</a></li>
+</ul>
+
+<h2>Workflows</h2>
+<ul>
+  <li><a href="matlab:open('Workflow_FirstSteps.mlx')">First Steps</a></li>
+  <li><a href="matlab:open('Workflow_1DConcentrationProfile.mlx')">1D Concentration Profile</a></li>
+  <li><a href="matlab:open('Workflow_ClusterDetermination.mlx')">Cluster Determination</a></li>
+  <li><a href="matlab:open('Workflow_Proxigram.mlx')">Proxigram Analysis</a></li>
+  <li><a href="matlab:open('Workflow_HDF5_IO.mlx')">HDF5 Database</a></li>
+</ul>
+
+<h2>External Resources</h2>
+<ul>
+  <li><a href="https://github.com/peterfelfer/Atom-Probe-Toolbox">GitHub Repository</a></li>
+  <li><a href="https://www.youtube.com/playlist?list=PLLr-VNeczShDzrm-wdIyz9ORjFL5KDeYT">Video Tutorials</a></li>
+</ul>
+
+<p><em>(c) Prof. Peter Felfer Group @ FAU Erlangen-Nurnberg</em></p>
+</body>
+</html>

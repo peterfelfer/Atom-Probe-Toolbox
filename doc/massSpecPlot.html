@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>massSpecPlot - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>massSpecPlot</h1>
+<pre>
+  massSpecPlot plots the data from pos to get a mass spectrum as a figure
+ 
+  handle = plotMassSpec(mc, bin, mode)
+  handle = plotMassSpec(mc, bin)
+ 
+  INPUT
+  mc:       is the mass-to-charge(mc)-ratio [Da] of the events in the
+            APT measurement stored in pos, table
+ 
+  bin:      is the width of the steps in which the plot is performed
+ 
+  mode:     specifies the way the counts are applied
+            'count' records the number of counts
+            'normalised' records the number of counts if the bin was one Da
+            wide over the overall number of counts
+            default mode is 'count'
+ 
+  OUTPUT
+  handle:   handle to the plot that contains counts or
+            (counts/Dalton)/totalCounts over Dalton. Used in further
+            analysis to find new ions
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

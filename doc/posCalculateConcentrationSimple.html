@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>posCalculateConcentrationSimple - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>posCalculateConcentrationSimple</h1>
+<pre>
+  posCalculateConcentrationSimple calculates the concentration of a
+  categorical list of atoms or ions
+ 
+  conc = posCalculateConcentrationSimple(pos, detEff, excludeList,volumeName);
+  conc = posCalculateConcentrationSimple(pos, detEff, excludeList)
+  conc = posCalculateConcentrationSimple(pos, detEff)
+ 
+  INPUT
+  pos:          decomposed pos file that contains ion and charge state of
+                the individual atoms
+ 
+  detEff:       detector efficiency of the atom probe, can be parsed as 
+                or as a fraction (for a LEAP 4000X HR it is 0.37)
+                
+  excludeList:  cell array that contains as character the individual
+                ions that shall not be considered for the concentration 
+                calculation, unranged atoms appear as 'unranged', if not 
+                parsed, no atoms will be excluded
+ 
+  volumeName:   name of the volume, parsed as character array, if not parsed,
+                the volume will be named after pos
+ 
+  OUTPUT
+  conc:         is a table that contains the count, concentration, and 
+                variance for each atom/ion that is not on the excludeList.
+                statistical deviation calculated after Danoix et al., 
+                <a href="https://doi.org/10.1016/j.ultramic.2007.02.005">https://doi.org/10.1016/j.ultramic.2007.02.005</a>
+                variance(conc) = conc*(1-conc)/numAtomsDetected * (1 - detEff)
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

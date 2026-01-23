@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>checkDependencies - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>checkDependencies</h1>
+<pre>
+  CHECKDEPENDENCIES Verify MATLAB version and required toolboxes
+ 
+  [status, report] = checkDependencies()
+  [status, report] = checkDependencies('verbose', true)
+  [status, report] = checkDependencies('autoAddPath', true)
+ 
+  Checks that all required MATLAB toolboxes and internal utilities are
+  available for the Atom Probe Toolbox to function correctly.
+ 
+  OPTIONS:
+    'verbose'     - Display detailed information (default: true)
+    'autoAddPath' - Automatically add toolbox paths (default: true)
+    'checkOptional' - Also check optional dependencies (default: false)
+ 
+  OUTPUT:
+    status - true if all required dependencies are met
+    report - Structure containing detailed dependency information
+        .matlabVersion  - Current MATLAB version
+        .required       - Table of required dependencies and their status
+        .optional       - Table of optional dependencies and their status
+        .missing        - Cell array of missing required dependencies
+        .warnings       - Cell array of warning messages
+ 
+  EXAMPLE:
+    checkDependencies();  

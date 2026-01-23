@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>massSpecComparison - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>massSpecComparison</h1>
+<pre>
+  massSpecComparison plots multiple massSpec in one figure
+  
+  specComp = massSpecComparison(pos1, pos2);
+  specComp = massSpecComparison(pos1, pos2, mode);
+  specComp = massSpecComparison(pos1, pos2, mode, posNames);
+  specComp = massSpecComparison(pos1, pos2, mode, posNames, binWidth, lineSize, colors);
+ 
+ 
+  INPUT
+  mode = 'normalised' or 'count'
+  pos = different pos variables up to a number of 7 (because the preset
+  colour vector has just 7 colors - if more needed please use the color
+  Vector)
+  posNames = Struct array with the name of the pos variables {'data1',
+  'data2'}
+  bindWidth = number between 0 and 1
+  lineSize = number starting from 1
+  colors = if specific colors are needed, please parse colors as vectors [0 0.4470 0.7410; 0.8500 0.3250
+  0.0980]
+ 
+  OUTPUT
+  specComp = with all the pos variables plotted
+  
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

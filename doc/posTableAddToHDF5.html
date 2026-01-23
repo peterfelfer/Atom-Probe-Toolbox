@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>posTableAddToHDF5 - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>posTableAddToHDF5</h1>
+<pre>
+  posTableAddToHDF5 enables the user to add pos/epos data 
+  to an existing HDF5 file with the appropriate groups structure.
+ 
+  posTableAddToHDF5(fileName,pos)
+ 
+  INPUT 
+  fileName:         full file name including path as string or char array
+ 
+  pos:              pos or epos table variable. Should contain the following entries:
+                    ionIdx,x,y,z,mc,tof,VDC,VP,detx,dety,deltaP,multi,ion,atom,isotope,chargeState,ionComplexity
+                    decomposition state is automatically determined and the
+                    corresponding data is written either into the group:
+                    '/atomProbeTomography/reconstruction/ion/'
+                    (undecomposed)
+                    '/atomProbeTomography/reconstruction/atom/'
+                    (decomposed)
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

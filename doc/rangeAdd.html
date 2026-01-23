@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>rangeAdd - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>rangeAdd</h1>
+<pre>
+  adds a range to a mass spectrum using graphical input
+  output is the handle to the area plot and the corresponding text
+ 
+  if multiple isotopic combinations of the same element are within the range,
+  automatically the one with the higher abundance (peak height) will be taken
+ 
+  if various ions of different element species are within one range,
+  the user can choose the desired ion out of a list in a pop-up window;
+  default selection is set to the ion with higher natural abundance
+ 
+  if the new range covers an existing range, the command gets aborted
+ 
+  if the new range is entirely covered by an existing range, the command
+  gets aborted
+ 
+  if the new range partially overlaps with an existing range, the new range
+  gets clipped to the adjacent range
+ 
+  if no inserted ion is located within the range, the user can manually enter a
+  range name (must be an ion, which is included in colorScheme) in a pop-up window
+ 
+  possible use without specific outputs: rangeAdd(spec,colorScheme)
+  generates only area (ans) but no handle or text in the workspace
+ 
+  [h, txt] = rangeAdd(spec,colorScheme)
+  [h, txt] = rangeAdd(spec,colorScheme,manualName)
+ 
+ 
+  INPUT
+  spec:         area plot that displays the mass spectrum (histogram of
+                m/c frequencies)either in raw counts or normalised to bin
+                width and total ion count
+ 
+  colorScheme:  table with elements assigned to color code
+ 
+  manualName:   name of range if no ion is defined, following keywords
+                are possible: 'background'. This defines a background range
+                If it is a valid ion name including charge state and 
+                isotope information, e.g. 16O 1H2 +, the range table is
+                filled out analogous to a regular range
+ 
+  rangeLimits: limits of the range without graphical input. Used for
+               building up a range figure e.g. from an HDF5
+ 
+  OUTPUT
+  h:            handle to the area plot of the range
+  txt:          corresponding text
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

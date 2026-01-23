@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>patchCreateProxigram - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>patchCreateProxigram</h1>
+<pre>
+  patchCreateProxigram calculates a proxigram for the patch 'interface' 
+  for the atoms in 'posSpecies', which are a subset of the atoms in 'pos' 
+  with a bin width of 'bin'.
+  
+  [proxi, binVector] = patchCreateProxigram(posSpecies,pos,interface,bin)
+ 
+  INPUT
+  posSpecies:   pos of the desired species, subset of initial pos
+ 
+  pos:          initial pos file with pos.x, pos.y, and pos.z
+ 
+  interface:    structure with faces and vertices of the interface
+ 
+  bin:          bin width in nm
+ 
+  OUTPUT
+  proxi:        concentration values of the desired species; y-values of
+                the proxigram
+ 
+  binVector:    corresponding distance values; x-values of the proxigram
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>
