@@ -6,12 +6,12 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Version](https://img.shields.io/badge/Version-1.0-orange.svg)](https://github.com/peterfelfer/Atom-Probe-Toolbox)
 
-Developed by the [Felfer Group](https://www.wtm.tf.fau.de/) at Friedrich-Alexander-Universität Erlangen-Nürnberg.
+Developed by the [Felfer Group](https://www.ww1.tf.fau.de/) at Friedrich-Alexander-Universität Erlangen-Nürnberg.
 
 ---
 
 ## Table of Contents
-
+- [Versions](#versions)
 - [Features](#features)
 - [Requirements](#requirements)
 - [Installation](#installation)
@@ -25,6 +25,21 @@ Developed by the [Felfer Group](https://www.wtm.tf.fau.de/) at Friedrich-Alexand
 - [License](#license)
 
 ---
+## Versions
+The top-level repository represents the current nightly builds. 
+Older versions are in their respective subfolder. 
+
+The status as of the publication of the following papers is contained in the Release 1.0
+
+Heller et al., A MATLAB Toolbox for Findable, Accessible, Interoperable, and Reusable Atom Probe Data Science, Microscopy and Microanalysis (2025): [https://doi.org/10.1093/mam/ozae031](https://doi.org/10.1093/mam/ozae031)
+Basic paper about the toolbox and functionality.
+
+Heller et al., Compensating Image Distortions in a Commercial Reflectron-Type Atom Probe, Microscopy and Microanalysis (2025): [https://doi.org/10.1093/mam/ozae052](https://doi.org/10.1093/mam/ozae052)
+This is relevant if you use the Reflectron distortion corrections for APT reconstruction. 
+
+If you use this tool box for your atom probe tomography analysis, please consider citing the relevant papers. 
+
+**Contributions and suggestions for improvement are always welcome! Happy Atom Probing**
 
 ## Features
 

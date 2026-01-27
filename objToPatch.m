@@ -1,4 +1,4 @@
-function [obj, gr] = objToPatch(fullfilename)
+function [obj, gr] = objToPatch(fullfilename, varargin)
 % objToPatch loads in a Wavefront OBJ file that can be generated in an
 % external program such as Blender. This function also support the use of
 % Polygroups, meaning that certain areas of a mesh can be marked e.g. for
@@ -8,6 +8,8 @@ function [obj, gr] = objToPatch(fullfilename)
 % [obj, gr] = objToPatch()
 % obj = objToPatch(fullfilename)
 % obj = objToPatch()
+% obj = objToPatch(fullfilename, 'removeUnusedVertices', true)
+% obj = objToPatch('removeUnusedVertices', true)
 %
 % INPUT
 % fullfilename:     full name (incl path) to the obj file to be loaded. if
@@ -26,10 +28,19 @@ function [obj, gr] = objToPatch(fullfilename)
 %                   vertices in the obj variable. 
 %                   
 
+removeUnusedVertices = false;
+fullfilenameProvided = nargin >= 1 && ~isempty(fullfilename);
+if fullfilenameProvided && ischar(fullfilename) && strcmpi(fullfilename, 'removeUnusedVertices')
+    fullfilenameProvided = false;
+end
 
-if ~exist('fullfilename','var')
+if ~fullfilenameProvided
     [file, path] = uigetfile('*.obj','select .obj file');
     fullfilename = [path file];
+end
+
+if nargin >= 1
+    [removeUnusedVertices] = parseOptions(fullfilename, varargin{:});
 end
 
 % split file into individual lines
@@ -41,6 +52,7 @@ fileCells = file2cellarray(fullfilename);
 objects = 0;
 vertices = 0;
 obj.vertices = [];
+obj.objects = struct('type', {}, 'faces', {});
 which_group = 0;
 gr.name = 'No Groups';
 gr.vertices = [];
@@ -85,19 +97,40 @@ for c = 1:size(fileCells,2)
             end
             
         case 'o'
-            objects = objects +1;
-            obj.objects(objects).type = fileCells{1, c+1}{1,1};
+            objects = objects + 1;
+            if numel(fileCells{1, c}) >= 2
+                obj.objects(objects).type = char(fileCells{1, c}{1, 2});
+            elseif c + 1 <= size(fileCells, 2) && ~isempty(fileCells{1, c + 1})
+                obj.objects(objects).type = char(fileCells{1, c + 1}{1, 1});
+            else
+                obj.objects(objects).type = sprintf('object_%d', objects);
+            end
             obj.objects(objects).faces = [];
             
         case 'p'
+            if objects == 0
+                objects = 1;
+                obj.objects(objects).type = 'default';
+                obj.objects(objects).faces = [];
+            end
             point = str2num(fileCells{1,c}{1,2});
             obj.objects(objects).faces = [obj.objects(objects).faces; point];
             
         case 'l'
+            if objects == 0
+                objects = 1;
+                obj.objects(objects).type = 'default';
+                obj.objects(objects).faces = [];
+            end
             line = [str2num(fileCells{1,c}{1,2}) str2num(fileCells{1,c}{1,3})];
             obj.objects(objects).faces = [obj.objects(objects).faces; line];
             
         case 'f'
+            if objects == 0
+                objects = 1;
+                obj.objects(objects).type = 'default';
+                obj.objects(objects).faces = [];
+            end
             if numel(fileCells{1,c}) == 4
                 face = [str2num(fileCells{1,c}{1,2}) str2num(fileCells{1,c}{1,3}) str2num(fileCells{1,c}{1,4})];
             else
@@ -115,6 +148,9 @@ for c = 1:size(fileCells,2)
     
 end
 
+if removeUnusedVertices
+    [obj, gr] = compactVertices(obj, gr);
+end
 
 
 
@@ -198,6 +234,73 @@ end
 function  objects=readmtl(filename_mtl,verbose)
 if(verbose),disp(['Reading Material file : ' filename_mtl]); end
 file_words=file2cellarray(filename_mtl);
+
+function [removeUnusedVertices] = parseOptions(fullfilename, varargin)
+removeUnusedVertices = false;
+if ischar(fullfilename) && strcmpi(fullfilename, 'removeUnusedVertices')
+    removeUnusedVertices = true;
+    return;
+end
+if isempty(varargin)
+    return;
+end
+pairs = varargin;
+if numel(pairs) == 1 && isstruct(pairs{1})
+    if isfield(pairs{1}, 'removeUnusedVertices')
+        removeUnusedVertices = logical(pairs{1}.removeUnusedVertices);
+    end
+    return;
+end
+for i = 1:2:numel(pairs)
+    key = pairs{i};
+    if i + 1 > numel(pairs)
+        break;
+    end
+    val = pairs{i + 1};
+    if ischar(key) || isstring(key)
+        if strcmpi(key, 'removeUnusedVertices')
+            removeUnusedVertices = logical(val);
+        end
+    end
+end
+
+function [obj, gr] = compactVertices(obj, gr)
+used = [];
+for i = 1:numel(obj.objects)
+    faces = obj.objects(i).faces;
+    if isempty(faces)
+        continue;
+    end
+    used = [used; faces(:)]; %#ok<AGROW>
+end
+used = unique(used);
+used = used(isfinite(used) & used >= 1 & used <= size(obj.vertices, 1));
+if isempty(used)
+    return;
+end
+
+oldToNew = zeros(size(obj.vertices, 1), 1);
+oldToNew(used) = 1:numel(used);
+obj.vertices = obj.vertices(used, :);
+
+for i = 1:numel(obj.objects)
+    faces = obj.objects(i).faces;
+    if isempty(faces)
+        continue;
+    end
+    obj.objects(i).faces = oldToNew(faces);
+end
+
+% Best-effort remap for group vertex indices (if they look like indices)
+for g = 1:numel(gr)
+    if isempty(gr(g).vertices)
+        continue;
+    end
+    if all(gr(g).vertices(:) == floor(gr(g).vertices(:))) && ...
+            max(gr(g).vertices(:)) <= numel(oldToNew)
+        gr(g).vertices = oldToNew(gr(g).vertices);
+    end
+end
 % Remove empty cells, merge lines split by "\" and convert strings with values to double
 [ftype, fdata]= fixlines(file_words);
 
@@ -230,4 +333,3 @@ for iline=1:length(ftype)
 end
 objects=objects(1:no);
 if(verbose),disp('Finished Reading Material file'); end
-
