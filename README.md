@@ -52,12 +52,17 @@ If you use this tool box for your atom probe tomography analysis, please conside
 ### Mass Spectrum Analysis
 - Interactive mass spectrum plotting and ranging
 - Automated peak detection and background fitting
+- Linear background correction between peaks
 - Isotope pattern matching
 - Peak deconvolution
 - Charge state ratio analysis
+- Publication-ready legend export (SVG/PDF)
 
 ### 3D Visualization & ROI
 - Interactive 3D point cloud visualization
+- Interactive control panel with species visibility, sorting, filtering
+- Keyboard shortcuts for quick species toggling (1-0, Shift+1-0)
+- RGB scale cube for publication figures
 - Region of Interest (ROI) selection: box, cylinder, sphere, plane
 - ROI manipulation GUI (`roiManipulate.mlapp`)
 - Custom color schemes per ion species
@@ -238,13 +243,16 @@ open('Workflow_Proxigram.mlx')
 | `ionConvertName` | Convert ion name formats |
 | `ionsCreateIsotopeList` | Generate isotope patterns |
 | `rangeAdd` | Add mass-to-charge range |
+| `rangeExtendToNeighbor` | Extend range to touch neighboring range |
 | `rangesFromPos` | Auto-generate ranges |
 
 ### Visualization
 | Function | Description |
 |----------|-------------|
 | `massSpecPlot` | Plot mass spectrum |
+| `massSpectrumLegend` | Create publication-ready legend for mass spectrum |
 | `scatterPlotPosData` | 3D atom visualization |
+| `scatterPlotPosWidget` | Interactive scatter plot control panel |
 | `colorSchemeCreate` | Create color scheme |
 | `colorSchemeIonAdd` | Add ion colors |
 
@@ -261,6 +269,7 @@ open('Workflow_Proxigram.mlx')
 | Function | Description |
 |----------|-------------|
 | `posCalculateConcentrationSimple` | Calculate composition |
+| `posCalculateConcentrationBackgroundRemoved` | Calculate composition with background correction |
 | `concentrationUncertainty` | Uncertainty quantification |
 | `pointCreateProxigram` | Point-based proxigram |
 | `lineCreateProxigram` | Line-based proxigram |

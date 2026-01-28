@@ -915,9 +915,19 @@ function onKeyPress(src, evd)
                 if isCtrl
                     onRedo(controlFig);
                 end
-            case {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
-                % Toggle species 1-9 based on current table order (after filtering/sorting)
-                tableRow = str2double(evd.Key);
+            case {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
+                % Toggle species 1-20 based on current table order (after filtering/sorting)
+                % Keys 1-9 map to species 1-9, key 0 maps to species 10
+                % Shift+1-9 map to species 11-19, Shift+0 maps to species 20
+                if evd.Key == '0'
+                    tableRow = 10;
+                else
+                    tableRow = str2double(evd.Key);
+                end
+                % Add 10 if Shift is held
+                if ismember('shift', evd.Modifier)
+                    tableRow = tableRow + 10;
+                end
                 if tableRow <= numel(data.filteredIndices)
                     pushUndo(controlFig);
                     actualIdx = data.filteredIndices(tableRow);

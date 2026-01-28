@@ -15,6 +15,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `spatialStatistics` - Comprehensive spatial statistics including RDF g(r), nearest neighbor distributions, and Ripley's K function
 - `dataQualityMetrics` - Data quality assessment with resolution estimation, artifact detection, and density analysis
 - `massSpecAnalysis` - Automated mass spectrum analysis with peak detection, background fitting, and resolution estimation
+- `posCalculateConcentrationBackgroundRemoved` - Concentration calculation with linear background correction
+  - Multiple background methods: ALS, minBetweenPeaks, linearBetweenPeaks, tofConstant
+  - Automatic handling of touching ranges
+  - Visual background overlay on mass spectrum
+
+#### Visualization
+- `scatterPlotPosWidget` - Interactive control panel for 3D scatter plots
+  - Species visibility toggle with checkboxes
+  - Sorting by count, mass, or name
+  - Search/filter species
+  - Keyboard shortcuts (1-0, Shift+1-0 for species 1-20)
+  - Color customization per species
+  - RGB scale cube for publication figures
+  - Axis label and tick visibility toggle
+  - Undo/redo support
+- `massSpectrumLegend` - Publication-ready legend for mass spectra
+  - Colored boxes for ion species with LaTeX formatting
+  - Line samples for background curves
+  - Export to SVG/PDF with editable text (Unicode mode)
+  - Consolidates ions by composition (ignoring isotopes/charge states)
+
+#### Range Management
+- `rangeExtendToNeighbor` - Extend a range to touch its neighboring range
+  - Click-based interface: click closer to left/right edge to extend that side
+  - Automatic detection of adjacent ranges
 
 #### Cluster Analysis
 - `clusterDBSCAN` - DBSCAN clustering with automatic GPU acceleration and CPU fallback

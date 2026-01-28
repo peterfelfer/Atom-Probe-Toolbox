@@ -7,6 +7,7 @@ function [labelHandles, leaderHandles, info] = massSpecPlotCleanUpLabels(spec, v
 % INPUT
 % spec:    mass spectrum handle (figure, axes, or plot handle)
 % name-value options:
+%   'layout'            'leaders' | 'topband' (default: 'leaders')
 %   'labelOffsetFactor' base multiplier for log axis (default: 1.4)
 %   'labelOffset'       base offset (fraction of y-range) for linear axis (default: 0.05)
 %   'tierSpacingFactor' tier multiplier for log axis (default: 1.25)
@@ -18,6 +19,7 @@ function [labelHandles, leaderHandles, info] = massSpecPlotCleanUpLabels(spec, v
 %   'xPadding'          horizontal padding (fraction of x-range) (default: 0.01)
 %   'maxXShift'         maximum x-shift allowed before using next tier (fraction of x-range) (default: 0.2)
 %   'maxTiers'          maximum tiers to try (default: 12)
+%   'labelBackground'   'auto' | 'range' | 'ion' (default: 'auto')
 %
 % OUTPUT
 % labelHandles:  text handles that were rearranged
@@ -31,6 +33,7 @@ if nargin < 1 || isempty(spec)
 end
 
 options = struct( ...
+    'layout', 'leaders', ...
     'labelOffsetFactor', 1.4, ...
     'labelOffset', 0.05, ...
     'tierSpacingFactor', 1.25, ...
@@ -41,7 +44,8 @@ options = struct( ...
     'stubLength', 0.04, ...
     'xPadding', 0.01, ...
     'maxXShift', 0.2, ...
-    'maxTiers', 12);
+    'maxTiers', 12, ...
+    'labelBackground', 'auto');
 
 if ~isempty(varargin)
     options = parseOptions(options, varargin{:});
@@ -77,6 +81,12 @@ tiers = cell(1, options.maxTiers);
 leaderHandles = gobjects(0, 1);
 labelsMoved = 0;
 tiersUsed = 0;
+
+layout = lower(string(options.layout));
+useTopBand = layout == "topband";
+if useTopBand
+    leaderHandles = gobjects(0, 1);
+end
 
 for i = 1:numel(labels)
     h = labels(i);
@@ -120,22 +130,35 @@ for i = 1:numel(labels)
             xCenter - labelWidth / 2 - padX, xCenter + labelWidth / 2 + padX];
     end
 
+    if useTopBand
+        applyLabelBackground(h, labelNames(i), rangeInfo, ax, options.labelBackground);
+    else
+        leaderHandles = [leaderHandles; drawLeader(ax, h, anchor, e, options, yRange, xRange, isLog)]; %#ok<AGROW>
+    end
     labelsMoved = labelsMoved + 1;
-    leaderHandles = [leaderHandles; drawLeader(ax, h, anchor, e, options, yRange, xRange, isLog)]; %#ok<AGROW>
 end
 
 info = struct('labelsMoved', labelsMoved, 'tiersUsed', tiersUsed);
 end
 
 function ax = resolveAxes(spec)
-    ax = spec;
-    if isgraphics(spec, 'figure')
+    ax = gobjects(0, 1);
+    if isgraphics(spec, 'axes')
+        ax = spec;
+    elseif isgraphics(spec, 'figure')
         axesList = findobj(spec, 'Type', 'axes');
         if ~isempty(axesList)
             ax = axesList(1);
         end
-    elseif ~isgraphics(spec, 'axes')
+    elseif isgraphics(spec)
         ax = ancestor(spec, 'axes');
+    end
+    if isempty(ax) || ~isgraphics(ax, 'axes')
+        if isstruct(spec) && isfield(spec, 'Parent')
+            ax = spec.Parent;
+        elseif isobject(spec) && isprop(spec, 'Parent')
+            ax = spec.Parent;
+        end
     end
     if isempty(ax) || ~isgraphics(ax, 'axes')
         error('massSpecPlotCleanUpLabels:invalidHandle', ...
@@ -158,7 +181,7 @@ end
 
 function info = collectRangeInfo(ax)
     plots = ax.Children;
-    info = struct('name', string.empty(0, 1), 'xPeak', [], 'yPeak', []);
+    info = struct('name', string.empty(0, 1), 'xPeak', [], 'yPeak', [], 'color', []);
     for pl = 1:numel(plots)
         try
             type = plots(pl).UserData.plotType;
@@ -173,6 +196,17 @@ function info = collectRangeInfo(ax)
         info.name(end+1, 1) = string(name);
         info.xPeak(end+1, 1) = xPeak;
         info.yPeak(end+1, 1) = yPeak;
+        info.color(end+1, :) = plotFaceColor(plots(pl));
+    end
+end
+
+function color = plotFaceColor(h)
+    color = [];
+    if isprop(h, 'FaceColor')
+        color = h.FaceColor;
+    end
+    if isempty(color) || numel(color) ~= 3
+        color = [];
     end
 end
 
@@ -282,6 +316,58 @@ function center = pickClosestCenter(intervals, target)
     center = min(max(target, intervals(idx, 1)), intervals(idx, 2));
 end
 
+function applyLabelBackground(h, labelName, rangeInfo, ax, mode)
+    color = [];
+    mode = lower(string(mode));
+    if mode == "auto" || mode == "range"
+        idx = find(rangeInfo.name == string(labelName), 1, 'first');
+        if ~isempty(idx)
+            color = rangeInfo.color(idx, :);
+        end
+    end
+    if isempty(color) && (mode == "auto" || mode == "ion")
+        color = ionColorFromAxes(ax, labelName);
+    end
+    if isempty(color)
+        return;
+    end
+    [textColor, bgColor] = pickTextContrast(color);
+    h.BackgroundColor = bgColor;
+    h.Color = textColor;
+    h.Margin = 2;
+end
+
+function color = ionColorFromAxes(ax, labelName)
+    color = [];
+    plots = ax.Children;
+    for pl = 1:numel(plots)
+        h = plots(pl);
+        try
+            type = h.UserData.plotType;
+        catch
+            type = "unknown";
+        end
+        if type ~= "ion"
+            continue;
+        end
+        if strcmp(string(h.DisplayName), string(labelName))
+            if isprop(h, 'Color')
+                color = h.Color;
+                return;
+            end
+        end
+    end
+end
+
+function [textColor, bgColor] = pickTextContrast(bgColor)
+    lum = 0.2126 * bgColor(1) + 0.7152 * bgColor(2) + 0.0722 * bgColor(3);
+    if lum > 0.5
+        textColor = [0 0 0];
+    else
+        textColor = [1 1 1];
+    end
+end
+
 function opts = parseOptions(opts, varargin)
     if mod(numel(varargin), 2) ~= 0
         error('massSpecPlotCleanUpLabels:invalidOptions', ...
@@ -313,6 +399,10 @@ function opts = parseOptions(opts, varargin)
                 opts.maxXShift = max(0, value);
             case "maxtiers"
                 opts.maxTiers = max(1, round(value));
+            case "layout"
+                opts.layout = char(value);
+            case "labelbackground"
+                opts.labelBackground = char(value);
             otherwise
                 error('massSpecPlotCleanUpLabels:invalidOption', ...
                     'Unknown option "%s".', name);
