@@ -11,6 +11,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 #### New Analysis Functions
+- `ionConvertMode` - Convert ion categorical names between concentration modes (ionic/isotopic/atomic)
+- `backgroundEstimate` - Standalone background estimation for mass spectra
+  - ALS (Asymmetric Least Squares) baseline fitting
+  - Linear interpolation between peaks
+  - Minimum between peaks
+  - TOF-constant background model
+  - TOF-fit: fits 1/sqrt(m/n) model to valleys between peaks
+  - Support for tofSpecBackgroundDetermination results
+- `tofSpecBackgroundDetermination` - Track TOF background over experiment
+  - Block-based analysis (e.g., every 1M ions or N blocks)
+  - Tracks background rate changes over experiment duration
+  - Converts TOF background to mass spectrum using 1/sqrt(m/n) physics
+  - Auto-detection of background regions from ranges
+  - Diagnostic plots with trend analysis
+- `sortIonCategories` - Sort ion/isotope/atom categories by atomic number or mass-to-charge
 - `concentrationUncertainty` - Proper uncertainty quantification using binomial, Poisson, or Clopper-Pearson methods
 - `spatialStatistics` - Comprehensive spatial statistics including RDF g(r), nearest neighbor distributions, and Ripley's K function
 - `dataQualityMetrics` - Data quality assessment with resolution estimation, artifact detection, and density analysis
@@ -19,6 +34,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - Multiple background methods: ALS, minBetweenPeaks, linearBetweenPeaks, tofConstant
   - Automatic handling of touching ranges
   - Visual background overlay on mass spectrum
+- `posCalculateConcentrationDeconvolved` - Concentration calculation with overlap deconvolution
+  - Non-negative least squares (NNLS) fitting for overlapping isotope peaks
+  - Optional Tikhonov regularization for ill-conditioned problems
+  - Uncertainty quantification with variance propagation through NNLS covariance
+  - Chi-square goodness-of-fit test with p-values
+  - Condition number warnings for unreliable deconvolutions
+  - `directCountIons` option for ions with non-natural isotope ratios
+  - `tracerPeaks` option to separate natural vs tracer contributions
+  - Raw counts extracted from unique detector hits via pos.ionIdx
+  - Connected components approach for numerical stability
+  - Multiple output modes: ionic, isotopic, atomic concentrations
+  - Diagnostic stacked bar plot with uncertainty bands
 
 #### Visualization
 - `scatterPlotPosWidget` - Interactive control panel for 3D scatter plots
@@ -82,6 +109,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - Informative error messages
 
 ### Changed
+- `posCalculateConcentrationSimple` - Added 'mode' option for ionic, isotopic, or atomic concentrations
+- `posCalculateConcentrationBackgroundRemoved` - Added 'mode' option for ionic, isotopic, or atomic concentrations
 - Updated README.md with comprehensive documentation
 - Reorganized `helptoc.xml` with proper function categories
 - Standardized function documentation format

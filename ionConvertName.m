@@ -46,7 +46,7 @@ function varargout = ionConvertName(varargin)
 %
 % isotopeTable:     table with all isotopes
 %
-% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nï¿½rnberg
 
 %% conversion from array to table/categorical. The new table/categorical is saved as an input
 % argument and is converted to table if isotopes are given, categorical if
@@ -130,21 +130,24 @@ if istable(varargin{1})
                 ionName = [ionName num2str(sum(isotopeGroup == i))];
             end
         end
-        ionName = [ionName ' '];
+        % Add space between elements (only for plain format)
+        if ~strcmp(format,'LaTeX')
+            ionName = [ionName ' '];
+        end
     end
-    
+
     % add + (or -) for charge states to the name
     if nargin > 1
         chargeState = varargin{2};
         if ~isnan(chargeState) % NaN for undefined charge state, e.g. in noise
-            
+
             if chargeState < 0
                 sym = '-';
             else
                 sym = '+';
             end
             if strcmp(format,'LaTeX')
-                ionName = [ionName ' ^{' repmat(sym,1,abs(chargeState)) '}'];
+                ionName = [ionName '^{' repmat(sym,1,abs(chargeState)) '}'];
             else
                 ionName = [ionName repmat(sym,1,abs(chargeState))];
             end
@@ -181,8 +184,12 @@ if iscategorical(varargin{1})
     isotopeGroup = sortedFindgroups(ionTable);
     for i = 1:max(isotopeGroup)
         idx = find(isotopeGroup == i,1);
-        ionName = [ionName ' ' char(ionTable.element(idx))];
-        
+        % Add space before element (only for plain format)
+        if ~strcmp(format,'LaTeX')
+            ionName = [ionName ' '];
+        end
+        ionName = [ionName char(ionTable.element(idx))];
+
         if sum(isotopeGroup == i) > 1
             if strcmp(format,'LaTeX')
                 ionName = [ionName '_{' num2str(sum(isotopeGroup == i)) '}'];
@@ -191,9 +198,7 @@ if iscategorical(varargin{1})
             end
         end
     end
-    
-    
-    
+
     % add + (or -) for charge states
     if nargin > 1
         chargeState = varargin{2};
@@ -204,7 +209,7 @@ if iscategorical(varargin{1})
                 sym = '+';
             end
             if strcmp(format,'LaTeX')
-                ionName = [ionName ' ^{' repmat(sym,1,abs(chargeState)) '}'];
+                ionName = [ionName '^{' repmat(sym,1,abs(chargeState)) '}'];
             else
                 ionName = [ionName repmat(sym,1,abs(chargeState))];
             end
@@ -287,11 +292,31 @@ if any(string(ionTable.Properties.VariableNames) == "isotope")
     ionTable.isotope(isnan(ionTable.isotope)) = 0;
 end
 
-isotopeGroup = findgroups(ionTable); % need to re-sort REALLY HOPE THAT WONT MAKE PROBLEMS
-groupIdx = unique(isotopeGroup,'stable');
-[~, idx] = sort(groupIdx);
+isotopeGroup = findgroups(ionTable);
+groupIdx = unique(isotopeGroup, 'stable');
+
+% Filter out NaN from groupIdx - NaN entries will be grouped together
+nanMask = isnan(groupIdx);
+validGroupIdx = groupIdx(~nanMask);
+
+% Create a mapping from old group numbers to new sequential numbers
+% This handles non-contiguous group numbers from findgroups
+if ~isempty(validGroupIdx)
+    groupMap = containers.Map(validGroupIdx, 1:length(validGroupIdx));
+else
+    groupMap = containers.Map();
+end
+
+% NaN groups will be assigned this number (treated as single unknown group)
+nanGroupNum = length(validGroupIdx) + 1;
+
+% Map group numbers
 for i = 1:length(isotopeGroup)
-    isotopeGroup(i) = idx(isotopeGroup(i));
+    if ~isnan(isotopeGroup(i))
+        isotopeGroup(i) = groupMap(isotopeGroup(i));
+    else
+        isotopeGroup(i) = nanGroupNum;
+    end
 end
 
 % replace 0s with NaNs again

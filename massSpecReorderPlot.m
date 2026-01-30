@@ -14,23 +14,24 @@ function massSpecReorderPlot(spec,order)
 % order:    set what kind of information stands in focus. if more
 %           information is given, order can contain following types in any order:
 %           "text": the text of the ion
+%           "backgroundEstimate": background estimation line (e.g., from concentration calculation)
 %           "ion": stem plot of the ion, which shows the exact position of the peak
 %           "range": ranged area of the peaks
 %           "background": background ranges for the mass spectrum
 %           "massSpectrum": the neutral mass spectrum
 %           "unknown": everything else
-%           default order is
-%           ["text","ion","range","background","massSpectrum","unknown"]
-%           
+%           default order is (first = foreground, last = background):
+%           ["text","backgroundEstimate","ion","range","background","massSpectrum","unknown"]
+%
 % OUTPUT
 %          mass spectrum with rearranged order
 %
-% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
 
 
 %% default if no input order is given
 if ~exist('order','var')
-    order = ["text","ion","range","background","massSpectrum","unknown"];
+    order = ["text","backgroundEstimate","ion","range","background","massSpectrum","unknown"];
 end
 
 

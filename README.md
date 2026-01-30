@@ -69,6 +69,7 @@ If you use this tool box for your atom probe tomography analysis, please conside
 
 ### Composition Analysis
 - Local and global concentration calculation
+- Multiple concentration modes: ionic, isotopic, atomic
 - 1D and 2D concentration profiles
 - Proxigram analysis (point, line, and surface-based)
 - Concentration uncertainty quantification
@@ -180,8 +181,13 @@ ranges = rangeAdd([51.9, 52.2], 'Cr', ions, ranges);
 
 ### Calculate Composition
 ```matlab
-% Simple concentration
-conc = posCalculateConcentrationSimple(pos, ranges);
+% Simple concentration (auto-detects mode)
+conc = posCalculateConcentrationSimple(pos, 0.37);
+
+% Specify concentration mode explicitly
+conc = posCalculateConcentrationSimple(pos, 0.37, {}, '', 'mode', 'ionic');     % Each ion species separate
+conc = posCalculateConcentrationSimple(pos, 0.37, {}, '', 'mode', 'isotopic');  % Group by isotope
+conc = posCalculateConcentrationSimple(pos, 0.37, {}, '', 'mode', 'atomic');    % Group by element
 
 % With uncertainty
 unc = concentrationUncertainty(conc.counts);
@@ -241,6 +247,7 @@ open('Workflow_Proxigram.mlx')
 |----------|-------------|
 | `ionAdd` | Add ion to ion list |
 | `ionConvertName` | Convert ion name formats |
+| `ionConvertMode` | Convert ion names between concentration modes (ionic/isotopic/atomic) |
 | `ionsCreateIsotopeList` | Generate isotope patterns |
 | `rangeAdd` | Add mass-to-charge range |
 | `rangeExtendToNeighbor` | Extend range to touch neighboring range |
@@ -270,6 +277,7 @@ open('Workflow_Proxigram.mlx')
 |----------|-------------|
 | `posCalculateConcentrationSimple` | Calculate composition |
 | `posCalculateConcentrationBackgroundRemoved` | Calculate composition with background correction |
+| `posCalculateConcentrationDeconvolved` | Calculate composition with overlap deconvolution (NNLS) |
 | `concentrationUncertainty` | Uncertainty quantification |
 | `pointCreateProxigram` | Point-based proxigram |
 | `lineCreateProxigram` | Line-based proxigram |
@@ -277,6 +285,8 @@ open('Workflow_Proxigram.mlx')
 | `spatialStatistics` | RDF, nearest neighbor analysis |
 | `dataQualityMetrics` | Data quality assessment |
 | `massSpecAnalysis` | Automated peak analysis |
+| `backgroundEstimate` | Background estimation (ALS, linear, min, TOF, tofFit) |
+| `tofSpecBackgroundDetermination` | Track TOF background over experiment |
 
 ### Cluster Analysis
 | Function | Description |
@@ -305,6 +315,7 @@ open('Workflow_Proxigram.mlx')
 | `batchProcess` | Batch processing |
 | `ProgressTracker` | Progress indication |
 | `validateInputs` | Input validation |
+| `sortIonCategories` | Sort ion/isotope/atom categories by atomic number or mass |
 
 ---
 
