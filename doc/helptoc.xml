@@ -22,8 +22,12 @@
                 <tocitem target="matlab:doc posTableFromHDF5">posTableFromHDF5</tocitem>
                 <tocitem target="matlab:doc rangesExtractFromFile">rangesExtractFromFile</tocitem>
                 <tocitem target="matlab:doc hdf5FileCreateFromMetaDataList">hdf5FileCreateFromMetaDataList</tocitem>
+                <tocitem target="matlab:doc stlToPatch">stlToPatch</tocitem>
+                <tocitem target="matlab:doc threeMfToPatch">threeMfToPatch</tocitem>
                 <tocitem target="matlab:doc patchToObj">patchToObj</tocitem>
                 <tocitem target="matlab:doc patchToPly">patchToPly</tocitem>
+                <tocitem target="matlab:doc patchToStl">patchToStl</tocitem>
+                <tocitem target="matlab:doc patchTo3mf">patchTo3mf</tocitem>
             </tocitem>
 
             <tocitem target="functions_ions.html">Ion and Range Management

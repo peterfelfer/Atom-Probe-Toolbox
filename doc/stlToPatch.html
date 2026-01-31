@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>stlToPatch - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>stlToPatch</h1>
+<pre>
+  stlToPatch imports an STL file into a patch (FV) structure.
+
+  fv = stlToPatch();
+            opens a "Select *.stl file" window
+  fv = stlToPatch(fileName);
+            reads the specified STL file
+  fv = stlToPatch(fileName, 'removeUnusedVertices', true);
+            removes duplicate/unused vertices and reindexes faces
+
+  INPUTS:
+  fileName:  STL file name
+
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

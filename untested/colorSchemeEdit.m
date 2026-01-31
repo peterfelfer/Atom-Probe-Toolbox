@@ -46,7 +46,7 @@ fig = figure('Name', char(options.title), ...
     'Color', 'w', ...
     'Units', 'pixels', ...
     'Position', [100 100 600 520]);
-ax = axes(fig, 'Units', 'normalized', 'Position', [0.06 0.12 0.78 0.82]);
+ax = axes(fig, 'Units', 'normalized', 'Position', [0.06 0.12 0.68 0.82]);
 hold(ax, 'on');
 axis(ax, 'equal');
 axis(ax, [-1.05 1.05 -1.05 1.05]);
@@ -81,6 +81,24 @@ doneBtn = uicontrol(fig, 'Style', 'pushbutton', ...
     'Position', [0.86 0.86 0.12 0.05], ...
     'Callback', @(~, ~) close(fig));
 
+colorPanel = uipanel(fig, 'Units', 'normalized', ...
+    'Position', [0.81 0.60 0.14 0.12], ...
+    'BackgroundColor', rgb(1, :), ...
+    'BorderType', 'line', 'HighlightColor', [0 0 0]);
+
+valueLabel = uicontrol(fig, 'Style', 'text', ...
+    'String', 'Value', ...
+    'Units', 'normalized', ...
+    'Position', [0.81 0.53 0.14 0.04], ...
+    'BackgroundColor', 'w');
+
+valueSlider = uicontrol(fig, 'Style', 'slider', ...
+    'Min', 0, 'Max', 1, 'Value', hsv(1, 3), ...
+    'Units', 'normalized', ...
+    'Position', [0.865 0.18 0.03 0.30], ...
+    'SliderStep', [0.01 0.1], ...
+    'Callback', @(src, ~) updateValueFromSlider(fig, src));
+
 toggleLabels(labelToggle, labels);
 
 data = struct();
@@ -93,6 +111,10 @@ data.scatter = scatterH;
 data.labels = labels;
 data.labelOffset = labelOffset;
 data.dragIdx = [];
+data.selectedIdx = 1;
+data.colorPanel = colorPanel;
+data.valueSlider = valueSlider;
+data.valueLabel = valueLabel;
 setappdata(fig, 'colorSchemeEditData', data);
 
 fig.WindowButtonDownFcn = @(~, ~) startDrag(fig, ax);
@@ -147,6 +169,8 @@ function startDrag(fig, ax)
     [minDist, idx] = min(dist);
     if minDist <= 0.08
         data.dragIdx = idx;
+        data.selectedIdx = idx;
+        updateSelectionUI(data);
         setappdata(fig, 'colorSchemeEditData', data);
     end
 end
@@ -185,6 +209,10 @@ function dragMove(fig, ax)
     data.labels(idx).Color = labelColor;
     data.labels(idx).BackgroundColor = labelBg;
 
+    if data.selectedIdx == idx
+        updateSelectionUI(data);
+    end
+
     setappdata(fig, 'colorSchemeEditData', data);
 end
 
@@ -199,6 +227,39 @@ end
 
 function onClose(fig)
     uiresume(fig);
+end
+
+function updateValueFromSlider(fig, slider)
+    data = getappdata(fig, 'colorSchemeEditData');
+    if isempty(data) || isempty(data.selectedIdx)
+        return;
+    end
+    idx = data.selectedIdx;
+    val = slider.Value;
+    data.hsv(idx, 3) = val;
+    data.rgb(idx, :) = hsv2rgb(data.hsv(idx, :));
+    data.colorScheme.color(idx, :) = data.rgb(idx, :);
+
+    data.scatter.CData = data.rgb;
+    [labelColor, labelBg] = pickLabelColors(data.rgb(idx, :));
+    data.labels(idx).Color = labelColor;
+    data.labels(idx).BackgroundColor = labelBg;
+
+    updateSelectionUI(data);
+    setappdata(fig, 'colorSchemeEditData', data);
+end
+
+function updateSelectionUI(data)
+    if isempty(data.selectedIdx)
+        return;
+    end
+    idx = data.selectedIdx;
+    if isgraphics(data.colorPanel)
+        data.colorPanel.BackgroundColor = data.rgb(idx, :);
+    end
+    if isgraphics(data.valueSlider)
+        data.valueSlider.Value = data.hsv(idx, 3);
+    end
 end
 
 function [x, y] = hsvToXY(hsv)

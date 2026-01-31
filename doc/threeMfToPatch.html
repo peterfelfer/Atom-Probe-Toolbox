@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>threeMfToPatch - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>threeMfToPatch</h1>
+<pre>
+  threeMfToPatch imports a 3MF file into a patch (FV) structure.
+
+  fv = threeMfToPatch();
+            opens a "Select *.3mf file" window
+  fv = threeMfToPatch(fileName);
+            reads the specified 3MF file
+  fv = threeMfToPatch(fileName, 'removeUnusedVertices', true);
+            removes duplicate/unused vertices and reindexes faces
+
+  INPUTS:
+  fileName:  3MF file name
+
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

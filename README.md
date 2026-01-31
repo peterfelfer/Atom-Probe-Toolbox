@@ -46,7 +46,7 @@ If you use this tool box for your atom probe tomography analysis, please conside
 ### Data Import & Export
 - Read `.pos`, `.epos`, and `.APT` (CAMECA) file formats
 - HDF5 database creation with standardized metadata schema
-- Export to `.obj`, `.ply`, `.h5` formats
+- Export to `.obj`, `.ply`, `.stl`, `.3mf`, `.h5` formats
 - RRNG range file import
 
 ### Mass Spectrum Analysis

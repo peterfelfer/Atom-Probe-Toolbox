@@ -134,7 +134,16 @@ function [conc, info] = posCalculateConcentrationDeconvolved(pos, detEff, exclud
 %
 %   'plotFits'       Logical flag to generate diagnostic plot (default: false)
 %                    Creates stacked bar chart showing each ion's contribution
-%                    to each range, overlaid with observed counts.
+%                    to each range, overlaid with observed counts. If background
+%                    correction is enabled, background is shown as the bottom layer.
+%
+%   'plotBackground' Logical flag to plot background on mass spectrum (default: false)
+%                    Requires 'massSpec' handle to be provided.
+%
+%   'colorScheme'    Color scheme for plotting (optional). Can be:
+%                    - A colorScheme struct from colorSchemeCreate()
+%                    - If not provided, colors are extracted from massSpec
+%                    - If neither available, default colors are used
 %
 %   'regularization' Tikhonov regularization parameter lambda (default: 0)
 %                    When lambda > 0, solves:
@@ -163,23 +172,14 @@ function [conc, info] = posCalculateConcentrationDeconvolved(pos, detEff, exclud
 %
 %   'backgroundMethod' Background correction method before deconvolution:
 %                    - 'none': no background correction (default)
-%                    - 'als': Asymmetric Least Squares baseline
-%                    - 'tofFit': fit 1/sqrt(m/c) model to valleys
-%                    - 'tofConstant': constant TOF background (requires tofBgResult)
-%                    - 'minBetweenPeaks': minimum in gaps between ranges
 %                    - 'linearBetweenPeaks': linear interpolation between gaps
+%                    - 'massSpecInvSqrt': fit B(m/c) = A/sqrt(m/c) to unranged regions
 %                    Background is subtracted from range counts before NNLS.
 %
-%   'tofBgResult'    Result struct from tofSpecBackgroundDetermination (optional)
-%                    Used with 'tofConstant' backgroundMethod for time-resolved
-%                    background correction.
+%   'minPeakDistance' Minimum distance from peaks for background fitting [Da] (default: 0.3)
 %
-%   'tofBlockIdx'    Block index to use from tofBgResult (default: mean of all)
-%
-%   'minPeakDistance' Minimum distance from peaks for tofFit [Da] (default: 0.3)
-%
-%   'tofConversion'  Conversion factor k where m/c = k * t^2 [Da/ns^2] (default: 5e-4)
-%                    Calculate from data: k = median(pos.mc ./ pos.tof.^2)
+%   'fitLimits'      Nx2 matrix of [begin, end] m/c ranges for background fitting (optional)
+%                    Example: [5, 20; 40, 60] fits only in 5-20 Da and 40-60 Da
 %
 %   'bin'            Histogram bin width for background estimation (default: 0.01)
 %
@@ -341,14 +341,14 @@ options = struct( ...
     'isotopeTable', [], ...
     'mode', '', ...
     'plotFits', false, ...
+    'plotBackground', false, ...
+    'colorScheme', [], ...
     'regularization', 0, ...
     'directCountIons', {{}}, ...
     'tracerPeaks', {{}}, ...
     'backgroundMethod', 'none', ...
-    'tofBgResult', [], ...
-    'tofBlockIdx', [], ...
-    'tofConversion', 5e-4, ...
     'minPeakDistance', 0.3, ...
+    'fitLimits', [], ...
     'bin', 0.01);
 
 if ~isempty(varargin)
@@ -409,26 +409,64 @@ rangeCenters = (rangeTable.mcbegin + rangeTable.mcend) / 2;
 
 % Background correction if requested
 backgroundCounts = zeros(size(rangeCounts));
+rangeCountsRaw = rangeCounts;  % Keep raw counts for output
 bgMethod = lower(string(options.backgroundMethod));
+bgInfo = struct();
+
 if bgMethod ~= "none" && bgMethod ~= ""
-    % Build mass spectrum for background estimation
-    mcmax = max(pos.mc);
-    bin = options.bin;
-    xSpec = linspace(0, mcmax, max(2, round(mcmax / bin)));
-    ySpec = hist(pos.mc, xSpec);
+    % Build internal histogram from pos data
+    mcMax = max(pos.mc);
+    mcMin = max(0.5, min(pos.mc));
+    binWidth = options.bin;
+    edges = mcMin:binWidth:mcMax;
+    histCounts = histcounts(pos.mc, edges);
+    mcCenters = edges(1:end-1) + binWidth/2;
 
-    % Compute background using backgroundEstimate
-    [bg, bgInfo] = backgroundEstimate(xSpec, ySpec, char(bgMethod), ...
-        'rangeTable', rangeTable, ...
-        'tofBgResult', options.tofBgResult, ...
-        'tofBlockIdx', options.tofBlockIdx, ...
-        'minPeakDistance', options.minPeakDistance);
+    % Normalize to counts/Da/totalIons for fitting
+    totalIons = height(pos);
+    countsNorm = histCounts / (binWidth * totalIons);
 
-    % Integrate background under each range
-    for r = 1:height(rangeTable)
-        inRange = xSpec >= rangeTable.mcbegin(r) & xSpec <= rangeTable.mcend(r);
-        if any(inRange)
-            backgroundCounts(r) = sum(bg(inRange));
+    % Use shared background estimation function
+    [bg, bgFitInfo] = backgroundEstimate(mcCenters, countsNorm, rangeTable, ...
+        'method', options.backgroundMethod, ...
+        'minPeakDistance', options.minPeakDistance, ...
+        'fitLimits', options.fitLimits);
+
+    bgInfo.method = bgFitInfo.method;
+    if isfield(bgFitInfo, 'coefficient')
+        bgInfo.fitCoefficient = bgFitInfo.coefficient;
+    end
+    if isfield(bgFitInfo, 'rsquared')
+        bgInfo.fitRsquared = bgFitInfo.rsquared;
+    end
+    if isfield(bgFitInfo, 'fitRegions')
+        bgInfo.fitRegions = bgFitInfo.fitRegions;
+    end
+    if isfield(bgFitInfo, 'gapFits')
+        bgInfo.gapFits = bgFitInfo.gapFits;
+    end
+    bgInfo.fitLimits = options.fitLimits;
+    bgInfo.mcCenters = mcCenters;
+    bgInfo.background = bg;  % counts/Da/totalIons
+    bgInfo.binWidth = binWidth;
+    bgInfo.totalIons = totalIons;
+
+    % Calculate background counts per range
+    if strcmpi(bgInfo.method, 'massSpecInvSqrt') && isfield(bgInfo, 'fitCoefficient')
+        % Use analytical integral: ∫ a/√mc dmc = 2a√mc
+        coeff = bgInfo.fitCoefficient;
+        for r = 1:height(rangeTable)
+            mcBegin = rangeTable.mcbegin(r);
+            mcEnd = rangeTable.mcend(r);
+            backgroundCounts(r) = 2 * coeff * (sqrt(mcEnd) - sqrt(mcBegin)) * totalIons;
+        end
+    else
+        % Use histogram summing for linearBetweenPeaks
+        for r = 1:height(rangeTable)
+            inRange = mcCenters >= rangeTable.mcbegin(r) & mcCenters <= rangeTable.mcend(r);
+            if any(inRange)
+                backgroundCounts(r) = sum(bg(inRange)) * binWidth * totalIons;
+            end
         end
     end
 
@@ -835,7 +873,11 @@ info.summary = struct(...
     'overallDOF', max(0, sum(rangeCounts > 0) - sum(ionCounts > 0)));
 
 if options.plotFits
-    plotStackedFit(rangeCenters, rangeCounts, F, ionCounts, ionVariance, ionLabels, specHandle, axHandle);
+    plotStackedFit(rangeCenters, rangeCountsRaw, F, ionCounts, ionVariance, ionLabels, backgroundCounts, specHandle, axHandle, options.colorScheme);
+end
+
+if options.plotBackground && ~isempty(specHandle) && isfield(bgInfo, 'background')
+    plotBackgroundOnMassSpec(specHandle, bgInfo.mcCenters, bgInfo.background, bgInfo.binWidth, bgInfo.totalIons);
 end
 
 % Aggregate counts for output mode
@@ -975,10 +1017,24 @@ standardError = sqrt(countVariance);  % Standard error of counts
 relativeError = standardError ./ max(concCounts, 1);  % Coefficient of variation
 relativeError(concCounts == 0) = 0;  % Avoid division artifacts for zero counts
 
-countsOut = [countsRaw; concCounts; concFrac; variance; countVariance; standardError; relativeError];
+% Calculate background counts per category
+% Distribute total background proportionally to deconvolved counts
+totalBackground = sum(backgroundCounts);
+bgCounts = zeros(size(counts));
+if totalBackground > 0 && sum(concCounts) > 0
+    % Distribute proportionally to deconvolved counts
+    bgCounts = totalBackground * (concCounts / sum(concCounts));
+end
+bgCounts(strcmpi(cats, 'unranged')) = 0;  % No background for unranged
+
+% Background fraction (background / raw counts)
+bgFraction = bgCounts ./ max(countsRaw, 1);
+bgFraction(countsRaw == 0) = 0;
+
+countsOut = [countsRaw; bgCounts; bgFraction; concCounts; concFrac; variance; countVariance; standardError; relativeError];
 
 % Output table
-numRows = 7;
+numRows = 9;
 conc = array2table(countsOut, 'VariableNames', cats');
 conc.Properties.VariableDescriptions = repmat({columnType}, size(cats'));
 volumeCat = categorical(repmat(string(volumeName), numRows, 1));
@@ -986,6 +1042,8 @@ volumeCat = categorical(repmat(string(volumeName), numRows, 1));
 % Type column: countsRaw is always 'ionic' (detector hit counts), others use output mode
 typeCol = categorical({...
     'ionic'; ...      % countsRaw - always ionic (raw detector hits per range)
+    type; ...         % backgroundCounts
+    type; ...         % backgroundFraction
     type; ...         % count
     type; ...         % concentration
     type; ...         % variance
@@ -996,7 +1054,7 @@ typeCol = categorical({...
 conc = [table(volumeCat, 'VariableNames', {'volume'}), ...
     table(zeros(numRows, 1), 'VariableNames', {'distance'}), ...
     table(typeCol, 'VariableNames', {'type'}), ...
-    table(categorical({'countsRaw'; 'count'; 'concentration'; 'variance'; ...
+    table(categorical({'countsRaw'; 'backgroundCounts'; 'backgroundFraction'; 'count'; 'concentration'; 'variance'; ...
         'countVariance'; 'standardError'; 'relativeError'}), 'VariableNames', {'format'}), ...
     conc];
 
@@ -1023,6 +1081,10 @@ function options = parseOptions(options, varargin)
                 options.mode = char(value);
             case "plotfits"
                 options.plotFits = logical(value);
+            case "plotbackground"
+                options.plotBackground = logical(value);
+            case "colorscheme"
+                options.colorScheme = value;
             case "regularization"
                 options.regularization = double(value);
             case "directcountions"
@@ -1039,14 +1101,10 @@ function options = parseOptions(options, varargin)
                 end
             case "backgroundmethod"
                 options.backgroundMethod = char(value);
-            case "tofbgresult"
-                options.tofBgResult = value;
-            case "tofblockidx"
-                options.tofBlockIdx = value;
-            case "tofconversion"
-                options.tofConversion = double(value);
             case "minpeakdistance"
                 options.minPeakDistance = double(value);
+            case "fitlimits"
+                options.fitLimits = value;
             case "bin"
                 options.bin = double(value);
             otherwise
@@ -1274,13 +1332,13 @@ function [components, rangeHasIon] = buildComponents(F)
     end
 end
 
-function plotStackedFit(rangeCenters, rangeCounts, F, ionCounts, ionVariance, ionLabels, specHandle, axHandle)
+function plotStackedFit(rangeCenters, rangeCounts, F, ionCounts, ionVariance, ionLabels, backgroundCounts, specHandle, axHandle, colorScheme)
     % Calculate contributions per ion per range
     contrib = F .* ionCounts';
     numRanges = numel(rangeCenters);
     numIons = numel(ionLabels);
 
-    % Calculate fit and uncertainty per range
+    % Calculate fit and uncertainty per range (ion contributions only, not background)
     fitCounts = sum(contrib, 2);
 
     % Propagate variance to range level: Var(sum) = sum of variances (weighted by F^2)
@@ -1291,35 +1349,60 @@ function plotStackedFit(rangeCenters, rangeCounts, F, ionCounts, ionVariance, io
     end
     rangeStdErr = sqrt(rangeVariance);
 
-    % Try to extract ion colors from massSpec
+    % Get ion colors: try massSpec first, then colorScheme, then defaults
     ionColors = getIonColorsFromSpec(specHandle, ionLabels);
+    if isempty(ionColors) && ~isempty(colorScheme)
+        ionColors = getIonColorsFromScheme(colorScheme, ionLabels);
+    end
 
     % Create figure
     fig = figure('Name', 'Deconvolution fit');
     ax = axes(fig);
 
-    % Plot stacked bars with custom colors if available
-    bh = bar(ax, rangeCenters, contrib, 'stacked', 'EdgeColor', 'none');
+    % Build stacked data: background at bottom, then ion contributions
+    hasBackground = any(backgroundCounts > 0);
+    if hasBackground
+        stackedData = [backgroundCounts(:), contrib];
+        stackLabels = ["Background"; ionLabels(:)];
+    else
+        stackedData = contrib;
+        stackLabels = ionLabels(:);
+    end
 
-    % Apply colors from massSpec if found
-    if ~isempty(ionColors)
-        for i = 1:min(numel(bh), size(ionColors, 1))
-            if all(~isnan(ionColors(i, :)))
-                bh(i).FaceColor = ionColors(i, :);
+    % Plot stacked bars
+    bh = bar(ax, rangeCenters, stackedData, 'stacked', 'EdgeColor', 'none');
+
+    % Apply colors: gray for background, then ion colors
+    if hasBackground
+        bh(1).FaceColor = [0.6 0.6 0.6];  % Gray for background
+        if ~isempty(ionColors)
+            for i = 1:min(numel(bh)-1, size(ionColors, 1))
+                if all(~isnan(ionColors(i, :)))
+                    bh(i+1).FaceColor = ionColors(i, :);
+                end
+            end
+        end
+    else
+        if ~isempty(ionColors)
+            for i = 1:min(numel(bh), size(ionColors, 1))
+                if all(~isnan(ionColors(i, :)))
+                    bh(i).FaceColor = ionColors(i, :);
+                end
             end
         end
     end
 
     hold(ax, 'on');
 
-    % Plot observed counts
+    % Plot observed counts (raw, before background subtraction)
     plot(ax, rangeCenters, rangeCounts, 'ko', 'MarkerSize', 8, 'MarkerFaceColor', 'k', ...
         'DisplayName', 'Observed');
 
-    % Plot fit with uncertainty band
+    % Plot fit with uncertainty band (total = background + ion contributions)
     % Sort by range center for proper line plotting
     [sortedCenters, sortIdx] = sort(rangeCenters);
-    sortedFit = fitCounts(sortIdx);
+    totalFit = fitCounts + backgroundCounts(:);
+    sortedFit = totalFit(sortIdx);
     sortedStdErr = rangeStdErr(sortIdx);
 
     % Uncertainty band (±1 sigma)
@@ -1331,21 +1414,30 @@ function plotStackedFit(rangeCenters, rangeCounts, F, ionCounts, ionVariance, io
     % Fit line
     plot(ax, sortedCenters, sortedFit, 'k-', 'LineWidth', 1.5, 'DisplayName', 'Fit');
 
-    % Residuals as stems at the bottom (optional visualization)
-    residuals = rangeCounts - fitCounts;
+    % Residuals
+    residuals = rangeCounts - totalFit;
 
     hold(ax, 'off');
 
     xlabel(ax, 'mass-to-charge [Da]');
     ylabel(ax, 'counts [#]');
-    title(ax, 'Deconvolution: observed vs. fit with uncertainty');
+    if hasBackground
+        title(ax, 'Deconvolution: observed vs. fit (background + ions)');
+    else
+        title(ax, 'Deconvolution: observed vs. fit');
+    end
 
-    % Legend: show ions (limited) plus observed/fit
-    if numIons <= 20
-        legendEntries = [ionLabels(:); "Observed"; "Fit ±1σ"; "Fit"];
+    % Legend: show background (if present), ions (limited), plus observed/fit
+    numLabels = numel(stackLabels);
+    if numLabels <= 20
+        legendEntries = [stackLabels; "Observed"; "Fit ±1σ"; "Fit"];
         legend(ax, legendEntries, 'Interpreter', 'none', 'Location', 'best');
     else
-        legend(ax, {'Observed', 'Fit ±1σ', 'Fit'}, 'Location', 'best');
+        if hasBackground
+            legend(ax, {'Background', 'Observed', 'Fit ±1σ', 'Fit'}, 'Location', 'best');
+        else
+            legend(ax, {'Observed', 'Fit ±1σ', 'Fit'}, 'Location', 'best');
+        end
     end
 
     if ~isempty(axHandle) && isgraphics(axHandle, 'axes')
@@ -1475,6 +1567,51 @@ function ionColors = getIonColorsFromSpec(specHandle, ionLabels)
         end
     catch
         % Return empty if anything fails
+        ionColors = [];
+    end
+end
+
+function ionColors = getIonColorsFromScheme(colorScheme, ionLabels)
+% Get ion colors from a colorScheme struct
+% Returns Nx3 matrix of RGB colors, or empty if not found
+
+    ionColors = [];
+    numIons = numel(ionLabels);
+
+    if isempty(colorScheme) || ~isstruct(colorScheme)
+        return;
+    end
+
+    ionColors = nan(numIons, 3);
+
+    % Check if colorScheme has ions field (from colorSchemeCreate)
+    if isfield(colorScheme, 'ions') && istable(colorScheme.ions)
+        ionTable = colorScheme.ions;
+        if ismember('ionName', ionTable.Properties.VariableNames) && ...
+           ismember('color', ionTable.Properties.VariableNames)
+            schemeIonNames = string(ionTable.ionName);
+            schemeColors = ionTable.color;
+
+            for j = 1:numIons
+                ionLabel = string(ionLabels(j));
+                labelNoSpace = regexprep(ionLabel, '\s+', '');
+
+                for k = 1:numel(schemeIonNames)
+                    if strcmpi(schemeIonNames(k), ionLabel) || strcmpi(schemeIonNames(k), labelNoSpace)
+                        if iscell(schemeColors)
+                            ionColors(j, :) = schemeColors{k};
+                        else
+                            ionColors(j, :) = schemeColors(k, :);
+                        end
+                        break;
+                    end
+                end
+            end
+        end
+    end
+
+    % Check if all NaN (no colors found)
+    if all(isnan(ionColors(:)))
         ionColors = [];
     end
 end
@@ -1884,5 +2021,122 @@ function mass = getElementMass(isotopeTable, element, isotope)
             % Just use average of isotope masses
             mass = mean(masses(elementMask));
         end
+    end
+end
+
+%% ========== Background Plotting ==========
+
+function h = plotBackgroundOnMassSpec(massSpec, mcCenters, bg, binWidth, totalIons)
+% Plot background on an existing mass spectrum
+% massSpec can be an area plot handle, axes, or figure
+
+    h = gobjects(0, 1);
+
+    % Resolve the area plot and axes
+    [ax, areaPlot] = resolveBgPlotHandle(massSpec);
+
+    if isempty(ax) || ~isgraphics(ax, 'axes')
+        return;
+    end
+
+    % Get the spectrum's bin width from the area plot if available
+    specBinWidth = binWidth;
+    if ~isempty(areaPlot) && isgraphics(areaPlot)
+        specX = areaPlot.XData;
+        specBinWidth = median(diff(specX));
+        if ~isfinite(specBinWidth) || specBinWidth <= 0
+            specBinWidth = binWidth;
+        end
+    end
+
+    % Detect spectrum units from y-axis label
+    specUnits = detectBgPlotUnits(ax);
+
+    % Scale background to match spectrum units
+    % bg is in counts/Da/totalIons
+    if specUnits == "normalised"
+        % Normalized spectrum shows counts/Da/totalIons - bg matches directly
+        bgPlot = bg;
+    else
+        % Spectrum is counts per bin - convert bg to counts/bin
+        bgPlot = bg * specBinWidth * totalIons;
+    end
+
+    % Handle log scale
+    if strcmpi(ax.YScale, 'log')
+        minY = ax.YLim(1);
+        if minY <= 0
+            minY = min(bgPlot(bgPlot > 0));
+        end
+        bgPlot(bgPlot < minY) = minY;
+    end
+
+    % Plot
+    holdState = ishold(ax);
+    hold(ax, 'on');
+    h = plot(ax, mcCenters, bgPlot, 'LineWidth', 1.5, 'Color', [1 0 0], 'LineStyle', '--');
+    h.DisplayName = 'background';
+    h.UserData.plotType = "backgroundEstimate";
+    if ~holdState
+        hold(ax, 'off');
+    end
+end
+
+function [ax, areaPlot] = resolveBgPlotHandle(massSpec)
+% Resolve mass spectrum handle to axes and area plot for background plotting
+
+    ax = [];
+    areaPlot = [];
+
+    if isgraphics(massSpec, 'axes')
+        ax = massSpec;
+        plots = findobj(ax, 'Type', 'area');
+        areaPlot = pickBgMassSpecPlot(plots);
+    elseif isgraphics(massSpec, 'figure')
+        plots = findobj(massSpec, 'Type', 'area');
+        areaPlot = pickBgMassSpecPlot(plots);
+        if ~isempty(areaPlot)
+            ax = ancestor(areaPlot, 'axes');
+        end
+    elseif isgraphics(massSpec, 'area')
+        % Direct area plot handle
+        areaPlot = massSpec;
+        ax = ancestor(massSpec, 'axes');
+    elseif isgraphics(massSpec)
+        % Other graphics object - try to get axes
+        ax = ancestor(massSpec, 'axes');
+        if ~isempty(ax)
+            plots = findobj(ax, 'Type', 'area');
+            areaPlot = pickBgMassSpecPlot(plots);
+        end
+    end
+end
+
+function spec = pickBgMassSpecPlot(plots)
+% Pick the mass spectrum area plot from a list of area plots
+
+    spec = [];
+    for i = 1:numel(plots)
+        try
+            if isfield(plots(i).UserData, 'plotType') && plots(i).UserData.plotType == "massSpectrum"
+                spec = plots(i);
+                return;
+            end
+        catch
+        end
+    end
+    if ~isempty(plots)
+        spec = plots(1);
+    end
+end
+
+function units = detectBgPlotUnits(ax)
+    units = "count";
+    try
+        ylab = lower(string(ax.YLabel.String));
+        if contains(ylab, "cts / da") || contains(ylab, "cts/da") || contains(ylab, "totcts") || contains(ylab, "/da")
+            units = "normalised";
+        end
+    catch
     end
 end

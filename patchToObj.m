@@ -22,11 +22,14 @@ function patchToObj(patch,objName,fileName)
 %
 % (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
 
-if ~exist('patch','var')
-    object = gco;
-    patch.vertices = get(object,'vertices');
-    patch.faces = get(object,'faces');
+if ~exist('patch','var') || isempty(patch)
+    patch = gco;
 end
+
+if isgraphics(patch)
+    patch = patchFromHandle(patch);
+end
+
 numPatch = length(patch);
 
 if ~exist('fileName','var')             % Create filepath
@@ -76,4 +79,65 @@ end
 
 fclose(fid);
 clear fid;
+end
+
+function patch = patchFromHandle(h)
+% Convert patch/surface/axes/figure handles to FV struct array
+
+    patch = struct('vertices', {}, 'faces', {});
+
+    if isgraphics(h, 'axes')
+        patches = findobj(h, 'Type', 'patch');
+        surfaces = findobj(h, 'Type', 'surface');
+        patches = flipud(patches);
+        surfaces = flipud(surfaces);
+        for i = 1:numel(patches)
+            patch(end+1) = fvFromPatch(patches(i)); %#ok<AGROW>
+        end
+        for i = 1:numel(surfaces)
+            patch(end+1) = fvFromSurface(surfaces(i)); %#ok<AGROW>
+        end
+        return;
+    end
+
+    if isgraphics(h, 'figure')
+        patches = findobj(h, 'Type', 'patch');
+        surfaces = findobj(h, 'Type', 'surface');
+        patches = flipud(patches);
+        surfaces = flipud(surfaces);
+        for i = 1:numel(patches)
+            patch(end+1) = fvFromPatch(patches(i)); %#ok<AGROW>
+        end
+        for i = 1:numel(surfaces)
+            patch(end+1) = fvFromSurface(surfaces(i)); %#ok<AGROW>
+        end
+        return;
+    end
+
+    if isgraphics(h, 'surface')
+        for i = 1:numel(h)
+            patch(end+1) = fvFromSurface(h(i)); %#ok<AGROW>
+        end
+        return;
+    end
+
+    if isgraphics(h, 'patch')
+        for i = 1:numel(h)
+            patch(end+1) = fvFromPatch(h(i)); %#ok<AGROW>
+        end
+    end
+end
+
+function fv = fvFromPatch(h)
+    fv.vertices = get(h, 'vertices');
+    fv.faces = get(h, 'faces');
+end
+
+function fv = fvFromSurface(h)
+    x = get(h, 'XData');
+    y = get(h, 'YData');
+    z = get(h, 'ZData');
+    [f, v] = surf2patch(x, y, z, 'triangles');
+    fv.vertices = v;
+    fv.faces = f;
 end

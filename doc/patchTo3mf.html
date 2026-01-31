@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>patchTo3mf - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>patchTo3mf</h1>
+<pre>
+  patchTo3mf exports a patch (FV) structure or graphics object to a 3MF file.
+
+  patchTo3mf();
+            opens a "Save *.3mf file to" window if selected object is a patch
+  patchTo3mf(fvOrHandle);
+            opens a "Save *.3mf file to" window
+  patchTo3mf(fvOrHandle, fileName);
+            saves file in current folder or specified path
+  patchTo3mf(fvOrHandle, fileName, 'unit', 'micrometer', 'scale', 1);
+            sets 3MF units and scale
+
+  INPUTS:
+  fvOrHandle: patch handle, axes handle, or FV structure
+  fileName:   desired name of saved file with .3mf suffix
+
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>

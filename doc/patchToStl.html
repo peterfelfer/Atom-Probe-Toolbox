@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>patchToStl - Atom Probe Toolbox</title>
+</head>
+<body>
+<h1>patchToStl</h1>
+<pre>
+  patchToStl exports a patch (FV) structure to an STL file.
+
+  patchToStl();
+            opens a "Save *.stl file to" window if selected object is a patch
+  patchToStl(fv);
+            opens a "Save *.stl file to" window
+  patchToStl(fv, fileName);
+            saves file in current folder or specified path
+  patchToStl(fv, fileName, 'format', 'binary');
+            saves binary STL
+
+  INPUTS:
+  fv:        structure with faces (f) and vertices (v)
+  fileName:  desired name of saved file with .stl as suffix
+
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>
+<p><a href="function_reference.html">Back to Function Reference</a></p>
+</body>
+</html>
