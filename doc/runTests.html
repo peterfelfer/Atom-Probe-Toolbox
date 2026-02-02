@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>runTests - Atom Probe Toolbox</title>
-</head>
-<body>
-<h1>runTests</h1>
-<pre>
-  RUNTESTS Run all tests for the Atom Probe Toolbox
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>runTests - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>runTests</h1>
+<pre>\n  RUNTESTS Run all tests for the Atom Probe Toolbox
  
   results = runTests()
   results = runTests('pattern', 'test_*.m')
@@ -45,4 +38,16 @@
     function success = test_edge_case()
         try
             myFunction([], []);
-            success = false;  
+            success = false;  % Should have thrown error
+        catch
+            success = true;
+        end
+    end
+    ```
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+
+    Other uses of runTests
+
+       slreq.ReqSet/runTests
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

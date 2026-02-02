@@ -1,0 +1,50 @@
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>posCalculateConcentrationBackgroundRemoved - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>posCalculateConcentrationBackgroundRemoved</h1>
+<pre>\n  posCalculateConcentrationBackgroundRemoved calculates concentrations with background correction.
+ 
+  conc = posCalculateConcentrationBackgroundRemoved(pos, detEff, excludeList, volumeName)
+  [conc, info] = posCalculateConcentrationBackgroundRemoved(pos, detEff, excludeList, volumeName, name, value)
+ 
+  INPUT
+  pos:          pos table with mc and ion/atom information
+  detEff:       detector efficiency (fraction or percent)
+  excludeList:  cell array of species to exclude (optional)
+  volumeName:   volume name (optional)
+ 
+  name-value options:
+    'method'        'linearBetweenPeaks' | 'massSpecInvSqrt' (default: 'linearBetweenPeaks')
+    'mode'          'ionic' | 'isotopic' | 'atomic'
+                    - 'ionic': each unique ion species counted separately
+                    - 'isotopic': groups by isotopic composition (ignores charge)
+                    - 'atomic': groups by element (ignores isotope and charge)
+                    Default: 'atomic' if 'atom' column exists, 'ionic' otherwise
+    'rangeTable'    range table (optional if massSpec is provided)
+    'massSpec'      mass spectrum area plot handle (used to extract ranges and for plotting)
+    'bin'           histogram bin width for internal calculations [Da] (default: 0.01)
+    'plotBackground' true/false (default: false)
+    'sortBy'        'auto' | 'none' | 'atomic' | 'weight' (default: 'auto')
+    'minPeakDistance' minimum distance from peaks for background fitting [Da] (default: 0.3)
+    'fitLimits'     Nx2 matrix of [begin, end] m/c ranges to use for fitting (optional)
+                    Example: [5, 20; 40, 60] fits only in 5-20 Da and 40-60 Da
+ 
+  TRACER SUPPORT
+  Tracer ions (marked with isTracer flag in the ion table) are included in
+  the concentration calculation. Categories containing "(tracer)" in their
+  name are flagged in the info.isTracerCategory output. For proper separation
+  of natural vs tracer contributions, use posCalculateConcentrationDeconvolved
+  with the 'tracerAbundance' option instead.
+ 
+  OUTPUT
+  conc:   concentration table (same format as posCalculateConcentrationSimple)
+  info:   struct with background details
+ 
+  METHODS
+  'linearBetweenPeaks' - Linear interpolation between gaps
+          Fits linear models in each gap and interpolates under peaks.
+ 
+  'massSpecInvSqrt' - Fits B(m/c) = A / sqrt(m/c) to unranged regions
+          Physics-based model: constant background in TOF space transforms
+          to 1/sqrt(m/c) in mass spectrum space.
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

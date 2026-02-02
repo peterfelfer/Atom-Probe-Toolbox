@@ -1,0 +1,37 @@
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>massSpectrumLegend - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>massSpectrumLegend</h1>
+<pre>\n  massSpectrumLegend creates a publication-ready legend for a mass spectrum
+ 
+  legendFig = massSpectrumLegend(spec)
+  legendFig = massSpectrumLegend(spec, Name, Value, ...)
+ 
+  Creates a legend in a separate figure window with:
+  - Colored boxes for each ion/range in the mass spectrum
+  - Line samples for other plot elements (background curves, etc.)
+  - Ion names formatted in LaTeX with proper sub/superscripts
+ 
+  INPUT
+  spec:     area plot of the mass spectrum, or axes containing it
+ 
+  Name-Value Options:
+    'columns'           Number of columns (default: 2)
+    'boxSize'           [width height] of color boxes in points (default: [20 12])
+    'fontSize'          Font size for labels (default: 11)
+    'fontName'          Font name (default: 'Helvetica')
+    'sortBy'            Sort order: 'mass', 'name', or 'none' (default: 'mass')
+    'includeTheoretical' Include theoretical ion markers (default: false)
+    'includeBackground' Include background curves (default: true)
+    'title'             Legend title (default: '' for no title)
+    'spacing'           Vertical spacing between entries in points (default: 6)
+    'margin'            Margin around legend in points (default: 15)
+    'useUnicode'        Use Unicode sub/superscripts instead of LaTeX (default: false)
+                        Set to true for editable text in SVG exports
+    'output'            File path to save directly (e.g., 'legend.svg')
+                        Supported formats: .svg, .pdf, .png, .eps
+                        If provided, saves and closes figure automatically
+ 
+  OUTPUT
+  legendFig:    Handle to the legend figure
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

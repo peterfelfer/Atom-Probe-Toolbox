@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>plotOrientationCube - Atom Probe Toolbox</title>
-</head>
-<body>
-<h1>plotOrientationCube</h1>
-<pre>
-  PLOTORIENTATIONCUBE Plot a cube representing crystallographic orientation in 3D
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>plotOrientationCube - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>plotOrientationCube</h1>
+<pre>\n  PLOTORIENTATIONCUBE Plot a cube representing crystallographic orientation in 3D
  
     H = PLOTORIENTATIONCUBE(ORIENTATIONINPUT) plots an orientation cube
     at the origin with default size.
@@ -43,4 +36,22 @@
             h.labels - Handles to axis labels (text)
  
     Example:
-        
+        % Plot cube at origin with identity orientation
+        R = eye(3);
+        plotOrientationCube(R);
+ 
+        % Using crystalOrientation object
+        ori = crystalOrientation(eye(3), 'cubic', 'position', [10, 20, 30]);
+        plotOrientationCube(ori);  % Uses position from object
+ 
+        % Plot cube at specific position with 45° rotation around Z
+        theta = pi/4;
+        R = [cos(theta) -sin(theta) 0; sin(theta) cos(theta) 0; 0 0 1];
+        plotOrientationCube(R, 'position', [10, 20, 30], 'size', 5);
+ 
+        % Plot cube at center of a mesh
+        mesh.vertices = rand(100, 3) * 50;  % Random vertices
+        plotOrientationCube(R, 'mesh', mesh, 'size', 3);
+ 
+    See also: crystalOrientation, stereoProj
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

@@ -47,7 +47,7 @@ function [h, txt] = rangeAdd(spec,colorScheme,manualName,rangeLimits)
 % h:            handle to the area plot of the range
 % txt:          corresponding text
 %
-% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nï¿½rnberg
 
 %% set current axes
 ax = spec.Parent;
@@ -146,35 +146,38 @@ if isValid
     h = area(spec.XData(isIn),spec.YData(isIn));
     h.FaceColor = [1 1 1];
     h.UserData.plotType = "range"; % is overwritten for background ranges
+    h.UserData.isTracer = false;   % default tracer flag, may be overwritten
     
     % take care of manual ranges
     if isManual & ~isBackground
-        [ion, chargeState] = ionConvertName(manualName);
+        [ion, chargeState, manualIsTracer] = ionConvertName(manualName);
         if not(isnan(chargeState)) & not(any(isnan(ion.isotope)))
             isValidIonName = true;
         end
-        
+
         if ~isnan(chargeState)
             h.UserData.ion = ion;
             h.UserData.chargeState = chargeState;
+            h.UserData.isTracer = manualIsTracer;
             h.DisplayName = ionConvertName(h.UserData.ion,h.UserData.chargeState);
             color = colorScheme.color(colorScheme.ion == ionConvertName(h.UserData.ion.element),:);
         else
             h.UserData.ion = manualName;
             h.UserData.chargeState = NaN;
+            h.UserData.isTracer = manualIsTracer;
             h.DisplayName = manualName;
             color = colorScheme.color(colorScheme.ion == manualName,:);
         end
-        
+
         if isempty(color)
             name = h.DisplayName;
             delete(h);
             error(['color for atom/ion ' name ' undefined']);
         end
-        
+
         h.FaceColor = color;
-        
-        
+
+
     elseif isManual & isBackground
         h.UserData.plotType = "background";
         h.DisplayName = "background";
@@ -198,6 +201,7 @@ if isValid
     potentialIon = {};
     potentialIonChargeState = [];
     potentialIonPeakHeight = [];
+    potentialIonIsTracer = [];
     if ~isempty(ionPlots)
         for pl = 1:length(ionPlots)
             isIn = (ionPlots(pl).XData > lim(1)) & (ionPlots(pl).XData < lim(2));
@@ -205,7 +209,7 @@ if isValid
                 % if multiple isotopic combinations of the ion are within the range,
                 % the most abundant one is automatically chosen
                 isIn = (ionPlots(pl).YData == max(ionPlots(pl).YData(isIn))) & isIn;
-                
+
                 potentialIon{end+1} = ionPlots(pl).UserData.ion{isIn};
                 if isscalar(ionPlots(pl).UserData.chargeState)
                     potentialIonChargeState(end+1) = ionPlots(pl).UserData.chargeState;
@@ -213,9 +217,16 @@ if isValid
                     potentialIonChargeState(end+1) = ionPlots(pl).UserData.chargeState(isIn);
                 end
                 potentialIonPeakHeight(end+1) = ionPlots(pl).YData(isIn);
+
+                % Extract isTracer flag from ion plot (default to false if not present)
+                if isfield(ionPlots(pl).UserData, 'isTracer')
+                    potentialIonIsTracer(end+1) = ionPlots(pl).UserData.isTracer;
+                else
+                    potentialIonIsTracer(end+1) = false;
+                end
             end
         end
-        
+
     end
     
     %% select which ion it is if necessary
@@ -229,28 +240,34 @@ if isValid
     elseif length(potentialIon) == 1 & ~isManual
         h.UserData.ion = potentialIon{1};
         h.UserData.chargeState = potentialIonChargeState(1);
+        h.UserData.isTracer = potentialIonIsTracer(1);
         h.DisplayName = ionConvertName(h.UserData.ion,h.UserData.chargeState);
 %         h.FaceColor = colorScheme.color(colorScheme.ion == ionConvertName(h.UserData.ion.element),:);
-        
-        
+
+
     elseif ~isManual % selection
         numPotIon = length(potentialIon);
         for i = 1:numPotIon
-            names{i} = [ionConvertName(potentialIon{i}, potentialIonChargeState(i)) '   ' num2str(potentialIonPeakHeight(i))];
+            ionDisplayName = ionConvertName(potentialIon{i}, potentialIonChargeState(i));
+            if potentialIonIsTracer(i)
+                ionDisplayName = [ionDisplayName ' (tracer)'];
+            end
+            names{i} = [ionDisplayName '   ' num2str(potentialIonPeakHeight(i))];
         end
-        
+
         % select the ion, defaulting to most abundant
         [~, maxIdx] = max(potentialIonPeakHeight);
         [idx, isSelection] = listdlg('ListString',names,'PromptString','Select ion species','SelectionMode','single',...
             'InitialValue',maxIdx);
-        
+
         if ~isSelection
             delete(h);
             return
         end
-        
+
         h.UserData.ion = potentialIon{idx};
         h.UserData.chargeState = potentialIonChargeState(idx);
+        h.UserData.isTracer = potentialIonIsTracer(idx);
         h.DisplayName = ionConvertName(h.UserData.ion,h.UserData.chargeState);
 %         h.FaceColor = colorScheme.color(colorScheme.ion == ionConvertName(h.UserData.ion.element),:);
     end
@@ -274,16 +291,25 @@ if isValid
     
     % add text to denote range if it's not a background range
     if ~isBackground
-        if isManual && not(isValidIonName)
-            txt = text(h.XData(1),max(h.YData)*1.4,manualName,'clipping','on');
-            txt.DisplayName = manualName;
-        else
-            txt = text(h.XData(1),max(h.YData)*1.4,ionConvertName(h.UserData.ion,h.UserData.chargeState,'LaTeX'),'clipping','on');
-            txt.DisplayName = ionConvertName(h.UserData.ion,h.UserData.chargeState,'plain');
+        % Get isTracer flag, default to false if not set
+        rangeIsTracer = false;
+        if isfield(h.UserData, 'isTracer')
+            rangeIsTracer = h.UserData.isTracer;
         end
+
+        if isManual && not(isValidIonName)
+            txtLabel = manualName;
+            txtDisplay = manualName;
+        else
+            txtLabel = ionConvertName(h.UserData.ion,h.UserData.chargeState,'LaTeX',rangeIsTracer);
+            txtDisplay = ionConvertName(h.UserData.ion,h.UserData.chargeState,'plain',rangeIsTracer);
+        end
+
+        txt = text(h.XData(1),max(h.YData)*1.4,txtLabel,'clipping','on');
+        txt.DisplayName = txtDisplay;
         txt.UserData.plotType = "text";
-        
-        
+
+
         % delete function for ion text and corresponding range
         h.DeleteFcn = @(~,~) delete(txt);
     end

@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>clusterDBSCAN - Atom Probe Toolbox</title>
-</head>
-<body>
-<h1>clusterDBSCAN</h1>
-<pre>
-  CLUSTERDBSCAN Density-based spatial clustering for APT data
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>clusterDBSCAN - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>clusterDBSCAN</h1>
+<pre>\n  CLUSTERDBSCAN Density-based spatial clustering for APT data
  
   [clusterIdx, clusterInfo] = clusterDBSCAN(pos, epsilon, minPts)
   [clusterIdx, clusterInfo] = clusterDBSCAN(pos, epsilon, minPts, 'useGPU', true)
@@ -50,4 +43,17 @@
     specifying the number of clusters and can find arbitrarily shaped clusters.
  
   EXAMPLES:
-    
+    % Basic clustering of solute atoms
+    [idx, info] = clusterDBSCAN(pos, 0.5, 10);
+ 
+    % Cluster only specific solute atoms (e.g., Cu in Fe matrix)
+    soluteIdx = strcmp(posTable.ion, 'Cu');
+    [idx, info] = clusterDBSCAN(posTable, 0.6, 5, 'soluteIdx', soluteIdx);
+ 
+  REFERENCES:
+    Ester et al. (1996) "A density-based algorithm for discovering clusters"
+    Marquis &amp; Hyde (2010) "Applications of atom-probe tomography to the
+    characterisation of solute behaviours"
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

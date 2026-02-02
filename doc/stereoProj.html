@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>stereoProj - Atom Probe Toolbox</title>
-</head>
-<body>
-<h1>stereoProj</h1>
-<pre>
-  STEREOPROJ Creates a stereographic projection of crystallographic poles
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>stereoProj - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>stereoProj</h1>
+<pre>\n  STEREOPROJ Creates a stereographic projection of crystallographic poles
  
     [ORI, AX] = STEREOPROJ(CRYSTALORIENTATION) creates a stereographic projection
     showing the poles of common crystallographic plane families for a crystal
@@ -56,4 +49,22 @@
         '113' - {113} family
  
     Example:
-        
+        % Identity orientation (crystal aligned with world)
+        R = eye(3);
+        [ori, ax] = stereoProj(R);
+ 
+        % Using crystalOrientation object
+        ori = crystalOrientation(eye(3), 'cubic');
+        [ori, ax] = stereoProj(ori);
+ 
+        % Show specific pole families with hexagonal system
+        R = eye(3);
+        stereoProj(R, 'crystalSystem', 'hexagonal', 'poles', {'001', '011', '111'});
+ 
+        % Get orientation after interactive manipulation
+        [~, ax] = stereoProj(eye(3));
+        % ... user drags poles interactively ...
+        ori = getCurrentOrientation(ancestor(ax, 'figure'));
+ 
+    See also: crystalOrientation, ipfColor, ipfMesh, getCurrentOrientation
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

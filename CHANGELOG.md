@@ -10,6 +10,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+#### Tracer Support
+- **First-class tracer ion support** throughout the toolbox
+  - `ionAdd` now accepts "tracer" suffix (e.g., `'H+tracer'`, `'O++tracer'`)
+  - Tracer ions displayed with diamond markers (◆) instead of circles
+  - `isTracer` flag stored in ion/range UserData and persisted to HDF5
+- `tracerAbundanceCreate` - Define custom isotope abundances for tracer materials
+  - Single isotope tracers: `tracerAbundanceCreate('H', 2, 1.0)` for 100% deuterium
+  - Multi-isotope tracers: `tracerAbundanceCreate('O', [16, 18], [0.5, 0.5])` for enriched oxygen
+- `posCalculateConcentrationDeconvolved` - Multi-source deconvolution with `'tracerAbundance'` option
+  - Mathematically separates natural vs tracer contributions using NNLS
+  - Natural ions use natural isotope abundances
+  - Tracer ions use custom abundances from `tracerAbundanceCreate()`
+  - Output includes separate columns for "Element" and "Element (tracer)"
+- `ionConvertName` - Parse and generate "tracer" suffix in ion names
+- `ionsExtractFromMassSpec` - Preserves `isTracer` flag in extracted ion tables
+- `ionTableFromHDF5` / `ionTableAddToHDF5` - Read/write `isTracer` attribute
+- `rangeAdd` - Propagates tracer flag from ions to ranges
+
 #### New Analysis Functions
 - `ionConvertMode` - Convert ion categorical names between concentration modes (ionic/isotopic/atomic)
 - `backgroundEstimate` - Standalone background estimation for mass spectra
@@ -109,8 +127,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - Informative error messages
 
 ### Changed
+- `ionAdd` - Now supports "tracer" suffix for marking ions as tracers (e.g., `'2H+tracer'`)
+- `ionStemPlot` - Uses diamond markers for tracer ions, stores `isTracer` in UserData
+- `ionConvertName` - Returns `isTracer` flag when parsing, appends "tracer" suffix when generating
+- `rangeAdd` - Extracts and stores `isTracer` flag from ion plots
+- `ionsExtractFromMassSpec` - Includes `isTracer` column in output table
+- `ionTableFromHDF5` / `ionTableAddToHDF5` - Support for `isTracer` attribute persistence
+- `posCalculateConcentrationDeconvolved` - Added `'tracerAbundance'` option for multi-source deconvolution
+- `posCalculateConcentrationBackgroundRemoved` - Added `info.isTracerCategory` output flag
 - `posCalculateConcentrationSimple` - Added 'mode' option for ionic, isotopic, or atomic concentrations
-- `posCalculateConcentrationBackgroundRemoved` - Added 'mode' option for ionic, isotopic, or atomic concentrations
 - Updated README.md with comprehensive documentation
 - Reorganized `helptoc.xml` with proper function categories
 - Standardized function documentation format

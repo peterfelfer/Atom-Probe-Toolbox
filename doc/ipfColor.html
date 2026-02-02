@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>ipfColor - Atom Probe Toolbox</title>
-</head>
-<body>
-<h1>ipfColor</h1>
-<pre>
-  IPFCOLOR Computes IPF color for crystallographic direction (cubic system)
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>ipfColor - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>ipfColor</h1>
+<pre>\n  IPFCOLOR Computes IPF color for crystallographic direction (cubic system)
  
     RGB = IPFCOLOR(DIRECTION) returns the RGB color for a crystallographic
     direction in a cubic crystal system using the standard IPF coloring
@@ -43,4 +36,14 @@
         [111] = Red   (top)
  
     Example:
-        
+        % Direct crystallographic direction
+        rgb = ipfColor([1 2 3]);
+        [rgb, ax] = ipfColor([1 1 0], 'plot', true);
+ 
+        % Using crystalOrientation with world direction
+        ori = crystalOrientation(eye(3), 'cubic');
+        worldNormal = [0 0 1];  % World Z direction
+        rgb = ipfColor(ori, worldNormal);
+ 
+    See also: crystalOrientation, ipfMesh, plotStandardTriangle
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

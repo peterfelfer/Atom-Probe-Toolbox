@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>ipfMesh - Atom Probe Toolbox</title>
-</head>
-<body>
-<h1>ipfMesh</h1>
-<pre>
-  IPFMESH Colors a mesh based on crystallographic surface normal orientation
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>ipfMesh - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>ipfMesh</h1>
+<pre>\n  IPFMESH Colors a mesh based on crystallographic surface normal orientation
  
     [FVCOLORED, AX] = IPFMESH(FV, ORIENTATIONINPUT) takes a mesh structure
     and a crystal orientation, calculates the crystallographic direction of
@@ -43,4 +36,19 @@
         ax - Axes handle (if plot is true)
  
     Example:
-        
+        % Create a sphere mesh
+        [X,Y,Z] = sphere(50);
+        fv = surf2patch(X,Y,Z,'triangles');
+ 
+        % Define crystal orientation (identity = crystal aligned with world)
+        R = eye(3);
+ 
+        % Color and display
+        [fvColored, ax] = ipfMesh(fv, R);
+ 
+        % Using crystalOrientation object
+        ori = crystalOrientation(eye(3), 'cubic');
+        [fvColored, ax] = ipfMesh(fv, ori);
+ 
+    See also: crystalOrientation, ipfColor, patch, surf2patch
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

@@ -1,0 +1,100 @@
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>tofSpecBackgroundDetermination - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>tofSpecBackgroundDetermination</h1>
+<pre>\n  TOFSPECBACKGROUNDDETERMINATION Determine TOF background and track over experiment.
+ 
+  Analyzes time-of-flight (TOF) background in specified regions and tracks
+  how it changes over the course of the experiment. The background rate in
+  TOF space can be converted to mass-to-charge space using the 1/sqrt(m/n)
+  relationship.
+ 
+  SYNTAX
+    [bgResult, info] = tofSpecBackgroundDetermination(pos, bgRegions)
+    [bgResult, info] = tofSpecBackgroundDetermination(pos, bgRegions, Name, Value, ...)
+ 
+  INPUT
+    pos         - Table with atom probe data. Must contain either:
+                  - 'tof' column: time-of-flight values [ns], OR
+                  - 'mc' column: mass-to-charge values [Da] (requires 'tofConversion')
+                  Should contain 'ionIdx' for proper event ordering.
+ 
+    bgRegions   - Background regions specified as:
+                  - Nx2 array of [tofStart, tofEnd] pairs in ns, OR
+                  - 'auto': automatically detect valleys (requires 'mc' and 'ranges')
+                  - struct with fields 'tof' or 'mc' for explicit specification
+ 
+  NAME-VALUE PAIRS
+    'blockSize'       - Number of ions per block (default: 1e6)
+    'numBlocks'       - Alternative: specify number of blocks (overrides blockSize)
+    'tofConversion'   - Conversion factor k where m/n = k * t^2 [Da/ns^2]
+                        If not provided and only 'mc' exists, will be estimated
+    'tofBinWidth'     - Bin width for TOF histogram [ns] (default: 1)
+    'mcBinWidth'      - Bin width for m/c histogram [Da] (default: 0.01)
+    'ranges'          - Range table (for 'auto' background detection)
+    'excludeRanged'   - Logical, exclude ranged regions from background (default: true)
+    'minPeakDistance' - Minimum distance from isolated peaks [Da] (default: 0.3)
+    'clusterThreshold' - Ranges closer than this are considered a cluster [Da] (default: 2.0)
+    'clusterExtraDistance' - Extra distance to add around peak clusters [Da] (default: 0.5)
+    'normalization'   - 'auto' | 'ion' | 'pulse' (default: 'auto')
+    'useUnrangedOnly' - Logical, estimate background from unranged ions only (default: true)
+    'tofRateMethod'   - 'regions' | 'histMean' (default: 'regions')
+    'plotResult'      - Logical, create diagnostic plots (default: false)
+    'mcRange'         - [mcMin, mcMax] range for output background curve (default: [0, 200])
+                        Note: mcRange is automatically extended to cover actual data range
+ 
+  OUTPUT
+    bgResult    - Structure containing:
+                  .tofRate      - Background rate per block [counts/ns/normalization]
+                  .tofRateError - Standard error of tofRate per block
+                  .blockIdx     - Block indices [start, end] into pos table
+                  .blockCenter  - Center ion index of each block
+                  .mcCurve      - Table with m/c values and background per block
+                  .meanRate     - Mean background rate across all blocks
+                  .rateStd      - Standard deviation of rate across blocks
+                  .rateTrend    - Linear trend coefficient [rate change per event index]
+                  .normalization - 'ion' or 'pulse'
+                  .totalNormalization - Total normalization count
+ 
+    info        - Structure containing:
+                  .tofConversion   - Conversion factor k used
+                  .bgRegionsTof    - Background regions in TOF space
+                  .totalBgCounts   - Total counts in background regions per block
+                  .totalBgTime     - Total TOF range width used [ns]
+                  .numBlocks       - Number of blocks analyzed
+                  .method          - 'direct' or 'fromMC' depending on input
+                  .normalization   - 'ion' or 'pulse'
+                  .totalNormalization - Total normalization count
+                  .useUnrangedOnly - true if unranged-only estimation is used
+ 
+  PHYSICS
+    The mass-to-charge ratio relates to time-of-flight as:
+        m/n = k * t^2
+ 
+    where k is an instrument constant [Da/ns^2].
+ 
+    If background is constant in TOF space at rate B_tof [counts/ns/normalization],
+    the background in mass spectrum space is:
+        B_mc(m/n) = B_tof / (2 * sqrt(k * m/n))
+ 
+    This gives the characteristic 1/sqrt(m/n) decay in mass spectra.
+ 
+  EXAMPLE
+    % Define background regions in TOF space
+    bgRegions = [100, 120; 250, 280; 400, 450];  % ns
+ 
+    % Analyze background in 10 blocks
+    [bgResult, info] = tofSpecBackgroundDetermination(pos, bgRegions, ...
+        'numBlocks', 10, 'plotResult', true);
+ 
+    % Get background at m/c = 56 Da for block 5
+    mc56 = 56;
+    bg56 = bgResult.tofRate(5) / (2 * sqrt(info.tofConversion * mc56));
+ 
+    % Auto-detect background regions from ranges
+    [bgResult, info] = tofSpecBackgroundDetermination(pos, 'auto', ...
+        'ranges', ranges, 'numBlocks', 10);
+ 
+  SEE ALSO
+    backgroundEstimate, massSpecPlot, posCalculateConcentrationDeconvolved
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

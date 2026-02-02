@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>concentrationUncertainty - Atom Probe Toolbox</title>
-</head>
-<body>
-<h1>concentrationUncertainty</h1>
-<pre>
-  CONCENTRATIONUNCERTAINTY Calculate concentration uncertainty from counting statistics
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>concentrationUncertainty - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>concentrationUncertainty</h1>
+<pre>\n  CONCENTRATIONUNCERTAINTY Calculate concentration uncertainty from counting statistics
  
   [uncertainty, details] = concentrationUncertainty(counts)
   [uncertainty, details] = concentrationUncertainty(counts, 'method', 'binomial')
@@ -46,4 +39,17 @@
     This accounts for the constraint that concentrations must sum to 1.
  
   EXAMPLES:
-    
+    % Single measurement with 3 elements
+    counts = [150, 40, 10];  % Fe, Cr, C atoms
+    unc = concentrationUncertainty(counts);
+ 
+    % Multiple measurements
+    counts = [150 40 10; 148 42 10; 152 38 10];
+    unc = concentrationUncertainty(counts, 'confidence', 0.99);
+ 
+  REFERENCES:
+    Danoix, F. et al. (2007) Microscopy and Microanalysis
+    Miller, M.K. (2000) Atom Probe Tomography
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

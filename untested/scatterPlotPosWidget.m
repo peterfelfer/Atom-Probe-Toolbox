@@ -62,7 +62,11 @@ arguments
     options.clipToBoundingBox (1,1) logical = true
     options.bboxUseSpan (1,1) logical = false
     options.bboxPadding (1,1) double {mustBeNonnegative} = 0
+    options.linkToBase (1,1) logical = false
+    options.linkedVar (1,1) string = ""
 end
+
+baseVarName = inputname(1);
 
 % Input validation
 validatePosTable(pos);
@@ -133,6 +137,12 @@ data.clipToBoundingBox = options.clipToBoundingBox;
 data.bboxUseSpan = options.bboxUseSpan;
 data.bboxPadding = options.bboxPadding;
 data.bboxUserEdited = false;
+data.linkToBase = options.linkToBase;
+data.linkedVar = options.linkedVar;
+data.linkKey = "";
+data.linkSignature = [];
+data.linkUpdating = false;
+data.linkRefreshTimer = [];
 
 % Performance: deferred updates and sampling cache
 data.liveUpdate = true;
@@ -188,6 +198,7 @@ data.fn = struct( ...
 tableData = buildTableData(data);
 
 setupControls(controlFig, tableData, data);
+configureLinkData(controlFig, baseVarName);
 updateScatter(controlFig);
 applyBoundingBox(ax, data.bbox, data.fixBoundingBox);
 
@@ -261,6 +272,7 @@ function cleanupAll(controlFig)
     if isscalar(controlFig) && isgraphics(controlFig)
         data = getappdata(controlFig, 'scatterPlotPosWidget');
         if ~isempty(data)
+            data = stopLinkData(data);
             data = destroyScaleCube(data);
             setappdata(controlFig, 'scatterPlotPosWidget', data);
         end
@@ -274,6 +286,7 @@ function cleanupOnControlClose(controlFig, ax)
     if isscalar(controlFig) && isgraphics(controlFig)
         data = getappdata(controlFig, 'scatterPlotPosWidget');
         if ~isempty(data)
+            data = stopLinkData(data);
             data = destroyScaleCube(data);
             setappdata(controlFig, 'scatterPlotPosWidget', data);
         end
@@ -303,6 +316,304 @@ function cleanupScatterHandles(ax)
             end
         end
     end
+end
+
+function configureLinkData(controlFig, baseVarName)
+    data = getappdata(controlFig, 'scatterPlotPosWidget');
+    if isempty(data)
+        return;
+    end
+    if ~data.linkToBase
+        return;
+    end
+    if strlength(data.linkedVar) == 0
+        if ~isempty(baseVarName)
+            data.linkedVar = string(baseVarName);
+        else
+            warning('scatterPlotPosWidget:linkVarMissing', ...
+                'linkToBase is true but no linkedVar name is available. Linking disabled.');
+            data.linkToBase = false;
+            setappdata(controlFig, 'scatterPlotPosWidget', data);
+            return;
+        end
+    end
+    if ~isvarname(char(data.linkedVar))
+        warning('scatterPlotPosWidget:invalidLinkVar', ...
+            'linkedVar "%s" is not a valid variable name. Linking disabled.', data.linkedVar);
+        data.linkToBase = false;
+        setappdata(controlFig, 'scatterPlotPosWidget', data);
+        return;
+    end
+
+    data.linkSignature = computePosSignature(data.pos);
+    if strlength(data.linkKey) == 0
+        rawId = char(java.util.UUID.randomUUID);
+        data.linkKey = "scatterPlotPosWidget_link_" + string(strrep(rawId, '-', '_'));
+    end
+
+    linkState = struct();
+    linkState.controlFig = controlFig;
+    linkState.linkedVar = char(data.linkedVar);
+    linkState.lastSig = data.linkSignature;
+    linkState.refreshFcn = @(newPos) refreshFromPos(controlFig, newPos);
+    linkState.sigFcn = @(newPos) computePosSignature(newPos);
+    linkState.updating = false;
+    setappdata(0, char(data.linkKey), linkState);
+
+    setappdata(controlFig, 'scatterPlotPosWidget', data);
+    applyLinkDataSources(controlFig);
+    startLinkRefreshTimer(controlFig);
+    if isgraphics(data.scatterFig)
+        linkdata(data.scatterFig, 'on');
+        refreshdata(data.scatterFig);
+    end
+end
+
+function data = stopLinkData(data)
+    if isfield(data, 'scatterFig') && isgraphics(data.scatterFig)
+        try
+            linkdata(data.scatterFig, 'off');
+        catch
+        end
+    end
+    if isfield(data, 'linkKey') && strlength(data.linkKey) > 0
+        try
+            rmappdata(0, char(data.linkKey));
+        catch
+        end
+        data.linkKey = "";
+    end
+    if isfield(data, 'linkRefreshTimer') && ~isempty(data.linkRefreshTimer) && isvalid(data.linkRefreshTimer)
+        try
+            stop(data.linkRefreshTimer);
+        catch
+        end
+        try
+            delete(data.linkRefreshTimer);
+        catch
+        end
+    end
+    data.linkRefreshTimer = [];
+    data.linkUpdating = false;
+end
+
+function applyLinkDataSources(controlFig)
+    data = getappdata(controlFig, 'scatterPlotPosWidget');
+    if isempty(data) || ~data.linkToBase
+        return;
+    end
+    if strlength(data.linkKey) == 0 || strlength(data.linkedVar) == 0
+        return;
+    end
+    varName = char(data.linkedVar);
+    if ~isvarname(varName)
+        return;
+    end
+    for i = 1:numel(data.scatterHandles)
+        h = data.scatterHandles(i);
+        if ~isgraphics(h)
+            continue;
+        end
+        exprX = sprintf('scatterPlotPosWidget_linkedData(''%s'', %d, ''x'', %s)', ...
+            char(data.linkKey), i, varName);
+        exprY = sprintf('scatterPlotPosWidget_linkedData(''%s'', %d, ''y'', %s)', ...
+            char(data.linkKey), i, varName);
+        exprZ = sprintf('scatterPlotPosWidget_linkedData(''%s'', %d, ''z'', %s)', ...
+            char(data.linkKey), i, varName);
+        h.XDataSource = exprX;
+        h.YDataSource = exprY;
+        h.ZDataSource = exprZ;
+    end
+end
+
+function startLinkRefreshTimer(controlFig)
+    data = getappdata(controlFig, 'scatterPlotPosWidget');
+    if isempty(data) || ~data.linkToBase
+        return;
+    end
+    if ~isfield(data, 'scatterFig') || ~isgraphics(data.scatterFig)
+        return;
+    end
+    if isfield(data, 'linkRefreshTimer') && ~isempty(data.linkRefreshTimer) && isvalid(data.linkRefreshTimer)
+        return;
+    end
+    data.linkRefreshTimer = timer( ...
+        'ExecutionMode', 'fixedSpacing', ...
+        'Period', 0.5, ...
+        'TimerFcn', @(t,~) safeRefreshLinkData(controlFig, t));
+    start(data.linkRefreshTimer);
+    setappdata(controlFig, 'scatterPlotPosWidget', data);
+end
+
+function safeRefreshLinkData(controlFig, timerObj)
+    if isempty(controlFig) || ~isgraphics(controlFig)
+        stopAndDeleteTimer(timerObj);
+        return;
+    end
+    data = getappdata(controlFig, 'scatterPlotPosWidget');
+    if isempty(data) || ~data.linkToBase
+        stopAndDeleteTimer(timerObj);
+        return;
+    end
+    if ~isfield(data, 'scatterFig') || ~isgraphics(data.scatterFig)
+        stopAndDeleteTimer(timerObj);
+        return;
+    end
+    try
+        refreshdata(data.scatterFig);
+    catch
+    end
+end
+
+function stopAndDeleteTimer(timerObj)
+    if isempty(timerObj) || ~isvalid(timerObj)
+        return;
+    end
+    try
+        stop(timerObj);
+    catch
+    end
+    try
+        delete(timerObj);
+    catch
+    end
+end
+
+function sig = computePosSignature(pos)
+    sig = struct();
+    sig.height = height(pos);
+    sig.width = width(pos);
+    sig.names = string(pos.Properties.VariableNames);
+    sampleCols = intersect({'x','y','z','mc','detx','dety','ionIdx'}, pos.Properties.VariableNames, 'stable');
+    sampleIdx = unique([1:min(5,height(pos)), max(1,height(pos)-4):height(pos)]);
+    acc = 0;
+    for i = 1:numel(sampleCols)
+        v = pos.(sampleCols{i});
+        if isnumeric(v)
+            acc = acc + sum(double(v(sampleIdx)), 'omitnan');
+        end
+    end
+    sig.sample = acc;
+end
+
+function refreshFromPos(controlFig, newPos)
+    data = getappdata(controlFig, 'scatterPlotPosWidget');
+    if isempty(data)
+        return;
+    end
+
+    validatePosTable(newPos);
+    data.pos = newPos;
+    data.coordsOriginal = [newPos.x, newPos.y, newPos.z];
+    data.coords = rotateCoordsZ(data.coordsOriginal, data.rotationAngle);
+    data.hasIsotope = ismember('isotope', newPos.Properties.VariableNames);
+    data.hasCharge = ismember('chargeState', newPos.Properties.VariableNames);
+
+    if ~data.bboxUserEdited
+        data.bboxOriginal = computeBoundingBox(data.coords, data.bboxPadding);
+        data.bbox = data.bboxOriginal;
+    end
+
+    [speciesNames, baseNames, displayNames, speciesIndices, speciesCounts] = computeGroups( ...
+        data.pos, data.mode, data.splitIsotope, data.splitCharge, data.showUnranged);
+    colors = mapColors(baseNames, data.colorScheme);
+    markerSizes = initMarkerSizes(numel(speciesNames), data.markerSizeGlobal);
+
+    allowRebuild = ~(isfield(data, 'linkUpdating') && data.linkUpdating);
+    reuseHandles = numel(speciesNames) == numel(data.speciesNames) && ...
+        all(string(displayNames) == string(data.displayNames));
+
+    if ~allowRebuild && ~reuseHandles
+        oldSpeciesNames = data.speciesNames;
+        oldDisplayNames = data.displayNames;
+        oldBaseNames = data.baseNames;
+        oldColors = data.colors;
+        oldMarkerSizes = data.markerSizes;
+
+        [isMatch, idx] = ismember(oldSpeciesNames, speciesNames);
+        alignedIndices = cell(numel(oldSpeciesNames), 1);
+        alignedCounts = zeros(numel(oldSpeciesNames), 1);
+        for i = 1:numel(oldSpeciesNames)
+            if isMatch(i)
+                alignedIndices{i} = speciesIndices{idx(i)};
+                alignedCounts(i) = speciesCounts(idx(i));
+            else
+                alignedIndices{i} = [];
+                alignedCounts(i) = 0;
+            end
+        end
+
+        speciesNames = oldSpeciesNames;
+        baseNames = oldBaseNames;
+        displayNames = oldDisplayNames;
+        colors = oldColors;
+        markerSizes = oldMarkerSizes;
+        speciesIndices = alignedIndices;
+        speciesCounts = alignedCounts;
+
+        visible = data.visible;
+        sampleFractions = data.sampleFractions;
+    else
+        visible = true(numel(speciesNames), 1);
+        sampleFractions = initSampleFractions(speciesCounts, data.sampleValue);
+
+        [isMatch, idx] = ismember(speciesNames, data.speciesNames);
+        if any(isMatch)
+            visible(isMatch) = data.visible(idx(isMatch));
+            sampleFractions(isMatch) = data.sampleFractions(idx(isMatch));
+            if numel(data.markerSizes) == numel(data.speciesNames)
+                markerSizes(isMatch) = data.markerSizes(idx(isMatch));
+            end
+        end
+    end
+
+    if allowRebuild && ~reuseHandles
+        if ~isempty(data.scatterHandles)
+            delete(data.scatterHandles(ishghandle(data.scatterHandles)));
+        end
+        axes(data.ax);
+        holdState = ishold(data.ax);
+        hold(data.ax, 'on');
+        data.scatterHandles = createScatterHandles(data.ax, displayNames, colors, markerSizes);
+        if ~holdState
+            hold(data.ax, 'off');
+        end
+    elseif reuseHandles
+        for i = 1:numel(data.scatterHandles)
+            h = data.scatterHandles(i);
+            if ~isgraphics(h)
+                continue;
+            end
+            set(h, 'MarkerFaceColor', colors(i, :), 'MarkerEdgeColor', colors(i, :), ...
+                'DisplayName', char(displayNames(i)));
+        end
+    end
+
+    data.speciesNames = speciesNames;
+    data.baseNames = baseNames;
+    data.displayNames = displayNames;
+    data.speciesIndices = speciesIndices;
+    data.speciesCounts = speciesCounts;
+    data.colors = colors;
+    data.visible = visible;
+    data.sampleFractions = sampleFractions;
+    data.markerSizes = markerSizes;
+    data.linkSignature = computePosSignature(newPos);
+
+    data.samplingCache = cell(numel(speciesNames), 1);
+    data.samplingCacheValid = false(numel(speciesNames), 1);
+
+    setappdata(controlFig, 'scatterPlotPosWidget', data);
+    if data.linkToBase && strlength(data.linkKey) > 0 && isappdata(0, char(data.linkKey))
+        linkState = getappdata(0, char(data.linkKey));
+        linkState.lastSig = data.linkSignature;
+        linkState.controlFig = controlFig;
+        setappdata(0, char(data.linkKey), linkState);
+    end
+    applyLinkDataSources(controlFig);
+    updateTable(controlFig);
+    updateScatter(controlFig);
+    updateBoundingBoxControls(controlFig);
 end
 
 function mode = resolveMode(pos, groupBy)

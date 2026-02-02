@@ -1,43 +1,54 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>posCalculateConcentrationSimple - Atom Probe Toolbox</title>
-</head>
-<body>
-<h1>posCalculateConcentrationSimple</h1>
-<pre>
-  posCalculateConcentrationSimple calculates the concentration of a
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>posCalculateConcentrationSimple - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>posCalculateConcentrationSimple</h1>
+<pre>\n  posCalculateConcentrationSimple calculates the concentration of a
   categorical list of atoms or ions
  
-  conc = posCalculateConcentrationSimple(pos, detEff, excludeList,volumeName);
+  conc = posCalculateConcentrationSimple(pos, detEff, excludeList, volumeName);
   conc = posCalculateConcentrationSimple(pos, detEff, excludeList)
   conc = posCalculateConcentrationSimple(pos, detEff)
+  conc = posCalculateConcentrationSimple(..., 'mode', mode)
  
   INPUT
   pos:          decomposed pos file that contains ion and charge state of
                 the individual atoms
  
-  detEff:       detector efficiency of the atom probe, can be parsed as 
+  detEff:       detector efficiency of the atom probe, can be parsed as
                 or as a fraction (for a LEAP 4000X HR it is 0.37)
-                
+ 
   excludeList:  cell array that contains as character the individual
-                ions that shall not be considered for the concentration 
-                calculation, unranged atoms appear as 'unranged', if not 
+                ions that shall not be considered for the concentration
+                calculation, unranged atoms appear as 'unranged', if not
                 parsed, no atoms will be excluded
  
   volumeName:   name of the volume, parsed as character array, if not parsed,
                 the volume will be named after pos
  
+  Name-Value Options:
+  'mode'        Concentration calculation mode:
+                'ionic' - each unique ion species counted separately
+                          (56Fe++ and 56Fe+ are different)
+                'isotopic' - groups by isotopic composition, ignores charge
+                          (56Fe++ and 56Fe+ counted together as 56Fe)
+                'atomic' - groups by element, ignores isotope and charge
+                          (all Fe isotopes counted together)
+                Default: 'atomic' if 'atom' column exists, 'ionic' otherwise
+ 
   OUTPUT
-  conc:         is a table that contains the count, concentration, and 
+  conc:         is a table that contains the count, concentration, and
                 variance for each atom/ion that is not on the excludeList.
-                statistical deviation calculated after Danoix et al., 
+                statistical deviation calculated after Danoix et al.,
                 <a href="https://doi.org/10.1016/j.ultramic.2007.02.005">https://doi.org/10.1016/j.ultramic.2007.02.005</a>
                 variance(conc) = conc*(1-conc)/numAtomsDetected * (1 - detEff)
  
-  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
-</pre>
-<p><a href="function_reference.html">Back to Function Reference</a></p>
-</body>
-</html>
+  EXAMPLES
+  % Ionic concentration (each charge state separate)
+  conc = posCalculateConcentrationSimple(pos, 0.37, {}, '', 'mode', 'ionic');
+ 
+  % Isotopic concentration (charge states grouped, isotopes separate)
+  conc = posCalculateConcentrationSimple(pos, 0.37, {}, '', 'mode', 'isotopic');
+ 
+  % Atomic concentration (all isotopes and charge states grouped)
+  conc = posCalculateConcentrationSimple(pos, 0.37, {}, '', 'mode', 'atomic');
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

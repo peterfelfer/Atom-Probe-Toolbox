@@ -1,0 +1,32 @@
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>ionConvertMode - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>ionConvertMode</h1>
+<pre>\n  ionConvertMode converts ion categorical names between concentration modes.
+ 
+  outCat = ionConvertMode(inCat, targetMode)
+ 
+  Converts ion names from ionic form to either isotopic or atomic form by
+  stripping charge state and/or isotope information.
+ 
+  INPUT
+  inCat:        categorical array of ion names (e.g., '56Fe ++', '16O2 +')
+  targetMode:   'ionic' | 'isotopic' | 'atomic'
+                - 'ionic': no change (returns input as-is)
+                - 'isotopic': strips charge state (e.g., '56Fe ++' -&gt; '56Fe')
+                - 'atomic': strips isotope and charge (e.g., '56Fe ++' -&gt; 'Fe')
+ 
+  OUTPUT
+  outCat:       categorical array with converted names
+ 
+  EXAMPLE
+  ions = categorical({'56Fe ++', '54Fe ++', '56Fe +', '16O +'});
+ 
+  % Isotopic mode - groups by isotope (ignores charge state)
+  isotopic = ionConvertMode(ions, 'isotopic');
+  % Result: {'56Fe', '54Fe', '56Fe', '16O'}
+ 
+  % Atomic mode - groups by element (ignores isotope and charge)
+  atomic = ionConvertMode(ions, 'atomic');
+  % Result: {'Fe', 'Fe', 'Fe', 'O'}
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

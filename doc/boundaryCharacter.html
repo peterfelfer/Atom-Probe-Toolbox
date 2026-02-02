@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>boundaryCharacter - Atom Probe Toolbox</title>
-</head>
-<body>
-<h1>boundaryCharacter</h1>
-<pre>
-  BOUNDARYCHARACTER Analyze and visualize grain boundary character
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>boundaryCharacter - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>boundaryCharacter</h1>
+<pre>\n  BOUNDARYCHARACTER Analyze and visualize grain boundary character
  
     [CHARDATA, AX] = BOUNDARYCHARACTER(FV, ORI1, ORI2) analyzes the character
     of a grain boundary between two crystals with orientations ORI1 and ORI2.
@@ -50,4 +43,20 @@
         ax - Axes handles (struct with .mesh, .ipf1, .ipf2 if showIPF is true)
  
     Example:
-        
+        % Create boundary mesh (e.g., a flat plane)
+        [X, Y] = meshgrid(-1:0.1:1, -1:0.1:1);
+        Z = zeros(size(X));
+        fv = surf2patch(X, Y, Z, 'triangles');
+ 
+        % Define two crystal orientations
+        ori1 = crystalOrientation(eye(3), 'cubic');
+        ori2 = crystalOrientation(rotationMatrix3D([1,1,1], 60), 'cubic');
+ 
+        % Visualize boundary character
+        [charData, ax] = boundaryCharacter(fv, ori1, ori2);
+ 
+        % Color by boundary plane in crystal 1
+        [charData, ax] = boundaryCharacter(fv, ori1, ori2, 'colorBy', 'plane1');
+ 
+    See also: crystalOrientation, ipfMesh, ipfHistogram
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

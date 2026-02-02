@@ -1,0 +1,48 @@
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>scatterPlotPosWidget - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>scatterPlotPosWidget</h1>
+<pre>\n  SCATTERPLOTPOSWIDGET Interactive scatter plot with visibility/sample controls.
+ 
+  [scatterHandles, ax, controlFig, info] = scatterPlotPosWidget(pos, colorScheme)
+  [scatterHandles, ax, controlFig, info] = scatterPlotPosWidget(pos, colorScheme, 'groupBy', 'ion')
+  [scatterHandles, ax, controlFig, info] = scatterPlotPosWidget(pos, [], 'axes', ax)
+ 
+  Creates a 3D scatter plot of APT data and a separate control window that
+  toggles species visibility and adjusts the displayed sampling fraction.
+ 
+  INPUT:
+    pos         table with x, y, z and a species column (ion/atom/isotope)
+    colorScheme table with columns: ion (categorical/string) and color (Nx3)
+ 
+  OPTIONS:
+    'axes'         - Target axes for scatter plot (default: new figure)
+    'groupBy'      - 'ion' | 'atom' | 'auto' (default: 'auto')
+    'sample'       - Initial sample fraction (0..1) or count (&gt;1) (default: 0.1)
+    'markerSize'   - Marker size for scatter (default: 15)
+    'markerSizeGlobal' - Global marker size (default: markerSize)
+    'randomSeed'   - Random seed for reproducible sampling (default: 1)
+    'showUnranged' - Include unranged/missing category (default: true)
+    'controlTitle' - Title for control window (default: 'APT Scatter Controls')
+    'splitIsotope' - Split by isotope if available (default: false)
+    'splitCharge'  - Split by charge state if available (default: false)
+    'fixBoundingBox' - Fix axis limits to dataset bounds (default: true)
+    'clipToBoundingBox' - Clip points to bounding box (default: true)
+    'bboxUseSpan'  - Use center/span edits for bounding box (default: false)
+    'bboxPadding'  - Fractional padding for bounding box (default: 0)
+ 
+  KEYBOARD SHORTCUTS (when control window is focused):
+    Space  - Toggle visibility of selected species
+    A      - Show all species
+    H      - Hide all species
+    R      - Reset view to default
+    1-9    - Toggle visibility of species 1-9
+    Ctrl+Z - Undo last change
+    Ctrl+Y - Redo last undone change
+ 
+  OUTPUT:
+    scatterHandles - array of scatter handles (one per species)
+    ax             - axes handle
+    controlFig     - control window figure handle
+    info           - struct with fields: speciesNames, speciesCounts, colors
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

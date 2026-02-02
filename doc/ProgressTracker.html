@@ -1,16 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>ProgressTracker - Atom Probe Toolbox</title>
-</head>
-<body>
-<h1>ProgressTracker</h1>
-<pre>
-  PROGRESSTRACKER Unified progress tracking for long-running operations
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>ProgressTracker - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>ProgressTracker</h1>
+<pre>\n  PROGRESSTRACKER Unified progress tracking for long-running operations
  
   Provides both command-line and graphical progress feedback with
   automatic time estimation.
  
   USAGE:
-    
+    % Simple iteration tracking
+    prog = ProgressTracker(nIterations, 'Processing atoms');
+    for i = 1:nIterations
+        % ... do work ...
+        prog.update(i);
+    end
+    prog.finish();
+ 
+    % With sub-operations
+    prog = ProgressTracker(nFiles, 'Processing files', 'showGUI', true);
+    for i = 1:nFiles
+        prog.update(i, sprintf('File %d: %s', i, filenames{i}));
+    end
+    prog.finish();
+ 
+    % Manual percentage updates
+    prog = ProgressTracker(100, 'Computing', 'mode', 'percentage');
+    prog.update(25);  % 25% complete
+ 
+  OPTIONS:
+    'showGUI'     - Show graphical waitbar (default: false)
+    'mode'        - 'iteration' or 'percentage' (default: 'iteration')
+    'minInterval' - Minimum seconds between display updates (default: 0.5)
+    'showETA'     - Show estimated time remaining (default: true)
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+
+    Documentation for ProgressTracker
+       doc ProgressTracker
+
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

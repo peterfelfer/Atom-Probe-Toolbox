@@ -1,0 +1,79 @@
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>posCalculateInterfacialExcess - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>posCalculateInterfacialExcess</h1>
+<pre>\n  posCalculateInterfacialExcess calculates interfacial excess from distance data
+ 
+  [excess, info] = posCalculateInterfacialExcess(pos, dist, species)
+  [excess, info] = posCalculateInterfacialExcess(pos, dist, species, 'Name', Value)
+ 
+  This function calculates the interfacial excess of specified species
+  relative to an interface defined by a distance array. The distance can
+  be to any feature: mesh interface, plane, line, point, isosurface, etc.
+ 
+  INPUT
+  pos:      pos table with ranged atoms (must have 'atom' or 'ion' column)
+ 
+  dist:     distance array (same length as pos) - distance to interface/feature
+            Positive and negative values indicate sides of the interface.
+            The interface location is where |dist| is minimum.
+ 
+  species:  cell array of species to calculate excess for
+            Examples: {'Al', 'Ti'}      - atomic mode
+                      {'Al++', 'Ti+'}   - ionic mode
+                      {'27Al', '48Ti'}  - isotopic mode
+ 
+  OPTIONS
+  'mode'        'atomic' | 'ionic' | 'isotopic' (default: auto-detect from species)
+                - atomic: group by element (ignores isotope and charge)
+                - ionic: each ion species separately
+                - isotopic: group by isotope (ignores charge)
+ 
+  'area'        interface area in nm^2 (optional)
+                If provided, excess is reported in at/nm^2
+ 
+  'interface'   patch struct with .vertices and .faces (optional)
+                If provided, area is calculated automatically from mesh
+ 
+  'side'        'both' | 'positive' | 'negative' (default: 'both')
+                - 'both': fit linear regions on both sides of interface
+                - 'positive': surface/cluster mode, fit only positive side
+                - 'negative': fit only negative side
+ 
+  'gui'         true | false (default: true)
+                If true, launches interactive GUI for adjusting fit limits
+ 
+  'threshold'   fraction of max derivative for auto fit limits (default: 0.2)
+                Only used when gui=false
+ 
+  OUTPUT
+  excess:   table with columns:
+            - species: species name
+            - excess_atoms: excess in number of atoms
+            - excess_per_nm2: excess in at/nm^2 (NaN if no area)
+            - partial1: partial excess on negative side
+            - partial2: partial excess on positive side
+            - fit_limits: [lim1 lim2 lim3 lim4] indices
+ 
+  info:     struct with:
+            - cumulative: cumulative curves for each species
+            - dist_sorted: sorted distance array
+            - sortIdx: sort indices
+            - interfaceLoc: interface location index
+            - area: interface area (or NaN)
+            - fits: linear fit coefficients
+            - guiHandle: handle to GUI figure (if gui=true)
+ 
+  EXAMPLE
+  % Calculate Al and Ti excess relative to a grain boundary mesh
+  dist = patchPointDistance(pos, interface);  % or any distance calculation
+  [excess, info] = posCalculateInterfacialExcess(pos, dist, {'Al', 'Ti'}, ...
+      'interface', interface);
+ 
+  % Calculate excess without GUI (automatic fitting)
+  [excess, info] = posCalculateInterfacialExcess(pos, dist, {'Al'}, ...
+      'gui', false, 'area', 125.4);
+ 
+  SEE ALSO
+  patchCreateExcessValue, patchCreateProxigram, patchPointDistance
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

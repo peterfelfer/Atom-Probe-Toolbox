@@ -1,26 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>threeMfToPatch - Atom Probe Toolbox</title>
-</head>
-<body>
-<h1>threeMfToPatch</h1>
-<pre>
-  threeMfToPatch imports a 3MF file into a patch (FV) structure.
-
-  fv = threeMfToPatch();
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>threeMfToPatch - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>threeMfToPatch</h1>
+<pre>\n  threeMfToPatch imports a 3MF file into a patch (FV) structure.
+ 
+  fv = threeMfToPatch()
             opens a "Select *.3mf file" window
-  fv = threeMfToPatch(fileName);
+  fv = threeMfToPatch(fileName)
             reads the specified 3MF file
-  fv = threeMfToPatch(fileName, 'removeUnusedVertices', true);
+  fv = threeMfToPatch(fileName, 'removeUnusedVertices', true)
             removes duplicate/unused vertices and reindexes faces
-
-  INPUTS:
-  fileName:  3MF file name
-
+ 
+  name-value options:
+    'removeUnusedVertices'  true/false (default: false)
+    'scale'                 scale factor applied to vertices (default: 1)
+    'combineObjects'        combine multiple objects into one FV (default: true)
+ 
+  OUTPUT:
+  fv: structure with fields 'faces' and 'vertices' (and 'facevertexcdata' if available)
+ 
   (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
-</pre>
-<p><a href="function_reference.html">Back to Function Reference</a></p>
-</body>
-</html>
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

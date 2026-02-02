@@ -1,0 +1,70 @@
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>backgroundEstimate - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>backgroundEstimate</h1>
+<pre>\n  backgroundEstimate estimates background in mass spectrum data.
+ 
+  [bg, info] = backgroundEstimate(mcCenters, countsNorm, rangeTable)
+  [bg, info] = backgroundEstimate(..., 'name', value)
+ 
+  This function estimates the background contribution in a mass spectrum
+  using one of two methods. The background can then be subtracted from
+  peak counts to improve concentration accuracy.
+ 
+  INPUT
+    mcCenters   - mass-to-charge bin centers [Da] (1 x N or N x 1 array)
+    countsNorm  - normalized counts at each bin center (counts/Da/totalIons)
+    rangeTable  - table with mcbegin, mcend columns defining peak regions
+ 
+  NAME-VALUE OPTIONS
+    'method'          - Background fitting method:
+                        'massSpecInvSqrt' (default) - fits B(m/c) = A/sqrt(m/c)
+                        'linearBetweenPeaks' - linear interpolation between gaps
+ 
+    'minPeakDistance' - Distance from peaks to exclude from fitting [Da]
+                        (default: 0.3). Only used by 'massSpecInvSqrt'.
+ 
+    'fitLimits'       - Nx2 matrix of [begin, end] m/c ranges to use for fitting
+                        (optional). Example: [5, 20; 40, 60] fits only in
+                        5-20 Da and 40-60 Da regions.
+ 
+  OUTPUT
+    bg   - background values at mcCenters (counts/Da/totalIons)
+           Same size as mcCenters.
+ 
+    info - struct with fit details:
+           .method      - method used ('massSpecInvSqrt' or 'linearBetweenPeaks')
+           .coefficient - (massSpecInvSqrt) the A parameter in A/sqrt(m/c)
+           .rsquared    - (massSpecInvSqrt) R-squared of fit
+           .fitRegions  - (massSpecInvSqrt) [x, y] points used for fitting
+           .gapFits     - (linearBetweenPeaks) cell array of gap fit structs
+ 
+  METHODS
+    'massSpecInvSqrt' - Fits B(m/c) = A / sqrt(m/c) to unranged regions.
+        Physics basis: A constant background in TOF space transforms to
+        1/sqrt(m/c) in mass spectrum space due to the m/c ~ t^2 relationship.
+        The analytical integral for background counts in a range [a,b] is:
+            bgCounts = 2 * A * (sqrt(b) - sqrt(a)) * totalIons
+ 
+    'linearBetweenPeaks' - Linear interpolation between gaps.
+        Fits linear models in each gap between ranges and interpolates
+        under peaks. Useful when background shape doesn't follow 1/sqrt.
+ 
+  EXAMPLE
+    % Build histogram from pos data
+    edges = 0.5:0.01:100;
+    counts = histcounts(pos.mc, edges);
+    mcCenters = edges(1:end-1) + 0.005;
+    countsNorm = counts / (0.01 * height(pos));
+ 
+    % Estimate background
+    [bg, info] = backgroundEstimate(mcCenters, countsNorm, rangeTable, ...
+        'method', 'massSpecInvSqrt', 'fitLimits', [10 80]);
+ 
+    % Plot
+    figure; semilogy(mcCenters, countsNorm, 'k', mcCenters, bg, 'r--');
+    legend('Spectrum', 'Background');
+ 
+  SEE ALSO
+    posCalculateConcentrationBackgroundRemoved, posCalculateConcentrationDeconvolved
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

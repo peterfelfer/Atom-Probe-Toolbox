@@ -1,20 +1,23 @@
 function varargout = ionConvertName(varargin)
 % ionConvertName converts an ion name to a table variable and reverse.
 % As input parameters, also categorical or an array of elements is
-% possible.
+% possible. Supports tracer ions marked with "tracer" suffix.
 %
 % Create ionTable
 % ionTable = ionConvertName(ionName);
-% [ionTable chargeState] = ionConvertName(ionName);
+% [ionTable, chargeState] = ionConvertName(ionName);
+% [ionTable, chargeState, isTracer] = ionConvertName(ionName);
 %
 % Create ionName
 % table:
 %   ionName = ionConvertName(ionTable,chargeState,format);
+%   ionName = ionConvertName(ionTable,chargeState,format,isTracer);
 %   ionName = ionConvertName(ionTable,chargeState);
 %   ionName = ionConvertName(ionTable,NaN,format);
 %   ionName = ionConvertName(ionTable);
 % categorical:
 %   ionName = ionConvertName(ionCategorical,chargeState,format);
+%   ionName = ionConvertName(ionCategorical,chargeState,format,isTracer);
 %   ionName = ionConvertName(ionCategorical,chargeState);
 %   ionName = ionConvertName(ionCategorical)
 % array:
@@ -22,10 +25,11 @@ function varargout = ionConvertName(varargin)
 %
 % INPUT/OUTPUT
 %
-% ionName: Name of the ion
+% ionName: Name of the ion (with optional " tracer" or "tracer" suffix)
 %   (isotope element count) x N chargestate        '56Fe2 16O3 ++'
 %   (element count) x N chargestate                'Fe2 O3 ++'
 %   (element count) x N                            'Fe2 O3'
+%   with tracer suffix                             'H+tracer' or 'O+ tracer'
 %   individual nucleides will be sorted by atomic number descending
 %   e.g. 'O H2'
 %
@@ -45,6 +49,10 @@ function varargout = ionConvertName(varargin)
 % format:           can be 'plain' or 'LaTeX'
 %
 % isotopeTable:     table with all isotopes
+%
+% isTracer:         logical flag indicating if this is a tracer ion
+%                   When parsing: true if "tracer" suffix was present
+%                   When generating: if true, appends " tracer" to name
 %
 % (c) by Prof. Peter Felfer Group @FAU Erlangen-N�rnberg
 
@@ -84,12 +92,17 @@ end
 %% conversion from table to name
 if istable(varargin{1})
     ionTable = varargin{1};
-    if nargin == 3
+    format = 'plain';
+    isTracer = false;
+
+    % Parse optional arguments: chargeState, format, isTracer
+    if nargin >= 3 && ischar(varargin{3})
         format = varargin{3};
-    else
-        format = 'plain';
     end
-    
+    if nargin >= 4 && islogical(varargin{4})
+        isTracer = varargin{4};
+    end
+
     % add atomic number to table
     numAtom = height(ionTable);
     for at = 1:numAtom
@@ -97,16 +110,16 @@ if istable(varargin{1})
     end
     % for unknown ions, NaNs are swapped for 0, to enable sorting
     atomicNumber(isnan(atomicNumber)) = 0;
-    
+
     ionTable = addvars(ionTable, atomicNumber,'NewVariableNames','atomicNumber');
-    
+
     % sort by atomic number descending
     ionTable = sortrows(ionTable,{'atomicNumber','isotope'},{'descend','descend'},'MissingPlacement','first');
-    
+
     % get multiplicity of atom occurrences in ion and write out names
     ionName = [];
-    
-    
+
+
     isotopeGroup = sortedFindgroups(ionTable);
     for i = 1:max(isotopeGroup)
         idx = find(isotopeGroup == i,1);
@@ -118,10 +131,10 @@ if istable(varargin{1})
                 ionName = [ionName num2str(ionTable.isotope(idx))];
             end
         end
-        
+
         % add chemical element to the name
         ionName = [ionName char(ionTable.element(idx))];
-        
+
         % add chemical element to the name
         if sum(isotopeGroup == i) > 1
             if strcmp(format,'LaTeX')
@@ -153,8 +166,16 @@ if istable(varargin{1})
             end
         end
     end
-    
-    
+
+    % Add tracer suffix if flagged
+    if isTracer
+        if strcmp(format,'LaTeX')
+            ionName = [ionName ' \mathrm{tracer}'];
+        else
+            ionName = [ionName ' tracer'];
+        end
+    end
+
     varargout{1} = strtrim(ionName);
 end
 
@@ -163,22 +184,26 @@ end
 %% conversion from categorical to name
 if iscategorical(varargin{1})
     element = varargin{1};
-    
-    if nargin == 3
+    format = 'plain';
+    isTracer = false;
+
+    % Parse optional arguments: chargeState, format, isTracer
+    if nargin >= 3 && ischar(varargin{3})
         format = varargin{3};
-    else
-        format = 'plain';
     end
-    
+    if nargin >= 4 && islogical(varargin{4})
+        isTracer = varargin{4};
+    end
+
     numAtom = length(element);
     for at = 1:numAtom
         atomicNumber(at,:) = symbolConvertAtomicNumber(char(element(at)));
     end
     ionTable = table(element,atomicNumber);
-    
+
     % sort by atomic number descending
     ionTable = sortrows(ionTable,{'atomicNumber'},{'descend'});
-    
+
     % get multiplicity of atom occurrences in ion and write out names
     ionName = [];
     isotopeGroup = sortedFindgroups(ionTable);
@@ -215,10 +240,18 @@ if iscategorical(varargin{1})
             end
         end
     end
-    
-    
+
+    % Add tracer suffix if flagged
+    if isTracer
+        if strcmp(format,'LaTeX')
+            ionName = [ionName ' \mathrm{tracer}'];
+        else
+            ionName = [ionName ' tracer'];
+        end
+    end
+
     varargout{1} = strtrim(ionName);
-    
+
 end
 
 
@@ -231,7 +264,16 @@ end
 
 if ischar(varargin{1})
     ionName = varargin{1};
-    
+
+    % Check for tracer suffix (case-insensitive)
+    % Handles: "H+tracer", "H+ tracer", "O tracer", "Otracer", etc.
+    isTracer = false;
+    tracerPattern = '\s*tracer\s*$';
+    if regexpi(ionName, tracerPattern)
+        isTracer = true;
+        ionName = regexprep(ionName, tracerPattern, '', 'ignorecase');
+    end
+
     %check for chargestate
     if any(ionName == '+')
         chargeState = sum(ionName == '+');
@@ -242,47 +284,58 @@ if ischar(varargin{1})
     else
         chargeState = NaN;
     end
-    
+
     ionName = strtrim(ionName); % remove any whitespace
-    
+
     % split individual elemental / isotopic parts
     parts = strsplit(ionName);
     numElements = length(parts);
     isotope = [];
     elementOut = categorical();
     isotopeOut = [];
-    
+
     for el = 1:numElements
+        % Skip empty parts
+        if isempty(parts{el})
+            continue;
+        end
+
         % find the chemical element
         element = parts{el}(isstrprop(parts{el},'alpha'));
-        
+
+        % Skip if no element found (e.g., stray numbers)
+        if isempty(element)
+            continue;
+        end
+
         isDigit = isstrprop(parts{el},'digit');
         % find the isotope
-        if isDigit(1) == true
+        if ~isempty(isDigit) && isDigit(1) == true
             isotope = str2num(parts{el}(1:find(~isDigit,1)-1));
         else
             isotope = NaN;
         end
-        
+
         % find the count
-        if isDigit(end) == true
+        if ~isempty(isDigit) && isDigit(end) == true
             count = str2num(parts{el}(find(~isDigit,1,'last')+1:end));
         else
             count = 1;
         end
-        
+
         for cnt = 1:count
             elementOut(end+1) = element;
             isotopeOut(end+1) = isotope;
         end
-        
+
     end
     element = elementOut';
     isotope = isotopeOut';
-    
+
     varargout{1} = table(element,isotope);
     varargout{2} = chargeState;
-    
+    varargout{3} = isTracer;
+
 end
 
 function group = sortedFindgroups(ionTable)

@@ -52,22 +52,25 @@ end
 
 doc = xmlread(modelPath);
 
-colorGroups = parseColorGroupsXml(doc);
-objects = parseObjectsXml(doc, colorGroups);
+materialGroups = parseMaterialGroupsXml(doc);
+objects = parseObjectsXml(doc, materialGroups);
+buildIds = parseBuildIdsXml(doc);
 
 if isempty(objects)
     fv = struct('faces', [], 'vertices', []);
     return;
 end
 
-if opts.combineObjects && numel(objects) > 1
-    objects = combineObjects(objects);
+[objectsOut] = resolveBuildObjects(objects, buildIds);
+
+if opts.combineObjects && numel(objectsOut) > 1
+    objectsOut = combineObjects(objectsOut);
 end
 
-if numel(objects) == 1
-    fv = objects(1);
+if numel(objectsOut) == 1
+    fv = objectsOut(1);
 else
-    fv = objects;
+    fv = objectsOut;
 end
 
 if opts.scale ~= 1
@@ -103,67 +106,88 @@ function opts = parseOptions(opts, varargin)
     end
 end
 
-function colorGroups = parseColorGroupsXml(doc)
-    colorGroups = containers.Map('KeyType', 'double', 'ValueType', 'any');
+function materialGroups = parseMaterialGroupsXml(doc)
+    materialGroups = containers.Map('KeyType', 'double', 'ValueType', 'any');
     nodes = doc.getElementsByTagName('*');
     for i = 0:(nodes.getLength - 1)
         node = nodes.item(i);
-        if ~isElementNamed(node, 'colorgroup')
-            continue;
-        end
-        idVal = getAttrDouble(node, 'id');
-        if ~isfinite(idVal)
-            continue;
-        end
-        colors = [];
-        childNodes = node.getChildNodes;
-        for j = 0:(childNodes.getLength - 1)
-            child = childNodes.item(j);
-            if ~isElementNamed(child, 'color')
+        if isElementNamed(node, 'colorgroup')
+            idVal = getAttrDouble(node, 'id');
+            if ~isfinite(idVal)
                 continue;
             end
-            hex = getAttrString(child, 'color');
-            if strlength(hex) == 7 && startsWith(hex, "#")
-                hex = extractAfter(hex, 1);
-            end
-            if strlength(hex) ~= 6
+            colors = parseColorEntries(node, 'color');
+            materialGroups(idVal) = colors;
+        elseif isElementNamed(node, 'basematerials')
+            idVal = getAttrDouble(node, 'id');
+            if ~isfinite(idVal)
                 continue;
             end
-            colors(end+1, :) = [ ...
-                hex2dec(char(extractBefore(extractAfter(hex, 0), 3))), ...
-                hex2dec(char(extractBefore(extractAfter(hex, 2), 3))), ...
-                hex2dec(char(extractBefore(extractAfter(hex, 4), 3))) ...
-                ] / 255; %#ok<AGROW>
+            colors = parseColorEntries(node, 'base');
+            materialGroups(idVal) = colors;
+        else
+            continue;
         end
-        colorGroups(idVal) = colors;
     end
 end
 
-function objects = parseObjectsXml(doc, colorGroups)
-    objects = struct('faces', {}, 'vertices', {}, 'facevertexcdata', {});
+function objects = parseObjectsXml(doc, materialGroups)
+    objects = struct('id', {}, 'faces', {}, 'vertices', {}, 'facevertexcdata', {}, 'components', {});
     nodes = doc.getElementsByTagName('*');
     for i = 0:(nodes.getLength - 1)
         node = nodes.item(i);
         if ~isElementNamed(node, 'object')
             continue;
         end
+        objId = getAttrDouble(node, 'id');
+        if ~isfinite(objId)
+            continue;
+        end
         meshNode = findChildElement(node, 'mesh');
-        if isempty(meshNode)
+        compNode = findChildElement(node, 'components');
+
+        obj = struct('id', objId, 'faces', [], 'vertices', [], 'facevertexcdata', [], 'components', []);
+        if ~isempty(meshNode)
+            defaultPid = getAttrDouble(node, 'pid');
+            defaultP = getDefaultP(node);
+            [vertices, faces, colors] = parseMeshXml(meshNode, materialGroups, defaultPid, defaultP);
+            obj.vertices = vertices;
+            obj.faces = faces;
+            if ~isempty(colors)
+                obj.facevertexcdata = colors;
+            end
+        elseif ~isempty(compNode)
+            obj.components = parseComponentsXml(compNode);
+        else
             continue;
-        end
-        [vertices, faces, colors] = parseMeshXml(meshNode, colorGroups);
-        if isempty(vertices) || isempty(faces)
-            continue;
-        end
-        obj = struct('faces', faces, 'vertices', vertices);
-        if ~isempty(colors)
-            obj.facevertexcdata = colors;
         end
         objects(end+1) = obj; %#ok<AGROW>
     end
 end
 
-function [vertices, faces, colors] = parseMeshXml(meshNode, colorGroups)
+function comps = parseComponentsXml(compNode)
+    comps = struct('objectId', {}, 'transform', {});
+    nodes = compNode.getChildNodes;
+    for i = 0:(nodes.getLength - 1)
+        node = nodes.item(i);
+        if ~isElementNamed(node, 'component')
+            continue;
+        end
+        objId = getAttrDouble(node, 'objectid');
+        if ~isfinite(objId)
+            continue;
+        end
+        t = getAttrString(node, 'transform');
+        if strlength(t) > 0
+            vals = str2double(strsplit(t));
+        else
+            vals = [];
+        end
+        comps(end+1) = struct('objectId', objId, 'transform', vals); %#ok<AGROW>
+    end
+end
+
+function [vertices, faces, colors] = parseMeshXml(meshNode, materialGroups, defaultPid, defaultP)
     vertices = [];
     faces = [];
     colors = [];
@@ -219,6 +243,16 @@ function [vertices, faces, colors] = parseMeshXml(meshNode, colorGroups)
         p2 = getAttrDouble(tNode, 'p2');
         p3 = getAttrDouble(tNode, 'p3');
         p = getAttrDouble(tNode, 'p');
+        if ~isfinite(p)
+            p = getAttrDouble(tNode, 'pindex');
+        end
+
+        if ~isfinite(pid) && isfinite(defaultPid)
+            pid = defaultPid;
+        end
+        if ~isfinite(p) && isfinite(defaultP)
+            p = defaultP;
+        end
 
         if isfinite(pid) && isfinite(p1) && isfinite(p2) && isfinite(p3)
             hasColor = true;
@@ -236,7 +270,7 @@ function [vertices, faces, colors] = parseMeshXml(meshNode, colorGroups)
     triP = triP(1:tCount, :);
 
     if hasColor
-        [vertices, faces, colors] = expandVertexColors(vertices, faces, triPid, triP, colorGroups);
+        [vertices, faces, colors] = expandVertexColors(vertices, faces, triPid, triP, materialGroups);
     end
 end
 
@@ -300,7 +334,7 @@ function child = findChildElement(parent, name)
     end
 end
 
-function [vOut, fOut, cOut] = expandVertexColors(vertices, faces, triPid, triP, colorGroups)
+function [vOut, fOut, cOut] = expandVertexColors(vertices, faces, triPid, triP, materialGroups)
     numFaces = size(faces, 1);
     vOut = zeros(numFaces * 3, 3);
     cOut = zeros(numFaces * 3, 3);
@@ -314,8 +348,8 @@ function [vOut, fOut, cOut] = expandVertexColors(vertices, faces, triPid, triP, 
         vOut(base + 3, :) = vertices(idx(3), :);
 
         pid = triPid(i);
-        if isKey(colorGroups, pid)
-            colors = colorGroups(pid);
+        if isKey(materialGroups, pid)
+            colors = materialGroups(pid);
             p1 = triP(i, 1) + 1;
             p2 = triP(i, 2) + 1;
             p3 = triP(i, 3) + 1;
@@ -354,6 +388,137 @@ end
 function [verticesOut, facesOut] = mergeDuplicateVertices(vertices, faces)
     [verticesOut, ~, idx] = unique(vertices, 'rows');
     facesOut = idx(faces);
+end
+
+function colors = parseColorEntries(parentNode, elementName)
+    colors = [];
+    childNodes = parentNode.getChildNodes;
+    for j = 0:(childNodes.getLength - 1)
+        child = childNodes.item(j);
+        if ~isElementNamed(child, elementName)
+            continue;
+        end
+        hex = getAttrString(child, 'color');
+        if strlength(hex) == 0
+            hex = getAttrString(child, 'displaycolor');
+        end
+        if strlength(hex) == 7 && startsWith(hex, "#")
+            hex = extractAfter(hex, 1);
+        end
+        if strlength(hex) ~= 6
+            continue;
+        end
+        colors(end+1, :) = [ ...
+            hex2dec(char(extractBefore(extractAfter(hex, 0), 3))), ...
+            hex2dec(char(extractBefore(extractAfter(hex, 2), 3))), ...
+            hex2dec(char(extractBefore(extractAfter(hex, 4), 3))) ...
+            ] / 255; %#ok<AGROW>
+    end
+end
+
+function defaultP = getDefaultP(node)
+    defaultP = getAttrDouble(node, 'p');
+    if ~isfinite(defaultP)
+        defaultP = getAttrDouble(node, 'pindex');
+    end
+end
+
+function buildIds = parseBuildIdsXml(doc)
+    buildIds = [];
+    nodes = doc.getElementsByTagName('*');
+    for i = 0:(nodes.getLength - 1)
+        node = nodes.item(i);
+        if ~isElementNamed(node, 'build')
+            continue;
+        end
+        childNodes = node.getChildNodes;
+        for j = 0:(childNodes.getLength - 1)
+            child = childNodes.item(j);
+            if ~isElementNamed(child, 'item')
+                continue;
+            end
+            objId = getAttrDouble(child, 'objectid');
+            if isfinite(objId)
+                buildIds(end+1) = objId; %#ok<AGROW>
+            end
+        end
+    end
+end
+
+function objectsOut = resolveBuildObjects(objects, buildIds)
+    if isempty(objects)
+        objectsOut = objects;
+        return;
+    end
+    objMap = containers.Map('KeyType', 'double', 'ValueType', 'any');
+    for i = 1:numel(objects)
+        objMap(objects(i).id) = objects(i);
+    end
+    if isempty(buildIds)
+        buildIds = [objects.id];
+    end
+    objectsOut = struct('faces', {}, 'vertices', {}, 'facevertexcdata', {});
+    for i = 1:numel(buildIds)
+        objId = buildIds(i);
+        if ~isKey(objMap, objId)
+            continue;
+        end
+        mesh = resolveObject(objMap, objId, []);
+        if ~isempty(mesh.vertices) && ~isempty(mesh.faces)
+            objectsOut(end+1) = mesh; %#ok<AGROW>
+        end
+    end
+end
+
+function mesh = resolveObject(objMap, objId, stack)
+    if any(stack == objId)
+        mesh = struct('faces', [], 'vertices', [], 'facevertexcdata', []);
+        return;
+    end
+    obj = objMap(objId);
+    if ~isempty(obj.vertices) && ~isempty(obj.faces)
+        mesh = struct('faces', obj.faces, 'vertices', obj.vertices, 'facevertexcdata', []);
+        if isfield(obj, 'facevertexcdata')
+            mesh.facevertexcdata = obj.facevertexcdata;
+        end
+        return;
+    end
+    stack = [stack, objId];
+    if isempty(obj.components)
+        mesh = struct('faces', [], 'vertices', [], 'facevertexcdata', []);
+        return;
+    end
+    meshes = struct('faces', {}, 'vertices', {}, 'facevertexcdata', {});
+    for i = 1:numel(obj.components)
+        comp = obj.components(i);
+        if ~isKey(objMap, comp.objectId)
+            continue;
+        end
+        childMesh = resolveObject(objMap, comp.objectId, stack);
+        if isempty(childMesh.vertices) || isempty(childMesh.faces)
+            continue;
+        end
+        if ~isempty(comp.transform)
+            childMesh.vertices = applyTransform(childMesh.vertices, comp.transform);
+        end
+        meshes(end+1) = childMesh; %#ok<AGROW>
+    end
+    if isempty(meshes)
+        mesh = struct('faces', [], 'vertices', [], 'facevertexcdata', []);
+        return;
+    end
+    mesh = combineObjects(meshes);
+end
+
+function vOut = applyTransform(vertices, vals)
+    if numel(vals) ~= 12
+        vOut = vertices;
+        return;
+    end
+    T = reshape(vals, 4, 3)';
+    R = T(:, 1:3);
+    t = T(:, 4)';
+    vOut = (vertices * R') + t;
 end
 
 function cleanupTempDir(tempDir)

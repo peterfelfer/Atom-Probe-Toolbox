@@ -170,6 +170,17 @@ function [conc, info] = posCalculateConcentrationDeconvolved(pos, detEff, exclud
 %                    Example: {'2H+'} for deuterium tracer experiments
 %                    This properly separates natural D from experimental D.
 %
+%   'tracerAbundance' Table defining tracer isotope abundances (default: [])
+%                    Created using tracerAbundanceCreate(). For multi-source
+%                    deconvolution, ions marked with isTracer=true in the
+%                    ionTable will use these abundances instead of natural.
+%                    The deconvolution separates "natural" and "tracer"
+%                    contributions mathematically using NNLS.
+%                    Example:
+%                      tracerAbund = tracerAbundanceCreate('O', [16,18], [0.5,0.5]);
+%                    Then ions with isTracer=true will use 50/50 16O/18O ratio
+%                    instead of natural ~99.76/0.04/0.20 for 16O/17O/18O.
+%
 %   'backgroundMethod' Background correction method before deconvolution:
 %                    - 'none': no background correction (default)
 %                    - 'linearBetweenPeaks': linear interpolation between gaps
@@ -346,6 +357,7 @@ options = struct( ...
     'regularization', 0, ...
     'directCountIons', {{}}, ...
     'tracerPeaks', {{}}, ...
+    'tracerAbundance', [], ...
     'backgroundMethod', 'none', ...
     'minPeakDistance', 0.3, ...
     'fitLimits', [], ...
@@ -480,7 +492,10 @@ unrangedCount = sum(~inAnyRange);
 
 % Build candidate ions
 isotopeTable = resolveIsotopeTable(options.isotopeTable);
-[ionLabels, ionBaseNames, chargeStates] = buildIonLabels(ionTable, rangeTable);
+[ionLabels, ionBaseNames, chargeStates, ionIsTracerFlags] = buildIonLabels(ionTable, rangeTable);
+
+% Get tracer abundance table if provided
+tracerAbundTable = options.tracerAbundance;
 
 numIons = numel(ionLabels);
 numRanges = height(rangeTable);
@@ -517,7 +532,18 @@ else
         if ~isfinite(chargeState) || chargeState == 0
             continue;
         end
-        [isoCombos, abundance, weight] = ionsCreateIsotopeList(ionName, isotopeTable);
+
+        % Check if this is a tracer ion with custom abundance table
+        useTracerAbundance = ionIsTracerFlags(k) && ~isempty(tracerAbundTable);
+
+        if useTracerAbundance
+            % Use tracer abundances instead of natural abundances
+            [isoCombos, abundance, weight] = ionsCreateIsotopeListTracer(ionName, isotopeTable, tracerAbundTable);
+        else
+            % Use natural abundances
+            [isoCombos, abundance, weight] = ionsCreateIsotopeList(ionName, isotopeTable);
+        end
+
         ionIsotope{k} = isoCombos;
         ionAbundance{k} = abundance(:);
         ionWeight{k} = weight(:) ./ abs(chargeState);
@@ -1099,6 +1125,8 @@ function options = parseOptions(options, varargin)
                 else
                     options.tracerPeaks = value;
                 end
+            case "tracerabundance"
+                options.tracerAbundance = value;
             case "backgroundmethod"
                 options.backgroundMethod = char(value);
             case "minpeakdistance"
@@ -1212,10 +1240,11 @@ function isotopeTable = resolveIsotopeTable(isotopeTableInput)
     end
 end
 
-function [labels, baseNames, chargeStates] = buildIonLabels(ionTable, rangeTable)
+function [labels, baseNames, chargeStates, isTracerFlags] = buildIonLabels(ionTable, rangeTable)
     labels = string.empty(0, 1);
     baseNames = string.empty(0, 1);
     chargeStates = [];
+    isTracerFlags = [];
 
     if isempty(ionTable) || ~istable(ionTable) || height(ionTable) == 0
         return;
@@ -1225,10 +1254,20 @@ function [labels, baseNames, chargeStates] = buildIonLabels(ionTable, rangeTable
     labels = strings(numIons, 1);
     baseNames = strings(numIons, 1);
     chargeStates = zeros(numIons, 1);
+    isTracerFlags = false(numIons, 1);
+
+    % Check if ionTable has isTracer column
+    hasIsTracerCol = ismember('isTracer', ionTable.Properties.VariableNames);
 
     for k = 1:numIons
         chargeStates(k) = ionTable.chargeState(k);
         baseNames(k) = string(ionTable.ionName(k));
+
+        % Get isTracer flag if available
+        if hasIsTracerCol
+            isTracerFlags(k) = ionTable.isTracer(k);
+        end
+
         try
             if ismember('ion', ionTable.Properties.VariableNames)
                 ionEntry = ionTable.ion(k);
@@ -1242,12 +1281,18 @@ function [labels, baseNames, chargeStates] = buildIonLabels(ionTable, rangeTable
         catch
             labels(k) = appendCharge(baseNames(k), ionTable.chargeState(k));
         end
+
+        % Append tracer indicator to label if tracer
+        if isTracerFlags(k)
+            labels(k) = labels(k) + " (tracer)";
+        end
     end
 
     % remove duplicates while preserving order
     [labels, ia] = unique(labels, 'stable');
     baseNames = baseNames(ia);
     chargeStates = chargeStates(ia);
+    isTracerFlags = isTracerFlags(ia);
 
     if isempty(labels)
         labels = string(rangeTable.rangeName);
@@ -2139,4 +2184,269 @@ function units = detectBgPlotUnits(ax)
         end
     catch
     end
+end
+
+%% ========== Tracer Abundance Support ==========
+
+function [ionType, abundance, weight] = ionsCreateIsotopeListTracer(ionName, isotopeTable, tracerAbundTable)
+% ionsCreateIsotopeListTracer creates isotope list using tracer abundances
+%
+% Similar to ionsCreateIsotopeList, but uses tracer abundance table
+% instead of natural abundances for elements in the tracer table.
+%
+% INPUT
+% ionName:        Ion name (e.g., 'O', 'H2', 'FeO')
+% isotopeTable:   Table with natural isotope masses and abundances
+% tracerAbundTable: Table with tracer isotope abundances (from tracerAbundanceCreate)
+%
+% OUTPUT
+% ionType:        Cell array of isotope combinations (tables)
+% abundance:      Abundance of each combination
+% weight:         Mass of each combination
+
+    % Parse ion name to get element composition
+    [ionTable, ~] = ionConvertName(ionName);
+
+    % Get unique elements in the ion
+    elements = categories(ionTable.element);
+    numAtoms = height(ionTable);
+
+    % Build isotope lists for each atom position
+    atomIsotopes = cell(numAtoms, 1);
+    atomAbundances = cell(numAtoms, 1);
+    atomMasses = cell(numAtoms, 1);
+
+    for a = 1:numAtoms
+        elem = char(ionTable.element(a));
+
+        % Check if this element is in the tracer abundance table
+        if ~isempty(tracerAbundTable)
+            elemMatch = string(tracerAbundTable.element) == string(elem);
+            hasTracerAbund = any(elemMatch);
+        else
+            hasTracerAbund = false;
+        end
+
+        if hasTracerAbund
+            % Use tracer abundances
+            tracerRows = tracerAbundTable(elemMatch, :);
+            tracerIsos = tracerRows.isotope;
+            tracerAbund = tracerRows.abundance;
+
+            % Get masses from natural isotope table
+            isoMasses = zeros(size(tracerIsos));
+            for i = 1:numel(tracerIsos)
+                mass = getIsotopeMass(isotopeTable, elem, tracerIsos(i));
+                if mass > 0
+                    isoMasses(i) = mass;
+                else
+                    % Fallback: approximate mass as isotope number
+                    isoMasses(i) = tracerIsos(i);
+                end
+            end
+
+            atomIsotopes{a} = tracerIsos;
+            atomAbundances{a} = tracerAbund;
+            atomMasses{a} = isoMasses;
+        else
+            % Use natural abundances from isotope table
+            [isos, abund, masses] = getNaturalIsotopes(isotopeTable, elem);
+            atomIsotopes{a} = isos;
+            atomAbundances{a} = abund;
+            atomMasses{a} = masses;
+        end
+    end
+
+    % Generate all combinations of isotopes
+    [ionType, abundance, weight] = generateIsotopeCombinations(ionTable, atomIsotopes, atomAbundances, atomMasses);
+end
+
+function [isotopes, abundances, masses] = getNaturalIsotopes(isotopeTable, element)
+% Get natural isotopes for an element from the isotope table
+
+    isotopes = [];
+    abundances = [];
+    masses = [];
+
+    % Find column names
+    colNames = isotopeTable.Properties.VariableNames;
+
+    elementCol = '';
+    massNumCol = '';
+    massCol = '';
+    abundCol = '';
+
+    for name = ["element", "symbol", "Element", "Symbol"]
+        if any(strcmpi(colNames, name))
+            elementCol = colNames{strcmpi(colNames, name)};
+            break;
+        end
+    end
+
+    for name = ["massNumber", "A", "mass_number", "MassNumber", "isotope"]
+        if any(strcmpi(colNames, name))
+            massNumCol = colNames{strcmpi(colNames, name)};
+            break;
+        end
+    end
+
+    for name = ["mass", "atomicMass", "Mass", "weight"]
+        if any(strcmpi(colNames, name))
+            massCol = colNames{strcmpi(colNames, name)};
+            break;
+        end
+    end
+
+    for name = ["abundance", "naturalAbundance", "Abundance", "relativeAbundance"]
+        if any(strcmpi(colNames, name))
+            abundCol = colNames{strcmpi(colNames, name)};
+            break;
+        end
+    end
+
+    if isempty(elementCol) || isempty(massNumCol) || isempty(massCol) || isempty(abundCol)
+        return;
+    end
+
+    % Find rows for this element
+    elements = string(isotopeTable.(elementCol));
+    mask = strcmpi(elements, element);
+
+    if ~any(mask)
+        return;
+    end
+
+    isotopes = isotopeTable.(massNumCol)(mask);
+    masses = isotopeTable.(massCol)(mask);
+    abundances = isotopeTable.(abundCol)(mask);
+
+    % Normalize abundances if in percentage
+    if any(abundances > 1)
+        abundances = abundances / 100;
+    end
+
+    % Filter out zero-abundance isotopes
+    validIdx = abundances > 0;
+    isotopes = isotopes(validIdx);
+    masses = masses(validIdx);
+    abundances = abundances(validIdx);
+end
+
+function mass = getIsotopeMass(isotopeTable, element, massNumber)
+% Get the mass of a specific isotope
+
+    mass = 0;
+
+    colNames = isotopeTable.Properties.VariableNames;
+
+    elementCol = '';
+    massNumCol = '';
+    massCol = '';
+
+    for name = ["element", "symbol", "Element", "Symbol"]
+        if any(strcmpi(colNames, name))
+            elementCol = colNames{strcmpi(colNames, name)};
+            break;
+        end
+    end
+
+    for name = ["massNumber", "A", "mass_number", "MassNumber", "isotope"]
+        if any(strcmpi(colNames, name))
+            massNumCol = colNames{strcmpi(colNames, name)};
+            break;
+        end
+    end
+
+    for name = ["mass", "atomicMass", "Mass", "weight"]
+        if any(strcmpi(colNames, name))
+            massCol = colNames{strcmpi(colNames, name)};
+            break;
+        end
+    end
+
+    if isempty(elementCol) || isempty(massNumCol) || isempty(massCol)
+        return;
+    end
+
+    elements = string(isotopeTable.(elementCol));
+    massNums = isotopeTable.(massNumCol);
+    masses = isotopeTable.(massCol);
+
+    mask = strcmpi(elements, element) & massNums == massNumber;
+    if any(mask)
+        mass = masses(find(mask, 1, 'first'));
+    end
+end
+
+function [ionType, abundance, weight] = generateIsotopeCombinations(ionTable, atomIsotopes, atomAbundances, atomMasses)
+% Generate all isotope combinations for a molecular ion
+
+    numAtoms = height(ionTable);
+
+    if numAtoms == 0
+        ionType = {};
+        abundance = [];
+        weight = [];
+        return;
+    end
+
+    % Start with first atom's isotopes
+    numCombos = numel(atomIsotopes{1});
+    comboIsotopes = cell(numCombos, numAtoms);
+    comboElements = cell(numCombos, numAtoms);
+    comboAbund = atomAbundances{1}(:);
+    comboMass = atomMasses{1}(:);
+
+    for c = 1:numCombos
+        comboIsotopes{c, 1} = atomIsotopes{1}(c);
+        comboElements{c, 1} = char(ionTable.element(1));
+    end
+
+    % Expand with each additional atom
+    for a = 2:numAtoms
+        newNumCombos = size(comboIsotopes, 1) * numel(atomIsotopes{a});
+        newComboIsotopes = cell(newNumCombos, numAtoms);
+        newComboElements = cell(newNumCombos, numAtoms);
+        newComboAbund = zeros(newNumCombos, 1);
+        newComboMass = zeros(newNumCombos, 1);
+
+        idx = 0;
+        for c = 1:size(comboIsotopes, 1)
+            for i = 1:numel(atomIsotopes{a})
+                idx = idx + 1;
+                % Copy existing atoms
+                for aa = 1:(a-1)
+                    newComboIsotopes{idx, aa} = comboIsotopes{c, aa};
+                    newComboElements{idx, aa} = comboElements{c, aa};
+                end
+                % Add new atom
+                newComboIsotopes{idx, a} = atomIsotopes{a}(i);
+                newComboElements{idx, a} = char(ionTable.element(a));
+                % Multiply abundance, add mass
+                newComboAbund(idx) = comboAbund(c) * atomAbundances{a}(i);
+                newComboMass(idx) = comboMass(c) + atomMasses{a}(i);
+            end
+        end
+
+        comboIsotopes = newComboIsotopes;
+        comboElements = newComboElements;
+        comboAbund = newComboAbund;
+        comboMass = newComboMass;
+    end
+
+    % Convert to output format
+    numCombos = size(comboIsotopes, 1);
+    ionType = cell(1, numCombos);
+
+    for c = 1:numCombos
+        element = categorical(comboElements(c, :)');
+        isotope = zeros(numAtoms, 1);
+        for a = 1:numAtoms
+            isotope(a) = comboIsotopes{c, a};
+        end
+        ionType{c} = table(element, isotope);
+    end
+
+    abundance = comboAbund(:)';
+    weight = comboMass(:)';
 end

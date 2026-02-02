@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>checkDependencies - Atom Probe Toolbox</title>
-</head>
-<body>
-<h1>checkDependencies</h1>
-<pre>
-  CHECKDEPENDENCIES Verify MATLAB version and required toolboxes
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>checkDependencies - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>checkDependencies</h1>
+<pre>\n  CHECKDEPENDENCIES Verify MATLAB version and required toolboxes
  
   [status, report] = checkDependencies()
   [status, report] = checkDependencies('verbose', true)
@@ -31,4 +24,8 @@
         .warnings       - Cell array of warning messages
  
   EXAMPLE:
-    checkDependencies();  
+    checkDependencies();  % Quick check with console output
+    [ok, rep] = checkDependencies('verbose', false);  % Silent check
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

@@ -4,17 +4,18 @@ function ionTable = ionTableFromHDF5(fileName)
 %
 % ionTable = ionTableFromHDF5(fileName);
 %
-% INPUT    
+% INPUT
 % fileName:     Name of hdf5 file incl. path
 %
-% OUTPUT   
+% OUTPUT
 % ionTable:     table with the following columns: ionName [string],
-%               chargeState [int], ion [categorical], color [float x3]
-%           
+%               chargeState [int], ion [categorical], color [float x3],
+%               isTracer [logical]
+%
 % NOTE: Alternatively false as an output if the file does not contain
 %       range information, i.e. is not an atom probe data file
 %
-% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
+% (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
 
 % get content structure in HDF5 file
 ionInfo = h5info(fileName,'/atomProbeTomography/identifiedIon');
@@ -25,25 +26,34 @@ numIon = size(ionInfo,1);
 % extract each ion from HDF5 file
 for i = 1:numIon
     attributes = struct2cell(ionInfo(i).Attributes)';
-    
+
     isIon = strcmp(attributes(:,1),'ion');
     isColor = strcmp(attributes(:,1),'color');
-    
+    isTracerAttr = strcmp(attributes(:,1),'isTracer');
+
     ionFullName = attributes{isIon,end};
     ionColor = attributes{isColor,end};
-    
+
+    % Check for isTracer attribute (default to false if not present)
+    if any(isTracerAttr)
+        ionIsTracer = logical(attributes{isTracerAttr,end});
+    else
+        ionIsTracer = false;
+    end
+
     [it, cs] = ionConvertName(ionFullName);
-    
+
     % populate table columns as individual variables
     ionName(i,:) = string(ionConvertName(it.element));
     chargeState(i,:) = cs;
     ion{i,:} = it.element;
     color(i,:) = ionColor;
-    
-    
+    isTracer(i,:) = ionIsTracer;
+
+
 end
 
 ionName = categorical(ionName);
 
 % combine to table
-ionTable = table(ionName,chargeState,ion,color);
+ionTable = table(ionName,chargeState,ion,color,isTracer);

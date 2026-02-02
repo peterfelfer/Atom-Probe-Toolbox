@@ -26,6 +26,13 @@ function [conc, info] = posCalculateConcentrationBackgroundRemoved(pos, detEff, 
 %   'fitLimits'     Nx2 matrix of [begin, end] m/c ranges to use for fitting (optional)
 %                   Example: [5, 20; 40, 60] fits only in 5-20 Da and 40-60 Da
 %
+% TRACER SUPPORT
+% Tracer ions (marked with isTracer flag in the ion table) are included in
+% the concentration calculation. Categories containing "(tracer)" in their
+% name are flagged in the info.isTracerCategory output. For proper separation
+% of natural vs tracer contributions, use posCalculateConcentrationDeconvolved
+% with the 'tracerAbundance' option instead.
+%
 % OUTPUT
 % conc:   concentration table (same format as posCalculateConcentrationSimple)
 % info:   struct with background details
@@ -320,6 +327,10 @@ info.rawCounts = rawCounts;
 info.backgroundCounts = bgCounts;
 info.correctedCounts = corrCounts;
 info.categories = cats;
+
+% Flag tracer categories (those containing "(tracer)" in name)
+isTracerCategory = contains(string(cats), '(tracer)', 'IgnoreCase', true);
+info.isTracerCategory = isTracerCategory;
 
 end
 

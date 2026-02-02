@@ -1,0 +1,36 @@
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>sortIonCategories - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>sortIonCategories</h1>
+<pre>\n  sortIonCategories sorts ion/isotope/atom category names.
+ 
+  catsOut = sortIonCategories(cats, sortBy)
+  [catsOut, data1, data2, ...] = sortIonCategories(cats, sortBy, data1, data2, ...)
+ 
+  Sorts category names by atomic number or mass-to-charge ratio.
+  Optionally reorders associated data arrays using the same sort order.
+ 
+  INPUT
+  cats:     cell array of category names (e.g., {'Fe', 'O', 'C', 'unranged'})
+  sortBy:   'atomic' | 'weight' | 'none' | 'name'
+            - 'atomic': sort by atomic number (primary) and isotope (secondary)
+            - 'weight': sort by mass-to-charge ratio
+            - 'name': alphabetical sort
+            - 'none': no sorting, return as-is
+  data1, data2, ...: optional data arrays to reorder (must be same length as cats)
+ 
+  OUTPUT
+  catsOut:  sorted category names
+  data1, data2, ...: reordered data arrays (if provided)
+ 
+  EXAMPLE
+  cats = {'O', 'Fe', 'C', 'unranged'};
+  counts = [100, 500, 50, 20];
+ 
+  % Sort by atomic number
+  [sortedCats, sortedCounts] = sortIonCategories(cats, 'atomic', counts);
+  % Result: {'C', 'O', 'Fe', 'unranged'}, [50, 100, 500, 20]
+ 
+  % Sort by mass
+  [sortedCats, sortedCounts] = sortIonCategories(cats, 'weight', counts);
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

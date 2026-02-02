@@ -1,0 +1,336 @@
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>posCalculateConcentrationDeconvolved - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>posCalculateConcentrationDeconvolved</h1>
+<pre>\n  posCalculateConcentrationDeconvolved estimates concentrations using overlap deconvolution.
+ 
+  conc = posCalculateConcentrationDeconvolved(pos, detEff, excludeList, volumeName)
+  [conc, info] = posCalculateConcentrationDeconvolved(pos, detEff, excludeList, volumeName, name, value)
+ 
+ --------------------------------------------------------------------------
+  DESCRIPTION
+ --------------------------------------------------------------------------
+  This function addresses a fundamental challenge in atom probe tomography:
+  overlapping mass-to-charge peaks from different ionic species. When multiple
+  ions have isotopes that fall within the same mass range, simple peak
+  integration cannot distinguish their contributions. This function uses
+  non-negative least squares (NNLS) fitting to deconvolve these overlapping
+  peaks based on known natural isotope abundance patterns.
+ 
+ --------------------------------------------------------------------------
+  MATHEMATICAL BACKGROUND
+ --------------------------------------------------------------------------
+  The deconvolution problem is formulated as a linear system:
+ 
+    c = F * a + residual
+ 
+  where:
+    c (m x 1) = observed counts in each of m mass ranges
+    F (m x n) = fraction matrix, where F(r,i) is the expected fraction of
+                ion i's signal that falls into range r, computed from natural
+                isotope abundances
+    a (n x 1) = unknown true counts for each of n ionic species
+ 
+  The solution is found by minimizing ||F*a - c||^2 subject to a &gt;= 0
+  (non-negativity constraint, since counts cannot be negative).
+ 
+  UNCERTAINTY QUANTIFICATION:
+  The variance of the NNLS solution is estimated from the residuals:
+    sigma^2 = sum(residuals.^2) / (m - k)
+  where k is the number of non-zero components in the solution.
+  The covariance matrix is approximated as:
+    Cov(a) = sigma^2 * pinv(F' * F)
+  This propagates through mode aggregation (ionic-&gt;isotopic-&gt;atomic) by
+  summing variances of independent variables.
+ 
+ --------------------------------------------------------------------------
+  ALGORITHM STEPS
+ --------------------------------------------------------------------------
+    1. BUILD FRACTION MATRIX: For each candidate ion, compute the isotope
+       distribution using natural abundances. Map each isotope's mass/charge
+       to the appropriate range, accumulating abundance fractions in F.
+ 
+    2. IDENTIFY CONNECTED COMPONENTS: Ranges and ions form a bipartite graph.
+       Connected components are groups of ranges/ions that share overlap.
+       Solving each component independently improves numerical stability.
+ 
+    3. SOLVE NNLS: For each component, solve min ||F_sub * a - c_sub||^2
+       subject to a &gt;= 0 using MATLAB's lsqnonneg. Optionally apply Tikhonov
+       regularization for ill-conditioned problems:
+         min ||F*a - c||^2 + lambda*||a||^2
+ 
+    4. UNCERTAINTY QUANTIFICATION: Estimate variance of the solution from
+       the residuals and the pseudo-inverse of F'*F (covariance matrix).
+ 
+    5. GOODNESS-OF-FIT: Compute chi-square statistics and R-squared to
+       assess how well the model fits the observed data.
+ 
+ --------------------------------------------------------------------------
+  WHEN TO USE THIS FUNCTION
+ --------------------------------------------------------------------------
+    - Fe-Ni systems at 28 Da (56Fe++ overlaps with 58Ni++)
+    - Ti-Cr systems at 24-26 Da
+    - Al-Fe systems (27Al+ overlaps with 54Fe++)
+    - Any system with known isotopic overlaps
+    - When accurate quantification is critical and overlaps are significant
+ 
+ --------------------------------------------------------------------------
+  WHEN NOT TO USE THIS FUNCTION
+ --------------------------------------------------------------------------
+    - Simple systems without overlaps (use posCalculateConcentrationSimple)
+    - Unknown or non-standard isotope ratios (e.g., enriched samples)
+    - Peaks with significant molecular ion contributions not in the ion table
+    - Very low count situations where Poisson noise dominates
+ 
+ --------------------------------------------------------------------------
+  INPUT
+ --------------------------------------------------------------------------
+  pos:          pos table with mc column (mass-to-charge values)
+                Must contain 'mc' column. Optionally contains 'ion', 'atom',
+                'isotope' columns for raw count comparison.
+ 
+  detEff:       detector efficiency as fraction (0-1) or percent (1-100)
+                Used for variance calculation. Typical values: 0.37-0.80
+                depending on the instrument and operating conditions.
+ 
+  excludeList:  cell array of species names to exclude from concentration
+                calculation (optional, default: {}). Excluded species are
+                still counted but set to 0 in concentration output.
+                Example: {'Ga', 'O'} to exclude gallium and oxygen.
+ 
+  volumeName:   string identifier for this volume/ROI (optional)
+                Used in the output table's 'volume' column.
+                Default: variable name of pos input.
+ 
+ --------------------------------------------------------------------------
+  NAME-VALUE OPTIONS
+ --------------------------------------------------------------------------
+    'massSpec'       Graphics handle to mass spectrum (area plot, axes, or
+                     figure). Used to extract range table and ion table if
+                     not provided separately. The mass spectrum should have
+                     ranges and ions defined using the standard toolbox
+                     annotation methods.
+ 
+    'rangeTable'     Table defining mass ranges with columns:
+                     - mcbegin: lower bound of range (Da)
+                     - mcend: upper bound of range (Da)
+                     - rangeName: identifier for the range
+                     - chargeState: charge state of ranged ions
+                     Overrides ranges extracted from massSpec if provided.
+ 
+    'ionTable'       Table of candidate ions with columns:
+                     - ionName: chemical formula (e.g., 'Fe', 'FeO')
+                     - chargeState: ionic charge state
+                     - ion: (optional) ion categorical for labeling
+                     Extracted from massSpec if not provided.
+ 
+    'isotopeTable'   Table of isotope data or path to .mat file containing
+                     isotope table. Must have columns for element, mass
+                     number, mass, and natural abundance.
+                     Default: 'isotopeTable_naturalAbundances.mat'
+ 
+    'mode'           Output aggregation mode:
+                     - 'ionic': report by ionic species (e.g., Fe++, FeO+)
+                     - 'isotopic': report by isotope (e.g., 56Fe, 58Fe)
+                     - 'atomic': report by element (e.g., Fe, Ni, O)
+                     Default: 'atomic' if pos has 'atom' column, else 'ionic'
+ 
+    'plotFits'       Logical flag to generate diagnostic plot (default: false)
+                     Creates stacked bar chart showing each ion's contribution
+                     to each range, overlaid with observed counts. If background
+                     correction is enabled, background is shown as the bottom layer.
+ 
+    'plotBackground' Logical flag to plot background on mass spectrum (default: false)
+                     Requires 'massSpec' handle to be provided.
+ 
+    'colorScheme'    Color scheme for plotting (optional). Can be:
+                     - A colorScheme struct from colorSchemeCreate()
+                     - If not provided, colors are extracted from massSpec
+                     - If neither available, default colors are used
+ 
+    'regularization' Tikhonov regularization parameter lambda (default: 0)
+                     When lambda &gt; 0, solves:
+                       min ||F*a - c||^2 + lambda*||a||^2
+                     Use small values (0.001-0.1) to stabilize ill-conditioned
+                     problems. Larger values bias toward smaller counts.
+                     A warning is issued when condition number &gt; 100.
+ 
+    'directCountIons' Cell array of ion names to count directly without
+                     deconvolution (default: {}). Use this for:
+                     - Ions with non-natural isotope ratios (e.g., deuterium
+                       tracers, isotopically enriched samples)
+                     - Ions with no overlaps where deconvolution adds noise
+                     Example: {'H', 'H2'} to directly count hydrogen species
+                     The ion names should match the ionName in ionTable.
+ 
+    'tracerPeaks'    Cell array of isotopic ion labels that are tracer peaks
+                     (default: {}). For each tracer peak:
+                     1. The peak is excluded from NNLS deconvolution
+                     2. The natural contribution is calculated from other
+                        isotopes of the same element using abundance ratios
+                     3. The tracer excess (measured - natural) is reported
+                        in a separate column with suffix " (tracer)"
+                     Example: {'2H+'} for deuterium tracer experiments
+                     This properly separates natural D from experimental D.
+ 
+    'tracerAbundance' Table defining tracer isotope abundances (default: [])
+                     Created using tracerAbundanceCreate(). For multi-source
+                     deconvolution, ions marked with isTracer=true in the
+                     ionTable will use these abundances instead of natural.
+                     The deconvolution separates "natural" and "tracer"
+                     contributions mathematically using NNLS.
+                     Example:
+                       tracerAbund = tracerAbundanceCreate('O', [16,18], [0.5,0.5]);
+                     Then ions with isTracer=true will use 50/50 16O/18O ratio
+                     instead of natural ~99.76/0.04/0.20 for 16O/17O/18O.
+ 
+    'backgroundMethod' Background correction method before deconvolution:
+                     - 'none': no background correction (default)
+                     - 'linearBetweenPeaks': linear interpolation between gaps
+                     - 'massSpecInvSqrt': fit B(m/c) = A/sqrt(m/c) to unranged regions
+                     Background is subtracted from range counts before NNLS.
+ 
+    'minPeakDistance' Minimum distance from peaks for background fitting [Da] (default: 0.3)
+ 
+    'fitLimits'      Nx2 matrix of [begin, end] m/c ranges for background fitting (optional)
+                     Example: [5, 20; 40, 60] fits only in 5-20 Da and 40-60 Da
+ 
+    'bin'            Histogram bin width for background estimation (default: 0.01)
+ 
+ --------------------------------------------------------------------------
+  OUTPUT
+ --------------------------------------------------------------------------
+  conc:  Table with concentration results. Columns are species names,
+         rows are different metrics:
+ 
+         Row 'countsRaw':     Raw counts from unique detector hits (via pos.ionIdx)
+                              These are direct range counts without deconvolution
+         Row 'count':         Deconvolved counts (after NNLS fitting)
+         Row 'concentration': Atomic/ionic fraction (excluding excludeList)
+         Row 'variance':      Sampling variance of concentration
+                              Formula: p*(1-p)/n * (1-detEff)
+                              where p=concentration, n=counts
+         Row 'countVariance': Variance of deconvolved counts from NNLS
+                              covariance matrix (propagated through mode
+                              aggregation). Represents deconvolution uncertainty.
+         Row 'standardError': Square root of countVariance. Use for error bars.
+         Row 'relativeError': standardError / count (coefficient of variation)
+                              Values &gt; 0.1 (10%) suggest high uncertainty.
+ 
+         Additional columns:
+         - volume: volume/ROI identifier
+         - distance: placeholder for proxigram distance (0 here)
+         - type: 'ionic', 'isotopic', or 'atomic'
+         - format: row identifier
+ 
+  info:  Struct with detailed diagnostic information:
+ 
+         .ionCounts       (n x 1) Deconvolved counts for each ion
+         .ionVariance     (n x 1) Variance of ionCounts from NNLS covariance
+         .rangeCounts     (m x 1) Observed counts in each range
+         .fitCounts       (m x 1) Fitted counts (F * ionCounts)
+         .residualCounts  (m x 1) Residuals (rangeCounts - fitCounts)
+         .fractionMatrix  (m x n) The F matrix used for deconvolution
+         .ionLabels       (n x 1) String labels for each ion
+         .components      Struct array of connected components:
+                          .ranges - indices of ranges in component
+                          .ions   - indices of ions in component
+         .conditionNumbers (k x 1) Condition number of F for each component
+                          Values &gt; 100 indicate potential numerical issues
+         .chiSquare       (k x 1) Pearson chi-square statistic per component
+                          Measures goodness-of-fit
+         .pValue          (k x 1) P-value for chi-square test
+                          Low values (&lt; 0.05) suggest poor fit
+         .rSquared        Scalar, overall R-squared (1 - SS_res/SS_tot)
+                          Values close to 1 indicate good fit
+         .isDirectCount   (n x 1) Logical array indicating which ions were
+                          counted directly (bypassed NNLS deconvolution)
+         .backgroundMethod String indicating background method used
+         .backgroundCounts (m x 1) Background counts subtracted per range
+         .detectionLimit  (n x 1) 3-sigma detection limit per ion
+         .isAboveDetectionLimit (n x 1) Logical, true if count &gt; detection limit
+         .rSquaredWeighted Weighted R-squared (by expected counts)
+         .summary         Struct with quick diagnostic statistics:
+                          - totalRangedCounts, totalDeconvolvedCounts
+                          - totalBackgroundCounts, countBalance
+                          - numIllConditioned, meanConditionNumber
+                          - numBelowDetectionLimit
+                          - overallChiSquare, overallDOF
+ 
+ --------------------------------------------------------------------------
+  EXAMPLES
+ --------------------------------------------------------------------------
+    % Basic usage with mass spectrum handle
+    [conc, info] = posCalculateConcentrationDeconvolved(pos, 0.57, {}, ...
+        'myROI', 'massSpec', massSpecHandle);
+ 
+    % With explicit tables and regularization for ill-conditioned system
+    [conc, info] = posCalculateConcentrationDeconvolved(pos, 0.57, {'Ga'}, ...
+        'ROI1', 'rangeTable', rangeTable, 'ionTable', ionTable, ...
+        'regularization', 0.01, 'plotFits', true);
+ 
+    % Extract concentration with error bars
+    concRow = conc(conc.format == 'concentration', :);
+    errRow = conc(conc.format == 'standardError', :);
+    elements = conc.Properties.VariableNames(5:end);
+    bar(1:numel(elements), table2array(concRow(1, 5:end)));
+    hold on;
+    errorbar(1:numel(elements), table2array(concRow(1, 5:end)), ...
+        table2array(errRow(1, 5:end)), 'k.');
+    set(gca, 'XTickLabel', elements);
+ 
+    % Examine fit quality
+    fprintf('R-squared: %.4f\n', info.rSquared);
+    if any(info.conditionNumbers &gt; 100)
+        warning('Some components are ill-conditioned - consider regularization');
+    end
+ 
+    % Check chi-square p-values for each component
+    for c = 1:numel(info.components)
+        fprintf('Component %d: cond=%.1f, chi2=%.2f, p=%.3f\n', ...
+            c, info.conditionNumbers(c), info.chiSquare(c), info.pValue(c));
+    end
+ 
+    % Plot residuals to check for systematic errors
+    figure; bar(info.residualCounts);
+    xlabel('Range index'); ylabel('Residual counts');
+    title('Positive residuals may indicate missing ions');
+ 
+    % Deuterium tracer example using tracerPeaks:
+    % This separates natural D (from H isotope ratios) from experimental D
+    [conc, info] = posCalculateConcentrationDeconvolved(pos, 0.57, {}, 'ROI', ...
+        'rangeTable', rangeTable, 'ionTable', ionTable, ...
+        'tracerPeaks', {'2H+'});
+ 
+    % The output table will have:
+    % - 'H' column: total H including natural D contribution
+    % - 'H (tracer)' column: excess D above natural abundance (experimental tracer)
+    %
+    % Check tracer info:
+    tracerIdx = find(info.isTracer);
+    for i = 1:numel(tracerIdx)
+        k = tracerIdx(i);
+        fprintf('%s: natural=%.0f, excess=%.0f\n', ...
+            info.ionLabels(k), info.tracerNaturalCounts(k), info.tracerExcessCounts(k));
+    end
+ 
+    % Alternative: use directCountIons if you want to bypass deconvolution entirely
+    % (e.g., when the reference isotope is also unreliable)
+    [conc, info] = posCalculateConcentrationDeconvolved(pos, 0.57, {}, 'ROI', ...
+        'rangeTable', rangeTable, 'ionTable', ionTable, ...
+        'directCountIons', {'1H+', '2H+'});
+ 
+ --------------------------------------------------------------------------
+  SEE ALSO
+ --------------------------------------------------------------------------
+    posCalculateConcentrationSimple, ionsCreateIsotopeList, lsqnonneg,
+    rangesExtractFromMassSpec, ionsExtractFromMassSpec
+ 
+ --------------------------------------------------------------------------
+  REFERENCES
+ --------------------------------------------------------------------------
+    - Lawson, C.L. and Hanson, R.J. "Solving Least Squares Problems."
+      SIAM, 1995. (NNLS algorithm)
+    - Hudson, D., et al. "Optimisation of mass ranging for atom probe
+      microanalysis." Ultramicroscopy (2011).
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n

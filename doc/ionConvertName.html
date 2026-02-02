@@ -1,28 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>ionConvertName - Atom Probe Toolbox</title>
-</head>
-<body>
-<h1>ionConvertName</h1>
-<pre>
-  ionConvertName converts an ion name to a table variable and reverse.
+<!DOCTYPE html>\n<html>\n<head>\n  <meta charset="utf-8">\n  <title>ionConvertName - Atom Probe Toolbox</title>
+</head>\n<body>\n<h1>ionConvertName</h1>
+<pre>\n  ionConvertName converts an ion name to a table variable and reverse.
   As input parameters, also categorical or an array of elements is
-  possible.
+  possible. Supports tracer ions marked with "tracer" suffix.
  
   Create ionTable
   ionTable = ionConvertName(ionName);
-  [ionTable chargeState] = ionConvertName(ionName);
+  [ionTable, chargeState] = ionConvertName(ionName);
+  [ionTable, chargeState, isTracer] = ionConvertName(ionName);
  
   Create ionName
   table:
     ionName = ionConvertName(ionTable,chargeState,format);
+    ionName = ionConvertName(ionTable,chargeState,format,isTracer);
     ionName = ionConvertName(ionTable,chargeState);
     ionName = ionConvertName(ionTable,NaN,format);
     ionName = ionConvertName(ionTable);
   categorical:
     ionName = ionConvertName(ionCategorical,chargeState,format);
+    ionName = ionConvertName(ionCategorical,chargeState,format,isTracer);
     ionName = ionConvertName(ionCategorical,chargeState);
     ionName = ionConvertName(ionCategorical)
   array:
@@ -30,10 +26,11 @@
  
   INPUT/OUTPUT
  
-  ionName: Name of the ion
+  ionName: Name of the ion (with optional " tracer" or "tracer" suffix)
     (isotope element count) x N chargestate        '56Fe2 16O3 ++'
     (element count) x N chargestate                'Fe2 O3 ++'
     (element count) x N                            'Fe2 O3'
+    with tracer suffix                             'H+tracer' or 'O+ tracer'
     individual nucleides will be sorted by atomic number descending
     e.g. 'O H2'
  
@@ -54,8 +51,9 @@
  
   isotopeTable:     table with all isotopes
  
-  (c) by Prof. Peter Felfer Group @FAU Erlangen-Nürnberg
-</pre>
-<p><a href="function_reference.html">Back to Function Reference</a></p>
-</body>
-</html>
+  isTracer:         logical flag indicating if this is a tracer ion
+                    When parsing: true if "tracer" suffix was present
+                    When generating: if true, appends " tracer" to name
+ 
+  (c) by Prof. Peter Felfer Group @FAU Erlangen-N�rnberg
+</pre>\n<p><a href="function_reference.html">Back to Function Reference</a></p>\n</body>\n</html>\n
