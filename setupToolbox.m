@@ -43,6 +43,7 @@ end
 subfolders = {
     '',                     % Root
     'analysis'
+    'atomProbeLab'
     'correlative'
     'crystallography'
     'utilities'

@@ -259,7 +259,7 @@ open('Workflow_Proxigram.mlx')
 | `massSpecPlot` | Plot mass spectrum |
 | `massSpectrumLegend` | Create publication-ready legend for mass spectrum |
 | `scatterPlotPosData` | 3D atom visualization |
-| `scatterPlotPosWidget` | Interactive scatter plot control panel |
+| `scatterPlotPosWidget` | Interactive scatter plot control panel with axis-based state persistence |
 | `colorSchemeCreate` | Create color scheme |
 | `colorSchemeIonAdd` | Add ion colors |
 

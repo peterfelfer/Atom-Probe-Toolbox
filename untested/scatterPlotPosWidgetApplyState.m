@@ -3,6 +3,11 @@ function controlFig = scatterPlotPosWidgetApplyState(controlFig, state)
 %
 % controlFig = scatterPlotPosWidgetApplyState(controlFig, state)
 %
+% Requires an active scatterPlotPosWidget control figure. To continue from
+% a saved visualization axis, reopen the widget on that axis first:
+%   [~, ~, controlFig] = scatterPlotPosWidget(pos, colorScheme, 'axes', ax);
+%   scatterPlotPosWidgetApplyState(controlFig, state);
+%
 % (c) by Prof. Peter Felfer Group @FAU Erlangen-Nurnberg
 
 if nargin < 2
@@ -59,6 +64,27 @@ end
 if isfield(state, 'rotationAngle')
     data.rotationAngle = double(state.rotationAngle);
 end
+if isfield(state, 'liveUpdate')
+    data.liveUpdate = logical(state.liveUpdate);
+end
+if isfield(state, 'showAxisLabels')
+    data.showAxisLabels = logical(state.showAxisLabels);
+end
+if isfield(state, 'showAxisTicks')
+    data.showAxisTicks = logical(state.showAxisTicks);
+end
+if isfield(state, 'showScaleCube')
+    data.showScaleCube = logical(state.showScaleCube);
+end
+if isfield(state, 'scaleCubeSize')
+    data.scaleCubeSize = double(state.scaleCubeSize);
+end
+if isfield(state, 'searchFilter')
+    data.searchFilter = string(state.searchFilter);
+end
+if isfield(state, 'sortMode')
+    data.sortMode = string(state.sortMode);
+end
 if isfield(state, 'boundingBox')
     data.bbox = state.boundingBox;
 end
@@ -113,6 +139,9 @@ if ~isempty(ctrls)
     if isfield(ctrls, 'seedEdit') && isgraphics(ctrls.seedEdit)
         ctrls.seedEdit.String = num2str(data.randomSeed, '%.0f');
     end
+    if isfield(ctrls, 'liveUpdateCb') && isgraphics(ctrls.liveUpdateCb)
+        ctrls.liveUpdateCb.Value = data.liveUpdate;
+    end
     if isfield(ctrls, 'rotationSlider') && isgraphics(ctrls.rotationSlider)
         ctrls.rotationSlider.Value = max(0, min(360, data.rotationAngle));
     end
@@ -125,6 +154,29 @@ if ~isempty(ctrls)
     if isfield(ctrls, 'bboxSpan') && isgraphics(ctrls.bboxSpan)
         ctrls.bboxSpan.Value = data.bboxUseSpan;
     end
+    if isfield(ctrls, 'showAxisLabels') && isgraphics(ctrls.showAxisLabels)
+        ctrls.showAxisLabels.Value = data.showAxisLabels;
+    end
+    if isfield(ctrls, 'showAxisTicks') && isgraphics(ctrls.showAxisTicks)
+        ctrls.showAxisTicks.Value = data.showAxisTicks;
+    end
+    if isfield(ctrls, 'showScaleCube') && isgraphics(ctrls.showScaleCube)
+        ctrls.showScaleCube.Value = data.showScaleCube;
+    end
+    if isfield(ctrls, 'scaleCubeSizeEdit') && isgraphics(ctrls.scaleCubeSizeEdit)
+        ctrls.scaleCubeSizeEdit.String = num2str(data.scaleCubeSize);
+    end
+    if isfield(ctrls, 'searchBox') && isgraphics(ctrls.searchBox)
+        ctrls.searchBox.String = char(data.searchFilter);
+    end
+    if isfield(ctrls, 'sortDropdown') && isgraphics(ctrls.sortDropdown)
+        sortModes = {'none', 'name_asc', 'name_desc', 'count_desc', 'count_asc', 'mass_desc', 'mass_asc'};
+        idxSort = find(strcmp(sortModes, char(data.sortMode)), 1, 'first');
+        if isempty(idxSort)
+            idxSort = 1;
+        end
+        ctrls.sortDropdown.Value = idxSort;
+    end
 end
 
 % Recompute grouping
@@ -132,6 +184,7 @@ end
     data.pos, data.mode, data.splitIsotope, data.splitCharge, data.showUnranged);
 colors = fn.mapColors(baseNames, data.colorScheme);
 data.markerSizes = fn.initMarkerSizes(numel(speciesNames), data.markerSizeGlobal);
+data.markerSizeLinked = true(numel(speciesNames), 1);
 if isfield(data, 'coordsOriginal')
     data.coords = fn.rotateCoordsZ(data.coordsOriginal, data.rotationAngle);
 end
@@ -158,6 +211,8 @@ data.colors = colors;
 % Apply per-species visibility/fractions by name
 data.visible = true(numel(speciesNames), 1);
 data.sampleFractions = fn.initSampleFractions(speciesCounts, data.sampleValue);
+savedMarkerSize = [];
+savedMarkerLinked = [];
 
 if isfield(state, 'species') && isfield(state.species, 'name')
     savedNames = string(state.species.name);
@@ -167,6 +222,16 @@ if isfield(state, 'species') && isfield(state.species, 'name')
         savedMarkerSize = double(state.species.markerSize);
     else
         savedMarkerSize = [];
+    end
+    if isfield(state.species, 'markerSizeLinked')
+        savedMarkerLinked = logical(state.species.markerSizeLinked);
+    else
+        savedMarkerLinked = [];
+    end
+    if isfield(state.species, 'color')
+        savedColors = double(state.species.color);
+    else
+        savedColors = [];
     end
     for i = 1:numel(speciesNames)
         idx = find(savedNames == speciesNames(i), 1, 'first');
@@ -180,7 +245,36 @@ if isfield(state, 'species') && isfield(state.species, 'name')
             if idx <= numel(savedMarkerSize) && ~isnan(savedMarkerSize(idx))
                 data.markerSizes(i) = savedMarkerSize(idx);
             end
+            if idx <= numel(savedMarkerLinked)
+                data.markerSizeLinked(i) = savedMarkerLinked(idx);
+            end
+            if ~isempty(savedColors) && size(savedColors, 1) >= idx && size(savedColors, 2) == 3
+                data.colors(i, :) = savedColors(idx, :);
+            end
         end
+    end
+end
+
+% Backward compatibility: infer marker-size links from saved per-species sizes
+% when an older state did not store explicit link flags.
+if isempty(savedMarkerLinked) && ~isempty(savedMarkerSize)
+    tol = max(1e-9, 1e-6 * max(1, data.markerSizeGlobal));
+    data.markerSizeLinked = abs(data.markerSizes(:) - data.markerSizeGlobal) <= tol;
+end
+
+% Linked species always follow the current global marker size.
+data.markerSizeLinked = logical(data.markerSizeLinked(:));
+linkedIdx = data.markerSizeLinked;
+if any(linkedIdx)
+    data.markerSizes(linkedIdx) = data.markerSizeGlobal;
+end
+
+for i = 1:numel(data.scatterHandles)
+    if isgraphics(data.scatterHandles(i))
+        set(data.scatterHandles(i), ...
+            'MarkerFaceColor', data.colors(i, :), ...
+            'MarkerEdgeColor', data.colors(i, :), ...
+            'SizeData', data.markerSizes(i));
     end
 end
 
@@ -208,7 +302,82 @@ if isfield(state, 'camera') && isgraphics(data.ax)
     if isfield(cam, 'CameraPosition'), data.ax.CameraPosition = cam.CameraPosition; end
     if isfield(cam, 'CameraTarget'), data.ax.CameraTarget = cam.CameraTarget; end
     if isfield(cam, 'CameraUpVector'), data.ax.CameraUpVector = cam.CameraUpVector; end
+    if isfield(cam, 'CameraViewAngle'), data.ax.CameraViewAngle = cam.CameraViewAngle; end
     if isfield(cam, 'ViewAngle'), data.ax.ViewAngle = cam.ViewAngle; end
     if isfield(cam, 'Projection'), data.ax.Projection = cam.Projection; end
+    if isfield(cam, 'View') && isnumeric(cam.View) && numel(cam.View) == 2
+        view(data.ax, cam.View(1), cam.View(2));
+    end
+end
+
+% Apply axis labels/ticks via callbacks where available.
+if ~isempty(ctrls)
+    if isfield(ctrls, 'showAxisLabels') && isgraphics(ctrls.showAxisLabels)
+        try
+            feval(ctrls.showAxisLabels.Callback, ctrls.showAxisLabels, []);
+        catch
+        end
+    end
+    if isfield(ctrls, 'showAxisTicks') && isgraphics(ctrls.showAxisTicks)
+        try
+            feval(ctrls.showAxisTicks.Callback, ctrls.showAxisTicks, []);
+        catch
+        end
+    end
+    if isfield(ctrls, 'scaleCubeSizeEdit') && isgraphics(ctrls.scaleCubeSizeEdit)
+        try
+            feval(ctrls.scaleCubeSizeEdit.Callback, ctrls.scaleCubeSizeEdit, []);
+        catch
+        end
+    end
+    if isfield(ctrls, 'showScaleCube') && isgraphics(ctrls.showScaleCube)
+        try
+            feval(ctrls.showScaleCube.Callback, ctrls.showScaleCube, []);
+        catch
+        end
+    end
+    if isfield(ctrls, 'liveUpdateCb') && isgraphics(ctrls.liveUpdateCb)
+        try
+            feval(ctrls.liveUpdateCb.Callback, ctrls.liveUpdateCb, []);
+        catch
+        end
+    end
+    if isfield(ctrls, 'sortDropdown') && isgraphics(ctrls.sortDropdown)
+        try
+            feval(ctrls.sortDropdown.Callback, ctrls.sortDropdown, []);
+        catch
+        end
+    end
+    if isfield(ctrls, 'searchBox') && isgraphics(ctrls.searchBox)
+        try
+            feval(ctrls.searchBox.Callback, ctrls.searchBox, []);
+        catch
+        end
+    end
+end
+
+% Persist applied state in the associated axes.
+if isgraphics(data.ax, 'axes')
+    try
+        currentState = scatterPlotPosWidgetGetState(controlFig);
+        writeStateToAxis(data.ax, currentState);
+    catch
+    end
+end
+end
+
+function writeStateToAxis(ax, state)
+if ~isgraphics(ax, 'axes')
+    return;
+end
+ud = ax.UserData;
+if isempty(ud) || isstruct(ud)
+    if isempty(ud)
+        ud = struct();
+    end
+    ud.scatterPlotPosWidgetState = state;
+    ax.UserData = ud;
+else
+    setappdata(ax, 'scatterPlotPosWidgetState', state);
 end
 end

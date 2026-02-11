@@ -7,6 +7,8 @@ function [scatterHandles, ax, controlFig, info] = scatterPlotPosWidget(pos, colo
 %
 % Creates a 3D scatter plot of APT data and a separate control window that
 % toggles species visibility and adjusts the displayed sampling fraction.
+% The widget persists visualization state on the target axes so reopening
+% the widget on the same axes resumes the previous configuration.
 %
 % INPUT:
 %   pos         table with x, y, z and a species column (ion/atom/isotope)
@@ -15,7 +17,8 @@ function [scatterHandles, ax, controlFig, info] = scatterPlotPosWidget(pos, colo
 % OPTIONS:
 %   'axes'         - Target axes for scatter plot (default: new figure)
 %   'groupBy'      - 'ion' | 'atom' | 'auto' (default: 'auto')
-%   'sample'       - Initial sample fraction (0..1) or count (>1) (default: 0.1)
+%   'sample'       - Initial sample fraction (0..1) or count (>1)
+%                    (default: 1 up to 1e6 ions, else 1e6/total ions)
 %   'markerSize'   - Marker size for scatter (default: 15)
 %   'markerSizeGlobal' - Global marker size (default: markerSize)
 %   'randomSeed'   - Random seed for reproducible sampling (default: 1)
@@ -27,6 +30,29 @@ function [scatterHandles, ax, controlFig, info] = scatterPlotPosWidget(pos, colo
 %   'clipToBoundingBox' - Clip points to bounding box (default: true)
 %   'bboxUseSpan'  - Use center/span edits for bounding box (default: false)
 %   'bboxPadding'  - Fractional padding for bounding box (default: 0)
+%   'restoreStateFromAxis' - Restore saved state from ax.UserData (default: true)
+%   'persistStateToAxis' - Persist state to ax.UserData during interaction (default: true)
+%
+% MARKER-SIZE LINKING:
+%   Editing a species marker size in the table unlinks that species from
+%   the global marker size slider. Use the table "Link" column to relink
+%   species back to the global value.
+%
+% STATE PERSISTENCE:
+%   Reopen on existing axes to continue a saved visualization:
+%     [~, ax] = scatterPlotPosData(pos, colorScheme);
+%     scatterPlotPosWidget(pos, colorScheme, 'axes', ax);
+%
+%   Save/restore explicit state structs:
+%     state = scatterPlotPosWidgetGetState(controlFig);
+%     save('state.mat', 'state');
+%     load('state.mat', 'state');
+%     scatterPlotPosWidgetApplyState(controlFig, state);
+%
+%   Reattach widget to a previously saved/opened visualization axes:
+%     fig = openfig('savedScatter.fig');
+%     ax = findobj(fig, 'Type', 'axes');
+%     scatterPlotPosWidget(pos, colorScheme, 'axes', ax(1));
 %
 % KEYBOARD SHORTCUTS (when control window is focused):
 %   Space  - Toggle visibility of selected species
@@ -64,6 +90,8 @@ arguments
     options.bboxPadding (1,1) double {mustBeNonnegative} = 0
     options.linkToBase (1,1) logical = false
     options.linkedVar (1,1) string = ""
+    options.restoreStateFromAxis (1,1) logical = true
+    options.persistStateToAxis (1,1) logical = true
 end
 
 baseVarName = inputname(1);
@@ -85,9 +113,11 @@ else
     ax = options.axes;
     fig = ancestor(ax, 'figure');
 end
+cleanupWidgetScatterHandles(ax);
 
 markerSizeGlobal = resolveMarkerSizeGlobal(options.markerSizeGlobal, options.markerSize);
 markerSizes = initMarkerSizes(numel(speciesNames), markerSizeGlobal);
+markerSizeLinked = true(numel(speciesNames), 1);
 
 axes(ax);
 holdState = ishold(ax);
@@ -122,6 +152,7 @@ data.controlFig = controlFig;
 data.markerSize = markerSizeGlobal;
 data.markerSizeGlobal = markerSizeGlobal;
 data.markerSizes = markerSizes;
+data.markerSizeLinked = markerSizeLinked;
 data.randomSeed = options.randomSeed;
 data.rotationAngle = 0;
 data.showUnranged = options.showUnranged;
@@ -143,6 +174,9 @@ data.linkKey = "";
 data.linkSignature = [];
 data.linkUpdating = false;
 data.linkRefreshTimer = [];
+data.restoreStateFromAxis = options.restoreStateFromAxis;
+data.persistStateToAxis = options.persistStateToAxis;
+data.suspendStatePersistence = false;
 
 % Performance: deferred updates and sampling cache
 data.liveUpdate = true;
@@ -177,10 +211,15 @@ data.scaleCubeSize = 10;  % nm default
 data.scaleCubeFig = [];
 data.scaleCubeAx = [];
 data.scaleCubePatches = [];
+data.scaleCubeLabel = [];
 data.viewSyncListener = [];
 data.xlimSyncListener = [];
 data.ylimSyncListener = [];
 data.zlimSyncListener = [];
+data.camViewAngleSyncListener = [];
+data.projectionSyncListener = [];
+data.positionSyncListener = [];
+data.dataAspectSyncListener = [];
 
 data.fn = struct( ...
     'computeGroups', @computeGroups, ...
@@ -199,8 +238,13 @@ tableData = buildTableData(data);
 
 setupControls(controlFig, tableData, data);
 configureLinkData(controlFig, baseVarName);
-updateScatter(controlFig);
-applyBoundingBox(ax, data.bbox, data.fixBoundingBox);
+
+didRestore = tryRestoreStateFromAxis(controlFig);
+if ~didRestore
+    updateScatter(controlFig);
+    applyBoundingBox(ax, data.bbox, data.fixBoundingBox);
+end
+persistStateToAxis(controlFig);
 
 % Setup cleanup listeners for graceful handle deletion
 setupCleanupListeners(controlFig, ax, fig);
@@ -270,6 +314,7 @@ end
 function cleanupAll(controlFig)
     % Clean up scale cube (axes and listeners) first
     if isscalar(controlFig) && isgraphics(controlFig)
+        persistStateToAxis(controlFig);
         data = getappdata(controlFig, 'scatterPlotPosWidget');
         if ~isempty(data)
             data = stopLinkData(data);
@@ -281,7 +326,8 @@ function cleanupAll(controlFig)
     end
 end
 
-function cleanupOnControlClose(controlFig, ax)
+function cleanupOnControlClose(controlFig, ~)
+    persistStateToAxis(controlFig);
     % Clean up scale cube (axes and listeners)
     if isscalar(controlFig) && isgraphics(controlFig)
         data = getappdata(controlFig, 'scatterPlotPosWidget');
@@ -291,8 +337,7 @@ function cleanupOnControlClose(controlFig, ax)
             setappdata(controlFig, 'scatterPlotPosWidget', data);
         end
     end
-    % Clean up scatter handles
-    cleanupScatterHandles(ax);
+    % Keep scatter handles in axes to allow reopening widget on same plot.
 end
 
 function safeClose(fig)
@@ -315,6 +360,16 @@ function cleanupScatterHandles(ax)
                 delete(children(i));
             end
         end
+    end
+end
+
+function cleanupWidgetScatterHandles(ax)
+    if ~isgraphics(ax, 'axes')
+        return;
+    end
+    widgetScatters = findobj(ax, 'Type', 'Scatter', 'Tag', 'scatterPlotPosWidgetScatter');
+    if ~isempty(widgetScatters)
+        delete(widgetScatters(ishghandle(widgetScatters)));
     end
 end
 
@@ -494,6 +549,192 @@ function sig = computePosSignature(pos)
         end
     end
     sig.sample = acc;
+end
+
+function didRestore = tryRestoreStateFromAxis(controlFig)
+    didRestore = false;
+    if ~isgraphics(controlFig)
+        return;
+    end
+    data = getappdata(controlFig, 'scatterPlotPosWidget');
+    if isempty(data) || ~isfield(data, 'restoreStateFromAxis') || ~data.restoreStateFromAxis
+        return;
+    end
+    if ~isfield(data, 'ax') || ~isgraphics(data.ax, 'axes')
+        return;
+    end
+
+    state = readStateFromAxis(data.ax);
+    if isempty(state)
+        return;
+    end
+
+    if isfield(state, 'posSignature')
+        sigCurrent = computePosSignature(data.pos);
+        if ~isequaln(state.posSignature, sigCurrent)
+            return;
+        end
+    end
+
+    try
+        scatterPlotPosWidgetApplyState(controlFig, state);
+        didRestore = true;
+    catch ME
+        warning('scatterPlotPosWidget:restoreStateFailed', ...
+            'Could not restore saved axis state: %s', ME.message);
+        didRestore = false;
+    end
+end
+
+function persistStateToAxis(controlFig)
+    if ~isgraphics(controlFig)
+        return;
+    end
+    data = getappdata(controlFig, 'scatterPlotPosWidget');
+    if isempty(data)
+        return;
+    end
+    if ~isfield(data, 'persistStateToAxis') || ~data.persistStateToAxis
+        return;
+    end
+    if isfield(data, 'suspendStatePersistence') && data.suspendStatePersistence
+        return;
+    end
+    if ~isfield(data, 'ax') || ~isgraphics(data.ax, 'axes')
+        return;
+    end
+
+    try
+        state = buildWidgetState(data);
+        writeStateToAxis(data.ax, state);
+    catch
+    end
+end
+
+function state = buildWidgetState(data)
+    state = struct();
+    state.version = 3;
+    state.mode = data.mode;
+    state.splitIsotope = data.splitIsotope;
+    state.splitCharge = data.splitCharge;
+    state.showUnranged = data.showUnranged;
+    state.sampleValue = data.sampleValue;
+    state.markerSize = data.markerSize;
+    if isfield(data, 'markerSizeGlobal')
+        state.markerSizeGlobal = data.markerSizeGlobal;
+    end
+    if isfield(data, 'randomSeed')
+        state.randomSeed = data.randomSeed;
+    end
+    if isfield(data, 'rotationAngle')
+        state.rotationAngle = data.rotationAngle;
+    end
+    if isfield(data, 'bbox')
+        state.boundingBox = data.bbox;
+        state.fixBoundingBox = data.fixBoundingBox;
+        state.clipToBoundingBox = data.clipToBoundingBox;
+        state.bboxUseSpan = data.bboxUseSpan;
+    end
+
+    if isfield(data, 'liveUpdate')
+        state.liveUpdate = data.liveUpdate;
+    end
+    if isfield(data, 'showAxisLabels')
+        state.showAxisLabels = data.showAxisLabels;
+    end
+    if isfield(data, 'showAxisTicks')
+        state.showAxisTicks = data.showAxisTicks;
+    end
+    if isfield(data, 'showScaleCube')
+        state.showScaleCube = data.showScaleCube;
+    end
+    if isfield(data, 'scaleCubeSize')
+        state.scaleCubeSize = data.scaleCubeSize;
+    end
+    if isfield(data, 'searchFilter')
+        state.searchFilter = data.searchFilter;
+    end
+    if isfield(data, 'sortMode')
+        state.sortMode = data.sortMode;
+    end
+
+    species = struct();
+    species.name = string(data.speciesNames);
+    species.visible = logical(data.visible);
+    species.fraction = data.sampleFractions;
+    if isfield(data, 'markerSizes')
+        species.markerSize = data.markerSizes;
+    end
+    if isfield(data, 'markerSizeLinked')
+        species.markerSizeLinked = logical(data.markerSizeLinked);
+    end
+    if isfield(data, 'colors')
+        species.color = data.colors;
+    end
+    state.species = species;
+
+    state.posSignature = computePosSignature(data.pos);
+
+    if isgraphics(data.ax)
+        cam = struct();
+        cam.CameraPosition = data.ax.CameraPosition;
+        cam.CameraTarget = data.ax.CameraTarget;
+        cam.CameraUpVector = data.ax.CameraUpVector;
+        cam.CameraViewAngle = data.ax.CameraViewAngle;
+        cam.Projection = data.ax.Projection;
+        [az, el] = view(data.ax);
+        cam.View = [az, el];
+        state.camera = cam;
+    end
+end
+
+function state = readStateFromAxis(ax)
+    state = [];
+    if ~isgraphics(ax, 'axes')
+        return;
+    end
+
+    ud = ax.UserData;
+    if isstruct(ud) && isfield(ud, 'scatterPlotPosWidgetState') && isstruct(ud.scatterPlotPosWidgetState)
+        state = ud.scatterPlotPosWidgetState;
+        return;
+    end
+
+    if isappdata(ax, 'scatterPlotPosWidgetState')
+        candidate = getappdata(ax, 'scatterPlotPosWidgetState');
+        if isstruct(candidate)
+            state = candidate;
+        end
+    end
+end
+
+function writeStateToAxis(ax, state)
+    if ~isgraphics(ax, 'axes')
+        return;
+    end
+
+    ud = ax.UserData;
+    if isempty(ud) || isstruct(ud)
+        if isempty(ud)
+            ud = struct();
+        end
+        ud.scatterPlotPosWidgetState = state;
+        ax.UserData = ud;
+    else
+        setappdata(ax, 'scatterPlotPosWidgetState', state);
+    end
+end
+
+function restoreStatePersistence(controlFig, originalSuspend)
+    if ~isgraphics(controlFig)
+        return;
+    end
+    data = getappdata(controlFig, 'scatterPlotPosWidget');
+    if isempty(data)
+        return;
+    end
+    data.suspendStatePersistence = originalSuspend;
+    setappdata(controlFig, 'scatterPlotPosWidget', data);
 end
 
 function refreshFromPos(controlFig, newPos)
@@ -739,38 +980,63 @@ function controlFig = createControlWindow(titleText)
         'NumberTitle', 'off', ...
         'MenuBar', 'none', ...
         'ToolBar', 'none', ...
-        'Color', [0.96 0.96 0.96], ...
+        'Color', [0.94 0.95 0.96], ...
         'Units', 'pixels', ...
-        'Position', [100 100 440 820], ...
+        'Position', [100 80 520 900], ...
+        'Resize', 'on', ...
+        'DefaultUicontrolFontName', 'Helvetica', ...
+        'DefaultUicontrolFontSize', 10, ...
         'KeyPressFcn', @onKeyPress);
 end
 
 function setupControls(controlFig, tableData, data)
     setappdata(controlFig, 'scatterPlotPosWidget', data);
 
-    % Standard button height for consistency
-    btnH = 0.028;
-    lblH = 0.025;
+    % UI style tokens for cleaner layout and visual consistency
+    figBg = get(controlFig, 'Color');
+    textBg = figBg;
+    panelBg = [0.98 0.985 0.99];
+    btnBg = [1 1 1];
+    accentColor = [0.16 0.33 0.53];
+
+    % Standardized geometry
+    btnH = 0.030;
+    lblH = 0.024;
     gap = 0.005;
-    margin = 0.04;
+    margin = 0.035;
+
+    % Title stripe for orientation
+    uicontrol(controlFig, 'Style', 'text', ...
+        'String', 'Grouping and Sampling Controls', ...
+        'Units', 'normalized', ...
+        'Position', [margin 0.975 0.92 0.02], ...
+        'HorizontalAlignment', 'left', ...
+        'FontWeight', 'bold', ...
+        'ForegroundColor', accentColor, ...
+        'BackgroundColor', textBg);
 
     % Mode selection panel
     modeGroup = uibuttongroup(controlFig, ...
         'Units', 'normalized', ...
-        'Position', [margin 0.935 0.92 0.05], ...
+        'Position', [margin 0.925 0.92 0.052], ...
         'Title', 'Display Mode', ...
+        'BackgroundColor', panelBg, ...
+        'ForegroundColor', accentColor, ...
+        'FontWeight', 'bold', ...
         'SelectionChangedFcn', @(src, evd) onGroupingChanged(controlFig, evd, src));
 
     rbIonic = uicontrol(modeGroup, 'Style', 'radiobutton', ...
         'String', 'Ionic', ...
         'Units', 'normalized', ...
         'Position', [0.02 0.15 0.35 0.7], ...
+        'BackgroundColor', panelBg, ...
         'TooltipString', 'Group atoms by ionic species');
 
     rbAtomic = uicontrol(modeGroup, 'Style', 'radiobutton', ...
         'String', 'Atomic', ...
         'Units', 'normalized', ...
         'Position', [0.38 0.15 0.35 0.7], ...
+        'BackgroundColor', panelBg, ...
         'TooltipString', 'Group atoms by element');
 
     if data.mode == "atomic"
@@ -786,6 +1052,7 @@ function setupControls(controlFig, tableData, data)
         'Units', 'normalized', ...
         'Position', [margin y 0.28 lblH], ...
         'Value', data.splitIsotope, ...
+        'BackgroundColor', textBg, ...
         'Enable', boolToOnOff(data.hasIsotope), ...
         'TooltipString', 'Separate species by isotope mass number', ...
         'Callback', @(~, ~) onGroupingChanged(controlFig));
@@ -795,6 +1062,7 @@ function setupControls(controlFig, tableData, data)
         'Units', 'normalized', ...
         'Position', [0.33 y 0.28 lblH], ...
         'Value', data.splitCharge, ...
+        'BackgroundColor', textBg, ...
         'Enable', boolToOnOff(data.hasCharge), ...
         'TooltipString', 'Separate species by charge state', ...
         'Callback', @(~, ~) onGroupingChanged(controlFig));
@@ -806,6 +1074,7 @@ function setupControls(controlFig, tableData, data)
         'Units', 'normalized', ...
         'Position', [margin y 0.22 lblH], ...
         'Value', data.liveUpdate, ...
+        'BackgroundColor', textBg, ...
         'TooltipString', 'Update scatter plot immediately on changes. Uncheck to defer updates.', ...
         'Callback', @(src, ~) onLiveUpdateToggle(src, controlFig));
 
@@ -814,6 +1083,7 @@ function setupControls(controlFig, tableData, data)
         'Units', 'normalized', ...
         'Position', [0.27 y 0.18 btnH], ...
         'Enable', 'off', ...
+        'BackgroundColor', btnBg, ...
         'TooltipString', 'Apply pending changes to the scatter plot', ...
         'Callback', @(~, ~) onApplyChanges(controlFig));
 
@@ -821,6 +1091,7 @@ function setupControls(controlFig, tableData, data)
         'String', 'Undo', ...
         'Units', 'normalized', ...
         'Position', [0.46 y 0.14 btnH], ...
+        'BackgroundColor', btnBg, ...
         'TooltipString', 'Undo last change (Ctrl+Z)', ...
         'Callback', @(~, ~) onUndo(controlFig));
 
@@ -828,6 +1099,7 @@ function setupControls(controlFig, tableData, data)
         'String', 'Redo', ...
         'Units', 'normalized', ...
         'Position', [0.61 y 0.14 btnH], ...
+        'BackgroundColor', btnBg, ...
         'TooltipString', 'Redo last undone change (Ctrl+Y)', ...
         'Callback', @(~, ~) onRedo(controlFig));
 
@@ -835,19 +1107,22 @@ function setupControls(controlFig, tableData, data)
         'String', '?', ...
         'Units', 'normalized', ...
         'Position', [0.76 y 0.08 btnH], ...
+        'BackgroundColor', btnBg, ...
         'TooltipString', 'Show keyboard shortcuts and help', ...
         'Callback', @(~, ~) showKeyboardHelp());
 
     % Sample fraction
-    y = y - lblH - gap*2;
+    y = y - lblH - gap;
     uicontrol(controlFig, 'Style', 'text', ...
         'String', 'Sample fraction:', ...
         'Units', 'normalized', ...
         'Position', [margin y 0.25 lblH], ...
         'HorizontalAlignment', 'left', ...
-        'BackgroundColor', [0.96 0.96 0.96]);
+        'BackgroundColor', textBg, ...
+        'ForegroundColor', accentColor, ...
+        'FontWeight', 'bold');
 
-    y = y - btnH - gap;
+    y = y - btnH - gap*0.7;
     slider = uicontrol(controlFig, 'Style', 'slider', ...
         'Min', 0, 'Max', 1, 'Value', min(data.sampleValue, 1), ...
         'Units', 'normalized', ...
@@ -863,15 +1138,17 @@ function setupControls(controlFig, tableData, data)
         'Callback', @(src, ~) onEdit(src, controlFig));
 
     % Marker size
-    y = y - lblH - gap;
+    y = y - lblH - gap*0.8;
     uicontrol(controlFig, 'Style', 'text', ...
         'String', 'Marker size:', ...
         'Units', 'normalized', ...
         'Position', [margin y 0.25 lblH], ...
         'HorizontalAlignment', 'left', ...
-        'BackgroundColor', [0.96 0.96 0.96]);
+        'BackgroundColor', textBg, ...
+        'ForegroundColor', accentColor, ...
+        'FontWeight', 'bold');
 
-    y = y - btnH - gap;
+    y = y - btnH - gap*0.7;
     markerMax = max(50, data.markerSizeGlobal);
     markerSlider = uicontrol(controlFig, 'Style', 'slider', ...
         'Min', 1, 'Max', markerMax, 'Value', min(data.markerSizeGlobal, markerMax), ...
@@ -888,22 +1165,22 @@ function setupControls(controlFig, tableData, data)
         'Callback', @(src, ~) onMarkerSizeEdit(src, controlFig));
 
     % Random seed and Rotation row
-    y = y - lblH - gap;
+    y = y - lblH - gap*0.8;
     uicontrol(controlFig, 'Style', 'text', ...
         'String', 'Random seed:', ...
         'Units', 'normalized', ...
         'Position', [margin y 0.22 lblH], ...
         'HorizontalAlignment', 'left', ...
-        'BackgroundColor', [0.96 0.96 0.96]);
+        'BackgroundColor', textBg);
 
     uicontrol(controlFig, 'Style', 'text', ...
         'String', 'Rotation (deg):', ...
         'Units', 'normalized', ...
         'Position', [0.50 y 0.25 lblH], ...
         'HorizontalAlignment', 'left', ...
-        'BackgroundColor', [0.96 0.96 0.96]);
+        'BackgroundColor', textBg);
 
-    y = y - btnH - gap;
+    y = y - btnH - gap*0.7;
     seedEdit = uicontrol(controlFig, 'Style', 'edit', ...
         'String', num2str(data.randomSeed, '%.0f'), ...
         'Units', 'normalized', ...
@@ -925,47 +1202,20 @@ function setupControls(controlFig, tableData, data)
         'TooltipString', 'Enter exact rotation angle in degrees', ...
         'Callback', @(src, ~) onRotationEdit(src, controlFig));
 
-    % Show/Hide buttons
-    y = y - btnH - gap*2;
-    showAllBtn = uicontrol(controlFig, 'Style', 'pushbutton', ...
-        'String', 'Show All', ...
-        'Units', 'normalized', ...
-        'Position', [margin y 0.22 btnH], ...
-        'TooltipString', 'Show all species (keyboard: A)', ...
-        'Callback', @(~, ~) onShowAll(controlFig));
-
-    hideAllBtn = uicontrol(controlFig, 'Style', 'pushbutton', ...
-        'String', 'Hide All', ...
-        'Units', 'normalized', ...
-        'Position', [margin + 0.23 y 0.22 btnH], ...
-        'TooltipString', 'Hide all species (keyboard: H)', ...
-        'Callback', @(~, ~) onHideAll(controlFig));
-
-    resetViewBtn = uicontrol(controlFig, 'Style', 'pushbutton', ...
-        'String', 'Reset View', ...
-        'Units', 'normalized', ...
-        'Position', [margin + 0.46 y 0.22 btnH], ...
-        'TooltipString', 'Reset 3D view to default (keyboard: R)', ...
-        'Callback', @(~, ~) onResetView(controlFig));
-
-    colorBtn = uicontrol(controlFig, 'Style', 'pushbutton', ...
-        'String', 'Color...', ...
-        'Units', 'normalized', ...
-        'Position', [margin + 0.69 y 0.22 btnH], ...
-        'TooltipString', 'Change color of selected species', ...
-        'Callback', @(~, ~) onChangeColor(controlFig));
-
     % Bounding box panel
     y = y - 0.12 - gap;
     bboxPanel = uipanel(controlFig, 'Title', 'Bounding Box', ...
         'Units', 'normalized', ...
         'Position', [margin y 0.92 0.11], ...
-        'BackgroundColor', [0.96 0.96 0.96]);
+        'BackgroundColor', panelBg, ...
+        'ForegroundColor', accentColor, ...
+        'FontWeight', 'bold');
 
     bboxFix = uicontrol(bboxPanel, 'Style', 'checkbox', ...
         'String', 'Fix', ...
         'Units', 'normalized', ...
         'Position', [0.02 0.70 0.14 0.25], ...
+        'BackgroundColor', panelBg, ...
         'TooltipString', 'Lock axis limits to bounding box', ...
         'Value', data.fixBoundingBox, ...
         'Callback', @(~, ~) onBoundingBoxChanged(controlFig, 'toggle'));
@@ -974,6 +1224,7 @@ function setupControls(controlFig, tableData, data)
         'String', 'Clip', ...
         'Units', 'normalized', ...
         'Position', [0.16 0.70 0.14 0.25], ...
+        'BackgroundColor', panelBg, ...
         'TooltipString', 'Only show points inside bounding box', ...
         'Value', data.clipToBoundingBox, ...
         'Callback', @(~, ~) onBoundingBoxChanged(controlFig, 'clip'));
@@ -982,6 +1233,7 @@ function setupControls(controlFig, tableData, data)
         'String', 'Span', ...
         'Units', 'normalized', ...
         'Position', [0.30 0.70 0.16 0.25], ...
+        'BackgroundColor', panelBg, ...
         'TooltipString', 'Edit as center/span instead of min/max', ...
         'Value', data.bboxUseSpan, ...
         'Callback', @(~, ~) onBoundingBoxChanged(controlFig, 'span'));
@@ -990,6 +1242,7 @@ function setupControls(controlFig, tableData, data)
         'String', 'Use Current', ...
         'Units', 'normalized', ...
         'Position', [0.47 0.70 0.25 0.25], ...
+        'BackgroundColor', btnBg, ...
         'TooltipString', 'Set bounding box from current view limits', ...
         'Callback', @(~, ~) onBoundingBoxChanged(controlFig, 'current'));
 
@@ -997,6 +1250,7 @@ function setupControls(controlFig, tableData, data)
         'String', 'Reset', ...
         'Units', 'normalized', ...
         'Position', [0.73 0.70 0.25 0.25], ...
+        'BackgroundColor', btnBg, ...
         'TooltipString', 'Reset bounding box to original data extent', ...
         'Callback', @(~, ~) onBoundingBoxChanged(controlFig, 'reset'));
 
@@ -1013,12 +1267,15 @@ function setupControls(controlFig, tableData, data)
     displayPanel = uipanel(controlFig, 'Title', 'Display Options', ...
         'Units', 'normalized', ...
         'Position', [margin y 0.92 0.05], ...
-        'BackgroundColor', [0.96 0.96 0.96]);
+        'BackgroundColor', panelBg, ...
+        'ForegroundColor', accentColor, ...
+        'FontWeight', 'bold');
 
     showAxisLabels = uicontrol(displayPanel, 'Style', 'checkbox', ...
         'String', 'Axis Labels', ...
         'Units', 'normalized', ...
         'Position', [0.02 0.15 0.22 0.7], ...
+        'BackgroundColor', panelBg, ...
         'Value', data.showAxisLabels, ...
         'TooltipString', 'Show/hide X, Y, Z axis labels', ...
         'Callback', @(src, ~) onAxisLabelsToggle(src, controlFig));
@@ -1027,6 +1284,7 @@ function setupControls(controlFig, tableData, data)
         'String', 'Ticks', ...
         'Units', 'normalized', ...
         'Position', [0.25 0.15 0.15 0.7], ...
+        'BackgroundColor', panelBg, ...
         'Value', data.showAxisTicks, ...
         'TooltipString', 'Show/hide axis tick marks and numbers', ...
         'Callback', @(src, ~) onAxisTicksToggle(src, controlFig));
@@ -1035,6 +1293,7 @@ function setupControls(controlFig, tableData, data)
         'String', 'Scale Cube', ...
         'Units', 'normalized', ...
         'Position', [0.42 0.15 0.22 0.7], ...
+        'BackgroundColor', panelBg, ...
         'Value', data.showScaleCube, ...
         'TooltipString', 'Show RGB scale cube (X=Red, Y=Green, Z=Blue)', ...
         'Callback', @(src, ~) onScaleCubeToggle(src, controlFig));
@@ -1044,7 +1303,7 @@ function setupControls(controlFig, tableData, data)
         'Units', 'normalized', ...
         'Position', [0.65 0.15 0.10 0.7], ...
         'HorizontalAlignment', 'right', ...
-        'BackgroundColor', [0.96 0.96 0.96]);
+        'BackgroundColor', panelBg);
 
     scaleCubeSizeEdit = uicontrol(displayPanel, 'Style', 'edit', ...
         'String', num2str(data.scaleCubeSize), ...
@@ -1058,44 +1317,90 @@ function setupControls(controlFig, tableData, data)
         'Units', 'normalized', ...
         'Position', [0.89 0.15 0.10 0.7], ...
         'HorizontalAlignment', 'left', ...
-        'BackgroundColor', [0.96 0.96 0.96]);
+        'BackgroundColor', panelBg);
 
     % Export panel
-    y = y - 0.045 - gap;
+    y = y - 0.055 - gap;
     exportPanel = uipanel(controlFig, 'Title', 'Export', ...
         'Units', 'normalized', ...
-        'Position', [margin y 0.92 0.04], ...
-        'BackgroundColor', [0.96 0.96 0.96]);
+        'Position', [margin y 0.92 0.048], ...
+        'BackgroundColor', panelBg, ...
+        'ForegroundColor', accentColor, ...
+        'FontWeight', 'bold');
 
     exportImagesBtn = uicontrol(exportPanel, 'Style', 'pushbutton', ...
         'String', 'Export Images', ...
         'Units', 'normalized', ...
-        'Position', [0.02 0.15 0.30 0.7], ...
+        'Position', [0.02 0.10 0.30 0.80], ...
+        'BackgroundColor', btnBg, ...
         'TooltipString', 'Export individual species images to files', ...
         'Callback', @(~, ~) onExportImages(controlFig));
 
     exportTurntableBtn = uicontrol(exportPanel, 'Style', 'pushbutton', ...
         'String', 'Turntable', ...
         'Units', 'normalized', ...
-        'Position', [0.34 0.15 0.30 0.7], ...
+        'Position', [0.34 0.10 0.30 0.80], ...
+        'BackgroundColor', btnBg, ...
         'TooltipString', 'Export rotating turntable animation', ...
         'Callback', @(~, ~) onExportTurntable(controlFig));
 
     exportWsBtn = uicontrol(exportPanel, 'Style', 'pushbutton', ...
         'String', 'To Workspace', ...
         'Units', 'normalized', ...
-        'Position', [0.66 0.15 0.32 0.7], ...
+        'Position', [0.66 0.10 0.32 0.80], ...
+        'BackgroundColor', btnBg, ...
         'TooltipString', 'Export visible points to MATLAB workspace', ...
         'Callback', @(~, ~) onExportToWorkspace(controlFig));
 
+    % Visibility panel
+    y = y - 0.055 - gap;
+    visibilityPanel = uipanel(controlFig, 'Title', 'Visibility', ...
+        'Units', 'normalized', ...
+        'Position', [margin y 0.92 0.048], ...
+        'BackgroundColor', panelBg, ...
+        'ForegroundColor', accentColor, ...
+        'FontWeight', 'bold');
+
+    showAllBtn = uicontrol(visibilityPanel, 'Style', 'pushbutton', ...
+        'String', 'Show All', ...
+        'Units', 'normalized', ...
+        'Position', [0.02 0.10 0.23 0.80], ...
+        'BackgroundColor', btnBg, ...
+        'TooltipString', 'Show all species (keyboard: A)', ...
+        'Callback', @(~, ~) onShowAll(controlFig));
+
+    hideAllBtn = uicontrol(visibilityPanel, 'Style', 'pushbutton', ...
+        'String', 'Hide All', ...
+        'Units', 'normalized', ...
+        'Position', [0.26 0.10 0.23 0.80], ...
+        'BackgroundColor', btnBg, ...
+        'TooltipString', 'Hide all species (keyboard: H)', ...
+        'Callback', @(~, ~) onHideAll(controlFig));
+
+    resetViewBtn = uicontrol(visibilityPanel, 'Style', 'pushbutton', ...
+        'String', 'Reset View', ...
+        'Units', 'normalized', ...
+        'Position', [0.50 0.10 0.23 0.80], ...
+        'BackgroundColor', btnBg, ...
+        'TooltipString', 'Reset 3D view to default (keyboard: R)', ...
+        'Callback', @(~, ~) onResetView(controlFig));
+
+    colorBtn = uicontrol(visibilityPanel, 'Style', 'pushbutton', ...
+        'String', 'Color...', ...
+        'Units', 'normalized', ...
+        'Position', [0.74 0.10 0.24 0.80], ...
+        'BackgroundColor', btnBg, ...
+        'TooltipString', 'Change color of selected species', ...
+        'Callback', @(~, ~) onChangeColor(controlFig));
+
     % Search and sort row
-    y = y - btnH - gap*2;
+    y = y - btnH - gap;
     uicontrol(controlFig, 'Style', 'text', ...
         'String', 'Search:', ...
         'Units', 'normalized', ...
         'Position', [margin y 0.12 lblH], ...
         'HorizontalAlignment', 'left', ...
-        'BackgroundColor', [0.96 0.96 0.96]);
+        'BackgroundColor', textBg);
 
     searchBox = uicontrol(controlFig, 'Style', 'edit', ...
         'String', '', ...
@@ -1108,6 +1413,7 @@ function setupControls(controlFig, tableData, data)
         'String', 'X', ...
         'Units', 'normalized', ...
         'Position', [margin + 0.41 y 0.06 btnH], ...
+        'BackgroundColor', btnBg, ...
         'TooltipString', 'Clear search filter', ...
         'Callback', @(~, ~) onClearSearch(controlFig));
 
@@ -1117,7 +1423,7 @@ function setupControls(controlFig, tableData, data)
         'Units', 'normalized', ...
         'Position', [margin + 0.49 y 0.08 lblH], ...
         'HorizontalAlignment', 'left', ...
-        'BackgroundColor', [0.96 0.96 0.96]);
+        'BackgroundColor', textBg);
 
     sortDropdown = uicontrol(controlFig, 'Style', 'popupmenu', ...
         'String', {'None', 'Name A-Z', 'Name Z-A', 'Count (High)', 'Count (Low)', 'Mass (High)', 'Mass (Low)'}, ...
@@ -1131,6 +1437,7 @@ function setupControls(controlFig, tableData, data)
         'String', char(9650), ...
         'Units', 'normalized', ...
         'Position', [margin + 0.84 y 0.06 btnH], ...
+        'BackgroundColor', btnBg, ...
         'TooltipString', 'Move selected species up in draw order (appears on top)', ...
         'Callback', @(~, ~) onMoveSpecies(controlFig, -1));
 
@@ -1138,6 +1445,7 @@ function setupControls(controlFig, tableData, data)
         'String', char(9660), ...
         'Units', 'normalized', ...
         'Position', [margin + 0.91 y 0.06 btnH], ...
+        'BackgroundColor', btnBg, ...
         'TooltipString', 'Move selected species down in draw order (appears below)', ...
         'Callback', @(~, ~) onMoveSpecies(controlFig, 1));
 
@@ -1145,9 +1453,13 @@ function setupControls(controlFig, tableData, data)
     y = y - 0.20 - gap;
     tbl = uitable(controlFig, ...
         'Data', tableData, ...
-        'ColumnName', {'Show', 'Color', 'Species', 'Count', '# Shown', 'Frac', 'Size'}, ...
-        'ColumnEditable', [true false false false true true true], ...
-        'ColumnWidth', {35, 35, 'auto', 55, 55, 50, 45}, ...
+        'ColumnName', {'Show', 'Color', 'Species', 'Count', '# Shown', 'Frac', 'Size', 'Link'}, ...
+        'RowName', {}, ...
+        'ColumnEditable', [true false false false true true true true], ...
+        'ColumnWidth', {35, 35, 'auto', 55, 55, 50, 45, 40}, ...
+        'BackgroundColor', [1 1 1; 0.96 0.97 0.99], ...
+        'FontName', 'Helvetica', ...
+        'FontSize', 10, ...
         'Units', 'normalized', ...
         'Position', [margin y 0.92 0.20], ...
         'TooltipString', 'Species table - toggle visibility, adjust sample fractions and marker sizes', ...
@@ -1160,8 +1472,9 @@ function setupControls(controlFig, tableData, data)
         'Units', 'normalized', ...
         'Position', [margin 0.005 0.92 0.025], ...
         'HorizontalAlignment', 'left', ...
-        'FontSize', 8, ...
-        'BackgroundColor', [0.92 0.92 0.92]);
+        'FontSize', 9, ...
+        'ForegroundColor', [0.1 0.1 0.1], ...
+        'BackgroundColor', [0.90 0.92 0.95]);
 
     setappdata(controlFig, 'scatterPlotPosWidgetControls', struct( ...
         'slider', slider, 'editBox', editBox, 'table', tbl, ...
@@ -1175,11 +1488,13 @@ function setupControls(controlFig, tableData, data)
         'bboxUseCurrent', bboxUseCurrent, 'bboxReset', bboxReset, 'bboxEdits', bboxEdits, ...
         'displayPanel', displayPanel, 'showAxisLabels', showAxisLabels, 'showAxisTicks', showAxisTicks, ...
         'showScaleCube', showScaleCube, 'scaleCubeSizeEdit', scaleCubeSizeEdit, ...
+        'visibilityPanel', visibilityPanel, ...
         'liveUpdateCb', liveUpdateCb, 'applyBtn', applyBtn, ...
         'undoBtn', undoBtn, 'redoBtn', redoBtn, ...
         'searchBox', searchBox, 'clearSearchBtn', clearSearchBtn, ...
         'sortDropdown', sortDropdown, ...
         'moveUpBtn', moveUpBtn, 'moveDownBtn', moveDownBtn, ...
+        'showAllBtn', showAllBtn, 'hideAllBtn', hideAllBtn, ...
         'colorBtn', colorBtn, 'resetViewBtn', resetViewBtn, ...
         'exportWsBtn', exportWsBtn, 'statusBar', statusBar, 'helpBtn', helpBtn));
 
@@ -1271,12 +1586,14 @@ function pushUndo(controlFig)
     if isempty(data)
         return;
     end
+    data = ensureMarkerSizeLinkState(data);
 
     % Create state snapshot
     state = struct();
     state.visible = data.visible;
     state.sampleFractions = data.sampleFractions;
     state.markerSizes = data.markerSizes;
+    state.markerSizeLinked = data.markerSizeLinked;
     state.colors = data.colors;
     state.speciesOrder = data.speciesOrder;
 
@@ -1301,12 +1618,14 @@ function onUndo(controlFig)
         if isempty(data) || isempty(data.undoStack)
             return;
         end
+        data = ensureMarkerSizeLinkState(data);
 
         % Save current state to redo stack
         currentState = struct();
         currentState.visible = data.visible;
         currentState.sampleFractions = data.sampleFractions;
         currentState.markerSizes = data.markerSizes;
+        currentState.markerSizeLinked = data.markerSizeLinked;
         currentState.colors = data.colors;
         currentState.speciesOrder = data.speciesOrder;
         data.redoStack{end+1} = currentState;
@@ -1319,6 +1638,11 @@ function onUndo(controlFig)
         data.visible = state.visible;
         data.sampleFractions = state.sampleFractions;
         data.markerSizes = state.markerSizes;
+        if isfield(state, 'markerSizeLinked')
+            data.markerSizeLinked = logical(state.markerSizeLinked);
+        else
+            data.markerSizeLinked = true(numel(data.speciesNames), 1);
+        end
         data.colors = state.colors;
         if isfield(state, 'speciesOrder')
             data.speciesOrder = state.speciesOrder;
@@ -1347,12 +1671,14 @@ function onRedo(controlFig)
         if isempty(data) || isempty(data.redoStack)
             return;
         end
+        data = ensureMarkerSizeLinkState(data);
 
         % Save current state to undo stack
         currentState = struct();
         currentState.visible = data.visible;
         currentState.sampleFractions = data.sampleFractions;
         currentState.markerSizes = data.markerSizes;
+        currentState.markerSizeLinked = data.markerSizeLinked;
         currentState.colors = data.colors;
         currentState.speciesOrder = data.speciesOrder;
         data.undoStack{end+1} = currentState;
@@ -1365,6 +1691,11 @@ function onRedo(controlFig)
         data.visible = state.visible;
         data.sampleFractions = state.sampleFractions;
         data.markerSizes = state.markerSizes;
+        if isfield(state, 'markerSizeLinked')
+            data.markerSizeLinked = logical(state.markerSizeLinked);
+        else
+            data.markerSizeLinked = true(numel(data.speciesNames), 1);
+        end
         data.colors = state.colors;
         if isfield(state, 'speciesOrder')
             data.speciesOrder = state.speciesOrder;
@@ -1637,6 +1968,7 @@ function onAxisLabelsToggle(src, controlFig)
             data.ax.YLabel.Visible = 'off';
             data.ax.ZLabel.Visible = 'off';
         end
+        persistStateToAxis(controlFig);
     catch ME
         warning('scatterPlotPosWidget:axisLabelsError', 'Axis labels toggle error: %s', ME.message);
     end
@@ -1661,6 +1993,7 @@ function onAxisTicksToggle(src, controlFig)
             data.ax.YAxis.Visible = 'off';
             data.ax.ZAxis.Visible = 'off';
         end
+        persistStateToAxis(controlFig);
     catch ME
         warning('scatterPlotPosWidget:axisTicksError', 'Axis ticks toggle error: %s', ME.message);
     end
@@ -1682,6 +2015,7 @@ function onScaleCubeToggle(src, controlFig)
         end
 
         setappdata(controlFig, 'scatterPlotPosWidget', data);
+        persistStateToAxis(controlFig);
     catch ME
         warning('scatterPlotPosWidget:scaleCubeToggleError', 'Scale cube toggle error: %s', ME.message);
     end
@@ -1707,6 +2041,7 @@ function onScaleCubeSizeEdit(src, controlFig)
         if data.showScaleCube && isValidGraphics(data.scaleCubeAx)
             updateScaleCubeGeometry(controlFig);
         end
+        persistStateToAxis(controlFig);
     catch ME
         warning('scatterPlotPosWidget:scaleCubeSizeError', 'Scale cube size error: %s', ME.message);
     end
@@ -1722,6 +2057,10 @@ function data = createScaleCube(data, controlFig)
     if isValidGraphics(data.scaleCubeAx)
         delete(data.scaleCubeAx);
     end
+    if isfield(data, 'scaleCubeLabel') && isValidGraphics(data.scaleCubeLabel)
+        delete(data.scaleCubeLabel);
+        data.scaleCubeLabel = [];
+    end
 
     % Delete existing listeners if present
     if isfield(data, 'viewSyncListener') && ~isempty(data.viewSyncListener)
@@ -1736,20 +2075,35 @@ function data = createScaleCube(data, controlFig)
     if isfield(data, 'zlimSyncListener') && ~isempty(data.zlimSyncListener)
         try delete(data.zlimSyncListener); catch, end
     end
+    if isfield(data, 'camViewAngleSyncListener') && ~isempty(data.camViewAngleSyncListener)
+        try delete(data.camViewAngleSyncListener); catch, end
+    end
+    if isfield(data, 'projectionSyncListener') && ~isempty(data.projectionSyncListener)
+        try delete(data.projectionSyncListener); catch, end
+    end
+    if isfield(data, 'positionSyncListener') && ~isempty(data.positionSyncListener)
+        try delete(data.positionSyncListener); catch, end
+    end
+    if isfield(data, 'dataAspectSyncListener') && ~isempty(data.dataAspectSyncListener)
+        try delete(data.dataAspectSyncListener); catch, end
+    end
 
     % Create new axes in the bottom right corner of the scatter figure
     % Position: [left bottom width height] in normalized units
     data.scaleCubeAx = axes(data.scatterFig, ...
-        'Position', [0.70 0.02 0.28 0.28], ...
+        'Position', [0.70 0.055 0.28 0.245], ...
+        'ActivePositionProperty', 'position', ...
         'DataAspectRatio', [1 1 1], ...
         'XTick', [], 'YTick', [], 'ZTick', [], ...
         'Box', 'off', ...
         'Color', 'none', ...           % Transparent background
         'XColor', 'none', ...          % Hide X axis line
         'YColor', 'none', ...          % Hide Y axis line
-        'ZColor', 'none');             % Hide Z axis line
+        'ZColor', 'none', ...          % Hide Z axis line
+        'Projection', data.ax.Projection);
     hold(data.scaleCubeAx, 'on');
-    axis(data.scaleCubeAx, 'vis3d', 'off');
+    axis(data.scaleCubeAx, 'vis3d');
+    axis(data.scaleCubeAx, 'off');
 
     % Make sure scale cube axes is on top
     uistack(data.scaleCubeAx, 'top');
@@ -1765,14 +2119,22 @@ function data = createScaleCube(data, controlFig)
 
     % Setup view and limits synchronization listeners
     if isValidGraphics(data.ax)
-        data.viewSyncListener = addlistener(data.ax, 'View', 'PostSet', ...
+        data.viewSyncListener = tryAddAxesPropertyListener(data.ax, 'View', ...
             @(~,~) onMainViewChanged(controlFig));
         % Also sync when axis limits change (zoom/pan)
-        data.xlimSyncListener = addlistener(data.ax, 'XLim', 'PostSet', ...
+        data.xlimSyncListener = tryAddAxesPropertyListener(data.ax, 'XLim', ...
             @(~,~) onMainLimitsChanged(controlFig));
-        data.ylimSyncListener = addlistener(data.ax, 'YLim', 'PostSet', ...
+        data.ylimSyncListener = tryAddAxesPropertyListener(data.ax, 'YLim', ...
             @(~,~) onMainLimitsChanged(controlFig));
-        data.zlimSyncListener = addlistener(data.ax, 'ZLim', 'PostSet', ...
+        data.zlimSyncListener = tryAddAxesPropertyListener(data.ax, 'ZLim', ...
+            @(~,~) onMainLimitsChanged(controlFig));
+        data.camViewAngleSyncListener = tryAddAxesPropertyListener(data.ax, 'CameraViewAngle', ...
+            @(~,~) onMainLimitsChanged(controlFig));
+        data.projectionSyncListener = tryAddAxesPropertyListener(data.ax, 'Projection', ...
+            @(~,~) onMainLimitsChanged(controlFig));
+        data.positionSyncListener = tryAddAxesPropertyListener(data.ax, 'Position', ...
+            @(~,~) onMainLimitsChanged(controlFig));
+        data.dataAspectSyncListener = tryAddAxesPropertyListener(data.ax, 'DataAspectRatio', ...
             @(~,~) onMainLimitsChanged(controlFig));
     end
 end
@@ -1788,35 +2150,7 @@ function data = drawScaleCube(data)
         return;
     end
 
-    % Get the main axes data range
-    mainXLim = data.ax.XLim;
-    mainYLim = data.ax.YLim;
-    mainZLim = data.ax.ZLim;
-
-    mainXRange = diff(mainXLim);
-    mainYRange = diff(mainYLim);
-    mainZRange = diff(mainZLim);
-
-    % Get the position of both axes to calculate size ratio
-    mainPos = data.ax.Position;
-    cubePos = data.scaleCubeAx.Position;
-
-    % Calculate the size ratio based on screen size
-    sizeRatio = mean([cubePos(3)/mainPos(3), cubePos(4)/mainPos(4)]);
-
-    % The scale cube axes should show a proportionally smaller data range
-    cubeXRange = mainXRange * sizeRatio;
-    cubeYRange = mainYRange * sizeRatio;
-    cubeZRange = mainZRange * sizeRatio;
-
-    % Center the scale cube axes at origin
-    halfX = cubeXRange / 2;
-    halfY = cubeYRange / 2;
-    halfZ = cubeZRange / 2;
-
-    xlim(data.scaleCubeAx, [-halfX, halfX]);
-    ylim(data.scaleCubeAx, [-halfY, halfY]);
-    zlim(data.scaleCubeAx, [-halfZ, halfZ]);
+    data = applyScaleCubeAxisLimits(data);
 
     s = data.scaleCubeSize / 2;  % Half-size
 
@@ -1859,11 +2193,7 @@ function data = drawScaleCube(data)
             'FaceAlpha', 1.0);
     end
 
-    % Add size annotation below the cube
-    sizeStr = sprintf('%g nm', data.scaleCubeSize);
-    text(data.scaleCubeAx, 0, 0, -s*1.8, sizeStr, ...
-        'Color', 'k', 'FontSize', 9, 'HorizontalAlignment', 'center', ...
-        'VerticalAlignment', 'top');
+    data = updateScaleCubeLabelOverlay(data);
 end
 
 function updateScaleCubeGeometry(controlFig)
@@ -1900,15 +2230,35 @@ function data = destroyScaleCube(data)
         try delete(data.zlimSyncListener); catch, end
         data.zlimSyncListener = [];
     end
+    if isfield(data, 'camViewAngleSyncListener') && ~isempty(data.camViewAngleSyncListener)
+        try delete(data.camViewAngleSyncListener); catch, end
+        data.camViewAngleSyncListener = [];
+    end
+    if isfield(data, 'projectionSyncListener') && ~isempty(data.projectionSyncListener)
+        try delete(data.projectionSyncListener); catch, end
+        data.projectionSyncListener = [];
+    end
+    if isfield(data, 'positionSyncListener') && ~isempty(data.positionSyncListener)
+        try delete(data.positionSyncListener); catch, end
+        data.positionSyncListener = [];
+    end
+    if isfield(data, 'dataAspectSyncListener') && ~isempty(data.dataAspectSyncListener)
+        try delete(data.dataAspectSyncListener); catch, end
+        data.dataAspectSyncListener = [];
+    end
 
     % Delete the scale cube axes (this also deletes all children including patches)
     if isValidGraphics(data.scaleCubeAx)
         delete(data.scaleCubeAx);
     end
+    if isfield(data, 'scaleCubeLabel') && isValidGraphics(data.scaleCubeLabel)
+        delete(data.scaleCubeLabel);
+    end
 
     data.scaleCubePatches = [];
     data.scaleCubeFig = [];
     data.scaleCubeAx = [];
+    data.scaleCubeLabel = [];
 end
 
 function onMainViewChanged(controlFig)
@@ -1943,36 +2293,158 @@ function syncScaleCubeView(data)
         return;
     end
 
-    % Get main axes data range
-    mainXLim = data.ax.XLim;
-    mainYLim = data.ax.YLim;
-    mainZLim = data.ax.ZLim;
+    applyScaleCubeAxisLimits(data);
+    applyScaleCubeCamera(data);
+    data = updateScaleCubeLabelOverlay(data);
+    if isfield(data, 'controlFig') && isValidGraphics(data.controlFig)
+        setappdata(data.controlFig, 'scatterPlotPosWidget', data);
+    end
+end
 
-    mainXRange = diff(mainXLim);
-    mainYRange = diff(mainYLim);
-    mainZRange = diff(mainZLim);
+function data = updateScaleCubeLabelOverlay(data)
+    if ~isValidGraphics(data.scatterFig) || ~isValidGraphics(data.scaleCubeAx)
+        return;
+    end
 
-    % Get screen size ratio
-    mainPos = data.ax.Position;
-    cubePos = data.scaleCubeAx.Position;
-    sizeRatio = mean([cubePos(3)/mainPos(3), cubePos(4)/mainPos(4)]);
+    sizeStr = sprintf('Scale: %g nm', data.scaleCubeSize);
+    labelPos = getScaleCubeLabelPosition(data.scaleCubeAx);
 
-    % Update scale cube limits to maintain correct physical scale
-    cubeXRange = mainXRange * sizeRatio;
-    cubeYRange = mainYRange * sizeRatio;
-    cubeZRange = mainZRange * sizeRatio;
+    if ~isfield(data, 'scaleCubeLabel') || ~isValidGraphics(data.scaleCubeLabel)
+        data.scaleCubeLabel = uicontrol(data.scatterFig, 'Style', 'text', ...
+            'String', sizeStr, ...
+            'Units', 'normalized', ...
+            'Position', labelPos, ...
+            'HorizontalAlignment', 'center', ...
+            'BackgroundColor', [1 1 1], ...
+            'ForegroundColor', [0 0 0], ...
+            'FontWeight', 'bold', ...
+            'FontSize', 11, ...
+            'Tag', 'scatterPlotPosWidgetScaleCubeLabel', ...
+            'Enable', 'inactive');
+    else
+        data.scaleCubeLabel.String = sizeStr;
+        data.scaleCubeLabel.Position = labelPos;
+        data.scaleCubeLabel.Visible = 'on';
+    end
 
-    halfX = cubeXRange / 2;
-    halfY = cubeYRange / 2;
-    halfZ = cubeZRange / 2;
+    try
+        uistack(data.scaleCubeLabel, 'top');
+    catch
+    end
+end
 
-    xlim(data.scaleCubeAx, [-halfX, halfX]);
-    ylim(data.scaleCubeAx, [-halfY, halfY]);
-    zlim(data.scaleCubeAx, [-halfZ, halfZ]);
+function labelPos = getScaleCubeLabelPosition(scaleCubeAx)
+    axPos = getAxesInnerPositionSafe(scaleCubeAx);
+    labelHeight = max(0.03, min(0.05, axPos(4) * 0.16));
+    xPad = axPos(3) * 0.06;
+    labelPos = [axPos(1) + xPad, max(0.002, axPos(2) - labelHeight * 0.95), ...
+        max(0.10, axPos(3) - 2 * xPad), labelHeight];
+end
 
-    % Copy the view angles (azimuth, elevation) from main axes
-    [az, el] = view(data.ax);
-    view(data.scaleCubeAx, az, el);
+function data = applyScaleCubeAxisLimits(data)
+    if ~isValidGraphics(data.ax) || ~isValidGraphics(data.scaleCubeAx)
+        return;
+    end
+
+    mainRange = [max(diff(data.ax.XLim), eps), ...
+        max(diff(data.ax.YLim), eps), ...
+        max(diff(data.ax.ZLim), eps)];
+
+    mainPos = getAxesInnerPositionSafe(data.ax);
+    cubePos = getAxesInnerPositionSafe(data.scaleCubeAx);
+
+    ratioW = max(cubePos(3), eps) / max(mainPos(3), eps);
+    ratioH = max(cubePos(4), eps) / max(mainPos(4), eps);
+    sizeRatio = min(ratioW, ratioH);
+    if ~isfinite(sizeRatio) || sizeRatio <= 0
+        sizeRatio = 0.25;
+    end
+
+    cubeRange = mainRange .* sizeRatio;
+    cubeRange = max(cubeRange, eps);
+    halfRange = cubeRange / 2;
+
+    xlim(data.scaleCubeAx, [-halfRange(1), halfRange(1)]);
+    ylim(data.scaleCubeAx, [-halfRange(2), halfRange(2)]);
+    zlim(data.scaleCubeAx, [-halfRange(3), halfRange(3)]);
+end
+
+function applyScaleCubeCamera(data)
+    if ~isValidGraphics(data.ax) || ~isValidGraphics(data.scaleCubeAx)
+        return;
+    end
+
+    try
+        data.scaleCubeAx.XDir = data.ax.XDir;
+        data.scaleCubeAx.YDir = data.ax.YDir;
+        data.scaleCubeAx.ZDir = data.ax.ZDir;
+        data.scaleCubeAx.Projection = data.ax.Projection;
+        data.scaleCubeAx.CameraViewAngle = data.ax.CameraViewAngle;
+        data.scaleCubeAx.CameraViewAngleMode = 'manual';
+    catch
+        % Fallback handled below.
+    end
+
+    didCopyCamera = true;
+    try
+        mainCenter = [mean(data.ax.XLim), mean(data.ax.YLim), mean(data.ax.ZLim)];
+        mainRange = [max(diff(data.ax.XLim), eps), ...
+            max(diff(data.ax.YLim), eps), ...
+            max(diff(data.ax.ZLim), eps)];
+        cubeRange = [max(diff(data.scaleCubeAx.XLim), eps), ...
+            max(diff(data.scaleCubeAx.YLim), eps), ...
+            max(diff(data.scaleCubeAx.ZLim), eps)];
+
+        camPosMain = data.ax.CameraPosition;
+        camTargetMain = data.ax.CameraTarget;
+        camUpMain = data.ax.CameraUpVector;
+
+        camPosCube = ((camPosMain - mainCenter) ./ mainRange) .* cubeRange;
+        camTargetCube = ((camTargetMain - mainCenter) ./ mainRange) .* cubeRange;
+        camUpCube = (camUpMain ./ mainRange) .* cubeRange;
+        if norm(camUpCube) <= eps
+            camUpCube = [0 0 1];
+        else
+            camUpCube = camUpCube ./ norm(camUpCube);
+        end
+
+        data.scaleCubeAx.CameraPositionMode = 'manual';
+        data.scaleCubeAx.CameraTargetMode = 'manual';
+        data.scaleCubeAx.CameraUpVectorMode = 'manual';
+        data.scaleCubeAx.CameraPosition = camPosCube;
+        data.scaleCubeAx.CameraTarget = camTargetCube;
+        data.scaleCubeAx.CameraUpVector = camUpCube;
+    catch
+        didCopyCamera = false;
+    end
+
+    if ~didCopyCamera
+        [az, el] = view(data.ax);
+        view(data.scaleCubeAx, az, el);
+    end
+end
+
+function pos = getAxesInnerPositionSafe(ax)
+    try
+        pos = ax.InnerPosition;
+    catch
+        pos = ax.Position;
+    end
+    if numel(pos) ~= 4
+        pos = [0 0 1 1];
+    end
+end
+
+function listenerHandle = tryAddAxesPropertyListener(ax, propertyName, callbackFn)
+    listenerHandle = [];
+    if ~isValidGraphics(ax)
+        return;
+    end
+    try
+        listenerHandle = addlistener(ax, propertyName, 'PostSet', callbackFn);
+    catch
+        listenerHandle = [];
+    end
 end
 
 %% Species Reordering (Z-Order)
@@ -2066,6 +2538,7 @@ function onChangeColor(controlFig)
 
         setappdata(controlFig, 'scatterPlotPosWidget', data);
         updateTable(controlFig);
+        persistStateToAxis(controlFig);
     catch ME
         warning('scatterPlotPosWidget:colorError', 'Color change error: %s', ME.message);
     end
@@ -2105,6 +2578,7 @@ function onResetView(controlFig)
             applyBoundingBox(data.ax, data.bbox, data.fixBoundingBox);
             updateBoundingBoxControls(controlFig);
         end
+        persistStateToAxis(controlFig);
     catch ME
         warning('scatterPlotPosWidget:resetViewError', 'Reset view error: %s', ME.message);
     end
@@ -2215,10 +2689,8 @@ function updateScatter(controlFig)
         if isempty(data)
             return;
         end
-        if ~isfield(data, 'markerSizes') || numel(data.markerSizes) ~= numel(data.speciesNames)
-            data.markerSizes = initMarkerSizes(numel(data.speciesNames), data.markerSizeGlobal);
-            setappdata(controlFig, 'scatterPlotPosWidget', data);
-        end
+        data = ensureMarkerSizeLinkState(data);
+        setappdata(controlFig, 'scatterPlotPosWidget', data);
 
         % Use pre-computed sampling if cache is valid, otherwise compute fresh
         if isfield(data, 'randomSeed') && ~isnan(data.randomSeed)
@@ -2272,6 +2744,7 @@ function updateScatter(controlFig)
         setappdata(controlFig, 'scatterPlotPosWidget', data);
         applyBoundingBox(data.ax, data.bbox, data.fixBoundingBox);
         updateStatusBar(controlFig);
+        persistStateToAxis(controlFig);
     catch ME
         warning('scatterPlotPosWidget:updateScatterError', 'Update scatter error: %s', ME.message);
     end
@@ -2356,9 +2829,7 @@ function onMarkerSizeSlider(src, controlFig)
         end
         pushUndo(controlFig);
         value = max(1, src.Value);
-        data.markerSizeGlobal = value;
-        data.markerSize = value;
-        data.markerSizes = initMarkerSizes(numel(data.speciesNames), value);
+        data = applyGlobalMarkerSize(data, value);
         setappdata(controlFig, 'scatterPlotPosWidget', data);
         ctrls = getappdata(controlFig, 'scatterPlotPosWidgetControls');
         if ~isempty(ctrls) && isfield(ctrls, 'markerEdit')
@@ -2381,9 +2852,7 @@ function onMarkerSizeEdit(src, controlFig)
         if isnan(value) || value <= 0
             value = data.markerSizeGlobal;
         end
-        data.markerSizeGlobal = value;
-        data.markerSize = value;
-        data.markerSizes = initMarkerSizes(numel(data.speciesNames), value);
+        data = applyGlobalMarkerSize(data, value);
         setappdata(controlFig, 'scatterPlotPosWidget', data);
         ctrls = getappdata(controlFig, 'scatterPlotPosWidgetControls');
         if ~isempty(ctrls) && isfield(ctrls, 'markerSlider') && isgraphics(ctrls.markerSlider)
@@ -2505,6 +2974,7 @@ function onExportImages(controlFig)
         end
 
         [baseName, ext] = fileparts(fileName);
+        baseName = string(baseName);
         ext = lower(string(ext));
         if ~ismember(ext, [".png", ".tif", ".tiff", ".jpg", ".jpeg", ".pdf", ".eps", ".svg"])
             ext = resolveExportExtension(filterIndex);
@@ -2516,6 +2986,10 @@ function onExportImages(controlFig)
         end
 
         originalVisible = data.visible;
+        originalSuspend = data.suspendStatePersistence;
+        data.suspendStatePersistence = true;
+        setappdata(controlFig, 'scatterPlotPosWidget', data);
+        suspendCleanup = onCleanup(@() restoreStatePersistence(controlFig, originalSuspend)); %#ok<NASGU>
         fig = ancestor(data.ax, 'figure');
         if isgraphics(fig)
             figure(fig);
@@ -2545,6 +3019,7 @@ function onExportImages(controlFig)
         end
 
         data.visible = originalVisible;
+        data.suspendStatePersistence = originalSuspend;
         setappdata(controlFig, 'scatterPlotPosWidget', data);
         updateTable(controlFig);
         updateScatter(controlFig);
@@ -2568,8 +3043,10 @@ function onExportTurntable(controlFig)
         end
 
         [baseName, ext] = fileparts(fileName);
+        baseName = string(baseName);
+        ext = string(ext);
         if isempty(ext)
-            ext = '.avi';
+            ext = ".avi";
         end
 
         visibleIdx = find(data.visible);
@@ -2578,6 +3055,10 @@ function onExportTurntable(controlFig)
         end
 
         originalVisible = data.visible;
+        originalSuspend = data.suspendStatePersistence;
+        data.suspendStatePersistence = true;
+        setappdata(controlFig, 'scatterPlotPosWidget', data);
+        suspendCleanup = onCleanup(@() restoreStatePersistence(controlFig, originalSuspend)); %#ok<NASGU>
         fig = ancestor(data.ax, 'figure');
         if isgraphics(fig)
             figure(fig);
@@ -2599,15 +3080,203 @@ function onExportTurntable(controlFig)
             end
             outFile = fullfile(pathName, outName + ext);
 
-            movieCreateTurntableAnimation(0.5, 30, outFile);
+            exportTurntableFromWidget(controlFig, outFile, 0.5, 30);
         end
 
         data.visible = originalVisible;
+        data.suspendStatePersistence = originalSuspend;
         setappdata(controlFig, 'scatterPlotPosWidget', data);
         updateTable(controlFig);
         updateScatter(controlFig);
     catch ME
         warning('scatterPlotPosWidget:exportTurntableError', 'Export turntable error: %s', ME.message);
+    end
+end
+
+function exportTurntableFromWidget(controlFig, outFile, stepDeg, frameRate)
+    data = getappdata(controlFig, 'scatterPlotPosWidget');
+    if isempty(data) || ~isfield(data, 'ax') || ~isValidGraphics(data.ax)
+        return;
+    end
+
+    ax = data.ax;
+    fig = ancestor(ax, 'figure');
+    if ~isValidGraphics(fig)
+        return;
+    end
+
+    if nargin < 4 || isempty(frameRate)
+        frameRate = 30;
+    end
+    if nargin < 3 || isempty(stepDeg) || stepDeg <= 0
+        stepDeg = 0.5;
+    end
+
+    nFrames = max(1, round(360 / stepDeg));
+    stepDeg = 360 / nFrames;
+
+    state = captureTurntableState(data);
+    stateCleanup = onCleanup(@() restoreTurntableState(state));
+
+    lockAxesForTurntable(data);
+
+    [~, ~, ext] = fileparts(outFile);
+    if strcmpi(ext, '.mp4')
+        writer = VideoWriter(outFile, 'MPEG-4');
+    else
+        writer = VideoWriter(outFile);
+    end
+    writer.FrameRate = frameRate;
+    writer.Quality = 100;
+    open(writer);
+    writerCleanup = onCleanup(@() closeVideoWriterSafe(writer));
+
+    for frameIdx = 1:nFrames
+        if frameIdx > 1
+            rotateAxesAroundZ(ax, stepDeg);
+        end
+
+        dataNow = getappdata(controlFig, 'scatterPlotPosWidget');
+        if ~isempty(dataNow) && isfield(dataNow, 'showScaleCube') && dataNow.showScaleCube
+            syncScaleCubeView(dataNow);
+        end
+        drawnow;
+
+        writeVideo(writer, getframe(fig));
+    end
+end
+
+function state = captureTurntableState(data)
+    state = struct();
+    state.mainAx = [];
+    state.main = struct();
+    state.hasCube = false;
+    state.cubeAx = [];
+    state.cube = struct();
+
+    if isfield(data, 'ax') && isValidGraphics(data.ax)
+        state.mainAx = data.ax;
+        state.main = captureAxesState(data.ax);
+    end
+
+    if isfield(data, 'showScaleCube') && data.showScaleCube && ...
+            isfield(data, 'scaleCubeAx') && isValidGraphics(data.scaleCubeAx)
+        state.hasCube = true;
+        state.cubeAx = data.scaleCubeAx;
+        state.cube = captureAxesState(data.scaleCubeAx);
+    end
+end
+
+function stateAx = captureAxesState(ax)
+    stateAx = struct();
+    props = {'XLim','YLim','ZLim', ...
+        'XLimMode','YLimMode','ZLimMode', ...
+        'DataAspectRatio','DataAspectRatioMode', ...
+        'PlotBoxAspectRatio','PlotBoxAspectRatioMode', ...
+        'CameraPosition','CameraPositionMode', ...
+        'CameraTarget','CameraTargetMode', ...
+        'CameraUpVector','CameraUpVectorMode', ...
+        'CameraViewAngle','CameraViewAngleMode', ...
+        'Projection'};
+    for i = 1:numel(props)
+        p = props{i};
+        if isprop(ax, p)
+            stateAx.(p) = ax.(p);
+        end
+    end
+end
+
+function restoreTurntableState(state)
+    if isfield(state, 'mainAx') && isValidGraphics(state.mainAx)
+        restoreAxesState(state.mainAx, state.main);
+    end
+    if isfield(state, 'hasCube') && state.hasCube && ...
+            isfield(state, 'cubeAx') && isValidGraphics(state.cubeAx)
+        restoreAxesState(state.cubeAx, state.cube);
+    end
+end
+
+function restoreAxesState(ax, stateAx)
+    if ~isValidGraphics(ax) || isempty(stateAx)
+        return;
+    end
+
+    numericProps = {'XLim','YLim','ZLim','DataAspectRatio','PlotBoxAspectRatio', ...
+        'CameraPosition','CameraTarget','CameraUpVector','CameraViewAngle','Projection'};
+    modeProps = {'XLimMode','YLimMode','ZLimMode', ...
+        'DataAspectRatioMode','PlotBoxAspectRatioMode', ...
+        'CameraPositionMode','CameraTargetMode', ...
+        'CameraUpVectorMode','CameraViewAngleMode'};
+
+    for i = 1:numel(numericProps)
+        p = numericProps{i};
+        if isfield(stateAx, p) && isprop(ax, p)
+            try
+                ax.(p) = stateAx.(p);
+            catch
+            end
+        end
+    end
+
+    for i = 1:numel(modeProps)
+        p = modeProps{i};
+        if isfield(stateAx, p) && isprop(ax, p)
+            try
+                ax.(p) = stateAx.(p);
+            catch
+            end
+        end
+    end
+end
+
+function lockAxesForTurntable(data)
+    if ~isfield(data, 'ax') || ~isValidGraphics(data.ax)
+        return;
+    end
+
+    ax = data.ax;
+    axis(ax, 'vis3d');
+    ax.XLimMode = 'manual';
+    ax.YLimMode = 'manual';
+    ax.ZLimMode = 'manual';
+    ax.DataAspectRatioMode = 'manual';
+    ax.PlotBoxAspectRatioMode = 'manual';
+    ax.CameraPositionMode = 'manual';
+    ax.CameraTargetMode = 'manual';
+    ax.CameraUpVectorMode = 'manual';
+    ax.CameraViewAngleMode = 'manual';
+
+    if isfield(data, 'showScaleCube') && data.showScaleCube && ...
+            isfield(data, 'scaleCubeAx') && isValidGraphics(data.scaleCubeAx)
+        axis(data.scaleCubeAx, 'vis3d');
+        data.scaleCubeAx.XLimMode = 'manual';
+        data.scaleCubeAx.YLimMode = 'manual';
+        data.scaleCubeAx.ZLimMode = 'manual';
+        data.scaleCubeAx.DataAspectRatioMode = 'manual';
+        data.scaleCubeAx.PlotBoxAspectRatioMode = 'manual';
+        syncScaleCubeView(data);
+    end
+end
+
+function rotateAxesAroundZ(ax, stepDeg)
+    if ~isValidGraphics(ax)
+        return;
+    end
+    try
+        camorbit(ax, stepDeg, 0, 'data', [0 0 1]);
+    catch
+        axes(ax);
+        camorbit(stepDeg, 0);
+    end
+end
+
+function closeVideoWriterSafe(writer)
+    if isempty(writer)
+        return;
+    end
+    try
+        close(writer);
+    catch
     end
 end
 
@@ -2626,6 +3295,7 @@ function onTableEdit(src, evd, controlFig)
             return;
         end
         actualRow = data.filteredIndices(row);
+        data = ensureMarkerSizeLinkState(data);
 
         pushUndo(controlFig);
 
@@ -2651,6 +3321,13 @@ function onTableEdit(src, evd, controlFig)
             end
             newSize = max(0.1, newSize);
             data.markerSizes(actualRow) = newSize;
+            data.markerSizeLinked(actualRow) = false;
+        elseif col == 8  % Link marker size to global
+            isLinked = logical(evd.NewData);
+            data.markerSizeLinked(actualRow) = isLinked;
+            if isLinked
+                data.markerSizes(actualRow) = data.markerSizeGlobal;
+            end
         end
         setappdata(controlFig, 'scatterPlotPosWidget', data);
         conditionalUpdate(controlFig);
@@ -2725,6 +3402,7 @@ function onGroupingChanged(controlFig, ~, modeGroup)
             data.pos, data.mode, data.splitIsotope, data.splitCharge, data.showUnranged);
         colors = mapColors(baseNames, data.colorScheme);
         data.markerSizes = initMarkerSizes(numel(speciesNames), data.markerSizeGlobal);
+        data.markerSizeLinked = true(numel(speciesNames), 1);
 
         if ~isempty(data.scatterHandles)
             delete(data.scatterHandles(ishghandle(data.scatterHandles)));
@@ -2787,6 +3465,7 @@ function handles = createScatterHandles(ax, displayNames, colors, markerSizes)
         handles(i) = scatter3(ax, nan, nan, nan, sizeValue, ...
             'filled', 'MarkerFaceColor', colors(i, :), ...
             'MarkerEdgeColor', colors(i, :), ...
+            'Tag', 'scatterPlotPosWidgetScatter', ...
             'DisplayName', char(displayNames(i)));
     end
 end
@@ -2852,11 +3531,13 @@ function bbox = centerSpanToBbox(center, span)
 end
 
 function [editMin, editMax] = makeBBoxRow(parent, labelText, y, valueMin, valueMax, callbackFn)
+    panelBg = get(parent, 'BackgroundColor');
     uicontrol(parent, 'Style', 'text', ...
         'String', labelText, ...
         'Units', 'normalized', ...
         'Position', [0.02 y 0.05 0.2], ...
-        'HorizontalAlignment', 'left');
+        'HorizontalAlignment', 'left', ...
+        'BackgroundColor', panelBg);
     editMin = uicontrol(parent, 'Style', 'edit', ...
         'String', num2str(valueMin, '%.4f'), ...
         'Units', 'normalized', ...
@@ -3085,6 +3766,36 @@ function sizes = initMarkerSizes(count, markerSizeGlobal)
     sizes = repmat(markerSizeGlobal, count, 1);
 end
 
+function data = ensureMarkerSizeLinkState(data)
+    nSpecies = numel(data.speciesNames);
+    if ~isfield(data, 'markerSizes') || numel(data.markerSizes) ~= nSpecies
+        data.markerSizes = initMarkerSizes(nSpecies, data.markerSizeGlobal);
+    end
+
+    if ~isfield(data, 'markerSizeLinked') || numel(data.markerSizeLinked) ~= nSpecies
+        data.markerSizeLinked = true(nSpecies, 1);
+        if ~isempty(data.markerSizes)
+            tol = max(1e-9, 1e-6 * max(1, data.markerSizeGlobal));
+            data.markerSizeLinked = abs(data.markerSizes(:) - data.markerSizeGlobal) <= tol;
+        end
+    else
+        data.markerSizeLinked = logical(data.markerSizeLinked(:));
+    end
+end
+
+function data = applyGlobalMarkerSize(data, markerSizeGlobal)
+    if isempty(markerSizeGlobal) || ~isfinite(markerSizeGlobal) || markerSizeGlobal <= 0
+        markerSizeGlobal = data.markerSizeGlobal;
+    end
+    data = ensureMarkerSizeLinkState(data);
+    data.markerSizeGlobal = markerSizeGlobal;
+    data.markerSize = markerSizeGlobal;
+    linkedIdx = data.markerSizeLinked;
+    if any(linkedIdx)
+        data.markerSizes(linkedIdx) = markerSizeGlobal;
+    end
+end
+
 function tag = sanitizeFileTag(nameIn)
     tag = string(nameIn);
     if strlength(tag) == 0
@@ -3118,8 +3829,9 @@ end
 
 function tableData = buildTableData(data)
     % Build table data for filtered species only
+    data = ensureMarkerSizeLinkState(data);
     nFiltered = numel(data.filteredIndices);
-    tableData = cell(nFiltered, 7);
+    tableData = cell(nFiltered, 8);
 
     for j = 1:nFiltered
         i = data.filteredIndices(j);
@@ -3154,6 +3866,11 @@ function tableData = buildTableData(data)
         else
             tableData{j, 7} = data.markerSizeGlobal;
         end
+        if isfield(data, 'markerSizeLinked') && numel(data.markerSizeLinked) >= i
+            tableData{j, 8} = logical(data.markerSizeLinked(i));
+        else
+            tableData{j, 8} = true;
+        end
     end
 end
 
@@ -3162,6 +3879,8 @@ function updateTable(controlFig)
     if isempty(data)
         return;
     end
+    data = ensureMarkerSizeLinkState(data);
+    setappdata(controlFig, 'scatterPlotPosWidget', data);
     ctrls = getappdata(controlFig, 'scatterPlotPosWidgetControls');
     if isempty(ctrls) || ~isfield(ctrls, 'table')
         return;
