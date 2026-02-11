@@ -49,6 +49,9 @@ function [scatterHandles, ax, controlFig, info] = scatterPlotPosWidget(pos, colo
 %     load('state.mat', 'state');
 %     scatterPlotPosWidgetApplyState(controlFig, state);
 %
+%   Load a saved profile/state from workspace into a running widget:
+%     scatterPlotPosWidgetLoadState(controlFig, 'visualisationProfile');
+%
 %   Reattach widget to a previously saved/opened visualization axes:
 %     fig = openfig('savedScatter.fig');
 %     ax = findobj(fig, 'Type', 'axes');
@@ -880,20 +883,22 @@ end
 
 function [groupNames, baseNames, displayNames, groupIndices, groupCounts] = computeGroups( ...
     pos, mode, splitIsotope, splitCharge, showUnranged)
+    posIdx = (1:height(pos))';
+
     if mode == "ionic"
         if ismember('ion', pos.Properties.VariableNames)
-            base = string(pos.ion);
+            baseRaw = string(pos.ion);
         elseif ismember('atom', pos.Properties.VariableNames)
-            base = string(pos.atom);
+            baseRaw = string(pos.atom);
         else
             error('scatterPlotPosWidget:missingGroupField', ...
                 'pos must contain ion or atom column.');
         end
     else
         if ismember('atom', pos.Properties.VariableNames)
-            base = string(pos.atom);
+            baseRaw = string(pos.atom);
         elseif ismember('ion', pos.Properties.VariableNames)
-            base = string(pos.ion);
+            baseRaw = string(pos.ion);
         else
             error('scatterPlotPosWidget:missingGroupField', ...
                 'pos must contain ion or atom column.');
@@ -901,20 +906,29 @@ function [groupNames, baseNames, displayNames, groupIndices, groupCounts] = comp
     end
 
     if showUnranged
-        base(ismissing(base)) = "unranged";
+        baseRaw(ismissing(baseRaw)) = "unranged";
     else
-        keep = ~ismissing(base);
-        base = base(keep);
+        keep = ~ismissing(baseRaw);
+        baseRaw = baseRaw(keep);
+        posIdx = posIdx(keep);
     end
 
-    groupKey = base;
+    % In ionic mode, use a charge-neutral base name and let splitCharge
+    % explicitly control whether charge states are merged or separated.
+    if mode == "ionic"
+        baseCore = stripChargeFromName(baseRaw);
+    else
+        baseCore = baseRaw;
+    end
+
+    groupKey = baseCore;
     if splitIsotope && ismember('isotope', pos.Properties.VariableNames)
-        iso = string(pos.isotope);
+        iso = string(pos.isotope(posIdx));
         iso(ismissing(iso)) = "NaN";
         groupKey = groupKey + "-" + iso;
     end
     if splitCharge && ismember('chargeState', pos.Properties.VariableNames)
-        cs = pos.chargeState;
+        cs = pos.chargeState(posIdx);
         csString = strings(size(cs));
         csString(:) = "";
         valid = ~isnan(cs);
@@ -924,7 +938,7 @@ function [groupNames, baseNames, displayNames, groupIndices, groupCounts] = comp
                 if n <= 0
                     csString(k) = "";
                 else
-                    csString(k) = repmat("+", 1, n);
+                    csString(k) = string(repmat('+', 1, n));
                 end
             end
         end
@@ -939,10 +953,11 @@ function [groupNames, baseNames, displayNames, groupIndices, groupCounts] = comp
 
     for i = 1:numel(groupNames)
         idx = find(groupIdx == i);
-        groupIndices{i} = idx;
+        groupIndices{i} = posIdx(idx);
         groupCounts(i) = numel(idx);
-        baseNames(i) = base(idx(1));
-        displayNames(i) = formatDisplayName(base(idx(1)), pos, idx(1), splitIsotope, splitCharge, showUnranged);
+        baseNames(i) = baseCore(idx(1));
+        displayNames(i) = formatDisplayName(baseCore(idx(1)), pos, posIdx(idx(1)), ...
+            splitIsotope, splitCharge, showUnranged);
     end
 end
 
@@ -1058,7 +1073,7 @@ function setupControls(controlFig, tableData, data)
         'Callback', @(~, ~) onGroupingChanged(controlFig));
 
     splitCharge = uicontrol(controlFig, 'Style', 'checkbox', ...
-        'String', 'Split charge', ...
+        'String', 'Split charge state', ...
         'Units', 'normalized', ...
         'Position', [0.33 y 0.28 lblH], ...
         'Value', data.splitCharge, ...
@@ -1329,9 +1344,9 @@ function setupControls(controlFig, tableData, data)
         'FontWeight', 'bold');
 
     exportImagesBtn = uicontrol(exportPanel, 'Style', 'pushbutton', ...
-        'String', 'Export Images', ...
+        'String', 'Images', ...
         'Units', 'normalized', ...
-        'Position', [0.02 0.10 0.30 0.80], ...
+        'Position', [0.02 0.10 0.23 0.80], ...
         'BackgroundColor', btnBg, ...
         'TooltipString', 'Export individual species images to files', ...
         'Callback', @(~, ~) onExportImages(controlFig));
@@ -1339,18 +1354,26 @@ function setupControls(controlFig, tableData, data)
     exportTurntableBtn = uicontrol(exportPanel, 'Style', 'pushbutton', ...
         'String', 'Turntable', ...
         'Units', 'normalized', ...
-        'Position', [0.34 0.10 0.30 0.80], ...
+        'Position', [0.26 0.10 0.23 0.80], ...
         'BackgroundColor', btnBg, ...
         'TooltipString', 'Export rotating turntable animation', ...
         'Callback', @(~, ~) onExportTurntable(controlFig));
 
-    exportWsBtn = uicontrol(exportPanel, 'Style', 'pushbutton', ...
-        'String', 'To Workspace', ...
+    exportProfileWsBtn = uicontrol(exportPanel, 'Style', 'pushbutton', ...
+        'String', 'Save WS', ...
         'Units', 'normalized', ...
-        'Position', [0.66 0.10 0.32 0.80], ...
+        'Position', [0.50 0.10 0.23 0.80], ...
         'BackgroundColor', btnBg, ...
-        'TooltipString', 'Export visible points to MATLAB workspace', ...
-        'Callback', @(~, ~) onExportToWorkspace(controlFig));
+        'TooltipString', 'Export visualisation profile to MATLAB workspace', ...
+        'Callback', @(~, ~) onExportProfileToWorkspace(controlFig));
+
+    importProfileWsBtn = uicontrol(exportPanel, 'Style', 'pushbutton', ...
+        'String', 'Load WS', ...
+        'Units', 'normalized', ...
+        'Position', [0.74 0.10 0.24 0.80], ...
+        'BackgroundColor', btnBg, ...
+        'TooltipString', 'Load a visualisation profile/state from MATLAB workspace', ...
+        'Callback', @(~, ~) onImportProfileFromWorkspace(controlFig));
 
     % Visibility panel
     y = y - 0.055 - gap;
@@ -1450,7 +1473,12 @@ function setupControls(controlFig, tableData, data)
         'Callback', @(~, ~) onMoveSpecies(controlFig, 1));
 
     % Species table
+    % Keep the top aligned with the current flow layout and expand downward
+    % to use the available space above the status bar.
     y = y - 0.20 - gap;
+    tableTop = y + 0.20;
+    tableBottom = 0.035; % leave a small gap above the status bar
+    tableHeight = max(0.20, tableTop - tableBottom);
     tbl = uitable(controlFig, ...
         'Data', tableData, ...
         'ColumnName', {'Show', 'Color', 'Species', 'Count', '# Shown', 'Frac', 'Size', 'Link'}, ...
@@ -1461,7 +1489,7 @@ function setupControls(controlFig, tableData, data)
         'FontName', 'Helvetica', ...
         'FontSize', 10, ...
         'Units', 'normalized', ...
-        'Position', [margin y 0.92 0.20], ...
+        'Position', [margin tableBottom 0.92 tableHeight], ...
         'TooltipString', 'Species table - toggle visibility, adjust sample fractions and marker sizes', ...
         'CellEditCallback', @(src, evd) onTableEdit(src, evd, controlFig), ...
         'CellSelectionCallback', @(src, evd) onTableSelection(src, evd, controlFig));
@@ -1496,11 +1524,113 @@ function setupControls(controlFig, tableData, data)
         'moveUpBtn', moveUpBtn, 'moveDownBtn', moveDownBtn, ...
         'showAllBtn', showAllBtn, 'hideAllBtn', hideAllBtn, ...
         'colorBtn', colorBtn, 'resetViewBtn', resetViewBtn, ...
-        'exportWsBtn', exportWsBtn, 'statusBar', statusBar, 'helpBtn', helpBtn));
+        'exportProfileWsBtn', exportProfileWsBtn, 'importProfileWsBtn', importProfileWsBtn, ...
+        'statusBar', statusBar, 'helpBtn', helpBtn));
+
+    % Keep controls fixed-size on resize and let only the species table expand.
+    configureControlResizeBehavior(controlFig);
 
     updateStatusBar(controlFig);
     updateUndoRedoButtons(controlFig);
     drawnow;
+end
+
+function configureControlResizeBehavior(controlFig)
+    ctrls = getappdata(controlFig, 'scatterPlotPosWidgetControls');
+    if isempty(ctrls) || ~isfield(ctrls, 'table') || ~isfield(ctrls, 'statusBar')
+        return;
+    end
+
+    figPos = getpixelposition(controlFig);
+    figW = figPos(3);
+    figH = figPos(4);
+
+    topLevel = findall(controlFig, '-depth', 1);
+    topLevel = topLevel(topLevel ~= controlFig);
+    keepDynamic = [ctrls.table, ctrls.statusBar];
+    fixedHandles = setdiff(topLevel, keepDynamic);
+    fixedHandles = fixedHandles(arrayfun(@isgraphics, fixedHandles));
+
+    nFixed = numel(fixedHandles);
+    fixedLeft = zeros(nFixed, 1);
+    fixedTop = zeros(nFixed, 1);
+    fixedWidth = zeros(nFixed, 1);
+    fixedHeight = zeros(nFixed, 1);
+
+    for i = 1:nFixed
+        h = fixedHandles(i);
+        set(h, 'Units', 'pixels');
+        p = getpixelposition(h);
+        fixedLeft(i) = p(1);
+        fixedTop(i) = figH - (p(2) + p(4));
+        fixedWidth(i) = p(3);
+        fixedHeight(i) = p(4);
+    end
+
+    set(ctrls.table, 'Units', 'pixels');
+    set(ctrls.statusBar, 'Units', 'pixels');
+
+    tablePos = getpixelposition(ctrls.table);
+    statusPos = getpixelposition(ctrls.statusBar);
+
+    layout = struct();
+    layout.fixedHandles = fixedHandles;
+    layout.fixedLeft = fixedLeft;
+    layout.fixedTop = fixedTop;
+    layout.fixedWidth = fixedWidth;
+    layout.fixedHeight = fixedHeight;
+    layout.tableHandle = ctrls.table;
+    layout.tableLeft = tablePos(1);
+    layout.tableRightMargin = figW - (tablePos(1) + tablePos(3));
+    layout.tableTopOffset = figH - (tablePos(2) + tablePos(4));
+    layout.tableBottom = tablePos(2);
+    layout.tableMinHeight = max(140, min(220, tablePos(4)));
+    layout.statusHandle = ctrls.statusBar;
+    layout.statusLeft = statusPos(1);
+    layout.statusRightMargin = figW - (statusPos(1) + statusPos(3));
+    layout.statusBottom = statusPos(2);
+    layout.statusHeight = statusPos(4);
+
+    setappdata(controlFig, 'scatterPlotPosWidgetLayout', layout);
+    set(controlFig, 'SizeChangedFcn', @(src, ~) onControlWindowResize(src));
+    onControlWindowResize(controlFig);
+end
+
+function onControlWindowResize(controlFig)
+    layout = getappdata(controlFig, 'scatterPlotPosWidgetLayout');
+    if isempty(layout) || ~isgraphics(controlFig)
+        return;
+    end
+
+    figPos = getpixelposition(controlFig);
+    figW = figPos(3);
+    figH = figPos(4);
+
+    % Reposition fixed controls with top anchoring; keep size unchanged.
+    nFixed = numel(layout.fixedHandles);
+    for i = 1:nFixed
+        h = layout.fixedHandles(i);
+        if ~isgraphics(h)
+            continue;
+        end
+        newX = layout.fixedLeft(i);
+        newY = figH - layout.fixedTop(i) - layout.fixedHeight(i);
+        setpixelposition(h, [newX, newY, layout.fixedWidth(i), layout.fixedHeight(i)]);
+    end
+
+    % Expand/shrink only the table.
+    if isgraphics(layout.tableHandle)
+        tableW = max(180, figW - layout.tableLeft - layout.tableRightMargin);
+        tableTop = figH - layout.tableTopOffset;
+        tableH = max(layout.tableMinHeight, tableTop - layout.tableBottom);
+        setpixelposition(layout.tableHandle, [layout.tableLeft, layout.tableBottom, tableW, tableH]);
+    end
+
+    % Keep status bar width matched to window width.
+    if isgraphics(layout.statusHandle)
+        statusW = max(120, figW - layout.statusLeft - layout.statusRightMargin);
+        setpixelposition(layout.statusHandle, [layout.statusLeft, layout.statusBottom, statusW, layout.statusHeight]);
+    end
 end
 
 %% Keyboard Shortcuts
@@ -2584,52 +2714,33 @@ function onResetView(controlFig)
     end
 end
 
-%% Export to Workspace
-function onExportToWorkspace(controlFig)
+function onExportProfileToWorkspace(controlFig)
     try
-        data = getappdata(controlFig, 'scatterPlotPosWidget');
-        if isempty(data)
-            return;
+        profile = visualisationProfileFromWidget(controlFig);
+        varName = "visualisationProfile";
+        if evalin('base', sprintf('exist(''%s'', ''var'')', varName))
+            timestamp = string(datetime('now', 'Format', 'yyyyMMdd_HHmmss'));
+            varName = "visualisationProfile_" + timestamp;
         end
-
-        % Collect visible points
-        visiblePoints = [];
-        for i = 1:numel(data.speciesNames)
-            if data.visible(i)
-                idx = data.speciesIndices{i};
-                if data.clipToBoundingBox
-                    inside = isInsideBBox(data.coords(idx, :), data.bbox);
-                    idx = idx(inside);
-                end
-                visiblePoints = [visiblePoints; idx]; %#ok<AGROW>
-            end
-        end
-
-        if isempty(visiblePoints)
-            msgbox('No visible points to export.', 'Export', 'warn');
-            return;
-        end
-
-        % Get variable name from user
-        varName = inputdlg('Variable name for exported data:', 'Export to Workspace', 1, {'visiblePos'});
-        if isempty(varName)
-            return;
-        end
-        varName = varName{1};
-
-        % Validate variable name
-        if ~isvarname(varName)
-            msgbox('Invalid variable name.', 'Export Error', 'error');
-            return;
-        end
-
-        % Export subset of pos table
-        exportedData = data.pos(visiblePoints, :);
-        assignin('base', varName, exportedData);
-
-        msgbox(sprintf('Exported %d points to workspace variable ''%s''.', height(exportedData), varName), 'Export Complete');
+        assignin('base', char(varName), profile);
+        msgbox(sprintf('Exported visualisation profile to workspace variable ''%s''.', varName), ...
+            'Export Complete');
     catch ME
-        warning('scatterPlotPosWidget:exportError', 'Export error: %s', ME.message);
+        warning('scatterPlotPosWidget:exportProfileError', ...
+            'Export profile error: %s', ME.message);
+    end
+end
+
+function onImportProfileFromWorkspace(controlFig)
+    try
+        [~, loaded, sourceName] = scatterPlotPosWidgetLoadState(controlFig);
+        if loaded
+            msgbox(sprintf('Loaded visualisation profile/state from workspace variable ''%s''.', char(sourceName)), ...
+                'Load Complete');
+        end
+    catch ME
+        warning('scatterPlotPosWidget:importProfileError', ...
+            'Import profile error: %s', ME.message);
     end
 end
 
@@ -3450,7 +3561,12 @@ function onGroupingChanged(controlFig, ~, modeGroup)
         updateScatter(controlFig);
         updateUndoRedoButtons(controlFig);
     catch ME
-        warning('scatterPlotPosWidget:groupingChangedError', 'Grouping changed error: %s', ME.message);
+        errLoc = "";
+        if ~isempty(ME.stack)
+            errLoc = sprintf(' (%s:%d)', ME.stack(1).name, ME.stack(1).line);
+        end
+        warning('scatterPlotPosWidget:groupingChangedError', ...
+            'Grouping changed error%s: %s', errLoc, ME.message);
     end
 end
 
@@ -3716,7 +3832,7 @@ function displayName = formatDisplayName(baseName, pos, rowIdx, splitIsotope, sp
         if ~isnan(cs)
             n = round(cs);
             if n > 0
-                chargePart = repmat("+", 1, n);
+                chargePart = string(repmat('+', 1, n));
             end
         end
     end

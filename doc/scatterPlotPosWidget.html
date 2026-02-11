@@ -38,11 +38,22 @@ STATE WORKFLOW:
   load('scatterState.mat', 'state');
   scatterPlotPosWidgetApplyState(controlFig, state);
 
+  % Load a state/profile from workspace into a running widget
+  scatterPlotPosWidgetLoadState(controlFig, 'visualisationProfile');
+
   % Re-open widget from a saved visualization/figure axes
   fig = openfig('savedScatter.fig');
   ax = findobj(fig, 'Type', 'axes');
   scatterPlotPosWidget(pos, colorScheme, 'axes', ax(1));
+
+  % Export reusable visualisation profile from widget (or use "Save WS")
+  visualisationProfile = visualisationProfileFromWidget(controlFig);
+  configExport(visualisationProfile, 'visualisationProfile.yaml');
 </pre>
+<p>
+Public API stability and schema compatibility are documented in
+<code>doc/Visualization_API_Contract.md</code>.
+</p>
 <p><a href="function_reference.html">Back to Function Reference</a></p>
 </body>
 </html>

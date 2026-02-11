@@ -17,6 +17,7 @@ Developed by the [Felfer Group](https://www.ww1.tf.fau.de/) at Friedrich-Alexand
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Documentation](#documentation)
+- [Visualization API Contract](#visualization-api-contract)
 - [Function Reference](#function-reference)
 - [Workflows](#workflows)
 - [Contributing](#contributing)
@@ -228,6 +229,13 @@ open('Workflow_ClusterDetermination.mlx')
 open('Workflow_Proxigram.mlx')
 ```
 
+### Visualization API Contract
+The scatter visualisation interface is treated as a stable script-facing API.
+See `doc/Visualization_API_Contract.md` for:
+- public function signatures and supported options,
+- state/profile schema and compatibility rules,
+- policy for evolving the API (including documentation update requirements).
+
 ---
 
 ## Function Reference
@@ -260,8 +268,18 @@ open('Workflow_Proxigram.mlx')
 | `massSpectrumLegend` | Create publication-ready legend for mass spectrum |
 | `scatterPlotPosData` | 3D atom visualization |
 | `scatterPlotPosWidget` | Interactive scatter plot control panel with axis-based state persistence |
+| `scatterPlotPosWidgetGetState` | Capture a widget state struct for scriptable reuse |
+| `scatterPlotPosWidgetApplyState` | Apply a saved widget state to a running widget |
+| `scatterPlotPosWidgetLoadState` | Load/apply a saved state or profile from workspace |
+| `visualisationProfileFromWidget` | Capture reusable visualization profile from widget/axes |
+| `visualisationProfileResolve` | Resolve a visualization profile for a new dataset/species set |
+| `visualisationProfileApply` | Apply a visualization profile programmatically (headless-capable) |
+| `visualisationProfileExportImages` | Scriptable still-image export from a visualization profile |
+| `visualisationProfileExportTurntable` | Scriptable turntable video export from a visualization profile |
 | `colorSchemeCreate` | Create color scheme |
 | `colorSchemeIonAdd` | Add ion colors |
+
+Contract and compatibility policy: `doc/Visualization_API_Contract.md`
 
 ### ROI Operations
 | Function | Description |
@@ -316,6 +334,10 @@ open('Workflow_Proxigram.mlx')
 | `ProgressTracker` | Progress indication |
 | `validateInputs` | Input validation |
 | `sortIonCategories` | Sort ion/isotope/atom categories by atomic number or mass |
+| `configExport` | Export configuration/profile structs to MAT/JSON/YAML |
+| `configImport` | Import configuration/profile structs from MAT/JSON/YAML |
+| `configYamlExport` | Internal dependency-free YAML export helper |
+| `configYamlImport` | Internal dependency-free YAML import helper |
 
 ---
 
@@ -335,6 +357,7 @@ open('Workflow_Proxigram.mlx')
 | `Workflow_HDF5_IO.mlx` | HDF5 database operations |
 | `Workflow_reconstruction.mlx` | 3D reconstruction |
 | `Workflow_ReflectronCorrection.mlx` | Reflectron correction |
+| `Workflow_atomVisualisation.m` | Interactive + scriptable scatter visualization and profile automation |
 
 ---
 
