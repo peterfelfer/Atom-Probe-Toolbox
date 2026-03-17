@@ -1,0 +1,36 @@
+{
+  "mcpServers": {
+    "matlab": {
+      "command": "/Applications/matlab-mcp-core-server",
+      "args": [
+        "--matlab-root=/Applications/MATLAB_R2025b.app",
+        "--initial-working-folder=/Users/peterfelfer/Dropbox/research/01_research_Erlangen/GIT repositories/Atom Probe Toolbox/Atom-Probe-Toolbox",
+        "--initialize-matlab-on-startup=true"
+      ]
+    },
+    "paperRAG-v1": {
+      "type": "stdio",
+      "command": "/Users/peterfelfer/anaconda3/bin/python",
+      "args": [
+        "/Users/peterfelfer/Dropbox/research/01_research_Erlangen/11_AI_databases_and_agents/bibliographics/pdf_processing/rag_qdrant/mcp_server.py",
+        "--config",
+        "/Users/peterfelfer/Dropbox/research/01_research_Erlangen/11_AI_databases_and_agents/bibliographics/pdf_processing/rag_qdrant/rag_qdrant.yaml",
+        "--profile",
+        "default",
+        "--transport",
+        "stdio"
+      ],
+      "env": {}
+    },
+    "crossref_openalex": {
+      "type": "stdio",
+      "command": "/Users/peterfelfer/anaconda3/bin/python",
+      "args": [
+        "/Users/peterfelfer/Dropbox/research/01_research_Erlangen/11_AI_databases_and_agents/bibliographics/mcp/crossref_openalex/mcp_server.py",
+        "--transport",
+        "stdio"
+      ],
+      "env": {}
+    }
+  }
+}

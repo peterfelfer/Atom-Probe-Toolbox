@@ -230,6 +230,7 @@ end
 %% Compute background counts per range using analytical integral for invSqrt
 bgCountsByIon = zeros(numel(categories(atoms)), 1);
 cats = categories(atoms);
+method = lower(string(options.method));
 
 if method == "massspecinvsqrt" && isfield(info, 'fitCoefficient')
     % Use analytical integral: ∫ a/√mc dmc = 2a√mc

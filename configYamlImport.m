@@ -82,10 +82,10 @@ if currentIndent > indent
 end
 
 trimmed = strtrim(lineNoComment);
-if startsWith(trimmed, '- ')
-    [value, idxOut] = parseSequence(lines, idx, indent);
-else
-    [value, idxOut] = parseMapping(lines, idx, indent);
+    if startsWith(trimmed, '-')
+        [value, idxOut] = parseSequence(lines, idx, indent);
+    else
+        [value, idxOut] = parseMapping(lines, idx, indent);
 end
 end
 
@@ -111,7 +111,7 @@ while true
     end
 
     trimmed = strtrim(lineNoComment);
-    if startsWith(trimmed, '- ')
+    if startsWith(trimmed, '-')
         break;
     end
 
@@ -160,11 +160,18 @@ while true
     end
 
     trimmed = strtrim(lineNoComment);
-    if ~startsWith(trimmed, '- ')
+    if ~startsWith(trimmed, '-')
         break;
     end
 
-    itemToken = strtrim(trimmed(3:end));
+    if strcmp(trimmed, '-')
+        itemToken = '';
+    elseif startsWith(trimmed, '- ')
+        itemToken = strtrim(trimmed(3:end));
+    else
+        error('configYamlImport:flowSyntax', ...
+            'Invalid sequence item at line %d.', idxCurrent);
+    end
     if isempty(itemToken)
         [child, nextIdx] = parseBlock(lines, idxCurrent + 1, indent + 2);
         items{end+1, 1} = child; %#ok<AGROW>

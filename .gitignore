@@ -1,3 +1,7 @@
 # Local test/output folders
 exampleFiles/
+exampleFiles_backup/
 CodexTest_visualisation/
+
+# Private RHIT import tools
+RHIT_imports/

@@ -1,0 +1,1637 @@
+[
+  {
+    "folder": "R02_10806",
+    "new_folder": true,
+    "description": "unranged/ReneN5-HT",
+    "files": [
+      {
+        "name": "R02_10806-v01.pos",
+        "backup_rel": "unranged/ReneN5-HT/R02_10806-v01.pos",
+        "type": "data"
+      },
+      {
+        "name": "R02_10806-v01_heat treated.pos",
+        "backup_rel": "Files_for_Peter_Felfer_interfacial_excess_calculation/R02_10806-v01_heat treated.pos",
+        "type": "data"
+      },
+      {
+        "name": "R02_10806-v01_heat treated_rangeFig.fig",
+        "backup_rel": "Files_for_Peter_Felfer_interfacial_excess_calculation/R02_10806-v01_heat treated_rangeFig.fig",
+        "type": "range"
+      },
+      {
+        "name": "Rene N5.RNG",
+        "backup_rel": "Files_for_Peter_Felfer_interfacial_excess_calculation/Rene N5.RNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R02_13447",
+    "new_folder": true,
+    "description": "Files_for_Peter_Felfer_interfacial_excess_calculation",
+    "files": [
+      {
+        "name": "R02_13447-v01_Rafted.pos",
+        "backup_rel": "Files_for_Peter_Felfer_interfacial_excess_calculation/R02_13447-v01_Rafted.pos",
+        "type": "data"
+      },
+      {
+        "name": "R02_13447-v01_Rafted_rangeFig.fig",
+        "backup_rel": "Files_for_Peter_Felfer_interfacial_excess_calculation/R02_13447-v01_Rafted_rangeFig.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R02_13453",
+    "new_folder": true,
+    "description": "Files_for_Peter_Felfer_interfacial_excess_calculation",
+    "files": [
+      {
+        "name": "R02_13453-v01_Cuboidal.pos",
+        "backup_rel": "Files_for_Peter_Felfer_interfacial_excess_calculation/R02_13453-v01_Cuboidal.pos",
+        "type": "data"
+      },
+      {
+        "name": "R02_13453-v01_Cuboidal_rangeFig.fig",
+        "backup_rel": "Files_for_Peter_Felfer_interfacial_excess_calculation/R02_13453-v01_Cuboidal_rangeFig.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R04_11114",
+    "new_folder": true,
+    "description": "unranged/A718/100430A718LEAP/100430-1/R04_11114/recons/recon-v01/default",
+    "files": [
+      {
+        "name": "R04_11114-v01.pos",
+        "backup_rel": "unranged/A718/100430A718LEAP/100430-1/R04_11114/recons/recon-v01/default/R04_11114-v01.pos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R04_11115",
+    "new_folder": true,
+    "description": "unranged/A718/100430A718LEAP/100430-2/R04_11115/recons/recon-v01/default",
+    "files": [
+      {
+        "name": "R04_11115-v01.pos",
+        "backup_rel": "unranged/A718/100430A718LEAP/100430-2/R04_11115/recons/recon-v01/default/R04_11115-v01.pos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R04_11116",
+    "new_folder": true,
+    "description": "unranged/A718/100430A718LEAP/100430-4/R04_11116/recons/recon-v02/default",
+    "files": [
+      {
+        "name": "R04_11116-v02.pos",
+        "backup_rel": "unranged/A718/100430A718LEAP/100430-4/R04_11116/recons/recon-v02/default/R04_11116-v02.pos",
+        "type": "data"
+      },
+      {
+        "name": "R04_11116-v01.pos",
+        "backup_rel": "unranged/A718/100430A718LEAP/100430-4/R04_11116/recons/recon-v01/default/R04_11116-v01.pos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R04_11124",
+    "new_folder": true,
+    "description": "unranged/A718/100430A718LEAP/100430-8/R04_11124/recons/recon-v01/default",
+    "files": [
+      {
+        "name": "R04_11124-v01.pos",
+        "backup_rel": "unranged/A718/100430A718LEAP/100430-8/R04_11124/recons/recon-v01/default/R04_11124-v01.pos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R04_11131",
+    "new_folder": true,
+    "description": "unranged/A718/100430A718LEAP/100430-9/R04_11131/recons/recon-v01/default",
+    "files": [
+      {
+        "name": "R04_11131-v01.pos",
+        "backup_rel": "unranged/A718/100430A718LEAP/100430-9/R04_11131/recons/recon-v01/default/R04_11131-v01.pos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R04_11201",
+    "new_folder": true,
+    "description": "unranged/A718/100509A718/100509-1/R04_11201/recons/trial/default",
+    "files": [
+      {
+        "name": "R04_11201-v01.pos",
+        "backup_rel": "unranged/A718/100509A718/100509-1/R04_11201/recons/trial/default/R04_11201-v01.pos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R04_11350",
+    "new_folder": false,
+    "description": "",
+    "files": [
+      {
+        "name": "R04_11350-v02-clip.pos",
+        "backup_rel": "unranged/A718/100531A718AQ/100531-2/R04_11350/recons/recon-v02/clipformovie/R04_11350-v02-clip.pos",
+        "type": "data"
+      },
+      {
+        "name": "R04_11350-v02.pos",
+        "backup_rel": "unranged/A718/100531A718AQ/100531-2/R04_11350/recons/recon-v02/default/R04_11350-v02.pos",
+        "type": "data"
+      },
+      {
+        "name": "r04_11350-v01.epos_ModifiedByEPOS.pos",
+        "backup_rel": "unranged/A718/100531A718AQ/100531-2/R04_11350/recons/recon-v01/r04_11350-v01.epos_ModifiedByEPOS.pos",
+        "type": "data"
+      },
+      {
+        "name": "r04_11350-v01.epos_ModifiedByEPOS.pos",
+        "backup_rel": "unranged/A718/100531A718AQ/100531-2/R04_11350/recons/recon-v01/default/r04_11350-v01.epos_ModifiedByEPOS.pos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R04_12445",
+    "new_folder": true,
+    "description": "unranged/A718/AQ_C/101027AQ_C/golden3/R04_12445/recons/recon-v01/default",
+    "files": [
+      {
+        "name": "R04_12445-v01.pos",
+        "backup_rel": "unranged/A718/AQ_C/101027AQ_C/golden3/R04_12445/recons/recon-v01/default/R04_12445-v01.pos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R04_13509",
+    "new_folder": true,
+    "description": "castrip grain boundary",
+    "files": [
+      {
+        "name": "R04_13509-v02.pos",
+        "backup_rel": "castrip grain boundary/R04_13509-v02.pos",
+        "type": "data"
+      },
+      {
+        "name": "R04_13509-v02_xrng.fig",
+        "backup_rel": "castrip grain boundary/R04_13509-v02_xrng.fig",
+        "type": "range"
+      },
+      {
+        "name": "CastripFIB40K.RNG",
+        "backup_rel": "castrip grain boundary/CastripFIB40K.RNG",
+        "type": "range"
+      },
+      {
+        "name": "R04_13509-v02_rng.fig",
+        "backup_rel": "castrip grain boundary/R04_13509-v02_rng.fig",
+        "type": "range"
+      },
+      {
+        "name": "R04_13509-v02.xrng",
+        "backup_rel": "castrip grain boundary/R04_13509-v02.xrng",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R04_15208",
+    "new_folder": true,
+    "description": "Saritha_data",
+    "files": [
+      {
+        "name": "R04_15208-v04-clip-2.pos",
+        "backup_rel": "Saritha_data/R04_15208-v04-clip-2.pos",
+        "type": "data"
+      },
+      {
+        "name": "R04_15208-v04-clip-2_xrng.fig",
+        "backup_rel": "Saritha_data/R04_15208-v04-clip-2_xrng.fig",
+        "type": "range"
+      },
+      {
+        "name": "R04_15208-v04-clip-2.xrng",
+        "backup_rel": "Saritha_data/R04_15208-v04-clip-2.xrng",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R04_19410",
+    "new_folder": true,
+    "description": "unranged/Al",
+    "files": [
+      {
+        "name": "R04_19410-v01.epos",
+        "backup_rel": "unranged/Al/R04_19410-v01.epos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R04_19413",
+    "new_folder": true,
+    "description": "unranged/Ni",
+    "files": [
+      {
+        "name": "R04_19413-v01.epos",
+        "backup_rel": "unranged/Ni/R04_19413-v01.epos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R04_19415",
+    "new_folder": true,
+    "description": "unranged/Ni",
+    "files": [
+      {
+        "name": "R04_19415-v01.epos",
+        "backup_rel": "unranged/Ni/R04_19415-v01.epos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R04_19421",
+    "new_folder": true,
+    "description": "unranged/W",
+    "files": [
+      {
+        "name": "R04_19421-v01.epos",
+        "backup_rel": "unranged/W/R04_19421-v01.epos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R04_19434",
+    "new_folder": true,
+    "description": "Si",
+    "files": [
+      {
+        "name": "R04_19434-v01.epos",
+        "backup_rel": "Si/R04_19434-v01.epos",
+        "type": "data"
+      },
+      {
+        "name": "R04_19434-v01_rng.fig",
+        "backup_rel": "Si/R04_19434-v01_rng.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R13_40310",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R13_40310Zr Top Level ROI.pos",
+        "backup_rel": "external_repos/globus/R13_40310Zr Top Level ROI.pos",
+        "type": "data"
+      },
+      {
+        "name": "R13_40310Zr Top Level ROI_massSpec.fig",
+        "backup_rel": "external_repos/globus/R13_40310Zr Top Level ROI_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R15_72243",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R15_72243 Top Level ROI.pos",
+        "backup_rel": "external_repos/globus/R15_72243 Top Level ROI.pos",
+        "type": "data"
+      },
+      {
+        "name": "R15_72243 Top Level ROI_massSpec.fig",
+        "backup_rel": "external_repos/globus/R15_72243 Top Level ROI_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R16_50678",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R16_50678 NiPdSi Top Level ROI.pos",
+        "backup_rel": "external_repos/globus/R16_50678 NiPdSi Top Level ROI.pos",
+        "type": "data"
+      },
+      {
+        "name": "R16_50678 NiPdSi Top Level ROI_massSpec.fig",
+        "backup_rel": "external_repos/globus/R16_50678 NiPdSi Top Level ROI_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R17_101977",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R17_101977 SiN.pos",
+        "backup_rel": "external_repos/globus/R17_101977 SiN.pos",
+        "type": "data"
+      },
+      {
+        "name": "R17_101977 SiN_massSpec.fig",
+        "backup_rel": "external_repos/globus/R17_101977 SiN_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R17_89420",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R17_89420FeSuper.pos",
+        "backup_rel": "external_repos/globus/R17_89420FeSuper.pos",
+        "type": "data"
+      },
+      {
+        "name": "R17_89420FeSuper_massSpec.fig",
+        "backup_rel": "external_repos/globus/R17_89420FeSuper_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R17_94469",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R17_94469 WRe Top Level ROI.pos",
+        "backup_rel": "external_repos/globus/R17_94469 WRe Top Level ROI.pos",
+        "type": "data"
+      },
+      {
+        "name": "R17_94469 WRe Top Level ROI_massSpec.fig",
+        "backup_rel": "external_repos/globus/R17_94469 WRe Top Level ROI_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R17_98556",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R17_98556.pos",
+        "backup_rel": "external_repos/globus/R17_98556.pos",
+        "type": "data"
+      },
+      {
+        "name": "R17_98556_massSpec.fig",
+        "backup_rel": "external_repos/globus/R17_98556_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R18_09738",
+    "new_folder": true,
+    "description": "unranged/A718/aged_no_C_bulk/R18_09738/recons/recon-v01/default",
+    "files": [
+      {
+        "name": "R18_09738-v01.pos",
+        "backup_rel": "unranged/A718/aged_no_C_bulk/R18_09738/recons/recon-v01/default/R18_09738-v01.pos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R18_12096",
+    "new_folder": false,
+    "description": "",
+    "files": [
+      {
+        "name": "R18_12096-v01.pos",
+        "backup_rel": "unranged/A718/AQ_C/100912AQ_C/R18_12096/recons/trial1/default/R18_12096-v01.pos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R18_50673",
+    "new_folder": true,
+    "description": "unranged/2013ESI_nc_A220",
+    "files": [
+      {
+        "name": "R18_50673-v01.pos",
+        "backup_rel": "unranged/2013ESI_nc_A220/R18_50673-v01.pos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R18_51491",
+    "new_folder": true,
+    "description": "2014Pt triple_line_Scherrer",
+    "files": [
+      {
+        "name": "R18_51491-v14.pos",
+        "backup_rel": "2014Pt triple_line_Scherrer/R18_51491-v14.pos",
+        "type": "data"
+      },
+      {
+        "name": "2013-11-04_51491-V14.RRNG",
+        "backup_rel": "2014Pt triple_line_Scherrer/2013-11-04_51491-V14.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R18_52010",
+    "new_folder": true,
+    "description": "Alex_data",
+    "files": [
+      {
+        "name": "R18_52010-v02.pos",
+        "backup_rel": "Alex_data/R18_52010-v02.pos",
+        "type": "data"
+      },
+      {
+        "name": "allAtoms.rng",
+        "backup_rel": "Alex_data/allAtoms.rng",
+        "type": "range"
+      },
+      {
+        "name": "R18_52010-v02.xrng",
+        "backup_rel": "Alex_data/R18_52010-v02.xrng",
+        "type": "range"
+      },
+      {
+        "name": "R18_52010-v02_xrng.fig",
+        "backup_rel": "Alex_data/R18_52010-v02_xrng.fig",
+        "type": "range"
+      },
+      {
+        "name": "2010.rrng",
+        "backup_rel": "Alex_data/2010.rrng",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R18_52189",
+    "new_folder": true,
+    "description": "140618KIT_anode",
+    "files": [
+      {
+        "name": "R18_52189-v01.epos",
+        "backup_rel": "140618KIT_anode/R18_52189-v01.epos",
+        "type": "data"
+      },
+      {
+        "name": "2013-12-16_R18_52189-v01.rrng",
+        "backup_rel": "140618KIT_anode/2013-12-16_R18_52189-v01.rrng",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R18_53222",
+    "new_folder": true,
+    "description": "external_repos/7986279",
+    "files": [
+      {
+        "name": "R18_53222_W_18K-v01.epos",
+        "backup_rel": "external_repos/7986279/R18_53222_W_18K-v01.epos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R18_54176",
+    "new_folder": true,
+    "description": "150320UCSB_ZrO_shadow mask",
+    "files": [
+      {
+        "name": "R18_54176-v01.pos",
+        "backup_rel": "150320UCSB_ZrO_shadow mask/R18_54176-v01.pos",
+        "type": "data"
+      },
+      {
+        "name": "54176.rrng",
+        "backup_rel": "150320UCSB_ZrO_shadow mask/54176.rrng",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R18_61451",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R18_61451 matchUSYD.pos",
+        "backup_rel": "external_repos/globus/R18_61451 matchUSYD.pos",
+        "type": "data"
+      },
+      {
+        "name": "R18_61451 matchUSYD_massSpec.fig",
+        "backup_rel": "external_repos/globus/R18_61451 matchUSYD_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R2001_00016",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R2001_00016 NiAlFeCo.pos",
+        "backup_rel": "external_repos/globus/R2001_00016 NiAlFeCo.pos",
+        "type": "data"
+      },
+      {
+        "name": "R2001_00016 NiAlFeCo_massSpec.fig",
+        "backup_rel": "external_repos/globus/R2001_00016 NiAlFeCo_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R21_07055",
+    "new_folder": true,
+    "description": "2015Visit_Kathi",
+    "files": [
+      {
+        "name": "R21_07055-v01.pos",
+        "backup_rel": "2015Visit_Kathi/R21_07055-v01.pos",
+        "type": "data"
+      },
+      {
+        "name": "7055_range file_analysis.rrng",
+        "backup_rel": "2015Visit_Kathi/7055_range file_analysis.rrng",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R21_08680",
+    "new_folder": true,
+    "description": "external_repos/7986279/aut_leoben_leitner",
+    "files": [
+      {
+        "name": "R21_08680-v02.pos",
+        "backup_rel": "external_repos/7986279/aut_leoben_leitner/R21_08680-v02.pos",
+        "type": "data"
+      },
+      {
+        "name": "R21_08680-v02_massSpec.fig",
+        "backup_rel": "external_repos/7986279/aut_leoben_leitner/R21_08680-v02_massSpec.fig",
+        "type": "range"
+      },
+      {
+        "name": "R21_08680.rrng",
+        "backup_rel": "external_repos/7986279/aut_leoben_leitner/R21_08680.rrng",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R31_06365",
+    "new_folder": true,
+    "description": "external_repos/7986279/usa_portland_wang",
+    "files": [
+      {
+        "name": "R31_06365-v02.pos",
+        "backup_rel": "external_repos/7986279/usa_portland_wang/R31_06365-v02.pos",
+        "type": "data"
+      },
+      {
+        "name": "R31_06365-v02.pos",
+        "backup_rel": "external_repos/7986279/APM.LEAP.Datasets.1/R31_06365-v02.pos",
+        "type": "data"
+      },
+      {
+        "name": "R31_06365-v02.pos",
+        "backup_rel": "external_repos/7986279/APM.LEAP.Datasets.1 2/R31_06365-v02.pos",
+        "type": "data"
+      },
+      {
+        "name": "R31_06365_autoEER.fig",
+        "backup_rel": "external_repos/7986279/usa_portland_wang/R31_06365_autoEER.fig",
+        "type": "range"
+      },
+      {
+        "name": "R31_06365-v02_massSpec.fig",
+        "backup_rel": "external_repos/7986279/usa_portland_wang/R31_06365-v02_massSpec.fig",
+        "type": "range"
+      },
+      {
+        "name": "R31_06365-v02.rrng",
+        "backup_rel": "external_repos/7986279/usa_portland_wang/R31_06365-v02.rrng",
+        "type": "range"
+      },
+      {
+        "name": "SeHoKim_R5076_44076_v02.rrng",
+        "backup_rel": "external_repos/7986279/APM.LEAP.Datasets.1/SeHoKim_R5076_44076_v02.rrng",
+        "type": "range"
+      },
+      {
+        "name": "R31_06365-v02.rrng",
+        "backup_rel": "external_repos/7986279/APM.LEAP.Datasets.1/R31_06365-v02.rrng",
+        "type": "range"
+      },
+      {
+        "name": "SeHoKim_R5076_44076_v02.rng",
+        "backup_rel": "external_repos/7986279/APM.LEAP.Datasets.1/SeHoKim_R5076_44076_v02.rng",
+        "type": "range"
+      },
+      {
+        "name": "SeHoKim_R5076_44076_v02.rrng",
+        "backup_rel": "external_repos/7986279/APM.LEAP.Datasets.1 2/SeHoKim_R5076_44076_v02.rrng",
+        "type": "range"
+      },
+      {
+        "name": "R31_06365-v02.rrng",
+        "backup_rel": "external_repos/7986279/APM.LEAP.Datasets.1 2/R31_06365-v02.rrng",
+        "type": "range"
+      },
+      {
+        "name": "SeHoKim_R5076_44076_v02.rng",
+        "backup_rel": "external_repos/7986279/APM.LEAP.Datasets.1 2/SeHoKim_R5076_44076_v02.rng",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R31_19142",
+    "new_folder": true,
+    "description": "external_repos/15319905",
+    "files": [
+      {
+        "name": "R31_19142 Elbow.RRNG",
+        "backup_rel": "external_repos/15319905/R31_19142 Elbow.RRNG",
+        "type": "range"
+      },
+      {
+        "name": "R31_19142 Tail.RRNG",
+        "backup_rel": "external_repos/15319905/R31_19142 Tail.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R36_02286",
+    "new_folder": true,
+    "description": "unranged/2014_Andrea_CoCu",
+    "files": [
+      {
+        "name": "R36_02286-v02_clustering_Cu_filt.pos",
+        "backup_rel": "unranged/2014_Andrea_CoCu/R36_02286-v02_clustering_Cu_filt.pos",
+        "type": "data"
+      },
+      {
+        "name": "R36_02286-v02_clustering_clippingCube1.pos",
+        "backup_rel": "unranged/2014_Andrea_CoCu/R36_02286-v02_clustering_clippingCube1.pos",
+        "type": "data"
+      },
+      {
+        "name": "R36_02286-v02_clustering_clippingCube.pos",
+        "backup_rel": "unranged/2014_Andrea_CoCu/R36_02286-v02_clustering_clippingCube.pos",
+        "type": "data"
+      },
+      {
+        "name": "R36_02286-v02.pos",
+        "backup_rel": "unranged/2014_Andrea_CoCu/R36_02286-v02.pos",
+        "type": "data"
+      },
+      {
+        "name": "R36_02286-v02_clustering_clippingCube_Cu_filt.pos",
+        "backup_rel": "unranged/2014_Andrea_CoCu/R36_02286-v02_clustering_clippingCube_Cu_filt.pos",
+        "type": "data"
+      },
+      {
+        "name": "R36_02286-v02_xrng.fig",
+        "backup_rel": "unranged/2014_Andrea_CoCu/R36_02286-v02_xrng.fig",
+        "type": "range"
+      },
+      {
+        "name": "R36_02286-v02.xrng",
+        "backup_rel": "unranged/2014_Andrea_CoCu/R36_02286-v02.xrng",
+        "type": "range"
+      },
+      {
+        "name": "R36_02286-v02_Cu_5pct_isosurf_proxigram.fig",
+        "backup_rel": "unranged/2014_Andrea_CoCu/R36_02286-v02_Cu_5pct_isosurf_proxigram.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R40_110290",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R40_110290Au.pos",
+        "backup_rel": "external_repos/globus/R40_110290Au.pos",
+        "type": "data"
+      },
+      {
+        "name": "R40_110290Au_massSpec.fig",
+        "backup_rel": "external_repos/globus/R40_110290Au_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R5038_00333",
+    "new_folder": true,
+    "description": "external_repos/7986279/usa_denton_smith_apav_gbco",
+    "files": [
+      {
+        "name": "R5038_00333-v02.epos",
+        "backup_rel": "external_repos/7986279/usa_denton_smith_apav_gbco/R5038_00333-v02.epos",
+        "type": "data"
+      },
+      {
+        "name": "rng_5pj.rrng",
+        "backup_rel": "external_repos/7986279/usa_denton_smith_apav_gbco/rng_5pj.rrng",
+        "type": "range"
+      },
+      {
+        "name": "R5038_00333-v02_massSpec.fig",
+        "backup_rel": "external_repos/7986279/usa_denton_smith_apav_gbco/R5038_00333-v02_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R5076_68722",
+    "new_folder": true,
+    "description": "external_repos",
+    "files": [
+      {
+        "name": "R5076_68722.epos",
+        "backup_rel": "external_repos/R5076_68722.epos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R5076_69132",
+    "new_folder": true,
+    "description": "external_repos/10677562",
+    "files": [
+      {
+        "name": "R5076_69132-v01.epos",
+        "backup_rel": "external_repos/10677562/R5076_69132-v01.epos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R5076_69138",
+    "new_folder": true,
+    "description": "external_repos/10677562",
+    "files": [
+      {
+        "name": "R5076_69138-v01.epos",
+        "backup_rel": "external_repos/10677562/R5076_69138-v01.epos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R5076_69145",
+    "new_folder": true,
+    "description": "external_repos/10677562",
+    "files": [
+      {
+        "name": "R5076_69145-v01.epos",
+        "backup_rel": "external_repos/10677562/R5076_69145-v01.epos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R5086_258504",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R5086_258504_UNSM_80micron_Tip2 Top Level ROI.pos",
+        "backup_rel": "external_repos/globus/R5086_258504_UNSM_80micron_Tip2 Top Level ROI.pos",
+        "type": "data"
+      },
+      {
+        "name": "R5086_258504_UNSM_80micron_Tip2 Top Level ROI_massSpec.fig",
+        "backup_rel": "external_repos/globus/R5086_258504_UNSM_80micron_Tip2 Top Level ROI_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R5100_228062",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R5100_228062 W.pos",
+        "backup_rel": "external_repos/globus/R5100_228062 W.pos",
+        "type": "data"
+      },
+      {
+        "name": "R5100_228062 W_massSpec.fig",
+        "backup_rel": "external_repos/globus/R5100_228062 W_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R5100_235274",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R5100_235274UW Ranging - Top Level ROI.pos",
+        "backup_rel": "external_repos/globus/R5100_235274UW Ranging - Top Level ROI.pos",
+        "type": "data"
+      },
+      {
+        "name": "R5100_235274UW Ranging - Top Level ROI_massSpec.fig",
+        "backup_rel": "external_repos/globus/R5100_235274UW Ranging - Top Level ROI_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R56_00211",
+    "new_folder": false,
+    "description": "",
+    "files": [
+      {
+        "name": "R56_00211-v04_rng.fig",
+        "backup_rel": "CoW_alloy_Freund/R56_00211-v04_rng.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R56_08424",
+    "new_folder": true,
+    "description": "R56_08424_FHT_NiAl",
+    "files": [
+      {
+        "name": "R56_08424-v06.EPOS",
+        "backup_rel": "R56_08424_FHT_NiAl/R56_08424-v06.EPOS",
+        "type": "data"
+      },
+      {
+        "name": "R56_08424-v04.pos",
+        "backup_rel": "R56_08424_FHT_NiAl/R56_08424-v04.pos",
+        "type": "data"
+      },
+      {
+        "name": "R56_08424-v06_massSpec.fig",
+        "backup_rel": "R56_08424_FHT_NiAl/R56_08424-v06_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R56_09162",
+    "new_folder": false,
+    "description": "",
+    "files": [
+      {
+        "name": "R56_09162-v01_massSpec.fig",
+        "backup_rel": "R56_09162_A718/R56_09162-v01_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R56_138794",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R56_138794 YWT Top Level ROI.pos",
+        "backup_rel": "external_repos/globus/R56_138794 YWT Top Level ROI.pos",
+        "type": "data"
+      },
+      {
+        "name": "R56_138794 YWT Top Level ROI_massSpec.fig",
+        "backup_rel": "external_repos/globus/R56_138794 YWT Top Level ROI_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6001_233217",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R6001_233217CuBe.pos",
+        "backup_rel": "external_repos/globus/R6001_233217CuBe.pos",
+        "type": "data"
+      },
+      {
+        "name": "R6001_233217CuBe_massSpec.fig",
+        "backup_rel": "external_repos/globus/R6001_233217CuBe_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6006_00308",
+    "new_folder": true,
+    "description": "external_repos/15319905",
+    "files": [
+      {
+        "name": "R6006_00308 Tail.RRNG",
+        "backup_rel": "external_repos/15319905/R6006_00308 Tail.RRNG",
+        "type": "range"
+      },
+      {
+        "name": "R6006_00308 Elbow.RRNG",
+        "backup_rel": "external_repos/15319905/R6006_00308 Elbow.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6006_254275",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R6006_254275 Cu LP .pos",
+        "backup_rel": "external_repos/globus/R6006_254275 Cu LP .pos",
+        "type": "data"
+      },
+      {
+        "name": "R6006_254275 Cu LP _massSpec.fig",
+        "backup_rel": "external_repos/globus/R6006_254275 Cu LP _massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6006_254276",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R6006_254276 Cu VpL.pos",
+        "backup_rel": "external_repos/globus/R6006_254276 Cu VpL.pos",
+        "type": "data"
+      },
+      {
+        "name": "R6006_254276 Cu VpL_massSpec.fig",
+        "backup_rel": "external_repos/globus/R6006_254276 Cu VpL_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6006_33138",
+    "new_folder": true,
+    "description": "external_repos/15319905",
+    "files": [
+      {
+        "name": "R6006_33138 Elbow.RRNG",
+        "backup_rel": "external_repos/15319905/R6006_33138 Elbow.RRNG",
+        "type": "range"
+      },
+      {
+        "name": "R6006_33138 thru 33365 Tail.RRNG",
+        "backup_rel": "external_repos/15319905/R6006_33138 thru 33365 Tail.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6006_33139",
+    "new_folder": true,
+    "description": "external_repos/15319905",
+    "files": [
+      {
+        "name": "R6006_33139 Elbow.RRNG",
+        "backup_rel": "external_repos/15319905/R6006_33139 Elbow.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6006_33140",
+    "new_folder": true,
+    "description": "external_repos/15319905",
+    "files": [
+      {
+        "name": "R6006_33140 Elbow.RRNG",
+        "backup_rel": "external_repos/15319905/R6006_33140 Elbow.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6006_33162",
+    "new_folder": true,
+    "description": "external_repos/15319905",
+    "files": [
+      {
+        "name": "R6006_33162 Elbow.RRNG",
+        "backup_rel": "external_repos/15319905/R6006_33162 Elbow.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6006_33167",
+    "new_folder": true,
+    "description": "external_repos/15319905",
+    "files": [
+      {
+        "name": "R6006_33167 Elbow.RRNG",
+        "backup_rel": "external_repos/15319905/R6006_33167 Elbow.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6006_33220",
+    "new_folder": true,
+    "description": "external_repos/15319905",
+    "files": [
+      {
+        "name": "R6006_33220 Elbow.RRNG",
+        "backup_rel": "external_repos/15319905/R6006_33220 Elbow.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6006_33337",
+    "new_folder": true,
+    "description": "external_repos/15319905",
+    "files": [
+      {
+        "name": "R6006_33337 Elbow.RRNG",
+        "backup_rel": "external_repos/15319905/R6006_33337 Elbow.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6006_33339",
+    "new_folder": true,
+    "description": "external_repos/15319905",
+    "files": [
+      {
+        "name": "R6006_33339 Elbow.RRNG",
+        "backup_rel": "external_repos/15319905/R6006_33339 Elbow.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6006_33365",
+    "new_folder": true,
+    "description": "external_repos/15319905",
+    "files": [
+      {
+        "name": "R6006_33365 Elbow.RRNG",
+        "backup_rel": "external_repos/15319905/R6006_33365 Elbow.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6012_2640257000",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R6012_2640257000 Al.pos",
+        "backup_rel": "external_repos/globus/R6012_2640257000 Al.pos",
+        "type": "data"
+      },
+      {
+        "name": "R6012_2640257000 Al_massSpec.fig",
+        "backup_rel": "external_repos/globus/R6012_2640257000 Al_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R6025_267386",
+    "new_folder": true,
+    "description": "external_repos/globus",
+    "files": [
+      {
+        "name": "R6025_267386_NMC811.pos",
+        "backup_rel": "external_repos/globus/R6025_267386_NMC811.pos",
+        "type": "data"
+      },
+      {
+        "name": "R6025_267386_NMC811_massSpec.fig",
+        "backup_rel": "external_repos/globus/R6025_267386_NMC811_massSpec.fig",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "R76_20231",
+    "new_folder": true,
+    "description": "external_repos/2669484",
+    "files": [
+      {
+        "name": "R76_20231-v01.epos",
+        "backup_rel": "external_repos/2669484/R76_20231-v01.epos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R76_23219",
+    "new_folder": true,
+    "description": "external_repos/2669482",
+    "files": [
+      {
+        "name": "R76_23219-v01.epos",
+        "backup_rel": "external_repos/2669482/R76_23219-v01.epos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "R76_31053",
+    "new_folder": true,
+    "description": "external_repos/2669454",
+    "files": [
+      {
+        "name": "R76_31053-v01.epos",
+        "backup_rel": "external_repos/2669454/R76_31053-v01.epos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "external_repos",
+    "new_folder": true,
+    "description": "external_repos",
+    "files": [
+      {
+        "name": "APT_TEM_dataset_selection.ato",
+        "backup_rel": "external_repos/APT_TEM_dataset_selection.ato",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "external_repos_11111719",
+    "new_folder": true,
+    "description": "external_repos/11111719",
+    "files": [
+      {
+        "name": "Enamel-2 m13 Young OES850 --9o7 Mion R31_20551-v03.pos",
+        "backup_rel": "external_repos/11111719/Enamel-2 m13 Young OES850 --9o7 Mion R31_20551-v03.pos",
+        "type": "data"
+      },
+      {
+        "name": "Enamel-2 m14 Young OES850 --19M R31_20642-v01.pos",
+        "backup_rel": "external_repos/11111719/Enamel-2 m14 Young OES850 --19M R31_20642-v01.pos",
+        "type": "data"
+      },
+      {
+        "name": "Enamel-2 m20 Old OES850 --8o9M R31_20694-v01.pos",
+        "backup_rel": "external_repos/11111719/Enamel-2 m20 Old OES850 --8o9M R31_20694-v01.pos",
+        "type": "data"
+      },
+      {
+        "name": "Enamel-2 m19 old OES850 --11M R31_20650-v03.pos",
+        "backup_rel": "external_repos/11111719/Enamel-2 m19 old OES850 --11M R31_20650-v03.pos",
+        "type": "data"
+      },
+      {
+        "name": "Enamel-2 m17 Old OES850 --17M R31_20647-v01.pos",
+        "backup_rel": "external_repos/11111719/Enamel-2 m17 Old OES850 --17M R31_20647-v01.pos",
+        "type": "data"
+      },
+      {
+        "name": "Enamel-2 m16 Young OES850 --8o5 Mion R31_20695-v01.pos",
+        "backup_rel": "external_repos/11111719/Enamel-2 m16 Young OES850 --8o5 Mion R31_20695-v01.pos",
+        "type": "data"
+      },
+      {
+        "name": "Enamel-2 m19 old OES850 --11M R31_20650-v03_massSpec.fig",
+        "backup_rel": "external_repos/11111719/Enamel-2 m19 old OES850 --11M R31_20650-v03_massSpec.fig",
+        "type": "range"
+      },
+      {
+        "name": "Enamel-2 m13 Young OES850 --9o7 Mion R31_20551-v03_massSpec.fig",
+        "backup_rel": "external_repos/11111719/Enamel-2 m13 Young OES850 --9o7 Mion R31_20551-v03_massSpec.fig",
+        "type": "range"
+      },
+      {
+        "name": "Enamel-2 m16 Young OES850 --8o5 Mion R31_20695-v01_massSpec.fig",
+        "backup_rel": "external_repos/11111719/Enamel-2 m16 Young OES850 --8o5 Mion R31_20695-v01_massSpec.fig",
+        "type": "range"
+      },
+      {
+        "name": "Enamel-2 m17 Old OES850 --17M R31_20647-v01_massSpec.fig",
+        "backup_rel": "external_repos/11111719/Enamel-2 m17 Old OES850 --17M R31_20647-v01_massSpec.fig",
+        "type": "range"
+      },
+      {
+        "name": "Enamel-2 m14 Young OES850 --19M R31_20642-v01.rrng",
+        "backup_rel": "external_repos/11111719/Enamel-2 m14 Young OES850 --19M R31_20642-v01.rrng",
+        "type": "range"
+      },
+      {
+        "name": "Enamel-2 m14 Young OES850 --19M R31_20642-v01_massSpec.fig",
+        "backup_rel": "external_repos/11111719/Enamel-2 m14 Young OES850 --19M R31_20642-v01_massSpec.fig",
+        "type": "range"
+      },
+      {
+        "name": "Enamel-2 m20 Old OES850 --8o9M R31_20694-v01_massSpec.fig",
+        "backup_rel": "external_repos/11111719/Enamel-2 m20 Old OES850 --8o9M R31_20694-v01_massSpec.fig",
+        "type": "range"
+      },
+      {
+        "name": "Enamel-2 m16 Young OES850 --8o5 Mion R31_20695-v01.rrng",
+        "backup_rel": "external_repos/11111719/Enamel-2 m16 Young OES850 --8o5 Mion R31_20695-v01.rrng",
+        "type": "range"
+      },
+      {
+        "name": "Enamel-2 m13 Young OES850 --9o7 Mion R31_20551-v03.rrng",
+        "backup_rel": "external_repos/11111719/Enamel-2 m13 Young OES850 --9o7 Mion R31_20551-v03.rrng",
+        "type": "range"
+      },
+      {
+        "name": "Enamel-2 m20 Old OES850 --8o9M R31_20694-v01.rrng",
+        "backup_rel": "external_repos/11111719/Enamel-2 m20 Old OES850 --8o9M R31_20694-v01.rrng",
+        "type": "range"
+      },
+      {
+        "name": "Enamel-2 m19 old OES850 --11M R31_20650-v03.rrng",
+        "backup_rel": "external_repos/11111719/Enamel-2 m19 old OES850 --11M R31_20650-v03.rrng",
+        "type": "range"
+      },
+      {
+        "name": "Enamel-2 m17 Old OES850 --17M R31_20647-v01.rrng",
+        "backup_rel": "external_repos/11111719/Enamel-2 m17 Old OES850 --17M R31_20647-v01.rrng",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "external_repos_5534859",
+    "new_folder": true,
+    "description": "external_repos/5534859",
+    "files": [
+      {
+        "name": "77c8293e-1b1c-41ca-96c9-e18ff266a000.POS",
+        "backup_rel": "external_repos/5534859/77c8293e-1b1c-41ca-96c9-e18ff266a000.POS",
+        "type": "data"
+      },
+      {
+        "name": "aa137df8-ce0e-481e-93e6-a22cb5a34882.POS",
+        "backup_rel": "external_repos/5534859/aa137df8-ce0e-481e-93e6-a22cb5a34882.POS",
+        "type": "data"
+      },
+      {
+        "name": "3a5ddf5d-ddf2-4c8c-89fe-e1dd115683db.POS",
+        "backup_rel": "external_repos/5534859/3a5ddf5d-ddf2-4c8c-89fe-e1dd115683db.POS",
+        "type": "data"
+      },
+      {
+        "name": "8fe936a9-c8bf-417a-8006-bff810375bc7.POS",
+        "backup_rel": "external_repos/5534859/8fe936a9-c8bf-417a-8006-bff810375bc7.POS",
+        "type": "data"
+      },
+      {
+        "name": "451a48eb-0d2c-4b6c-8587-ebfc832e38ff.POS",
+        "backup_rel": "external_repos/5534859/451a48eb-0d2c-4b6c-8587-ebfc832e38ff.POS",
+        "type": "data"
+      },
+      {
+        "name": "0d2cc974-9d9a-44ab-a779-09740f6ecb82.POS",
+        "backup_rel": "external_repos/5534859/0d2cc974-9d9a-44ab-a779-09740f6ecb82.POS",
+        "type": "data"
+      },
+      {
+        "name": "4c1e71dc-9fdb-44ab-b7fb-105235775029.POS",
+        "backup_rel": "external_repos/5534859/4c1e71dc-9fdb-44ab-b7fb-105235775029.POS",
+        "type": "data"
+      },
+      {
+        "name": "98e28a97-ad0c-456a-a561-70e0a961eaf5.POS",
+        "backup_rel": "external_repos/5534859/98e28a97-ad0c-456a-a561-70e0a961eaf5.POS",
+        "type": "data"
+      },
+      {
+        "name": "c55d7256-3600-4e0a-91d2-f09fd4648ef9.POS",
+        "backup_rel": "external_repos/5534859/c55d7256-3600-4e0a-91d2-f09fd4648ef9.POS",
+        "type": "data"
+      },
+      {
+        "name": "653b9b5f-6f4c-4773-8e80-e0e9f3fe5dcc.POS",
+        "backup_rel": "external_repos/5534859/653b9b5f-6f4c-4773-8e80-e0e9f3fe5dcc.POS",
+        "type": "data"
+      },
+      {
+        "name": "4eef8bf6-c36e-4d1e-95e3-e38174fcb4b7.POS",
+        "backup_rel": "external_repos/5534859/4eef8bf6-c36e-4d1e-95e3-e38174fcb4b7.POS",
+        "type": "data"
+      },
+      {
+        "name": "485df44e-33bd-4c40-89fb-29aa3faa7785.POS",
+        "backup_rel": "external_repos/5534859/485df44e-33bd-4c40-89fb-29aa3faa7785.POS",
+        "type": "data"
+      },
+      {
+        "name": "6c6c6ee5-4080-46bf-8cfb-d33c0863fdd0.POS",
+        "backup_rel": "external_repos/5534859/6c6c6ee5-4080-46bf-8cfb-d33c0863fdd0.POS",
+        "type": "data"
+      },
+      {
+        "name": "5acb03b0-04db-4a1d-93a1-356cbd913e69.POS",
+        "backup_rel": "external_repos/5534859/5acb03b0-04db-4a1d-93a1-356cbd913e69.POS",
+        "type": "data"
+      },
+      {
+        "name": "39f09588-44a8-4dc8-862b-1db9790ee30f.POS",
+        "backup_rel": "external_repos/5534859/39f09588-44a8-4dc8-862b-1db9790ee30f.POS",
+        "type": "data"
+      },
+      {
+        "name": "d5692e46-52a1-4c62-a0b2-01fe39c2a496.POS",
+        "backup_rel": "external_repos/5534859/d5692e46-52a1-4c62-a0b2-01fe39c2a496.POS",
+        "type": "data"
+      },
+      {
+        "name": "70a59eff-003c-4337-832a-604c260dc623.POS",
+        "backup_rel": "external_repos/5534859/70a59eff-003c-4337-832a-604c260dc623.POS",
+        "type": "data"
+      },
+      {
+        "name": "bb158535-0204-4619-b532-e35c422c96b5.POS",
+        "backup_rel": "external_repos/5534859/bb158535-0204-4619-b532-e35c422c96b5.POS",
+        "type": "data"
+      },
+      {
+        "name": "03297260-c180-425c-8896-b0484af71750.POS",
+        "backup_rel": "external_repos/5534859/03297260-c180-425c-8896-b0484af71750.POS",
+        "type": "data"
+      },
+      {
+        "name": "2653fa9c-6c43-4481-94f4-10b67a5c682b.POS",
+        "backup_rel": "external_repos/5534859/2653fa9c-6c43-4481-94f4-10b67a5c682b.POS",
+        "type": "data"
+      },
+      {
+        "name": "dd15537d-6019-4a80-8abe-4b388f3b77b6.POS",
+        "backup_rel": "external_repos/5534859/dd15537d-6019-4a80-8abe-4b388f3b77b6.POS",
+        "type": "data"
+      },
+      {
+        "name": "ee04a8e4-2f1a-472d-89a0-37a0a3fd6471.POS",
+        "backup_rel": "external_repos/5534859/ee04a8e4-2f1a-472d-89a0-37a0a3fd6471.POS",
+        "type": "data"
+      },
+      {
+        "name": "e89fa9d3-eef5-49e0-b0b6-9da0ca826eee.POS",
+        "backup_rel": "external_repos/5534859/e89fa9d3-eef5-49e0-b0b6-9da0ca826eee.POS",
+        "type": "data"
+      },
+      {
+        "name": "b4b7c711-c302-4ee5-b411-e2a3bf6aad97.POS",
+        "backup_rel": "external_repos/5534859/b4b7c711-c302-4ee5-b411-e2a3bf6aad97.POS",
+        "type": "data"
+      },
+      {
+        "name": "a086e6ba-ac96-40ac-b620-2acc9aa82806.POS",
+        "backup_rel": "external_repos/5534859/a086e6ba-ac96-40ac-b620-2acc9aa82806.POS",
+        "type": "data"
+      },
+      {
+        "name": "a6c565c8-a27c-4502-93e1-96ecefa315eb.POS",
+        "backup_rel": "external_repos/5534859/a6c565c8-a27c-4502-93e1-96ecefa315eb.POS",
+        "type": "data"
+      },
+      {
+        "name": "e7923146-1755-47ec-876b-ded31b78d2b6.POS",
+        "backup_rel": "external_repos/5534859/e7923146-1755-47ec-876b-ded31b78d2b6.POS",
+        "type": "data"
+      },
+      {
+        "name": "ee98f685-6f6f-484d-b8ea-9980930f174d.POS",
+        "backup_rel": "external_repos/5534859/ee98f685-6f6f-484d-b8ea-9980930f174d.POS",
+        "type": "data"
+      },
+      {
+        "name": "range file.RRNG",
+        "backup_rel": "external_repos/5534859/range file.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "external_repos_5838237",
+    "new_folder": true,
+    "description": "external_repos/5838237",
+    "files": [
+      {
+        "name": "2min FeO R76_50312.EPOS",
+        "backup_rel": "external_repos/5838237/2min FeO R76_50312.EPOS",
+        "type": "data"
+      },
+      {
+        "name": "Steel before D-charging R96_50397.EPOS",
+        "backup_rel": "external_repos/5838237/Steel before D-charging R96_50397.EPOS",
+        "type": "data"
+      },
+      {
+        "name": "Pristine FeO R76_45587.EPOS",
+        "backup_rel": "external_repos/5838237/Pristine FeO R76_45587.EPOS",
+        "type": "data"
+      },
+      {
+        "name": "1min FeO R76_50315.EPOS",
+        "backup_rel": "external_repos/5838237/1min FeO R76_50315.EPOS",
+        "type": "data"
+      },
+      {
+        "name": "Steel after D-charging R96_50473.EPOS",
+        "backup_rel": "external_repos/5838237/Steel after D-charging R96_50473.EPOS",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "external_repos_7986279_APM.LEAP.Datasets.4",
+    "new_folder": true,
+    "description": "external_repos/7986279/APM.LEAP.Datasets.4",
+    "files": [
+      {
+        "name": "70_50_50.POS",
+        "backup_rel": "external_repos/7986279/APM.LEAP.Datasets.4/70_50_50.POS",
+        "type": "data"
+      },
+      {
+        "name": "AB.RRNG",
+        "backup_rel": "external_repos/7986279/APM.LEAP.Datasets.4/AB.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "external_repos_7986279_APM.LEAP.Datasets.4 2",
+    "new_folder": true,
+    "description": "external_repos/7986279/APM.LEAP.Datasets.4 2",
+    "files": [
+      {
+        "name": "70_50_50.POS",
+        "backup_rel": "external_repos/7986279/APM.LEAP.Datasets.4 2/70_50_50.POS",
+        "type": "data"
+      },
+      {
+        "name": "AB.RRNG",
+        "backup_rel": "external_repos/7986279/APM.LEAP.Datasets.4 2/AB.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "external_repos_7986279_usa_denton_smith_apav_si",
+    "new_folder": true,
+    "description": "external_repos/7986279/usa_denton_smith_apav_si",
+    "files": [
+      {
+        "name": "Si.pos",
+        "backup_rel": "external_repos/7986279/usa_denton_smith_apav_si/Si.pos",
+        "type": "data"
+      },
+      {
+        "name": "Si.epos",
+        "backup_rel": "external_repos/7986279/usa_denton_smith_apav_si/Si.epos",
+        "type": "data"
+      },
+      {
+        "name": "Si.RNG",
+        "backup_rel": "external_repos/7986279/usa_denton_smith_apav_si/Si.RNG",
+        "type": "range"
+      },
+      {
+        "name": "Si_rng.fig",
+        "backup_rel": "external_repos/7986279/usa_denton_smith_apav_si/Si_rng.fig",
+        "type": "range"
+      },
+      {
+        "name": "Si.RRNG",
+        "backup_rel": "external_repos/7986279/usa_denton_smith_apav_si/Si.RRNG",
+        "type": "range"
+      }
+    ]
+  },
+  {
+    "folder": "unranged_A718_100531A718AQ",
+    "new_folder": true,
+    "description": "unranged/A718/100531A718AQ/100531-2/R04_11350/recons/recon-v01/GB35nmCylinderAQ_noC",
+    "files": [
+      {
+        "name": "forImage.indexed.pos",
+        "backup_rel": "unranged/A718/100531A718AQ/100531-2/R04_11350/recons/recon-v02/forImage/forImage.indexed.pos",
+        "type": "data"
+      },
+      {
+        "name": "cube20nm.pos",
+        "backup_rel": "unranged/A718/100531A718AQ/100531-2/R04_11350/recons/recon-v01/cube20nmEPOS/cube20nm.pos",
+        "type": "data"
+      },
+      {
+        "name": "prefRetPaper20nm.pos",
+        "backup_rel": "unranged/A718/100531A718AQ/100531-2/R04_11350/recons/recon-v01/prefRetPaper20nm/prefRetPaper20nm.pos",
+        "type": "data"
+      },
+      {
+        "name": "GB35nmAQ.pos",
+        "backup_rel": "unranged/A718/100531A718AQ/100531-2/R04_11350/recons/recon-v01/GB35nmCylinderAQ_noC/GB35nmAQ.pos",
+        "type": "data"
+      }
+    ]
+  },
+  {
+    "folder": "unranged_A718_AQ_C",
+    "new_folder": true,
+    "description": "unranged/A718/AQ_C/101027AQ_C/golden3/R04_12445/recons/recon-v01/15nmcylinder",
+    "files": [
+      {
+        "name": "GB35x3C_2.pos",
+        "backup_rel": "unranged/A718/AQ_C/100912AQ_C/R18_12096/recons/trial1/GB35x3_C2/GB35x3C_2.pos",
+        "type": "data"
+      },
+      {
+        "name": "GB35nm-roi.pos",
+        "backup_rel": "unranged/A718/AQ_C/100912AQ_C/R18_12096/recons/trial1/GB35nm/GB35nm-roi.pos",
+        "type": "data"
+      },
+      {
+        "name": "GB35nm-roi.pos",
+        "backup_rel": "unranged/A718/AQ_C/100912AQ_C/R18_12096/recons/trial1/GB35nmCylinder_AQ_C/GB35nm-roi.pos",
+        "type": "data"
+      },
+      {
+        "name": "GB35nm.pos",
+        "backup_rel": "unranged/A718/AQ_C/100912AQ_C/R18_12096/recons/trial1/GB35nmCylinder_AQ_C/GB35nm.pos",
+        "type": "data"
+      },
+      {
+        "name": "GBAQC35x5.pos",
+        "backup_rel": "unranged/A718/AQ_C/100912AQ_C/R18_12096/recons/trial1/GB35nmCylinder_AQ_C/GBAQC35x5.pos",
+        "type": "data"
+      },
+      {
+        "name": "GB35nm3nmthick.pos",
+        "backup_rel": "unranged/A718/AQ_C/100912AQ_C/R18_12096/recons/trial1/GB35nmCylinder_AQ_C/GB35nm3nmthick.pos",
+        "type": "data"
+      },
+      {
+        "name": "prefRetPaper20nm.pos",
+        "backup_rel": "unranged/A718/AQ_C/100912AQ_C/R18_12096/recons/k3.5/prefRetPaper20nm/prefRetPaper20nm.pos",
+        "type": "data"
+      },
+      {
+        "name": "15nmcylinder.pos",
+        "backup_rel": "unranged/A718/AQ_C/101027AQ_C/golden3/R04_12445/recons/recon-v01/15nmcylinder/15nmcylinder.pos",
+        "type": "data"
+      }
+    ]
+  }
+]

@@ -1,0 +1,15 @@
+# Atom Probe Toolbox configuration (YAML subset)
+# LEAP 5000 XS instrument preset
+version: 1
+schema: "instrumentPreset"
+instrument:
+  name: "LEAP 5000 XS"
+  manufacturer: "CAMECA"
+  type: "LEAP"
+reconstruction:
+  detectionEfficiency: 0.80
+  flightPathLength: 120
+  t0: 50.0
+  kFactor: 3.3
+  ICF: 1.65
+  fieldFactor: 0.18

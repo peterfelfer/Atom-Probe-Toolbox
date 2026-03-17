@@ -1,0 +1,15 @@
+# Atom Probe Toolbox configuration (YAML subset)
+# EIKOS instrument preset
+version: 1
+schema: "instrumentPreset"
+instrument:
+  name: "EIKOS"
+  manufacturer: "CAMECA"
+  type: "EIKOS"
+reconstruction:
+  detectionEfficiency: 0.50
+  flightPathLength: 100
+  t0: 45.0
+  kFactor: 3.3
+  ICF: 1.65
+  fieldFactor: 0.18

@@ -1,0 +1,15 @@
+# Atom Probe Toolbox configuration (YAML subset)
+# LEAP 4000X HR instrument preset
+version: 1
+schema: "instrumentPreset"
+instrument:
+  name: "LEAP 4000X HR"
+  manufacturer: "CAMECA"
+  type: "LEAP"
+reconstruction:
+  detectionEfficiency: 0.37
+  flightPathLength: 110
+  t0: 55.7
+  kFactor: 3.3
+  ICF: 1.65
+  fieldFactor: 0.18
