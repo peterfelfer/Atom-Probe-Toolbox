@@ -94,6 +94,7 @@ arguments
     options.bgWindow (1,1) double {mustBePositive} = 0.3
     options.minPurity (1,1) double {mustBeNonnegative} = 0.0
     options.minCounts (1,1) double {mustBeNonnegative} = 0
+    options.fitTails (1,1) logical = true
     options.showPlot (1,1) logical = false
 end
 
@@ -195,13 +196,62 @@ for p = 1:(nPeaks - 1)
     leftLimit(p+1) = valleyBin;
 end
 
-%% Compute EER boundaries using global background, constrained to peak region
+%% Fit power law tails for each peak (optional)
+% The thermal tail of an APT peak follows a power law: signal ~ a * dx^(-c)
+% where dx is the distance from the peak maximum. When enabled, the fitted
+% tails of neighbouring peaks are added to the effective background, so the
+% EER boundary accounts for the classification probability between adjacent
+% peaks. When disabled (fitTails=false), only the monotone decrease
+% constraint and valley partitioning are used (global background mode).
+tailFits = struct('aRight', {}, 'cRight', {}, 'aLeft', {}, 'cLeft', {});
+for p = 1:nPeaks
+    tailFits(p).aRight = NaN; tailFits(p).cRight = NaN;
+    tailFits(p).aLeft = NaN;  tailFits(p).cLeft = NaN;
+end
+
+if options.fitTails
+for p = 1:nPeaks
+
+    pkMc = centers(pkBins(p));
+
+    % Right tail: fit from peak+0.05 to midpoint toward right neighbor
+    if p < nPeaks
+        midRight = (pkMc + centers(pkBins(p+1))) / 2;
+    else
+        midRight = centers(rightLimit(p));
+    end
+    fitMask = centers > pkMc + 0.05 & centers < midRight;
+    if sum(fitMask) >= 5
+        dx = centers(fitMask) - pkMc;
+        sig = max(1, rawCounts(fitMask) - bgRaw(fitMask));
+        pf = polyfit(log(dx), log(sig), 1);
+        tailFits(p).cRight = -pf(1);
+        tailFits(p).aRight = exp(pf(2));
+    end
+
+    % Left tail: fit from peak-0.05 to midpoint toward left neighbor
+    if p > 1
+        midLeft = (centers(pkBins(p-1)) + pkMc) / 2;
+    else
+        midLeft = centers(leftLimit(p));
+    end
+    fitMask = centers < pkMc - 0.05 & centers > midLeft;
+    if sum(fitMask) >= 5
+        dx = pkMc - centers(fitMask);
+        sig = max(1, rawCounts(fitMask) - bgRaw(fitMask));
+        pf = polyfit(log(dx), log(sig), 1);
+        tailFits(p).cLeft = -pf(1);
+        tailFits(p).aLeft = exp(pf(2));
+    end
+end
+end % if options.fitTails
+
+%% Compute EER boundaries with neighbor tail subtraction
 k = options.purityFactor;
 mcbegin = nan(nPeaks, 1);
 mcend = nan(nPeaks, 1);
 
 for p = 1:nPeaks
-    % Map peak bin to index within the region
     lBin = leftLimit(p);
     rBin = rightLimit(p);
     regionBins = lBin:rBin;
@@ -209,27 +259,85 @@ for p = 1:nPeaks
     pkInRegion = pkBins(p) - lBin + 1;
     pkInRegion = max(1, min(nRegion, pkInRegion));
 
-    % EER on left half (peak to left valley)
-    mcbegin(p) = findEERBoundaryLocal( ...
-        rawCounts(regionBins), bgRaw(regionBins), centers(regionBins), pkInRegion, k, 'left');
+    regionCts = rawCounts(regionBins);
+    regionBg = bgRaw(regionBins);
+    regionMc = centers(regionBins);
 
-    % EER on right half (peak to right valley)
+    % Subtract the right neighbor's left tail from the right half
+    neighborTailRight = zeros(1, nRegion);
+    if p < nPeaks && isfinite(tailFits(p+1).aLeft) && tailFits(p+1).cLeft > 0
+        nbrMc = centers(pkBins(p+1));
+        dx = nbrMc - regionMc;
+        valid = dx > 0.02;
+        neighborTailRight(valid) = tailFits(p+1).aLeft .* dx(valid).^(-tailFits(p+1).cLeft);
+    end
+
+    % Subtract the left neighbor's right tail from the left half
+    neighborTailLeft = zeros(1, nRegion);
+    if p > 1 && isfinite(tailFits(p-1).aRight) && tailFits(p-1).cRight > 0
+        nbrMc = centers(pkBins(p-1));
+        dx = regionMc - nbrMc;
+        valid = dx > 0.02;
+        neighborTailLeft(valid) = tailFits(p-1).aRight .* dx(valid).^(-tailFits(p-1).cRight);
+    end
+
+    % Effective background = global bg + neighbor tail contributions
+    effectiveBg = regionBg + neighborTailRight + neighborTailLeft;
+
+    % EER on left half
+    mcbegin(p) = findEERBoundaryLocal( ...
+        regionCts, effectiveBg, regionMc, pkInRegion, k, 'left');
+
+    % EER on right half
     mcend(p) = findEERBoundaryLocal( ...
-        rawCounts(regionBins), bgRaw(regionBins), centers(regionBins), pkInRegion, k, 'right');
+        regionCts, effectiveBg, regionMc, pkInRegion, k, 'right');
 end
 
-%% Compute quality metrics
+%% Compute quality metrics and cross-contamination matrix
 purity = nan(nPeaks, 1);
 recovery = nan(nPeaks, 1);
 counts = nan(nPeaks, 1);
 bgCounts = nan(nPeaks, 1);
 sigCounts = nan(nPeaks, 1);
 
+% Cross-contamination matrix: contamination(p, q) = estimated number of
+% atoms from peak q's tail that fall inside range p. This can be used to
+% correct the composition: corrected_counts(p) = counts(p) - sum(contamination(p,:))
+contamination = zeros(nPeaks, nPeaks);
+
 for p = 1:nPeaks
     inRange = centers >= mcbegin(p) & centers <= mcend(p);
     counts(p) = sum(rawCounts(inRange));
     bgCounts(p) = sum(bgRaw(inRange));
-    sigCounts(p) = max(0, counts(p) - bgCounts(p));
+
+    % Compute contamination from each neighbour's tail
+    if options.fitTails
+        for q = 1:nPeaks
+            if q == p; continue; end
+            tf = tailFits(q);
+            [~, qBin] = min(abs(centers - peakMcPositions(q)));
+            qMc = centers(qBin);
+
+            if qMc < centers(pkBins(p)) && isfinite(tf.aRight) && tf.cRight > 0
+                % Peak q is to the left; its right tail extends into range p
+                dx = centers(inRange) - qMc;
+                valid = dx > 0.02;
+                if any(valid)
+                    contamination(p, q) = sum(tf.aRight .* dx(valid).^(-tf.cRight));
+                end
+            elseif qMc > centers(pkBins(p)) && isfinite(tf.aLeft) && tf.cLeft > 0
+                % Peak q is to the right; its left tail extends into range p
+                dx = qMc - centers(inRange);
+                valid = dx > 0.02;
+                if any(valid)
+                    contamination(p, q) = sum(tf.aLeft .* dx(valid).^(-tf.cLeft));
+                end
+            end
+        end
+    end
+
+    totalContam = sum(contamination(p, :));
+    sigCounts(p) = max(0, counts(p) - bgCounts(p) - totalContam);
 
     if counts(p) > 0
         purity(p) = sigCounts(p) / counts(p);
@@ -266,6 +374,8 @@ info.binWidth = binWidth;
 info.purityFactor = k;
 info.totalIons = totalIons;
 info.bgCoefficient = bgCoefficient;
+info.tailFits = tailFits;
+info.contamination = contamination;
 info.settings = options;
 
 %% Diagnostic plot
