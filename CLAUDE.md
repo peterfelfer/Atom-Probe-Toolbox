@@ -174,7 +174,8 @@ clusterDBSCAN(pos, epsilon, minPts);
 
 ### Data I/O
 
-- `posLoad(fileName)` — load .pos/.epos file into table
+- `posLoad(fileName)` — load .pos/.epos/.apt/.h5 file into table (auto-detects pyccapt HDF5)
+- `posLoadPyccapt(fileName)` — load pyccapt raw HDF5 (`/dld/*` datasets) into standard pos table
 - `posExport(pos, fileName)` — export pos table to file
 - `posTableFromHDF5(fileName, datasetName)` — load from HDF5
 - `posTableAddToHDF5(pos, fileName, datasetName)` — save to HDF5
@@ -256,6 +257,17 @@ clusterDBSCAN(pos, epsilon, minPts);
 - `boundaryCharacter` — grain boundary character
 - `stereoProj` — stereographic projection
 - `plotOrientationCube` — orientation cube visualization
+
+### Raw Data Calibration (aptDataCalibration/)
+
+- `tofToMassToCharge(tof, VDC, detx, dety, L, t0, 'mode', 'voltage', 'VP', VP)` — TOF to mc conversion
+- `massToChargeToTof(mc, VDC, detx, dety, L)` — mc to TOF (inverse)
+- `voltageCorrection(pos, [lo hi], 'sampleSize', 1000)` — quadratic voltage-dependent mc correction
+- `bowlCorrection(pos, [lo hi], 'gridSize', 5)` — 2-D quadratic spatial mc correction
+- `fineTuneT0(pos, L, t0, 'mode', 'voltage', 'VP', VP)` — interactive t0 slider
+- `determineLAndT0(pos, selectedPeaks, 'detectorWindow', 5)` — fit L and t0 via linear regression
+- `plotExperimentHistory(pos)` — 2-D histogram (ion index vs TOF) with interactive temporal crop
+- `plotFieldDesorptionMap(pos)` — detector FDM with interactive circular spatial crop
 
 ### Reconstruction
 

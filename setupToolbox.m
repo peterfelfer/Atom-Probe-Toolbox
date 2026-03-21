@@ -55,6 +55,7 @@ subfolders = {
     'utilities_IO'
     'utilities_IO/APT_reader_MPIE'
     'utilities_IO/EMIODist2'
+    'aptDataCalibration'
     'doc'
 };
 

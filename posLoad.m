@@ -51,11 +51,16 @@ try
         case 'apt'
             pos = aptToTable(fileName);
         case {'h5', 'hdf5'}
-            if ~isempty(options.dataset)
+            if isPyccaptHDF5(fileName)
+                pos = posLoadPyccapt(fileName, 'quiet', options.quiet);
+            elseif ~isempty(options.dataset)
                 error('posLoad:datasetUnsupported', ...
                     'HDF5 dataset override not supported.');
+            else
+                pos = posTableFromHDF5(fileName);
             end
-            pos = posTableFromHDF5(fileName);
+        case 'pyccapt'
+            pos = posLoadPyccapt(fileName, 'quiet', options.quiet);
         otherwise
             error('posLoad:unknownFormat', 'Unknown file format: %s', format);
     end
@@ -76,6 +81,15 @@ if ~options.quiet
     end
 end
 
+end
+
+function tf = isPyccaptHDF5(fileName)
+    try
+        info = h5info(fileName);
+        tf = any(strcmp({info.Groups.Name}, '/dld'));
+    catch
+        tf = false;
+    end
 end
 
 function format = normalizeFormat(formatOpt, fileName)

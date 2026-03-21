@@ -95,6 +95,14 @@ If you use this tool box for your atom probe tomography analysis, please conside
 - Reflectron distortion correction
 - Field desorption map analysis
 
+### Raw Data Calibration ([aptDataCalibration](aptDataCalibration/README.md))
+- pyccapt raw HDF5 data loading with auto-detection
+- Time-of-flight to mass-to-charge conversion (laser and voltage modes)
+- Voltage-dependent mass correction (quadratic fit)
+- Spatial bowl correction (2-D quadratic surface fit)
+- Interactive propagation delay (t0) fine-tuning
+- Flight-path length and t0 estimation via linear regression
+
 ### Correlative Microscopy
 - Volume resampling and rotation
 - Isosurface extraction
@@ -243,12 +251,25 @@ See `doc/Visualization_API_Contract.md` for:
 ### Data I/O
 | Function | Description |
 |----------|-------------|
-| `posLoad` | Load .pos/.epos files |
+| `posLoad` | Load .pos/.epos/.apt/.h5 files (auto-detects pyccapt HDF5) |
 | `posExport` | Export position data |
 | `rangesExtractFromFile` | Import RRNG range files |
 | `hdf5FileCreateFromMetaDataList` | Create HDF5 database |
 | `posTableAddToHDF5` | Save data to HDF5 |
 | `posTableFromHDF5` | Load data from HDF5 |
+| `posLoadPyccapt` | Load pyccapt raw HDF5 (`/dld/*` format) |
+
+### Raw Data Calibration (aptDataCalibration)
+| Function | Description |
+|----------|-------------|
+| `tofToMassToCharge` | Convert time-of-flight to mass-to-charge (laser/voltage modes) |
+| `massToChargeToTof` | Convert mass-to-charge to time-of-flight (inverse) |
+| `voltageCorrection` | Voltage-dependent mc correction (quadratic fit) |
+| `bowlCorrection` | Spatial mc correction (2-D quadratic surface fit) |
+| `fineTuneT0` | Interactive t0 slider with live mass spectrum |
+| `determineLAndT0` | Estimate flight-path L and t0 via linear regression |
+| `plotExperimentHistory` | 2-D histogram (index vs TOF) with temporal crop |
+| `plotFieldDesorptionMap` | Field desorption map with circular spatial crop |
 
 ### Ion & Range Management
 | Function | Description |
@@ -358,6 +379,8 @@ Contract and compatibility policy: `doc/Visualization_API_Contract.md`
 | `Workflow_reconstruction.mlx` | 3D reconstruction |
 | `Workflow_ReflectronCorrection.mlx` | Reflectron correction |
 | `Workflow_atomVisualisation.m` | Interactive + scriptable scatter visualization and profile automation |
+| `Workflow_pyccapt_DataProcessing.m` | End-to-end calibration of pyccapt raw data ([aptDataCalibration](aptDataCalibration/README.md)) |
+| `Workflow_pyccapt_LAndT0Determination.m` | Flight-path and t0 estimation for pyccapt data ([aptDataCalibration](aptDataCalibration/README.md)) |
 
 ---
 
