@@ -1,4 +1,4 @@
-function [h, txt] = rangeAdd(spec,colorScheme,manualName,rangeLimits)
+function [h, txt] = rangeAdd(spec,colorScheme,manualName,rangeLimits,autoSelect)
 % adds a range to a mass spectrum using graphical input
 % output is the handle to the area plot and the corresponding text
 %
@@ -247,24 +247,30 @@ if isValid
 
     elseif ~isManual % selection
         numPotIon = length(potentialIon);
-        for i = 1:numPotIon
-            ionDisplayName = ionConvertName(potentialIon{i}, potentialIonChargeState(i));
-            if potentialIonIsTracer(i)
-                ionDisplayName = [ionDisplayName ' (tracer)'];
-            end
-            names{i} = [ionDisplayName '   ' num2str(potentialIonPeakHeight(i))];
-        end
-
-        % select the ion, defaulting to most abundant
         [~, maxIdx] = max(potentialIonPeakHeight);
-        rangeCenterMc = mean(lim);
-        promptStr = sprintf('Select ion for range at %.1f Da', rangeCenterMc);
-        [idx, isSelection] = listdlg('ListString',names,'PromptString',promptStr,'SelectionMode','single',...
-            'InitialValue',maxIdx);
 
-        if ~isSelection
-            delete(h);
-            return
+        if exist('autoSelect','var') && autoSelect
+            % Auto-select the most abundant ion without dialog
+            idx = maxIdx;
+        else
+            % Interactive selection dialog
+            for i = 1:numPotIon
+                ionDisplayName = ionConvertName(potentialIon{i}, potentialIonChargeState(i));
+                if potentialIonIsTracer(i)
+                    ionDisplayName = [ionDisplayName ' (tracer)'];
+                end
+                names{i} = [ionDisplayName '   ' num2str(potentialIonPeakHeight(i))];
+            end
+
+            rangeCenterMc = mean(lim);
+            promptStr = sprintf('Select ion for range at %.1f Da', rangeCenterMc);
+            [idx, isSelection] = listdlg('ListString',names,'PromptString',promptStr,'SelectionMode','single',...
+                'InitialValue',maxIdx);
+
+            if ~isSelection
+                delete(h);
+                return
+            end
         end
 
         h.UserData.ion = potentialIon{idx};
