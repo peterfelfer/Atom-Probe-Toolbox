@@ -81,6 +81,26 @@ for cs = options.chargeStates
     for u = 1:nUnique
         ionName = uniqueIonNames(u);
 
+        % Check physical validity:
+        % - Atomic ions: charge state must not exceed total electrons (atomic number)
+        % - Molecular ions: charge state must be strictly less than total
+        %   electrons (at least one bonding electron must remain, otherwise
+        %   the molecule dissociates — e.g. H2++ = two bare protons, no bond)
+        try
+            ionTable = ionConvertName(char(ionName));
+            totalElectrons = 0;
+            for ae = 1:height(ionTable)
+                totalElectrons = totalElectrons + symbolConvertAtomicNumber(char(ionTable.element(ae)));
+            end
+            nAtoms = height(ionTable);
+            if nAtoms == 1
+                if cs > totalElectrons, continue; end
+            else
+                if cs >= totalElectrons, continue; end
+            end
+        catch
+        end
+
         % Get all isotopic variants for this ion
         mask = ionList.ion == ionName;
         mcValues = ionList.mc(mask);
