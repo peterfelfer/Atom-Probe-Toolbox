@@ -80,7 +80,7 @@ end
 
 if isValid
     %% check for manual range name input
-    isManual = exist('manualName','var'); % is a manual name present?
+    isManual = exist('manualName','var') && ~isempty(manualName); % is a manual name present?
     isBackground = false;
     isValidIonName = false;
     if isManual
@@ -257,7 +257,9 @@ if isValid
 
         % select the ion, defaulting to most abundant
         [~, maxIdx] = max(potentialIonPeakHeight);
-        [idx, isSelection] = listdlg('ListString',names,'PromptString','Select ion species','SelectionMode','single',...
+        rangeCenterMc = mean(lim);
+        promptStr = sprintf('Select ion for range at %.1f Da', rangeCenterMc);
+        [idx, isSelection] = listdlg('ListString',names,'PromptString',promptStr,'SelectionMode','single',...
             'InitialValue',maxIdx);
 
         if ~isSelection
