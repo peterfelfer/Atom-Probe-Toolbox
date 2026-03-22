@@ -9,7 +9,9 @@
 %   3. Specify elements and generate candidate ions
 %   4. Match candidates to detected peaks via isotopic pattern matching
 %   5. Review and edit ion assignments
-%   6. Create ranges using auto EER algorithm
+%   6. Add ion stems to mass spectrum
+%   7. Create ranges using auto EER algorithm
+%   8. Apply ranges (auto-detect ions from stems)
 %
 % Prerequisites: calibrated pos table with mc column (from .epos, .pos,
 % or pyccapt data after tofToMassToCharge + voltage/bowl correction).
@@ -23,17 +25,17 @@ load('colorScheme.mat');
 pos = posLoad();
 
 %% 2. Peak Detection
-% Create initial mass spectrum and detect peaks.
-% Adjust the parameters below to control sensitivity.
+% Adjust the parameters below to control sensitivity. Re-run this section
+% until the detection captures the relevant peaks without too much noise.
 
-% --- Peak detection parameters (adjust these) ---
+% --- Peak detection parameters ---
 binWidth            = 0.01;   % Da — histogram bin width
 minProminenceFactor = 6;      % prominence must exceed factor x local noise
 minDistanceDa       = 0.3;    % Da — minimum distance between peaks
 baselineQuantile    = 0.1;    % quantile for baseline estimation
 smoothSpan          = 0.1;    % Da — smoothing window for residual
+minProminenceDisplay = 500;   % minimum prominence for a peak to be considered
 
-% Run peak detection
 [peakTable, peakInfo] = massSpecFindPeaks(pos.mc, ...
     'binWidth', binWidth, ...
     'minProminenceFactor', minProminenceFactor, ...
@@ -41,17 +43,11 @@ smoothSpan          = 0.1;    % Da — smoothing window for residual
     'baselineQuantile', baselineQuantile, ...
     'smoothSpan', smoothSpan);
 
-fprintf('Detected %d peaks.\n', height(peakTable));
+sigPeaks = peakTable(peakTable.prominence > minProminenceDisplay, :);
+fprintf('Detected %d peaks (%d above prominence threshold).\n', ...
+    height(peakTable), height(sigPeaks));
 
 %% 2b. Diagnostic Plot — Inspect Peak Detection
-% Visualise the spectrum, baseline, noise floor, and detected peaks.
-% If too many or too few peaks, adjust the parameters above and re-run.
-
-% --- Minimum prominence filter for display ---
-minProminenceDisplay = 500;
-
-sigPeaks = peakTable(peakTable.prominence > minProminenceDisplay, :);
-fprintf('Significant peaks (prominence > %d): %d\n', minProminenceDisplay, height(sigPeaks));
 
 figure('Name', 'Peak Detection', 'NumberTitle', 'off', 'Position', [100 100 1200 500]);
 semilogy(peakInfo.centers, peakInfo.counts, 'Color', [0.7 0.7 0.7], 'LineWidth', 0.5);
@@ -75,35 +71,32 @@ legend('Spectrum', 'Baseline', 'Noise threshold', 'Detected peaks', 'Location', 
 title(sprintf('Peak detection: %d significant peaks', height(sigPeaks)));
 hold off;
 
-%% 2c. Peak Table — Review Detected Peaks
-disp(sigPeaks(:, {'mc', 'height', 'prominence'}));
-
 %% 3. Specify Elements and Ion Generation Parameters
-% List the chemical elements present in your specimen.
-% The algorithm generates all plausible ionic and molecular species
-% from these elements (via ionsCreateComplex), computes their isotopic
-% fingerprints, and matches the patterns against the detected peaks.
+% List the chemical elements present in your specimen. The algorithm
+% generates all plausible ionic and molecular species (via ionsCreateComplex),
+% computes their isotopic fingerprints, and matches against detected peaks.
 
 % --- Edit these for your specimen ---
-elements = {'Pd', 'H', 'C', 'N', 'O'};
+elements = {'Ti', 'Al', 'N', 'O', 'H', 'C', 'Si'};
 
 % --- Ion generation parameters ---
 complexity     = [1 2 3];  % atom counts per ion (1=atomic, 2=diatomic, 3=triatomic)
-chargeStates   = [1 2];    % charge states to consider
-matchTolerance = 0.15;     % Da — how close each isotope must be to a peak
+chargeStates   = [1 2 3];  % charge states to consider
+matchTolerance = 0.15;     % Da — isotope-to-peak matching tolerance
 
 %% 4. Isotopic Pattern Matching
-% For each candidate ion, the full isotopic pattern (all isotope positions
-% and relative abundances) is compared against the observed peak heights.
-% Ions with many isotopes matching the correct ratios score highest.
+% Each candidate ion's full isotopic pattern (positions + relative
+% abundances) is compared against the observed peak heights.
 %
 % Scoring:
 %   score = cosine_similarity x fraction_matched x confidence x (1/complexity)
 %
-% Cosine similarity measures how well relative peak heights match the
-% expected natural abundance ratios. Confidence rewards ions with more
-% matched isotopes (a 6-isotope match like Pd is far more informative
-% than a 1-isotope match like H). Complexity penalises molecular ions.
+% Ions with many isotopes matching the correct ratios (e.g. Ti with 5
+% isotopes) score highest. Monoisotopic ions score lower due to less
+% evidence. Molecular ions are penalised by complexity.
+%
+% Physically impossible charge states are automatically filtered
+% (e.g. H++ = impossible, H2++ = no bonding electron).
 
 [matchedIons, ~] = ionMatchPattern(peakTable, elements, isotopeTable, ...
     'complexity', complexity, ...
@@ -114,8 +107,8 @@ matchTolerance = 0.15;     % Da — how close each isotope must be to a peak
     'showPlot', true);
 
 fprintf('\nTop ion identifications:\n');
+nShow = min(40, height(matchedIons));
 fprintf('%-25s  CS  Score  Cmpl  nIso\n', 'Ion');
-nShow = min(30, height(matchedIons));
 for i = 1:nShow
     fprintf('%-25s  %d   %.3f   %d     %d\n', ...
         matchedIons.ionName{i}, matchedIons.chargeState(i), ...
@@ -123,170 +116,140 @@ for i = 1:nShow
         matchedIons.nIsotopes(i));
 end
 
-%% 4b. Select Ions to Keep
-% Review the ranked list above and choose a score threshold.
-% Ions below the threshold are discarded.
-% You can also manually add or remove ions after this step.
+%% 5. Select Ions to Keep
+% Review the ranked list and choose a score threshold. Ions below the
+% threshold are discarded. You can also manually edit after filtering.
 
 % --- Adjust this threshold ---
 scoreThreshold = 0.15;
 
 selectedIons = matchedIons(matchedIons.score >= scoreThreshold, :);
-fprintf('\nSelected %d ions with score >= %.2f:\n', height(selectedIons), scoreThreshold);
-disp(selectedIons(:, {'ionName', 'score', 'chargeState', 'complexity', 'nIsotopes'}));
+fprintf('Selected %d ions with score >= %.2f\n', height(selectedIons), scoreThreshold);
 
-%% 4c. Manual Edits (optional)
+%% 5b. Manual Edits (optional)
 % Remove incorrect assignments:
-%   selectedIons(strcmp(selectedIons.ionName, 'O N ++'), :) = [];
+%   selectedIons(strcmp(selectedIons.ionName, 'Si C H ++'), :) = [];
 %
-% The selected ions will be used for ranging in the next step.
+% The selected ions determine which stems are added in the next step.
 
-%% 5. Create Mass Spectrum with Ion Stems
-% Plot the calibrated mass spectrum and overlay ion stems for the
-% selected ions.
+%% 6. Add Ion Stems to Mass Spectrum
+% Creates a fresh mass spectrum and adds stems for ALL selected ions
+% (both atomic and molecular). rangeAdd will auto-detect ion identity
+% from these stems when applying ranges.
 
+close all;
 spec = massSpecPlot(pos.mc, binWidth, 'normalised');
 xlim([0 min(150, max(pos.mc))]);
 
-% Add stems for each unique element at each charge state
-stemmed = struct();
+stemmed = {};
 for i = 1:height(selectedIons)
     ionName = selectedIons.ionName{i};
     cs = selectedIons.chargeState(i);
-
-    % Extract the base element name (first word before space or +)
-    tokens = regexp(ionName, '(\S+)\s*\++$', 'tokens');
+    tokens = regexp(ionName, '(.+?)\s*\++$', 'tokens');
     if isempty(tokens), continue; end
-    formula = tokens{1}{1};
-
-    % Only add stems for single-element ions (ionAdd handles the isotopes)
-    formulaParts = strsplit(strtrim(formula));
-    if numel(formulaParts) > 1, continue; end
-
-    % Check it's a pure element (no digits = no isotope prefix)
-    elemName = regexprep(formula, '^\d+', '');
-    key = matlab.lang.makeValidName(sprintf('%s_%d', elemName, cs));
-
-    if ~isfield(stemmed, key)
-        try
-            ionAdd(spec, elemName, cs, isotopeTable, colorScheme, 0, 0.005, 'most abundant', 0.5);
-            stemmed.(key) = true;
-        catch
-        end
+    formula = strtrim(tokens{1}{1});
+    key = sprintf('%s_%d', formula, cs);
+    if ismember(key, stemmed), continue; end
+    try
+        ionAdd(spec, formula, cs, isotopeTable, colorScheme, 0, 0.005, 'most abundant', 0.5);
+        stemmed{end+1} = key; %#ok<SAGROW>
+    catch
     end
 end
 
-title('Mass spectrum with matched ion stems');
+fprintf('%d ion stems added to spectrum.\n', numel(stemmed));
+title('Mass spectrum with identified ion stems');
 
-%% 6. Auto-Range with EER Algorithm
-% Collect all peak mc positions from the selected ions and compute
-% optimal range boundaries using the Equal Error Rate criterion.
+%% 7. Compute EER Ranges
+% Collect all peak mc positions from the selected ions' isotope patterns
+% and compute optimal range boundaries using the Equal Error Rate criterion.
 
-% Gather peak positions from each ion's isotope pattern
 allPeakMc = [];
 for i = 1:height(selectedIons)
     positions = selectedIons.peakPositions{i};
-    positions = positions(positions > 0);  % remove unmatched zeros
+    positions = positions(positions > 0);
     allPeakMc = [allPeakMc, positions]; %#ok<AGROW>
 end
 allPeakMc = unique(allPeakMc);
 
-fprintf('Ranging %d unique peak positions.\n', numel(allPeakMc));
-
-[eerRanges, eerInfo] = rangeAutoEER(pos.mc, allPeakMc, ...
-    'binWidth', binWidth, 'showPlot', true);
-
+fprintf('Computing EER ranges for %d peak positions...\n', numel(allPeakMc));
+[eerRanges, eerInfo] = rangeAutoEER(pos.mc, allPeakMc, 'binWidth', binWidth, 'showPlot', true);
 fprintf('EER ranges computed: %d\n', height(eerRanges));
 
-%% 7. Apply Ranges to Mass Spectrum
-% For each EER range, find the best-matching ion and apply it with rangeAdd.
-% Molecular ions are added to the colorScheme automatically.
+%% 8. Apply Ranges
+% Each EER range is applied using rangeAdd, which auto-detects the ion
+% from the stems on the spectrum.
+%
+% If multiple ion stems fall within a range, a selection dialog appears
+% showing "Select ion for range at XX.X Da". Pick the correct ion.
+%
+% If no ion stem is in range, the range is skipped (you can add it
+% manually afterward with rangeAdd).
+%
+% Narrow ranges (< 2 bins) are skipped automatically.
 
-% Pre-add molecular ions to colorScheme
-for i = 1:height(selectedIons)
-    ionName = selectedIons.ionName{i};
-    tokens = regexp(ionName, '(.+?)\s*\++$', 'tokens');
-    if isempty(tokens), continue; end
-    formula = strtrim(tokens{1}{1});
-    formulaParts = strsplit(formula);
-    if numel(formulaParts) > 1
-        catName = categorical(string(formula));
-        if ~any(colorScheme.ion == catName)
-            newColor = rand(1, 3) * 0.5 + 0.25;
-            colorScheme = [colorScheme; table(catName, newColor, 'VariableNames', {'ion', 'color'})]; %#ok<AGROW>
-        end
-    end
-end
+minRangeWidth = 2 * binWidth;  % minimum range width
 
-% Build a lookup: for each peak mc, find the best ion name
-peakToIon = containers.Map('KeyType', 'double', 'ValueType', 'char');
-for i = 1:height(selectedIons)
-    positions = selectedIons.peakPositions{i};
-    theoPattern = selectedIons.theoPattern{i};
-    ionName = selectedIons.ionName{i};
-
-    for p = 1:numel(positions)
-        if positions(p) == 0, continue; end
-        pk = round(positions(p), 4);
-
-        % Only assign if this ion has higher score than any existing assignment
-        if ~peakToIon.isKey(pk)
-            peakToIon(pk) = ionName;
-        end
-    end
-end
-
-fprintf('\nApplying ranges:\n');
+fprintf('\nApplying ranges (selection dialogs may appear for ambiguous peaks):\n');
 nOk = 0;
+nNoIon = 0;
+nSkip = 0;
 for i = 1:height(eerRanges)
     lo = eerRanges.mcbegin(i);
     hi = eerRanges.mcend(i);
-    pk = round(eerRanges.peakMc(i), 4);
 
-    if peakToIon.isKey(pk)
-        ionName = peakToIon(pk);
-    else
-        % Try to find closest key
-        allKeys = cell2mat(peakToIon.keys());
-        [minDist, closestIdx] = min(abs(allKeys - eerRanges.peakMc(i)));
-        if minDist < 0.3
-            ionName = peakToIon(allKeys(closestIdx));
-        else
-            fprintf('  [%7.2f, %7.2f] Da — no ion assignment, skipping\n', lo, hi);
-            continue;
-        end
+    if (hi - lo) < minRangeWidth
+        nSkip = nSkip + 1;
+        continue;
     end
-
-    % Extract just the ion name for rangeAdd (strip trailing spaces)
-    ionName = strtrim(ionName);
 
     try
-        rangeAdd(spec, colorScheme, ionName, [lo hi]);
+        rangeAdd(spec, colorScheme, [], [lo hi]);
         nOk = nOk + 1;
-        fprintf('  %-20s [%7.2f, %7.2f] Da\n', ionName, lo, hi);
     catch e
-        fprintf('  %-20s [%7.2f, %7.2f] — %s\n', ionName, lo, hi, e.message);
+        if contains(e.message, 'no ion defined')
+            nNoIon = nNoIon + 1;
+        else
+            nSkip = nSkip + 1;
+        end
     end
 end
 
-fprintf('\n%d of %d ranges applied.\n', nOk, height(eerRanges));
-
-%% 8. Extract Range Table
-rangeTable = rangesExtractFromMassSpec(spec);
-fprintf('\nFinal range table (%d ranges):\n', height(rangeTable));
-disp(rangeTable(:, {'rangeName', 'mcbegin', 'mcend', 'chargeState'}));
-
-title('Automated mass spectrum analysis — fully ranged');
+fprintf('\n%d ranges applied, %d no ion in range, %d skipped.\n', nOk, nNoIon, nSkip);
+title('Mass spectrum — fully ranged');
 
 %% 9. Summary
+
+% Count ranged ions from range patches on the spectrum
+ax = spec.Parent;
+plots = ax.Children;
+nRanges = 0;
 totalRanged = 0;
-for i = 1:height(rangeTable)
-    totalRanged = totalRanged + sum(pos.mc >= rangeTable.mcbegin(i) & pos.mc <= rangeTable.mcend(i));
+for pl = 1:numel(plots)
+    try
+        if plots(pl).UserData.plotType == "range"
+            nRanges = nRanges + 1;
+            totalRanged = totalRanged + sum( ...
+                pos.mc >= min(plots(pl).XData) & pos.mc <= max(plots(pl).XData));
+        end
+    catch
+    end
 end
+
 fprintf('\n========================================\n');
 fprintf('  Elements: %s\n', strjoin(elements, ', '));
 fprintf('  Peaks detected: %d (significant: %d)\n', height(peakTable), height(sigPeaks));
 fprintf('  Ions matched: %d (above threshold: %d)\n', height(matchedIons), height(selectedIons));
-fprintf('  Ranges applied: %d\n', nOk);
+fprintf('  Ion stems added: %d\n', numel(stemmed));
+fprintf('  EER ranges computed: %d\n', height(eerRanges));
+fprintf('  Ranges applied: %d\n', nRanges);
 fprintf('  Ions ranged: %d / %d (%.1f%%)\n', totalRanged, height(pos), 100*totalRanged/height(pos));
 fprintf('========================================\n');
+
+%% 10. Next Steps (optional)
+% After ranging, continue with the standard toolbox workflow:
+%
+%   rangeTable = rangesExtractFromMassSpec(spec);
+%   pos = posAllocateRange(pos, rangeTable, 'decompose');
+%   conc = posCalculateConcentrationSimple(pos, detEff, {'unranged'});
+%   scatterPlotPosWidget(pos, colorScheme);
