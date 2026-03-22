@@ -250,8 +250,16 @@ if isValid
         [~, maxIdx] = max(potentialIonPeakHeight);
 
         if exist('autoSelect','var') && autoSelect
-            % Auto-select the most abundant ion without dialog
-            idx = maxIdx;
+            % Auto-select: prefer simplest ion (fewest atoms), tiebreak by peak height
+            ionComplexities = zeros(numPotIon, 1);
+            for ii = 1:numPotIon
+                ionComplexities(ii) = height(potentialIon{ii});
+            end
+            minComplexity = min(ionComplexities);
+            simplestMask = (ionComplexities == minComplexity);
+            heights = potentialIonPeakHeight(:);
+            heights(~simplestMask) = -Inf;
+            [~, idx] = max(heights);
         else
             % Interactive selection dialog
             for i = 1:numPotIon

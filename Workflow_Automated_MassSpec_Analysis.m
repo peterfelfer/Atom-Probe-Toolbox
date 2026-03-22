@@ -136,12 +136,11 @@ fprintf('EER ranges computed: %d\n', height(eerRanges)) %[output:2d325b7c]
 
 %%
 %[text] ## 8. Apply Ranges
-%[text] Each EER range is applied using `rangeAdd`, which auto-detects the ion from the stems on the spectrum. When multiple stems overlap a range, the most abundant ion is auto-selected.
+%[text] Each EER range is applied using `rangeAdd`, which auto-detects the ion from the stems on the spectrum.
 %[text] - If **one** ion stem is in the range, it is assigned automatically.
-%[text] - If **multiple** stems overlap, the most abundant ion is picked automatically (`autoSelect = true`).
+%[text] - If **multiple** stems overlap, a selection dialog appears showing *"Select ion for range at XX.X Da"*. Pick the correct ion.
 %[text] - If **no** stem is in range, the range is skipped. You can add it manually afterward.
-%[text] - Narrow ranges (\< 2 bins) are skipped automatically.
-%[text] - Review the result and manually correct any misassignments with `rangeAdd(spec, colorScheme)`. \
+%[text] - Narrow ranges (\< 2 bins) are skipped automatically. \
 
 % Pre-add all molecular ion formulas to colorScheme so rangeAdd can find them
 for i = 1:height(selectedIons)
@@ -175,7 +174,7 @@ for i = 1:height(eerRanges) %[output:group:7ff38ec6]
         continue;
     end
     try
-        rangeAdd(spec, colorScheme, [], [lo hi], true); %[output:34c08a6e]
+        rangeAdd(spec, colorScheme, [], [lo hi]); %[output:34c08a6e]
         nOk = nOk + 1;
     catch e
         if contains(e.message, 'no ion defined')
