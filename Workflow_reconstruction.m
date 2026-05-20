@@ -6,7 +6,7 @@ load('colorScheme.mat');
 
 % picking epos file
 [file, path] = uigetfile('*.epos');
-pos = posToTable([path file]);
+pos = posToTable([path file]); % NOTE: posLoad is the preferred loader for new scripts
   %[control:button:0488]{"position":[1,2]}
 %%
 %[text] picking and allocating ranges

@@ -1,8 +1,10 @@
 %[text] # Workflow Cluster Determination
 %[text] 
-%[text] This workflow shows how to determine and look for Clusters in your dataset. 
+%[text] This workflow shows how to determine and look for Clusters in your dataset.
 %[text] All of the codes are based on the use of Voronoi cells. In the paper "Detecting and extracting clusters in atom probe data: A simple, automated method using Voronoi cells" P.Felfer, A.V. Ceguerra, S.P. Ringer, J.M. Cairney Utramicroscopy 150 (2015) 30-36 a deeper description about the algorithm is presented.
 %[text] For the calculation, the user needs a decomposed pos file.
+%[text] **NOTE on data types:** Many clustering and geometry functions require double precision coordinates. If you encounter type errors, wrap coordinates in *double()* before passing them to these functions, e.g. *clusterDetermination(double(clusterPos), double(pos))*. This is especially important when pos table columns are stored as single precision.
+%[text] For a simpler, GPU-accelerated alternative, see *clusterDBSCAN* at the bottom of this workflow.
 %%
 %[text] ## Determine the clusters
 %[text] The clusterDetermination function calculates the voronoi Volume in combination with the delaunay triangulation. The Kolmogorov - Smirnov test as described in the paper above is also performed.
@@ -40,9 +42,30 @@ expClusterSizes = histcounts(clusterIdx, numClusters);
 ranClusterSizes = histcounts(randomClusterIdx, randomNumClusters);
 Nmin = clusterSizeAnalyse(expClusterSizes,ranClusterSizes);
 %%
-%[text] ## 
-%[text] ## 
-%[text] 
+%[text] ## Post-cluster analysis
+%[text] After identifying clusters, it is often useful to analyse the composition of individual clusters and visualise them. The *clusteredAtoms* table from the cluster determination step contains all atoms assigned to clusters.
+%[text] ### Cluster composition
+%[text] To calculate the composition of the clustered atoms, use *posCalculateConcentrationSimple*. The detection efficiency must match the instrument used (see instrument presets in CLAUDE.md).
+detEff = 0.52; % detection efficiency — must match the instrument
+concClusters = posCalculateConcentrationSimple(clusteredAtoms, detEff, {'unranged'}, 'clusters', 'mode', 'atomic');
+disp(concClusters);
+%%
+%[text] ### Visualise clustered atoms
+%[text] The clustered atoms can be visualised with a scatter plot. Load the color scheme if not already in the workspace.
+load colorScheme.mat
+scatterPlotPosData(clusteredAtoms, colorScheme);
+%%
+%[text] ## Alternative: DBSCAN Clustering
+%[text] The function *clusterDBSCAN* provides a simpler interface for density-based clustering with optional GPU acceleration. The two key parameters are *epsilon* (the neighbourhood radius in nm) and *minPts* (the minimum number of points to form a cluster). Typical starting values: epsilon = 0.5-1.0 nm, minPts = 5-20 depending on the solute concentration.
+%[text] See the dedicated live script ***ClusterAnalysisDBSCAN*** for a full workflow including post-cluster composition analysis.
+%[text] **NOTE on data types:** If the pos table columns are single precision, wrap in *double()* before calling *clusterDBSCAN*.
+% clusterPos = pos(pos.ion == 'solute',:);
+% epsilon = 0.7; % neighbourhood radius in nm
+% minPts = 10; % minimum number of points to form a cluster
+% [clusterIdx, numClusters] = clusterDBSCAN(double(clusterPos), epsilon, minPts);
+%%
+%[text] ##
+%[text]
 
 %[appendix]{"version":"1.0"}
 %---

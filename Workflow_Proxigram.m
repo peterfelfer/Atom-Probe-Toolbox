@@ -1,9 +1,28 @@
-%[text] # **Proxigram** 
+%[text] # **Proxigram**
 %[text] **Creation of a simple proxigram**
 %[text] Materials often exhibit concentration gradients or sections, which are enriched or depleted with respect to a specific element. Therefore, the evaluation of the concentration of a specified species can be of high interest.
 %[text] By means of **proxi**mity histo**grams** (**proxigrams**), the user can plot the concentration profile of a species with respect to the distance to a defined surface (e.g., isosurface, grain boundary).
+%[text] **NOTE on data types:** If pos table columns are stored as single precision, the proxigram functions may require double precision. Wrap coordinates in *double()* if you encounter type errors.
 %%
-%[text] For the creation of a proxigram, the user needs to define an interface, which must be a 1x1 structure with fields of faces and vertices (hence often called fv), e.g., an isosurface (see the live script ***Isosurface***).
+%[text] ## Creating an isosurface (prerequisite)
+%[text] The proxigram requires an interface (a structure with *faces* and *vertices* fields, often called *fv*). This is typically an isosurface created from a concentration map. See the live script ***Isosurface*** for full details. Below is a minimal example to create one directly:
+%[text] **IMPORTANT: Axis ordering** — MATLAB's *isosurface* treats the first dimension as Y and the second as X. Grid vectors must be passed as *gridVec\{2\}, gridVec\{1\}, gridVec\{3\}* (X and Y swapped).
+dist = [pos.x pos.y pos.z];
+bin = [2 2 2]; % voxel size in nm (typical: 1=fine, 2=general, 3=fast)
+mode = 'distance';
+[binCenters, binEdges] = binVectorsFromDistance(dist,bin,mode);
+gridVec = binCenters;
+vox = posToVoxel(pos,gridVec);
+species = {'Al'}; % choose the species for the isosurface
+voxIon = posToVoxel(pos,gridVec,species);
+conc = voxIon./vox;
+isovalue = "8"; % isovalue in at.%
+fv = isosurface(gridVec{2},gridVec{1},gridVec{3},conc,isovalue);
+p = patch(fv, 'FaceColor', [1 1 0]); axis equal; rotate3d on;
+  %[control:button:c001]{"position":[1,2]}
+%%
+%[text] ## Single-ion proxigram
+%[text] For the creation of a proxigram, the user needs an interface (*fv*), the pos data of the species of interest (*posSpecies*), and the parent pos (*pos*).
 %[text] Additionally, the pos file of the species (*posSpecies*), the parent pos file (*pos*), and the bin width (*bin*) must be defined.
 %[text] The outputs of the function *patchCreateProxigram* are the x- and y-values of the resulting plot, represented by *binVector* and *proxi*, respectively.
 pos = pos; % selection of pos file (initial or decomposed); must be present in the workspace %[control:dropdown:8af9]{"position":[7,10]}
@@ -56,6 +75,9 @@ ylabel('concentration [%]');
 %---
 %[metadata:view]
 %   data: {"layout":"onright","rightPanelPercent":30.1}
+%---
+%[control:button:c001]
+%   data: {"label":"Run","run":"Section"}
 %---
 %[control:dropdown:8af9]
 %   data: {"defaultValue":"pos","itemLabels":["pos","posIn"],"items":["pos","posIn"],"label":"pos","run":"Nothing"}

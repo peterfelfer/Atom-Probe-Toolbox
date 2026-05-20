@@ -57,6 +57,7 @@ subfolders = {
     'utilities_IO/EMIODist2'
     'aptDataCalibration'
     'doc'
+    'RHIT_imports'
 };
 
 % Add paths

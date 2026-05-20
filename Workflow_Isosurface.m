@@ -5,7 +5,7 @@
 %[text] ### Create grid vectors
 %[text] In the first step, a set of grid vectors in 3D binning is created by the function *binVectorsFromDistance*. As inputs the distance variable and the bin width need to be specified. For the 3D binning the x, y, and z coordinates of the pos file are predestined as the *dist* input. The bin width can be either isotropic (e.g., \[1 1 1\] or anisotropic (e.g., \[1 2 2\]), whereas the positions in *dist* correspond with the position within *bin*. Here, as mode only *'distance'* is possible since the binning needs to be executed in three dimensions.
 dist = [pos.x pos.y pos.z]; % distance variable for the binning %[control:editfield:9396]{"position":[8,27]}
-bin = [1 1 1]; % bin width of each voxel in the direction of the defined distances, in nm %[control:editfield:5d8f]{"position":[7,14]}
+bin = [2 2 2]; % bin width of each voxel in nm (typical: 1 nm for fine detail, 2 nm for general analysis, 3 nm for fast overview) %[control:editfield:5d8f]{"position":[7,14]}
 mode = 'distance'; %[control:dropdown:53aa]{"position":[8,18]}
 [binCenters, binEdges] = binVectorsFromDistance(dist,bin,mode); % creates the bin centers and bin edges of a grid
    %[control:button:2823]{"position":[2,3]}
@@ -22,10 +22,10 @@ conc = voxIon./vox; % calculation of the concentration of the wanted species
 %[text] 
 %%
 %[text] ### Create the isosurface
-%[text] In the final step the isosurface is calculated and subsequently visualised. The *isovalue* can be any number between 0 and 100 (in at.%). For the visualisation, a *RGB* color code for the faces must be defined.
-%[text] NOTE: When using the function *isosurface*, the input *isovalue* must be either a string or a character array. 
+%[text] In the final step the isosurface is calculated and subsequently visualised. The *isovalue* is specified in at.% (e.g., 8 means 8 at.%). Typical values range from 1 to 40 at.% depending on the material system. It is common practice to try several isovalues to find the one that best captures the feature of interest. For the visualisation, a *RGB* color code for the faces must be defined.
+%[text] **IMPORTANT: Axis ordering** — MATLAB's *isosurface* function treats the first dimension as Y and the second as X. This is why the grid vectors are passed in the order *gridVec\{2\}, gridVec\{1\}, gridVec\{3\}* (swapped X and Y). If your isosurface appears mirrored or rotated, check this ordering.
 isovalue = "8"; % specification of the isovalue in at.% %[control:editfield:57b1]{"position":[12,15]}
-fv = isosurface(gridVec{2},gridVec{1},gridVec{3},conc,isovalue); % creation of the isosurface with faces and vertices
+fv = isosurface(gridVec{2},gridVec{1},gridVec{3},conc,isovalue); % creation of the isosurface with faces and vertices (note: gridVec{2},gridVec{1} are swapped)
 RGB = [1 1 0]; % RGB color code for the isosurface faces %[control:editfield:80ff]{"position":[7,14]}
 p = patch(fv, 'FaceColor', RGB); axis equal; rotate3d on; % visualisation of the created isosurface %[output:405c823e]
 axisSpatialAptify; % change into APT common view %[output:405c823e]

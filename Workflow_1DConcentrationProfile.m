@@ -8,7 +8,7 @@
 dist = pos.z; % determine the distance variable to be binned
 %[text] There are **two modes** possible. The user has to choose the wanted case and comment the unwanted case in this live script (either by pushing the button in the task bar or pressing the keys *Ctrl + R*) in order to execute the live script properly since the input variables *bin* and *mode* are practically 'connected' (for the mode *'distance'*  values between 1 and around 20 make sense, whereas the mode *'count'* needs much higher values).
 %[text] **Case \#1:** *'distance'* is used as *mode*, which resembles the distance in nm from bin edge to bin edge
-bin = 1; % bin width in nm %[control:editfield:1ef6]{"position":[7,8]}
+bin = 1; % bin width in nm (typical: 0.25 nm near interfaces, 0.5 nm default, 1 nm for overview) %[control:editfield:1ef6]{"position":[7,8]}
 mode = 'distance';
 [binCenters, binEdges] = binVectorsFromDistance(dist,bin,mode); % creates bin centers and bin edges of the voxels
   %[control:button:35c4]{"position":[1,2]}
@@ -28,7 +28,7 @@ vox = posNdBin(pos, dist, binEdges); % creates a cell array of various pos subse
 %%
 %[text] ## Creation of an anonymous function
 %[text] In the next step, a so-called 'anonymous function' will be defined. This means that a function handle will be created, here it is called *concentrationKernel*. By doing so, the subsequent step can be executed more easily.
-%[text] As input, the detector efficiency is needed. For example, in case of the LEAP 4000X HR, this value is 0.37 or 37 %, respectively.
+%[text] As input, the detector efficiency is needed. **This value is critical for correct composition and must match the instrument.** Common values: 0.37 or 37% (LEAP 4000X HR), 0.52 or 52% (LEAP 5000 XR), 0.80 or 80% (LEAP 5000 XS), 0.50 or 50% (EIKOS).
 %[text] The inputs *excludeListConc* and *volumeName* are optional:
 detEff = 37; % detector efficiency, input as decimal or percentage figure possible %[control:editfield:5f11]{"position":[10,12]}
 excludeListConc = {'unranged'}; % list of ions that shall not be considered for the concentration calculation, unranged atoms appear as 'unranged', optional %[control:editfield:2030]{"position":[19,31]}

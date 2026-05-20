@@ -14,13 +14,13 @@
 %[text] As the analysis data, a \*.pos or \*.epos file can be loaded. A window will pop-up and prompt the user to choose a file. If the user wants to load an \*.epos file, the selection in the selection window (buttom right) needs to be changed to \*.epos. 
 load isotopeTable_naturalAbundances.mat
 load colorScheme.mat
-posIn = posToTable;
+posIn = posToTable; % NOTE: posLoad is the preferred loader for new scripts and supports .pos, .epos, .apt, and .h5 formats
 %[text] 
 %%
 %[text] ## Creating a mass spectrum
 %[text] When the pos or epos file is loaded, the mass spectrum can be plotted. The bin width and the plotting mode can be changed. Possible modes are *'count'* and *'normalised'*.
 %[text] *'count'* shows the number of detected counts per bin over the mass-to-charge ratio, *'normalised'* records the number of counts as if the bin was 1 Da wide over the total number of counts.
-bin = 0.04; % bin width of the steps in which the plot is performed %[control:slider:27f5]{"position":[7,11]}
+bin = 0.01; % bin width of the steps in which the plot is performed (typical: 0.01 Da for detailed analysis, 0.04 for quick overview) %[control:slider:27f5]{"position":[7,11]}
 mode = 'normalised' ; % specifies the way the counts are applied %[control:dropdown:4d2c]{"position":[8,20]}
 spec = massSpecPlot(posIn,bin,mode); % plots the mass spectrum %[output:754db353]
   %[control:button:094b]{"position":[1,2]}
@@ -122,6 +122,13 @@ posRaw = posUnDecompose(pos);
   %[control:button:5b28]{"position":[1,2]}
 %[text] 
 %%
+%[text] ## Quick composition check
+%[text] After allocating ions, a quick composition check is the natural next step. This gives an immediate overview of the elemental concentrations. The detection efficiency (*detEff*) must match the instrument used. Common values: 0.37 (LEAP 4000X HR), 0.52 (LEAP 5000 XR), 0.80 (LEAP 5000 XS), 0.50 (EIKOS). See the live script ***Concentration*** for more detailed composition analysis.
+detEff = 0.52; % detection efficiency — must match the instrument used
+conc = posCalculateConcentrationSimple(pos, detEff, {'unranged'}, '', 'mode', 'atomic');
+disp(conc);
+  %[control:button:b001]{"position":[1,2]}
+%%
 %[text] ## Extracting ions from a mass spectrum
 %[text] The function *ionsExtractFromMassSpec* pulls all ions and corresponding information from a mass spectrum plot and gets all plots connected to the mass spectrum. The output *ionTable* is a table containing the ion names with charge state, elemental composition (in column *ion*) and assigned color code.
 %[text] The created ion table can be used, for example, for the creation of a new color scheme, see the live script **ColorScheme** or the function *colorSchemeCreate*.
@@ -134,6 +141,9 @@ ionTable = ionsExtractFromMassSpec(spec); % extracting ions from a mass spectrum
 %---
 %[metadata:view]
 %   data: {"layout":"onright","rightPanelPercent":32.5}
+%---
+%[control:button:b001]
+%   data: {"label":"Run","run":"Section"}
 %---
 %[control:slider:27f5]
 %   data: {"defaultValue":0.01,"label":"bin","max":0.1,"min":0.001,"run":"Nothing","runOn":"ValueChanged","step":0.01}

@@ -3,7 +3,7 @@
 %[text] In order to reconstruct an APT tip in 3D, first a mass spectrum needs to be ranged, see the instructions in the live script ***FirstSteps***.
 %[text] If the user wants to work with a saved ranged mass spectrum, the mass spectrum figure needs to be opened. Then the mass spectrum plot must be selected and the command *spec = gco;* executed. To ensure a proper functionality of the subsequent steps, both the pos file and the *colorScheme* need to be loaded (if not already present in the workspace):
 load colorScheme.mat;
-posIn = posToTable;
+posIn = posToTable; % NOTE: posLoad is the preferred loader for new scripts and supports .pos, .epos, .apt, and .h5 formats
 %%
 %[text] ## Allocating ions to the ranges of the mass spectrum
 %[text] The function *posAllocateRange* takes a pos and a range variable and allocates ion hits to it. First, the defined ranges of the mass spectrum need to be extracted, therefore *rangesExtractFromMassSpec* must be executed in advance.

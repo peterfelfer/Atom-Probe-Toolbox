@@ -3,7 +3,7 @@
 %[text] This workflow requires the installation of the open source software for visualisation aspects Blender 2.91.0 https://www.blender.org/
 %[text] If mass spectrum and pos file are not present follow the next steps
 spec = gco;
-posIn = posToTable;
+posIn = posToTable; % NOTE: posLoad is the preferred loader for new scripts
 rng = rangesExtractFromMassSpec(spec);
 pos = posAllocateRange(posIn, rng, 'decompose');
 %%

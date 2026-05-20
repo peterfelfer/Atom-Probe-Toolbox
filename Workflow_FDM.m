@@ -5,7 +5,7 @@
 %[text] (epos = posAllocateRange(epos,rangesExtractFromMassSpec(spec),'decompose');)
 %[text] If the user does not want to distinguish between certain species, no mass spectrum needs to be ranged and no allocation needs to be performed (see last section of this workflow).
 %[text] NOTE: The user has to select (\*.epos) as displayed data type in the dialog box when loading a new file.
-epos = posToTable; % loading of an *.epos file %[output:93658938] %[output:54e20342]
+pos = posToTable; % loading of an *.epos file (NOTE: posLoad is the preferred loader for new scripts) %[output:93658938] %[output:54e20342]
   %[control:button:6d8b]{"position":[1,2]}
 %[text] 
 %%
@@ -62,7 +62,7 @@ frames =  300; % number of frames of the movie %[control:editfield:175d]{"positi
 sample = 10000; % specification of sample size for each image %[control:editfield:5d39]{"position":[10,15]}
 RES = 100; % resolution of the field desorption map (RES x RES), must be bigger than 1 %[control:editfield:38ef]{"position":[7,10]}
 fileName = "5915"; % definition of the file name, file will be saved in current folder %[control:editfield:4a7d]{"position":[12,18]}
-movieFDM = movieCreateFieldDesorptionMap(epos.detx,epos.dety,frames,sample,RES,fileName);
+movieFDM = movieCreateFieldDesorptionMap(pos.detx,pos.dety,frames,sample,RES,fileName);
   %[control:button:4390]{"position":[1,2]}
 %%
 %[text] ## Creation of a FDM with only an epos file
@@ -71,7 +71,7 @@ movieFDM = movieCreateFieldDesorptionMap(epos.detx,epos.dety,frames,sample,RES,f
 %[text] NOTE: The starting value must be smaller than the end value. Furthermore, the axes scaling changes with changing bin width and therefore, the units are arbitrary.
 from = 1; % definition of the start index of detected ion %[control:editfield:18b7]{"position":[8,9]}
 to = 16854314; % definition of the end index of detected ion, must be bigger than 'from' value %[control:editfield:79f4]{"position":[6,14]}
-FDM = hist3([epos.detx(from:to),epos.dety(from:to)],binCenters); % creates array of the 3D histogram
+FDM = hist3([pos.detx(from:to),pos.dety(from:to)],binCenters); % creates array of the 3D histogram
 imageFDM = imagesc(FDM); axis equal; % creates image of the field desorption map %[output:3d358e0a]
 clearvars from to 
   %[control:button:304a]{"position":[1,2]}

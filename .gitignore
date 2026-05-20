@@ -8,3 +8,15 @@ hits_*.mat
 
 # old usage patterns for improving the toolbox, maybe in the future also equations from paper and so on
 usage_and_background/
+
+# OS / IDE junk
+.DS_Store
+
+# Local MCP / editor configs (contain user-specific absolute paths)
+opencode.json
+
+# License server logs
+flex*.log
+
+# Run-specific calibration outputs
+R*_calib.mat

@@ -546,7 +546,12 @@ function [bgRaw, A] = estimateBackgroundInvSqrt(centers, rawCounts, peakMc, marg
     A = sum(yLow(:) .* invSqrtX) / sum(invSqrtX.^2);
     A = max(0, A);
 
-    bgRaw = A ./ sqrt(max(centers, 0.01));
+    % Cap the BG model at mc = 1 to avoid the 1/sqrt(mc) divergence
+    % below 1 Da. The asymptotic 1/sqrt(mc) form comes from a constant-TOF
+    % background under t = scale*sqrt(mc) + t0, which breaks down at the
+    % low edge where t0 dominates. Without the cap, the BG would explode
+    % toward mc = 0 and clip the left side of light-element peaks (1H+).
+    bgRaw = A ./ sqrt(max(centers, 1));
 end
 
 

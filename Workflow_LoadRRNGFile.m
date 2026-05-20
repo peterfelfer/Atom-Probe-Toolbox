@@ -9,12 +9,12 @@
 
 % Load the .rrng file, colorScheme and the isotopeTable
 [file path] = uigetfile('*.rrng');
-% load('colorScheme.mat')
-% load('isotopeTable_naturalAbundances.mat')
+load('colorScheme.mat')
+load('isotopeTable_naturalAbundances.mat')
 
 % extract the Elements from the .rrng file and creat an ionList
 elements = elementsExtractFromText(fileread([path file]));
-ionList = ionsCreateComplex(elements,[1 2],isotopeTable,[1 2 3]); %[output:4ccf19a1]
+ionList = ionsCreateComplex(elements,[1 2],isotopeTable,[1 2 3]);
 
 %split the .rrng file into strings
 rrng = string(splitlines(fileread([path file])));
@@ -33,7 +33,4 @@ end
 %---
 %[metadata:view]
 %   data: {"layout":"onright","rightPanelPercent":23.6}
-%---
-%[output:4ccf19a1]
-%   data: {"dataType":"error","outputData":{"errorType":"runtime","text":"Unrecognized function or variable 'isotopeTable'."}}
 %---
