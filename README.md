@@ -5,8 +5,25 @@
 [![MATLAB](https://img.shields.io/badge/MATLAB-R2019b%2B-blue.svg)](https://www.mathworks.com/products/matlab.html)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Version](https://img.shields.io/badge/Version-1.0-orange.svg)](https://github.com/peterfelfer/Atom-Probe-Toolbox)
+[![Funded by the ERC](https://img.shields.io/badge/Funded%20by-ERC%20Starting%20Grant%20805065-003399.svg)](https://cordis.europa.eu/project/id/805065)
 
 Developed by the [Felfer Group](https://www.ww1.tf.fau.de/) at Friedrich-Alexander-Universität Erlangen-Nürnberg.
+
+---
+
+## Funding Acknowledgement
+
+<a href="https://cordis.europa.eu/project/id/805065">
+  <img src="LOGO-ERC_negatif.jpg" alt="European Research Council logo" align="right" width="160" />
+</a>
+
+This toolbox has been developed in the framework of the ERC project
+**HydMet — *Fundamentals of Hydrogen in Structural Metals at the Atomic Scale*** ([Grant Agreement No. 805065](https://cordis.europa.eu/project/id/805065)),
+funded by the European Research Council under the European Union's Horizon 2020 research and innovation programme (ERC Starting Grant, 2018–2024, host institution: Friedrich-Alexander-Universität Erlangen-Nürnberg).
+
+> This project has received funding from the European Research Council (ERC) under the European Union's Horizon 2020 research and innovation programme (grant agreement No 805065).
+
+If you use this toolbox in published work, please reproduce the acknowledgement above and cite the relevant papers listed below.
 
 ---
 
@@ -24,6 +41,7 @@ Developed by the [Felfer Group](https://www.ww1.tf.fau.de/) at Friedrich-Alexand
 - [Citation](#citation)
 - [Authors](#authors)
 - [License](#license)
+- [Acknowledgments](#acknowledgments)
 
 ---
 ## Versions
@@ -458,6 +476,18 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 ---
 
 ## Acknowledgments
+
+### Funding
+
+<a href="https://cordis.europa.eu/project/id/805065">
+  <img src="LOGO-ERC_negatif.jpg" alt="European Research Council logo" align="left" width="120" />
+</a>
+
+The development of this toolbox was funded by the European Research Council (ERC) under the European Union's Horizon 2020 research and innovation programme through the ERC Starting Grant **HydMet — *Fundamentals of Hydrogen in Structural Metals at the Atomic Scale*** (grant agreement No 805065, 2018–2024). Host institution: Friedrich-Alexander-Universität Erlangen-Nürnberg. See [CORDIS record](https://cordis.europa.eu/project/id/805065).
+
+<br clear="left" />
+
+### Further thanks
 
 - The atom probe community for feedback and feature requests
 - [CAMECA](https://www.cameca.com/) for instrument support

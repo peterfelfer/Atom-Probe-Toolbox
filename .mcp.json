@@ -1,12 +1,15 @@
 {
   "mcpServers": {
     "matlab": {
-      "command": "/Applications/matlab-mcp-core-server",
+      "command": "/Applications/matlab-mcp-core-server-maca64",
       "args": [
         "--matlab-root=/Applications/MATLAB_R2025b.app",
-        "--initial-working-folder=/Users/peterfelfer/Dropbox/research/01_research_Erlangen/GIT repositories/Atom Probe Toolbox/Atom-Probe-Toolbox",
+        "--initial-working-folder=/Users/peterfelfer/Dropbox/01_research/0101_shared/010105_code/GIT repositories/Atom Probe Toolbox/Atom-Probe-Toolbox",
         "--initialize-matlab-on-startup=true"
-      ]
+      ],
+      "env": {
+        "LM_PROJECT": "iww1"
+      }
     },
     "paperRAG-v1": {
       "type": "stdio",
