@@ -14,7 +14,7 @@ Developed by the [Felfer Group](https://www.ww1.tf.fau.de/) at Friedrich-Alexand
 ## Funding Acknowledgement
 
 <a href="https://cordis.europa.eu/project/id/805065">
-  <img src="LOGO-ERC_negatif.jpg" alt="European Research Council logo" align="right" width="160" />
+  <img src="LOGO-ERC_negatif.jpg" alt="European Research Council logo" align="right" width="280" />
 </a>
 
 This toolbox has been developed in the framework of the ERC project
@@ -480,7 +480,7 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 ### Funding
 
 <a href="https://cordis.europa.eu/project/id/805065">
-  <img src="LOGO-ERC_negatif.jpg" alt="European Research Council logo" align="left" width="120" />
+  <img src="LOGO-ERC_negatif.jpg" alt="European Research Council logo" align="left" width="220" />
 </a>
 
 The development of this toolbox was funded by the European Research Council (ERC) under the European Union's Horizon 2020 research and innovation programme through the ERC Starting Grant **HydMet — *Fundamentals of Hydrogen in Structural Metals at the Atomic Scale*** (grant agreement No 805065, 2018–2024). Host institution: Friedrich-Alexander-Universität Erlangen-Nürnberg. See [CORDIS record](https://cordis.europa.eu/project/id/805065).
